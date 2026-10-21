@@ -3,13 +3,22 @@ import { BlockAssembler, type ToolSchema } from '@deepseek-ai/dsh-llm'
 import { DEFAULT_ROUTE } from '@learning-agent/llm-json'
 import { DSML_OPEN_HINT, parseDsml } from './dsml.js'
 import { TextRetainer, formatRetentionNotice } from './output-retention.js'
+import { emptyPruneState, pruneToolResults, totalToolResultChars } from './tool-result-pruner.js'
 
 /** Tool results are budgeted in UTF-8 bytes, like DSH's output-retention library. */
 const DEFAULT_TOOL_MAX_BYTES = 36_000
 
+/** Trigger old-result pruning once this turn carries more than this many code points. */
+const DEFAULT_TURN_TOOL_MAX_CHARS = 48_000
+
 function toolMaxBytes(): number {
   const raw = Number(process.env.LEARNING_AGENT_TOOL_MAX_BYTES)
   return Number.isInteger(raw) && raw > 0 ? raw : DEFAULT_TOOL_MAX_BYTES
+}
+
+function turnToolMaxChars(): number {
+  const raw = Number(process.env.LEARNING_AGENT_TURN_TOOL_MAX_CHARS)
+  return Number.isInteger(raw) && raw > 0 ? raw : DEFAULT_TURN_TOOL_MAX_CHARS
 }
 
 /** Keep head/tail plus a notice; the full result is not persisted. */
@@ -130,6 +139,15 @@ export interface AgentLoopResult {
   called: string[]
   /** Per-call detail, deduped by name+args, for the turn trace. */
   calls: ToolCallRecord[]
+  /** Program-side context accounting for this turn. */
+  context: LoopContextStats
+}
+
+export interface LoopContextStats {
+  toolDeliveredChars: number
+  toolPrunedChars: number
+  toolPrunedCalls: number
+  peakToolChars: number
 }
 
 /**
@@ -152,6 +170,13 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
   const called: string[] = []
   const calls: ToolCallRecord[] = []
   const cache = new Map<string, string>()
+  const pruneState = emptyPruneState()
+  const contextStats = (): LoopContextStats => ({
+    toolDeliveredChars: totalToolResultChars(messages),
+    toolPrunedChars: pruneState.prunedChars,
+    toolPrunedCalls: pruneState.prunedCalls,
+    peakToolChars: pruneState.peakChars,
+  })
 
   const emit = (event: AgentLoopEvent): void => {
     try {
@@ -168,6 +193,9 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
    * the tool calls it asked for plus whatever prose came with them.
    */
   const request = async (round: number, schemas: ToolSchema[]): Promise<{ toolCalls: ToolCall[]; text: string }> => {
+    // DSH prunes the surface before re-measuring; here the surface is this
+    // turn's messages, so the same deterministic prune runs before each request.
+    pruneToolResults(messages, pruneState, turnToolMaxChars())
     const assembler = new BlockAssembler()
     /**
      * 流式出字时不要把 DSML 标记漏给学生：以 '<' 开头的尾巴先压住，
@@ -340,7 +368,7 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
     if (text.length > 0) lastText = text
     if (toolCalls.length === 0) {
       if (text.length === 0) throw new Error('模型没有返回任何内容')
-      return { text, rounds: round, called, calls }
+      return { text, rounds: round, called, calls, context: contextStats() }
     }
     await runCalls(toolCalls, round)
   }
@@ -371,9 +399,10 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
       rounds: closingRound,
       called,
       calls,
+      context: contextStats(),
     }
   }
-  if (closingText.length > 0) return { text: closingText, rounds: closingRound, called, calls }
-  if (lastText.length > 0) return { text: lastText, rounds: closingRound, called, calls }
+  if (closingText.length > 0) return { text: closingText, rounds: closingRound, called, calls, context: contextStats() }
+  if (lastText.length > 0) return { text: lastText, rounds: closingRound, called, calls, context: contextStats() }
   throw new Error(`模型在 ${maxRounds} 轮内没有结束工具调用（${[...new Set(called)].join(', ')}）`)
 }
