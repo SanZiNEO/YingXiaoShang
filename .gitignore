@@ -1,0 +1,45 @@
+.venv/
+__pycache__/
+*.pyc
+*.pdf
+data/**/*.png
+.env
+
+# Local scratch work and runtime state — never commit
+.scratch/
+.learning-agent/
+.zhi/
+release/
+
+# Read-only course materials — never commit
+resources/
+
+# Build output and dependencies
+node_modules/
+lib/
+!pipeline/lib/
+!pipeline/lib/**/*.ts
+apps/desktop/out/
+apps/desktop/dist/
+apps/desktop/seed/
+apps/web/dist/
+*.tsbuildinfo
+packages/*/src/**/*.js
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.d.ts.map
+
+# Tool leftovers: electron-vite 临时配置、原子写入残留的空目录
+_tmp_*/
+apps/desktop/electron.vite.config.*.mjs
+
+# AI 会话过程文档（交接/计划/进度/核对笔记/早期蓝图）不入库，
+# 需要留档请放 docs/ 下并按文档地图维护，或放 .scratch/ai-notes/。
+/HANDOFF.md
+/findings.md
+/progress.md
+/task_plan.md
+/LEARNING_AGENT_MVP_PLAN.md
+
+# 参考用的上游源码，只读，不入库
+/example

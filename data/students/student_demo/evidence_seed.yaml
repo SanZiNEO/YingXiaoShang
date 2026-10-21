@@ -1,0 +1,112 @@
+type: evidence-seed
+student_id: student_demo
+note: 合成证据，仅用于 MVP 演示；片段模拟学生原话
+evidence:
+  - id: ev_demo_ch04_pre_01
+    competency_id: problem_framing
+    level: L2
+    strength: C
+    evidence_type: explanation
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_pre
+    excerpt: 我觉得这个品牌卖不动主要是因为曝光不够，所以应该加大投放。
+    rationale: 直接把销量下滑归因为曝光不足，未区分需求结构、渠道效率等替代解释。
+    confidence: 0.62
+    occurred_at: 2026-09-20T10:05:00+08:00
+  - id: ev_demo_ch04_pre_02
+    competency_id: evidence_hypothesis
+    level: L2
+    strength: C
+    evidence_type: hypothesis
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_pre
+    excerpt: 我的假设是需求还在，只是没有触达到目标消费者。
+    rationale: 能说出假设，但没有说明用什么证据验证或推翻。
+    confidence: 0.58
+    occurred_at: 2026-09-20T10:12:00+08:00
+  - id: ev_demo_ch04_pre_03
+    competency_id: decision_tradeoff
+    level: L1
+    strength: C
+    evidence_type: decision
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_pre
+    excerpt: 那就先加预算，把小红书和抖音都投一遍。
+    rationale: 单一建议，没有比较替代方案、预算约束或失败模式。
+    confidence: 0.7
+    occurred_at: 2026-09-20T10:18:00+08:00
+  - id: ev_demo_ch04_pre_04
+    competency_id: communication
+    level: L2
+    strength: C
+    evidence_type: communication
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_pre
+    excerpt: 我的建议是加大投放，因为现在竞争很激烈，不投就会被竞品抢走。
+    rationale: 结构清楚，但没有针对决策者关心的 ROI 和风险调整表达。
+    confidence: 0.55
+    occurred_at: 2026-09-20T10:22:00+08:00
+  - id: ev_demo_ch04_post_01
+    competency_id: problem_framing
+    level: L3
+    strength: B
+    evidence_type: explanation
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_post
+    excerpt: 我先把问题拆成两类：如果复购率稳定但新客获取成本上升，可能是渠道效率问题；如果分渠道转化都下降，才更像产品市场匹配问题。
+    rationale: 区分症状与根因，给出可检验的替代解释，并界定判断条件。
+    confidence: 0.82
+    occurred_at: 2026-10-12T19:40:00+08:00
+  - id: ev_demo_ch04_post_02
+    competency_id: evidence_hypothesis
+    level: L3
+    strength: B
+    evidence_type: evidence_use
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_post
+    excerpt: 我会先看复购率、分渠道转化和竞品价格；如果复购稳定但 CAC 翻倍，就支持渠道效率假设，否则要重新看产品匹配。
+    rationale: 明确区分事实、假设与推断，并说明什么证据会支持或推翻判断。
+    confidence: 0.8
+    occurred_at: 2026-10-12T19:48:00+08:00
+  - id: ev_demo_ch04_post_03
+    competency_id: decision_tradeoff
+    level: L2
+    strength: B
+    evidence_type: tradeoff
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_post
+    excerpt: 如果复购稳定且 CAC 上升，优先优化渠道结构而不是加预算；如果分渠道转化都下降，则重新评估产品市场匹配。
+    rationale: 给出条件性主张，但还没有说明预算、组织与退出条件。
+    confidence: 0.74
+    occurred_at: 2026-10-12T19:55:00+08:00
+  - id: ev_demo_ch04_post_04
+    competency_id: communication
+    level: L3
+    strength: B
+    evidence_type: communication
+    source_type: chat
+    chapter_id: ch04
+    session_id: demo_post
+    excerpt: 对老板我会先说结论：先不加预算，用两周做渠道效率诊断；如果诊断支持曝光假设，再分批追加预算。
+    rationale: 针对决策者关切组织论证，给出下一步与条件。
+    confidence: 0.78
+    occurred_at: 2026-10-12T20:02:00+08:00
+  - id: ev_demo_ch06_01
+    competency_id: problem_framing
+    level: L2
+    strength: C
+    evidence_type: hypothesis
+    source_type: chat
+    chapter_id: ch06
+    session_id: demo_research
+    excerpt: 我想研究 Z 世代对国潮联名的态度，因为最近很多品牌都在做联名。
+    rationale: 研究主题明确，但还没有界定决策问题、目标人群边界与可回答的研究问题。
+    confidence: 0.5
+    occurred_at: 2026-10-16T14:10:00+08:00

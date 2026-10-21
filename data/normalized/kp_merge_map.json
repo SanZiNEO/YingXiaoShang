@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "description": "人工确认的同义知识点合并映射：把 old_id 合并进 canonical_id。仅收录经人工核对 aliases/examples/definition 同源、且 data 整理阶段已用 parent_id 声明归属的重复抽取记录（多为 legacy 简称对教材全称）。不得把真正的概念层级（parent_id 表达的『子概念/子阶段』，如『情感』属于『心理因素』）当作重复收录；这里只放『同一概念的两个 id』。mergeDuplicateKps 消费本表，合并时保留已审结论并把旧 id 写入 kp_canonical_map。",
+  "updated": "2026-10-19",
+  "merges": [
+    {
+      "old_id": "kp_env_macro_2",
+      "canonical_id": "kp_env_macro",
+      "reason": "legacy『宏观营销环境』与教材『宏观营销环境分析』为同一概念，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_env_micro_2",
+      "canonical_id": "kp_env_micro",
+      "reason": "legacy『微观营销环境』与教材『微观营销环境分析』为同一概念，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_env_opportunity_threat_2",
+      "canonical_id": "kp_env_opportunity_threat",
+      "reason": "legacy『机会威胁综合分析矩阵』与教材『机会-威胁综合分析』为同一概念，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_personal_2",
+      "canonical_id": "kp_personal",
+      "reason": "『个人因素』是『影响消费者购买的个人因素』的简称，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_situational_2",
+      "canonical_id": "kp_situational",
+      "reason": "『情境因素』是『影响消费者购买的情境因素』的简称，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_social_2",
+      "canonical_id": "kp_social",
+      "reason": "『社会因素』是『影响消费者购买的社会因素』的简称，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_culture_2",
+      "canonical_id": "kp_culture",
+      "reason": "『文化因素』是『影响消费者购买的文化因素』的简称，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_psychological_2",
+      "canonical_id": "kp_psychological",
+      "reason": "『心理因素』是『影响消费者购买的心理因素』的简称，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    },
+    {
+      "old_id": "kp_government_market_2",
+      "canonical_id": "kp_government_market",
+      "reason": "legacy『政府市场』与教材『政府市场与购买行为分析』为同一概念，aliases 与 examples 完全一致，已声明 parent_id 指向主概念"
+    }
+  ]
+}

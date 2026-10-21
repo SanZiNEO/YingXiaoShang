@@ -1,0 +1,28 @@
+{
+  "name": "@learning-agent/db",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib"],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@learning-agent/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.0.5"
+  }
+}

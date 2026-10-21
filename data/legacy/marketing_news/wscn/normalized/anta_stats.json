@@ -1,0 +1,39 @@
+{
+  "articles": 11,
+  "tags": 56,
+  "tag_type_counts": {
+    "competency": 28,
+    "knowledge_point": 28
+  },
+  "top_kps": [
+    [
+      "kp_consumer_market",
+      8
+    ],
+    [
+      "kp_consumer_behavior",
+      5
+    ],
+    [
+      "kp_lifestyle",
+      5
+    ],
+    [
+      "kp_env_supplier",
+      4
+    ],
+    [
+      "kp_env_competitor",
+      3
+    ],
+    [
+      "kp_env_natural",
+      2
+    ],
+    [
+      "kp_subculture",
+      1
+    ]
+  ],
+  "articles_without_kp": []
+}

@@ -1,0 +1,33 @@
+# Profile-level overrides: confinement, model route, and shell-free tools.
+
+- id: sandbox-policy
+  config:
+    mode: workspace-write
+    workspaceRoot: !!js (process.env.LEARNING_AGENT_HOME || ((process.env.USERPROFILE || process.env.HOME) + '/.learning-agent'))
+
+- id: fs-sandbox
+  disabled: true
+
+- id: spill-local
+  config:
+    root: !!js (process.env.LEARNING_AGENT_HOME || ((process.env.USERPROFILE || process.env.HOME) + '/.learning-agent')) + '/spill'
+    cleanupPeriodDays: 30
+
+# The learning product exposes no shell, search, or cwd-changing tools.
+- id: tool-bash
+  disabled: true
+- id: tool-pwsh
+  disabled: true
+- id: tool-fs-search
+  disabled: true
+- id: tool-working-directory
+  disabled: true
+
+- id: agent-loop
+  config:
+    maxParallelToolCalls: 6
+    agents:
+      - id: main
+        provider: deepseek-official
+        model: deepseek-flash
+        maxTokens: 8192

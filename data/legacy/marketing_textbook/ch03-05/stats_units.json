@@ -1,0 +1,87 @@
+{
+  "units": 72,
+  "tags": 322,
+  "paragraphs_total": 413,
+  "units_without_paragraphs": [
+    "unit-ch4-0020",
+    "unit-ch4-0026",
+    "unit-ch4-0034",
+    "unit-ch5-0063"
+  ],
+  "tag_type_counts": {
+    "knowledge_point": 178,
+    "competency": 72,
+    "decision": 72
+  },
+  "tag_role_counts": {
+    "core": 216,
+    "mention": 106
+  },
+  "chapter_units": {
+    "第 ３章 市场营销环境分析": 18,
+    "第 ４章 消费者市场与购买行为分析": 36,
+    "第 ５章 组织市场与购买行为分析": 18
+  },
+  "top_kps": [
+    [
+      "kp_env_economic",
+      18
+    ],
+    [
+      "kp_env_technology",
+      12
+    ],
+    [
+      "kp_env_culture",
+      11
+    ],
+    [
+      "kp_needs_motives",
+      10
+    ],
+    [
+      "kp_family",
+      9
+    ],
+    [
+      "kp_env_supplier",
+      8
+    ],
+    [
+      "kp_env_political",
+      7
+    ],
+    [
+      "kp_beliefs_attitudes",
+      7
+    ],
+    [
+      "kp_nonprofit_market",
+      6
+    ],
+    [
+      "kp_perception",
+      5
+    ],
+    [
+      "kp_government_procurement",
+      5
+    ],
+    [
+      "kp_env_population",
+      4
+    ],
+    [
+      "kp_org_market_concept",
+      4
+    ],
+    [
+      "kp_env_natural",
+      3
+    ],
+    [
+      "kp_env_legal",
+      3
+    ]
+  ]
+}

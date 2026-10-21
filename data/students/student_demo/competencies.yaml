@@ -1,0 +1,68 @@
+type: competency-set
+version: v0.1
+note: 草稿 rubric，需由任课教师与评价专家定稿
+dimensions:
+  - id: problem_framing
+    name: 问题建构
+    definition: 能否定义真正的问题、边界、约束与利益相关者。
+    observable:
+      - 区分症状与根因
+      - 界定决策边界与时间尺度
+      - 识别主要利益相关者及其诉求
+    levels:
+      - level: L1
+        description: 把案例中的现象直接当问题；边界模糊；未识别关键利益相关者。
+      - level: L2
+        description: 能用框架拆解，但框架与情境匹配度低，遗漏关键约束。
+      - level: L3
+        description: 能区分症状与根因；界定决策边界、时间尺度、资源约束；识别主要利益相关者。
+      - level: L4
+        description: 能质疑题目预设；提出替代问题框架；说明框架适用边界与盲区。
+  - id: evidence_hypothesis
+    name: 证据与假设
+    definition: 能否区分事实、假设与观点，选择证据，识别偏差。
+    observable:
+      - 区分事实/假设/推断
+      - 说明判断依赖的假设
+      - 指出什么证据会推翻判断
+    levels:
+      - level: L1
+        description: 观点堆砌，事实与假设混用。
+      - level: L2
+        description: 有证据意识，但选择标准不清。
+      - level: L3
+        description: 证据链完整，区分事实/假设/推断，做基本估算。
+      - level: L4
+        description: 主动寻找反证，做敏感性/情景分析，说明证据缺口。
+  - id: decision_tradeoff
+    name: 决策与取舍
+    definition: 能否形成有条件的主张，比较替代方案，处理风险与伦理。
+    observable:
+      - 给出条件性主张
+      - 比较替代方案
+      - 说明失败模式与风险
+    levels:
+      - level: L1
+        description: 单一建议，无条件、无替代、无风险。
+      - level: L2
+        description: 能列选项比较，但停留在优缺点清单。
+      - level: L3
+        description: 明确标准与权重，给出条件性建议，考虑风险与实施。
+      - level: L4
+        description: 设计触发条件/退出机制，处理利益相关者冲突与伦理张力。
+  - id: communication
+    name: 沟通与影响
+    definition: 能否针对受众组织论证、回应质疑、推动行动。
+    observable:
+      - 识别受众关切
+      - 组织论证结构
+      - 回应反对意见
+    levels:
+      - level: L1
+        description: 信息倾倒，无受众意识。
+      - level: L2
+        description: 结构清晰，但未针对受众调整。
+      - level: L3
+        description: 受众适配，能回应质疑，语言克制。
+      - level: L4
+        description: 能处理反对意见，建立可信度，明确下一步与责任。

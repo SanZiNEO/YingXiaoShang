@@ -1,0 +1,145 @@
+# Learning-agent domain layer.
+# Mounted after the runtime base and web layers in the learning profile.
+
+- id: agent-preset-registry
+  config:
+    default: knowledge-news
+
+# The shipped coding presets are not part of the learning product.
+- id: preset-standard
+  disabled: true
+- id: preset-ptc
+  disabled: true
+- id: preset-minimal
+  disabled: true
+- id: preset-cordis
+  disabled: true
+
+- insert:
+    - id: learning-db
+      name: '@learning-agent/db'
+      config:
+        appHome: !!js (process.env.LEARNING_AGENT_HOME || ((process.env.USERPROFILE || process.env.HOME) + '/.learning-agent'))
+
+    - id: app-fs
+      name: '@learning-agent/fs-app'
+      config:
+        cwd: !!js (process.env.LEARNING_AGENT_HOME || ((process.env.USERPROFILE || process.env.HOME) + '/.learning-agent'))
+        appRoot: !!js (process.env.LEARNING_AGENT_HOME || ((process.env.USERPROFILE || process.env.HOME) + '/.learning-agent'))
+
+    - id: path-gate
+      name: '@learning-agent/path-gate'
+      config:
+        appRoot: !!js (process.env.LEARNING_AGENT_HOME || ((process.env.USERPROFILE || process.env.HOME) + '/.learning-agent'))
+
+    - id: knowledge
+      name: '@learning-agent/knowledge'
+
+    - id: news
+      name: '@learning-agent/news'
+
+    - id: matcher
+      name: '@learning-agent/matcher'
+
+    - id: questions
+      name: '@learning-agent/questions'
+
+    - id: research
+      name: '@learning-agent/research'
+
+    - id: bp
+      name: '@learning-agent/bp'
+
+    - id: learning-api
+      name: '@learning-agent/api'
+
+    - id: learning-ui
+      name: '@learning-agent/ui'
+
+    # ---- Agent presets -------------------------------------------------
+
+    - id: preset-knowledge-news
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: knowledge-news
+        name: 知识库·新闻
+        order: 1
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |
+                你是营销案例教练。你的任务是让学生用第4章消费者行为的知识分析最新营销案例，而不是替学生写答案。
+                规则：
+                1. 先让学生判断这条新闻体现了哪些消费者行为知识点，再揭示匹配结果。
+                2. 每次只问一个关键问题，等学生回答后再继续。
+                3. 引用新闻原文的证据句和知识点的定义；没有证据就不要匹配。
+                4. 如果新闻涉及课程思政点，用一句话说明，但不要硬贴；没有合适点就说「本篇不涉及」。
+                5. 学生要求出题时，引导他到「出题」智能体；不要自己生成题目。
+          - id: knowledge
+            name: '@learning-agent/knowledge'
+          - id: news
+            name: '@learning-agent/news'
+          - id: matcher
+            name: '@learning-agent/matcher'
+
+    - id: preset-research
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: research
+        name: 调研教练
+        order: 2
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |
+                你是调研教练。先问清决策问题、研究问题、目标人群和约束，再给方法。
+                不要直接给问卷终稿；先让学生确认研究目标和假设。
+                每个方法建议都要说明取舍和风险。
+          - id: research
+            name: '@learning-agent/research'
+          - id: knowledge
+            name: '@learning-agent/knowledge'
+
+    - id: preset-bp
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: bp
+        name: 商业计划书教练
+        order: 3
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |
+                你是商业计划书教练。先问客户、痛点、证据和商业模式假设。
+                每个数字都要标来源或假设；没有来源就写「假设」，不要编造市场数据。
+                先给结构和证据要求，再帮学生填充；不要替学生写完整计划书。
+          - id: bp
+            name: '@learning-agent/bp'
+          - id: knowledge
+            name: '@learning-agent/knowledge'
+
+    - id: preset-question-gen
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: question-gen
+        name: 出题
+        order: 4
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |
+                你是出题智能体。你的底层是知识库和新闻：先检索知识点、新闻原文和教材习题，再出题。
+                每题必须绑定 kp_id、答案、解析、难度；不得凭空编题，不得编造知识点。
+                先确认来源、题型、难度、数量，再调用 generate_questions。
+          - id: knowledge
+            name: '@learning-agent/knowledge'
+          - id: news
+            name: '@learning-agent/news'
+          - id: matcher
+            name: '@learning-agent/matcher'
+          - id: questions
+            name: '@learning-agent/questions'

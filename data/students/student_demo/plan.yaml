@@ -1,0 +1,195 @@
+type: learning-plan
+student_id: student_demo
+course: 市场营销学
+note: 章节前测/后测用于形成性评价，不作为高利害分数
+chapters:
+  - chapter_id: ch01
+    title: 市场营销导论
+    pre:
+      title: 前测 · 营销是什么
+      tasks:
+        - 用自己的话说明营销与销售的区别
+        - 举一个你最近被营销影响的例子
+    learning:
+      title: 学习 · 营销观念
+      tasks:
+        - 读教材第 1 章
+        - 用 3 句话总结营销管理哲学的演变
+    post:
+      title: 后测 · 迁移
+      tasks:
+        - 换一个行业解释同一营销观念
+        - 指出自己前一版回答的漏洞
+  - chapter_id: ch02
+    title: 市场营销管理哲学
+    pre:
+      title: 前测 · 企业导向
+      tasks:
+        - 判断一个案例属于哪种营销导向
+    learning:
+      title: 学习 · 导向比较
+      tasks:
+        - 比较生产/产品/推销/营销/社会营销观念
+    post:
+      title: 后测 · 条件性主张
+      tasks:
+        - 说明什么条件下应选择哪种导向
+  - chapter_id: ch03
+    title: 市场营销环境
+    pre:
+      title: 前测 · 环境扫描
+      tasks:
+        - 列出影响某品牌的三类环境因素
+    learning:
+      title: 学习 · 宏观与微观环境
+      tasks:
+        - 用 PESTEL 分析一个品类
+    post:
+      title: 后测 · 机会与威胁
+      tasks:
+        - 把环境因素转成机会/威胁判断，并说明证据
+  - chapter_id: ch04
+    title: 消费者市场与购买行为分析
+    pre:
+      title: 前测 · 消费者行为
+      tasks:
+        - 描述一次自己的购买决策过程
+        - 判断哪些因素影响了这次决策
+    learning:
+      title: 学习 · 消费者行为模型
+      tasks:
+        - 读教材第 4 章
+        - 用消费者行为知识点分析一条营销新闻
+        - 区分文化、社会、个人、心理因素
+    post:
+      title: 后测 · 情境迁移
+      tasks:
+        - 换一个品类重新分析同一消费者行为
+        - 指出自己判断依赖的假设与反证
+        - 给出一个可执行的营销建议
+  - chapter_id: ch05
+    title: 组织市场与购买行为分析
+    pre:
+      title: 前测 · 组织购买
+      tasks:
+        - 说明组织市场与消费者市场的差异
+    learning:
+      title: 学习 · 组织购买决策
+      tasks:
+        - 分析一个 B2B 采购案例
+    post:
+      title: 后测 · 角色与流程
+      tasks:
+        - 识别购买中心角色与决策流程
+  - chapter_id: ch06
+    title: 市场营销调研
+    pre:
+      title: 前测 · 研究问题
+      tasks:
+        - 把一个模糊的商业问题改写成研究问题
+    learning:
+      title: 学习 · 调研设计
+      tasks:
+        - 设计抽样、问卷/访谈提纲与分析计划
+    post:
+      title: 后测 · 证据链
+      tasks:
+        - 说明每个结论对应的证据与局限
+  - chapter_id: ch07
+    title: 目标市场营销战略
+    pre:
+      title: 前测 · STP
+      tasks:
+        - 为一个品牌写一句定位
+    learning:
+      title: 学习 · 细分与定位
+      tasks:
+        - 比较两个细分方案并说明取舍
+    post:
+      title: 后测 · 定位证据
+      tasks:
+        - 用证据支持定位选择，指出替代方案
+  - chapter_id: ch08
+    title: 产品策略
+    pre:
+      title: 前测 · 产品层次
+      tasks:
+        - 说明核心产品/形式产品/附加产品
+    learning:
+      title: 学习 · 产品组合
+      tasks:
+        - 分析一个产品组合决策
+    post:
+      title: 后测 · 取舍
+      tasks:
+        - 给出产品线调整建议与风险
+  - chapter_id: ch09
+    title: 价格策略
+    pre:
+      title: 前测 · 定价
+      tasks:
+        - 列出三种定价方法
+    learning:
+      title: 学习 · 定价决策
+      tasks:
+        - 为一个新品做定价建议
+    post:
+      title: 后测 · 敏感性
+      tasks:
+        - 说明价格变化对销量/利润的影响假设
+  - chapter_id: ch10
+    title: 渠道策略
+    pre:
+      title: 前测 · 渠道
+      tasks:
+        - 画出某品牌的分销链路
+    learning:
+      title: 学习 · 渠道设计
+      tasks:
+        - 比较直营/经销/平台模式
+    post:
+      title: 后测 · 冲突
+      tasks:
+        - 识别渠道冲突并给解决方案
+  - chapter_id: ch11
+    title: 促销策略
+    pre:
+      title: 前测 · 传播
+      tasks:
+        - 说明整合营销传播的组成
+    learning:
+      title: 学习 · 传播组合
+      tasks:
+        - 为一个 campaign 选择渠道组合
+    post:
+      title: 后测 · 受众适配
+      tasks:
+        - 针对不同受众改写同一主张
+  - chapter_id: ch12
+    title: 市场营销计划、组织与控制
+    pre:
+      title: 前测 · 计划
+      tasks:
+        - 列出营销计划的组成部分
+    learning:
+      title: 学习 · 执行与控制
+      tasks:
+        - 为一个计划设计指标与复盘节奏
+    post:
+      title: 后测 · 可执行性
+      tasks:
+        - 指出计划中的资源/组织风险
+  - chapter_id: ch13
+    title: 市场营销新发展
+    pre:
+      title: 前测 · 新趋势
+      tasks:
+        - 举一个数字化/可持续营销例子
+    learning:
+      title: 学习 · 新营销
+      tasks:
+        - 分析一个新技术或新渠道的影响
+    post:
+      title: 后测 · 批判性
+      tasks:
+        - 说明趋势的适用边界与伦理风险

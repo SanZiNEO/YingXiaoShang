@@ -1,0 +1,411 @@
+{
+  "started_at": "2026-10-18T09:40:29.953Z",
+  "finished_at": "2026-10-18T09:40:31.103Z",
+  "chapters": [
+    {
+      "chapter_id": "ch01",
+      "number": 1,
+      "title": "市场营销导论",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第1章数字资源\\第1章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第1章数字资源\\第1章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第1章数字资源\\第1章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第1章数字资源\\第1章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第1章数字资源\\第1章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "official knowledge point has no body definition: 市场的类型",
+        "official knowledge point has no body definition: 数智营销发展的现实基础"
+      ],
+      "counts": {
+        "knowledge_points": 8,
+        "official_knowledge_points": 8,
+        "granular_knowledge_points": 0,
+        "sections": 4,
+        "content_blocks": 64,
+        "questions": 32,
+        "ideology_points": 5,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 98,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch02",
+      "number": 2,
+      "title": "市场营销管理哲学",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第2章数字资源\\第2章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第2章数字资源\\第2章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第2章数字资源\\第2章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第2章数字资源\\第2章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第2章数字资源\\第2章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "13 question(s) had no knowledge point match; used a chapter fallback"
+      ],
+      "counts": {
+        "knowledge_points": 16,
+        "official_knowledge_points": 16,
+        "granular_knowledge_points": 0,
+        "sections": 5,
+        "content_blocks": 63,
+        "questions": 39,
+        "ideology_points": 3,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 179,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch03",
+      "number": 3,
+      "title": "市场营销环境",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第3章数字资源\\第3章 知识点与关键词.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第3章数字资源\\第3章 习题.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第3章数字资源\\第3章 课程思政.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第3章数字资源\\第3章 教学指南.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第3章数字资源\\第3章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "merged 27 legacy granular knowledge points from E:\\Documents\\GitHub\\learning-agent\\data\\legacy\\marketing_textbook\\ch03-05\\knowledge_points.json",
+        "3 question(s) had no knowledge point match; used a chapter fallback"
+      ],
+      "counts": {
+        "knowledge_points": 34,
+        "official_knowledge_points": 7,
+        "granular_knowledge_points": 27,
+        "sections": 4,
+        "content_blocks": 43,
+        "questions": 24,
+        "ideology_points": 4,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 125,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch04",
+      "number": 4,
+      "title": "消费者市场与购买行为分析",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第4章数字资源\\第4章 知识点和关键词.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第4章数字资源\\第4章 习题.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第4章数字资源\\第4章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第4章数字资源\\第4章 教学指南.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第4章数字资源\\第4章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "mammoth: Unrecognised paragraph style: '五级章节' (Style ID: a7)",
+        "mammoth: An unrecognised element was ignored: v:fill",
+        "mammoth: An unrecognised element was ignored: v:stroke",
+        "mammoth: A v:imagedata element without a relationship ID was ignored",
+        "mammoth: An unrecognised element was ignored: {urn:schemas-microsoft-com:office:office}lock",
+        "merged 39 legacy granular knowledge points from E:\\Documents\\GitHub\\learning-agent\\data\\legacy\\marketing_textbook\\ch03-05\\knowledge_points.json"
+      ],
+      "counts": {
+        "knowledge_points": 50,
+        "official_knowledge_points": 11,
+        "granular_knowledge_points": 39,
+        "sections": 5,
+        "content_blocks": 47,
+        "questions": 47,
+        "ideology_points": 5,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 201,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch05",
+      "number": 5,
+      "title": "组织市场与购买行为分析",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第5章数字资源\\第5章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第5章数字资源\\第5章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第5章数字资源\\第5章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第5章数字资源\\第5章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第5章数字资源\\第5章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "merged 18 legacy granular knowledge points from E:\\Documents\\GitHub\\learning-agent\\data\\legacy\\marketing_textbook\\ch03-05\\knowledge_points.json"
+      ],
+      "counts": {
+        "knowledge_points": 41,
+        "official_knowledge_points": 12,
+        "granular_knowledge_points": 29,
+        "sections": 4,
+        "content_blocks": 86,
+        "questions": 23,
+        "ideology_points": 5,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 228,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch06",
+      "number": 6,
+      "title": "市场营销调研",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第6章数字资源\\第6章 知识点与关键词.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第6章数字资源\\第6章 习题.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第6章数字资源\\第6章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第6章数字资源\\第6章 教学指南.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第6章数字资源\\第6章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "official knowledge point has no body definition: 市场营销调研的类型",
+        "official knowledge point has no body definition: 市场营销调研的步骤",
+        "official knowledge point has no body definition: 抽样的相关概念",
+        "2 question(s) had no knowledge point match; used a chapter fallback"
+      ],
+      "counts": {
+        "knowledge_points": 11,
+        "official_knowledge_points": 11,
+        "granular_knowledge_points": 0,
+        "sections": 5,
+        "content_blocks": 37,
+        "questions": 53,
+        "ideology_points": 6,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 186,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch07",
+      "number": 7,
+      "title": "目标市场营销战略",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 习题.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 课程思政.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 教学指南.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "mammoth: Unrecognised paragraph style: 'p1' (Style ID: p1)",
+        "mammoth: Unrecognised paragraph style: 'List Paragraph' (Style ID: a3)",
+        "official knowledge point has no body definition: 市场定位的依据",
+        "1 question(s) had no knowledge point match; used a chapter fallback"
+      ],
+      "counts": {
+        "knowledge_points": 15,
+        "official_knowledge_points": 13,
+        "granular_knowledge_points": 2,
+        "sections": 5,
+        "content_blocks": 71,
+        "questions": 32,
+        "ideology_points": 5,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 175,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch08",
+      "number": 8,
+      "title": "产品策略",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第8章数字资源\\第8章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第8章数字资源\\第8章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第8章数字资源\\第8章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第8章数字资源\\第8章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第8章数字资源\\第8章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "official knowledge point has no body definition: 产品组合优化分析",
+        "official knowledge point has no body definition: 新产品的概念及类型"
+      ],
+      "counts": {
+        "knowledge_points": 13,
+        "official_knowledge_points": 11,
+        "granular_knowledge_points": 2,
+        "sections": 5,
+        "content_blocks": 88,
+        "questions": 30,
+        "ideology_points": 4,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 149,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch09",
+      "number": 9,
+      "title": "价格策略",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第9章数字资源\\第9章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第9章数字资源\\第9章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第9章数字资源\\第9章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第9章数字资源\\第9章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第9章数字资源\\第9章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "2 question(s) had no knowledge point match; used a chapter fallback"
+      ],
+      "counts": {
+        "knowledge_points": 20,
+        "official_knowledge_points": 20,
+        "granular_knowledge_points": 0,
+        "sections": 4,
+        "content_blocks": 44,
+        "questions": 39,
+        "ideology_points": 2,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 186,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch10",
+      "number": 10,
+      "title": "渠道策略",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第10章数字资源\\第10章 知识点与关键词.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第10章数字资源\\第10章 习题.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第10章数字资源\\第10章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第10章数字资源\\第10章 教学指南.docx",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第10章数字资源\\第10章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "mammoth: Unrecognised paragraph style: 'List Paragraph' (Style ID: a3)",
+        "official knowledge point has no body definition: 分销渠道的含义及实质"
+      ],
+      "counts": {
+        "knowledge_points": 9,
+        "official_knowledge_points": 9,
+        "granular_knowledge_points": 0,
+        "sections": 4,
+        "content_blocks": 62,
+        "questions": 44,
+        "ideology_points": 4,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 118,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch11",
+      "number": 11,
+      "title": "促销策略",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第11章数字资源\\第11章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第11章数字资源\\第11章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第11章数字资源\\第11章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第11章数字资源\\第11章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第11章数字资源\\第11章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [
+        "2 question(s) had no knowledge point match; used a chapter fallback"
+      ],
+      "counts": {
+        "knowledge_points": 22,
+        "official_knowledge_points": 22,
+        "granular_knowledge_points": 0,
+        "sections": 3,
+        "content_blocks": 77,
+        "questions": 43,
+        "ideology_points": 2,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 220,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch12",
+      "number": 12,
+      "title": "市场营销计划、组织与控制",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第12章数字资源\\第12章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第12章数字资源\\第12章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第12章数字资源\\第12章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第12章数字资源\\第12章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第12章数字资源\\第12章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [],
+      "counts": {
+        "knowledge_points": 10,
+        "official_knowledge_points": 10,
+        "granular_knowledge_points": 0,
+        "sections": 4,
+        "content_blocks": 47,
+        "questions": 27,
+        "ideology_points": 2,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 111,
+        "required_files": 4
+      }
+    },
+    {
+      "chapter_id": "ch13",
+      "number": 13,
+      "title": "市场营销新发展",
+      "files": [
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第13章数字资源\\第13章 知识点与关键词.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第13章数字资源\\第13章 习题.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第13章数字资源\\第13章 课程思政.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第13章数字资源\\第13章 教学指南.doc",
+        "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第13章数字资源\\第13章 知识框架图.pdf"
+      ],
+      "failed": [],
+      "warnings": [],
+      "counts": {
+        "knowledge_points": 4,
+        "official_knowledge_points": 4,
+        "granular_knowledge_points": 0,
+        "sections": 4,
+        "content_blocks": 15,
+        "questions": 23,
+        "ideology_points": 2,
+        "teaching_guide": 1,
+        "framework_pdf": 1,
+        "framework_text_chars": 154,
+        "required_files": 4
+      }
+    }
+  ],
+  "totals": {
+    "chapters": 13,
+    "required_expected": 52,
+    "required_documents": 52,
+    "optional_expected": 13,
+    "optional_documents": 13,
+    "knowledge_points": 253,
+    "official_knowledge_points": 154,
+    "granular_knowledge_points": 99,
+    "sections": 56,
+    "content_blocks": 744,
+    "questions": 456,
+    "ideology_points": 49,
+    "teaching_guides": 13,
+    "failed_required": 0
+  },
+  "failed": []
+}

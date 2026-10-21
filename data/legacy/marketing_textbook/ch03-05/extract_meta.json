@@ -1,0 +1,18 @@
+{
+  "body_size_mode": 10.3,
+  "pages": [
+    63,
+    128
+  ],
+  "records": 752,
+  "kinds": {
+    "chapter": 3,
+    "special": 27,
+    "paragraph": 488,
+    "section": 13,
+    "h2": 41,
+    "figure": 10,
+    "h4": 139,
+    "h3": 31
+  }
+}

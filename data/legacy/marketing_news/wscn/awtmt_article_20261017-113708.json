@@ -1,0 +1,771 @@
+{
+  "code": 20000,
+  "message": "OK",
+  "data": {
+    "count": 2219,
+    "items": [
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/ab5b317e-54ba-4124-af71-7de4cf4b6356",
+          "display_name": "张雅琦",
+          "id": 120000004773,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3783716?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "美国9月零售销售数据表面亮眼，实则暗藏隐忧——油价高企推高整体读数，但同期多项消费品类出现收缩，通胀挤压效应正在蔓延至家庭可支配支出。美国商",
+        "content_short": "",
+        "display_time": 1792069614,
+        "id": 3783716,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/77be24da-6e1f-458c-8932-e6b9cfdb19e0.png",
+          "height": 528,
+          "width": 792,
+          "size": 732964
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "quanqiuyaowen",
+            "name": "突发要闻-Breaking News"
+          }
+        ],
+        "title": "油价推高美国9月零售环比增0.8%，剔除波动项后<em>消费</em>增长乏力",
+        "uri": "https://wallstreetcn.com/articles/3783716?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/da78b695-955a-450a-b021-a8cd85b013a3",
+          "display_name": "李佳",
+          "id": 120000004873,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3783524?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此时推出Muse",
+        "content_short": "",
+        "display_time": 1791883698,
+        "id": 3783524,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/9a8b7786-13e4-49f4-8ca6-6b27617fd62b.jpeg",
+          "height": 495,
+          "width": 792,
+          "size": 150560
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "AI模型遭遇<em>消费</em>降级：顶级模型使用占比从55%降至14%，用户转向性价比",
+        "uri": "https://wallstreetcn.com/articles/3783524?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+          "display_name": "杨宸",
+          "id": 120000004919,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3783295?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+        "content_short": "",
+        "display_time": 1791559153,
+        "id": 3783295,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/72775abd-ba0a-4604-8c45-7ee36b106ece.png",
+          "height": 682,
+          "width": 1024,
+          "size": 1562809
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "美10月<em>消费</em>者信心指数初值降至五个月低点，经济现况指标创历史新低",
+        "uri": "https://wallstreetcn.com/articles/3783295?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/e6a5af79-24ca-42e8-a006-fbfff2f4a4be",
+          "display_name": "董静",
+          "id": 120000004826,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3783154?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "今年的“十一”有些不一样。中秋提前，拼假最长可连休13天——假期更长了，但需求和政策的结构都出现一些微妙变化，值得及时捕捉。首先在节奏上，中",
+        "content_short": "",
+        "display_time": 1791431687,
+        "id": 3783154,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/49dc5b31-44f4-4b47-a0e3-d71a0e027df6.png",
+          "height": 528,
+          "width": 792,
+          "size": 813976
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "国联民生证券陶川、孙海若",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "国庆<em>消费</em>：账单里的“星级信号”",
+        "uri": "https://wallstreetcn.com/articles/3783154?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/08507e99-88ee-4368-b332-c44def86720c",
+          "display_name": "赵颖",
+          "id": 120000004514,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3783151?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "国庆假期数据出炉。本文中，我们从宏观、零售轻工及美妆、社会服务及传媒等角度为大家详细解读。宏观：消费平稳增长，“拼假游”释放2026年国庆假",
+        "content_short": "",
+        "display_time": 1791426087,
+        "id": 3783151,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/ab4fb39a-5776-424e-8d11-8ff71f404eb7.jpeg",
+          "height": 682,
+          "width": 1024,
+          "size": 123332
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "一文读懂国庆假期数据：<em>消费</em>平稳边际改善，“拼假游”释放、“奔县游”火热",
+        "uri": "https://wallstreetcn.com/articles/3783151?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+          "display_name": "杨宸",
+          "id": 120000004919,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3783123?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "根据纽约联储周三公布的一项调查，美国消费者对短期通胀的预期在上月明显升温；对劳动力市场的看法有所改善，包括认为自己失业的概率下降，以及主动辞",
+        "content_short": "",
+        "display_time": 1791387741,
+        "id": 3783123,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/0495288a-e432-462c-a52d-015fe704be1e.png",
+          "height": 682,
+          "width": 1024,
+          "size": 1562809
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "quanqiuyaowen",
+            "name": "突发要闻-Breaking News"
+          }
+        ],
+        "title": "美国<em>消费</em>者一年期通胀预期升至3.9%，创三年多新高，劳动力市场信心改善",
+        "uri": "https://wallstreetcn.com/articles/3783123?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/067d1c38-6f46-4ffc-a648-7af55d6251af",
+          "display_name": "苏健城",
+          "id": 120000004900,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3783122?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "欧元兑美元跌至2025年5月以来最低，2026年以来下跌4.44%。法国财政危机加深叠加政治动荡，法德10年期国债利差接近2012年欧债危机",
+        "content_short": "",
+        "display_time": 1791372470,
+        "id": 3783122,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_6.jpg",
+          "height": 1533,
+          "width": 2300,
+          "size": 1502062
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1000023,
+            "title": "见闻主编精选"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "hongguantuoshui",
+            "name": "宏观脱水"
+          }
+        ],
+        "title": "欧洲财政风险推动欧元下跌，巴西资产在总统大选预期下大涨，中国国庆假期入境<em>消费</em>亮眼---1007宏观脱水",
+        "uri": "https://wallstreetcn.com/premium/articles/3783122?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9",
+        "vip_type": "gold",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3783122?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/067d1c38-6f46-4ffc-a648-7af55d6251af",
+          "display_name": "苏健城",
+          "id": 120000004900,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3783023?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "纳指与全球主要市场走出罕见分化，长端美债收益率升破5%为分母端压力来源，资产差异在分子端，即谁具备盈利上修对冲。AI资产拥有分子对冲，道指、",
+        "content_short": "",
+        "display_time": 1791210378,
+        "id": 3783023,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_1.jpg",
+          "height": 1364,
+          "width": 2048,
+          "size": 1050273
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1000023,
+            "title": "见闻主编精选"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "hongguantuoshui",
+            "name": "宏观脱水"
+          }
+        ],
+        "title": "全球股市分化AI盈利对冲成关键，美国国会控制权将重估政策预期，中国生产分化<em>消费</em>磨底政策加码---1005宏观脱水",
+        "uri": "https://wallstreetcn.com/premium/articles/3783023?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9",
+        "vip_type": "gold",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3783023?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/da78b695-955a-450a-b021-a8cd85b013a3",
+          "display_name": "李佳",
+          "id": 120000004873,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3782917?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor ",
+        "content_short": "",
+        "display_time": 1790935876,
+        "id": 3782917,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/cc65e7bb-3756-4a2b-a4c6-346d999c6ae6.png",
+          "height": 591,
+          "width": 792,
+          "size": 966354
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "发布23天引爆<em>消费</em>级Agent！大摩深度解读“Muse 6大焦点问题”",
+        "uri": "https://wallstreetcn.com/articles/3782917?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/365c616b-79d8-4f08-9509-05bc8d38f1b9",
+          "display_name": "乐鸣",
+          "id": 100001460703,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3782851?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "1、【美国8月商品贸易逆差意外暴涨】美国商务部周三公布的预估数据显示，8月商品贸易逆差环比扩大11.5%至1326亿美元，创2025年初以来",
+        "content_short": "",
+        "display_time": 1790818758,
+        "id": 3782851,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/8cc82cab-03b6-4080-8271-44a2b65dcd2f.jpeg",
+          "height": 600,
+          "width": 800,
+          "size": 72617
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1000023,
+            "title": "见闻主编精选"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "VIPzaowanbao",
+            "name": "早晚报"
+          }
+        ],
+        "title": "10月1日会员早报：美国8月商品贸易逆差意外暴涨 美国<em>消费</em>者信心创逾12年新低",
+        "uri": "https://wallstreetcn.com/premium/articles/3782851?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9",
+        "vip_type": "gold",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3782851?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/da78b695-955a-450a-b021-a8cd85b013a3",
+          "display_name": "李佳",
+          "id": 120000004873,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3782840?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "美国经济在多重压力下仍保持较强增长动能。美国商务部周三公布的最终数据显示，二季度实际GDP年化季环比增长2.2%，较初值1.5%大幅上修，也",
+        "content_short": "",
+        "display_time": 1790773005,
+        "id": 3782840,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/63101c19-2953-4346-b240-dff4f969ffc3.png",
+          "height": 459,
+          "width": 689,
+          "size": 470663
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "quanqiuyaowen",
+            "name": "突发要闻-Breaking News"
+          }
+        ],
+        "title": "美国二季度实际GDP年化季环比终值2.2%，<em>消费</em>与AI投资成主要支撑",
+        "uri": "https://wallstreetcn.com/articles/3782840?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/067d1c38-6f46-4ffc-a648-7af55d6251af",
+          "display_name": "苏健城",
+          "id": 120000004900,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3782834?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "9月美国制造业PMI显著走强，8月零售反弹，非农超预期且失业率维持低位，核心CPI环比升温。联储如期加息且指引偏鹰，加息预期大幅升温，美元升",
+        "content_short": "",
+        "display_time": 1790767207,
+        "id": 3782834,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_15.jpg",
+          "height": 576,
+          "width": 1024,
+          "size": 576520
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1000023,
+            "title": "见闻主编精选"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "hongguantuoshui",
+            "name": "宏观脱水"
+          }
+        ],
+        "title": "美制造与<em>消费</em>走强加息预期升温，美军事信用折价传导金融信用，中美在贸易药物人工智能等达共识---0930宏观脱水",
+        "uri": "https://wallstreetcn.com/premium/articles/3782834?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9",
+        "vip_type": "gold",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3782834?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/08507e99-88ee-4368-b332-c44def86720c",
+          "display_name": "赵颖",
+          "id": 120000004514,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3782802?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+        "content_short": "",
+        "display_time": 1790738546,
+        "id": 3782802,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/00b98fa9-e591-4a8a-8268-b36b198defbb.png",
+          "height": 528,
+          "width": 792,
+          "size": 873892
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "高盛详解代理式AI<em>消费</em>时代：谁将成为电商领域的最大赢家？",
+        "uri": "https://wallstreetcn.com/articles/3782802?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+          "display_name": "杨宸",
+          "id": 120000004919,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3782775?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩。据周二公布的",
+        "content_short": "",
+        "display_time": 1790723880,
+        "id": 3782775,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_3.jpg",
+          "height": 1365,
+          "width": 2048,
+          "size": 1301836
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "美国<em>消费</em>者信心骤降至2014年以来最低，<em>消费</em>意愿全面降温，美联储面临政策两难",
+        "uri": "https://wallstreetcn.com/articles/3782775?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/067d1c38-6f46-4ffc-a648-7af55d6251af",
+          "display_name": "苏健城",
+          "id": 120000004900,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3782736?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "8月工业企业利润同比从7月的11.2%放缓至4.2%，营收增速边际改善至7.3%。PPI回升与利润回落形成背离，盈利改善集中于少数上游与AI",
+        "content_short": "",
+        "display_time": 1790674406,
+        "id": 3782736,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
+          "height": 1667,
+          "width": 2500,
+          "size": 2188263
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1000023,
+            "title": "见闻主编精选"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "hongguantuoshui",
+            "name": "宏观脱水"
+          }
+        ],
+        "title": "中国8月工企利润放缓，中国文旅<em>消费</em>月展望，平陆运河通航令四大行业受益---0929宏观脱水",
+        "uri": "https://wallstreetcn.com/premium/articles/3782736?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9",
+        "vip_type": "gold",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3782736?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/da78b695-955a-450a-b021-a8cd85b013a3",
+          "display_name": "李佳",
+          "id": 120000004873,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3782658?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新增",
+        "content_short": "",
+        "display_time": 1790594684,
+        "id": 3782658,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/3d69bdbe-4a95-4471-a74c-6d82c4c916ea.png",
+          "height": 528,
+          "width": 792,
+          "size": 574139
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "美国“快乐通胀”升温：爱好类<em>消费</em>8月同比涨7.9%，Z世代游戏支出过去一年增20%",
+        "uri": "https://wallstreetcn.com/articles/3782658?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/067d1c38-6f46-4ffc-a648-7af55d6251af",
+          "display_name": "苏健城",
+          "id": 120000004900,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3782607?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "消费税改革是扩内需、理顺央地财政关系的必要一环，2026年转向优化征税范围和税率、推进部分品目后移。收入归属按存量核定基数、增量原则归地方，",
+        "content_short": "",
+        "display_time": 1790513706,
+        "id": 3782607,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_12.jpg",
+          "height": 1683,
+          "width": 2500,
+          "size": 2192759
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1000023,
+            "title": "见闻主编精选"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "hongguantuoshui",
+            "name": "宏观脱水"
+          }
+        ],
+        "title": "中国<em>消费</em>税改革推进与央地分配，中国碳资产开发与绿色转型---W39国内宏观脱水",
+        "uri": "https://wallstreetcn.com/premium/articles/3782607?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9",
+        "vip_type": "gold",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3782607?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/067d1c38-6f46-4ffc-a648-7af55d6251af",
+          "display_name": "苏健城",
+          "id": 120000004900,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3782606?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "美国经济增长势头偏强，9月综合PMI超预期走至5年新高，就业数据强劲而地产偏弱。中美达成八点成果共识，美伊仍在拉锯，多位地方联储主席鹰派表态",
+        "content_short": "",
+        "display_time": 1790513299,
+        "id": 3782606,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_6.jpg",
+          "height": 1533,
+          "width": 2300,
+          "size": 1502062
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1000023,
+            "title": "见闻主编精选"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "hongguantuoshui",
+            "name": "宏观脱水"
+          }
+        ],
+        "title": "美国增长走强<em>消费</em>小幅降温，全球AI融资缺口与表外隐性风险---W39海外宏观脱水",
+        "uri": "https://wallstreetcn.com/premium/articles/3782606?layout=wscn-layout?keyword=%E6%B6%88%E8%B4%B9",
+        "vip_type": "gold",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3782606?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+          "display_name": "杨宸",
+          "id": 120000004919,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3782551?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+        "content_short": "",
+        "display_time": 1790348193,
+        "id": 3782551,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/231b096c-2379-42bb-bcbe-08d83e23a489.png",
+          "height": 682,
+          "width": 1024,
+          "size": 1562809
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "密歇根大学9月<em>消费</em>者信心指数降至四个月低点，未来一年通胀预期升至4.6%",
+        "uri": "https://wallstreetcn.com/articles/3782551?keyword=%E6%B6%88%E8%B4%B9"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/af8a4f31-63d8-420c-b295-6df67f098944",
+          "display_name": "卜淑情",
+          "id": 120000004518,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3782385?keyword=%E6%B6%88%E8%B4%B9"
+        },
+        "comment_count": 0,
+        "content": "现房销售新政带来的机制变化最近几天，地产板块反弹，如下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+        "content_short": "",
+        "display_time": 1790164010,
+        "id": 3782385,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/e3e668ad-24d4-4c78-84af-3e260065ddd2.png",
+          "height": 528,
+          "width": 792,
+          "size": 581422
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "沧海一土狗",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "为什么这一次楼市将领先于<em>消费</em>复苏？",
+        "uri": "https://wallstreetcn.com/articles/3782385?keyword=%E6%B6%88%E8%B4%B9"
+      }
+    ],
+    "next_cursor": "2",
+    "related_paid_article": {
+      "author": null,
+      "comment_count": 0,
+      "content": "",
+      "content_short": "财险产品开发新规正式落地，非车险综合治理进一步向产品和定价环节延伸。\n此前持续推进的“报行合一”已推动部分险种手续费率明显下降，新规将进一步规范条款设计、费率执行和产品管理，推动行业竞争从渠道费用比拼转向风险定价与承保能力竞争，头部险企的规模、数据及风控优势有望进一步强化。更重要的是，新规有望激发财险行业的盈利弹性。",
+      "display_time": 1792207937,
+      "id": 3783413,
+      "image": {
+        "uri": "https://wpimg-wscn.awtmt.com/b98791d8-19d7-4fa1-adf3-5cc7d4b79e94.png",
+        "height": 646,
+        "width": 718,
+        "size": 419091
+      },
+      "is_in_vip_privilege": true,
+      "is_paid": false,
+      "is_priced": true,
+      "is_trail": false,
+      "limited_time": 0,
+      "relate_topics": [
+        {
+          "id": 1000023,
+          "title": "见闻主编精选"
+        }
+      ],
+      "source_name": "万周",
+      "source_uri": "",
+      "subtitle": "",
+      "tag": "精选",
+      "themes": null,
+      "title": "财险反内卷进入深水区：产品新规正式落地，财险行业盈利弹性一触即发？",
+      "uri": "https://wallstreetcn.com/premium/articles/3783413?layout=wscn-layout",
+      "vip_type": "gold",
+      "vip_uri": "https://wallstreetcn.com/member/articles/3783413?keyword="
+    },
+    "search_id": ""
+  }
+}

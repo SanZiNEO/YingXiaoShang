@@ -1,0 +1,1324 @@
+{
+  "dataset": "marketing_news_wscn",
+  "source": "华尔街见闻",
+  "fetched_at": "2026-10-17T11:37:49.510953+08:00",
+  "queries": [
+    "消费",
+    "B2B"
+  ],
+  "count": 20,
+  "articles": [
+    {
+      "article_id": "wscn-3783716",
+      "title": "油价推高美国9月零售环比增0.8%，剔除波动项后消费增长乏力",
+      "url": "https://wallstreetcn.com/articles/3783716?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-10-15T21:06:54+08:00",
+      "author": "张雅琦",
+      "summary": "美国9月零售销售数据表面亮眼，实则暗藏隐忧——油价高企推高整体读数，但同期多项消费品类出现收缩，通胀挤压效应正在蔓延至家庭可支配支出。美国商",
+      "content": "美国9月零售销售数据表面亮眼，实则暗藏隐忧——油价高企推高整体读数，但同期多项消费品类出现收缩，通胀挤压效应正在蔓延至家庭可支配支出。美国商",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "油价推高美国9月零售环比增0.8%，剔除波动项后消费增长乏力 美国9月零售销售数据表面亮眼，实则暗藏隐忧——油价高企推高整体读数，但同期多项消费品类出现收缩，通胀挤压效应正在蔓延至家庭可支配支出。美国商",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_economic",
+          "tag_name": "经济环境",
+          "tag_role": "example",
+          "confidence": 0.7,
+          "method": "rule",
+          "evidence_span": "数据表面亮眼，实则暗藏隐忧——油价高企推高整体读数，但同期多项消费品类出现收缩，通胀挤压效应正在蔓延至家庭可支配支出。美国商",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "油价推高美国9月零售环比增0.8%，剔除波动项后消费增长乏力 美国9月零售销售数据表面亮眼，实则暗藏隐忧——油价高企推高整体读数，但同期多项消费品类出现收缩，通胀挤压效应正在蔓延至家庭可支配支出。美国商",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "油价推高美国9月零售环比增0.8%，剔除波动项后消费增长乏力 美国9月零售销售数据表面亮眼，实则暗藏隐忧——油价高企推高整体读数，但同期多项消费品类出现收缩，通胀挤压效应正在蔓延至家庭可支配支出。美国商",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3783524",
+      "title": "AI模型遭遇消费降级：顶级模型使用占比从55%降至14%，用户转向性价比",
+      "url": "https://wallstreetcn.com/articles/3783524?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-10-13T17:28:18+08:00",
+      "author": "李佳",
+      "summary": "AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此时推出Muse",
+      "content": "AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此时推出Muse",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_personal_economic",
+          "tag_name": "经济因素",
+          "tag_role": "example",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "AI模型遭遇消费降级：顶级模型使用占比从55%降至14%，用户转向性价比 AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此时推出Mus",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "AI模型遭遇消费降级：顶级模型使用占比从55%降至14%，用户转向性价比 AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此时推出Mus",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_technology",
+          "tag_name": "技术环境",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "AI模型遭遇消费降级：顶级模型使用占比从55%降至14%，用户转向性价比 AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "AI模型遭遇消费降级：顶级模型使用占比从55%降至14%，用户转向性价比 AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此时推出Mus",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "AI模型遭遇消费降级：顶级模型使用占比从55%降至14%，用户转向性价比 AI大模型行业正面临一个反差：科技巨头仍在竞相推出性能更强的前沿模型，用户却开始转向更便宜、足以满足实际需求的产品。Meta此时推出Mus",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3783295",
+      "title": "美10月消费者信心指数初值降至五个月低点，经济现况指标创历史新低",
+      "url": "https://wallstreetcn.com/articles/3783295?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-10-09T23:19:13+08:00",
+      "author": "杨宸",
+      "summary": "美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+      "content": "美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_behavior",
+          "tag_name": "消费者行为",
+          "tag_role": "example",
+          "confidence": 0.8,
+          "method": "rule",
+          "evidence_span": "美10月消费者信心指数初值降至五个月低点，经济现况指标创历史新低 美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "美10月消费者信心指数初值降至五个月低点，经济现况指标创历史新低 美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_economic",
+          "tag_name": "经济环境",
+          "tag_role": "example",
+          "confidence": 0.7,
+          "method": "rule",
+          "evidence_span": "数初值降至五个月低点，经济现况指标创历史新低 美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "美10月消费者信心指数初值降至五个月低点，经济现况指标创历史新低 美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "美10月消费者信心指数初值降至五个月低点，经济现况指标创历史新低 美国消费者信心在10月初再度走低，通胀持续施压令家庭经济状况感受降至有记录以来最差水平，为美国经济前景增添新的隐忧。密歇根大学周五发布的初步",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3783154",
+      "title": "国庆消费：账单里的“星级信号”",
+      "url": "https://wallstreetcn.com/articles/3783154?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-10-08T11:54:47+08:00",
+      "author": "董静",
+      "summary": "今年的“十一”有些不一样。中秋提前，拼假最长可连休13天——假期更长了，但需求和政策的结构都出现一些微妙变化，值得及时捕捉。首先在节奏上，中",
+      "content": "今年的“十一”有些不一样。中秋提前，拼假最长可连休13天——假期更长了，但需求和政策的结构都出现一些微妙变化，值得及时捕捉。首先在节奏上，中",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "国庆消费：账单里的“星级信号” 今年的“十一”有些不一样。中秋提前，拼假最长可连休13天——假期更长了，但需求和政策的结构都出现一些微妙变化，值得及时捕捉。首先在节奏上，中",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_political",
+          "tag_name": "政治环境",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "今年的“十一”有些不一样。中秋提前，拼假最长可连休13天——假期更长了，但需求和政策的结构都出现一些微妙变化，值得及时捕捉。首先在节奏上，中",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "国庆消费：账单里的“星级信号” 今年的“十一”有些不一样。中秋提前，拼假最长可连休13天——假期更长了，但需求和政策的结构都出现一些微妙变化，值得及时捕捉。首先在节奏上，中",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "国庆消费：账单里的“星级信号” 今年的“十一”有些不一样。中秋提前，拼假最长可连休13天——假期更长了，但需求和政策的结构都出现一些微妙变化，值得及时捕捉。首先在节奏上，中",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3783151",
+      "title": "一文读懂国庆假期数据：消费平稳边际改善，“拼假游”释放、“奔县游”火热",
+      "url": "https://wallstreetcn.com/articles/3783151?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-10-08T10:21:27+08:00",
+      "author": "赵颖",
+      "summary": "国庆假期数据出炉。本文中，我们从宏观、零售轻工及美妆、社会服务及传媒等角度为大家详细解读。宏观：消费平稳增长，“拼假游”释放2026年国庆假",
+      "content": "国庆假期数据出炉。本文中，我们从宏观、零售轻工及美妆、社会服务及传媒等角度为大家详细解读。宏观：消费平稳增长，“拼假游”释放2026年国庆假",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "一文读懂国庆假期数据：消费平稳边际改善，“拼假游”释放、“奔县游”火热 国庆假期数据出炉。本文中，我们从宏观、零售轻工及美妆、社会服务及传媒等角度为大家详细解读。宏观：消费平稳增长，“拼假游”释放2026年国庆假",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "一文读懂国庆假期数据：消费平稳边际改善，“拼假游”释放、“奔县游”火热 国庆假期数据出炉。本文中，我们从宏观、零售轻工及美妆、社会服务及传媒等角度为大家详细解读。宏观：消费平稳增长，“拼假游”释放2026年国庆假",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "一文读懂国庆假期数据：消费平稳边际改善，“拼假游”释放、“奔县游”火热 国庆假期数据出炉。本文中，我们从宏观、零售轻工及美妆、社会服务及传媒等角度为大家详细解读。宏观：消费平稳增长，“拼假游”释放2026年国庆假",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3783123",
+      "title": "美国消费者一年期通胀预期升至3.9%，创三年多新高，劳动力市场信心改善",
+      "url": "https://wallstreetcn.com/articles/3783123?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-10-07T23:42:21+08:00",
+      "author": "杨宸",
+      "summary": "根据纽约联储周三公布的一项调查，美国消费者对短期通胀的预期在上月明显升温；对劳动力市场的看法有所改善，包括认为自己失业的概率下降，以及主动辞",
+      "content": "根据纽约联储周三公布的一项调查，美国消费者对短期通胀的预期在上月明显升温；对劳动力市场的看法有所改善，包括认为自己失业的概率下降，以及主动辞",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "美国消费者一年期通胀预期升至3.9%，创三年多新高，劳动力市场信心改善 根据纽约联储周三公布的一项调查，美国消费者对短期通胀的预期在上月明显升温；对劳动力市场的看法有所改善，包括认为自己失业的概率下降，以",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_economic",
+          "tag_name": "经济环境",
+          "tag_role": "example",
+          "confidence": 0.7,
+          "method": "rule",
+          "evidence_span": "美国消费者一年期通胀预期升至3.9%，创三年多新高，劳动力市场信心改善 根据纽约联储周三公布的一项调查，美国消费者对短期通胀的预期在上月明显升温；对劳动力市场的看法有所改善，包括认为自己失业的概率下降，以及主动辞",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "美国消费者一年期通胀预期升至3.9%，创三年多新高，劳动力市场信心改善 根据纽约联储周三公布的一项调查，美国消费者对短期通胀的预期在上月明显升温；对劳动力市场的看法有所改善，包括认为自己失业的概率下降，以",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "美国消费者一年期通胀预期升至3.9%，创三年多新高，劳动力市场信心改善 根据纽约联储周三公布的一项调查，美国消费者对短期通胀的预期在上月明显升温；对劳动力市场的看法有所改善，包括认为自己失业的概率下降，以",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3782917",
+      "title": "发布23天引爆消费级Agent！大摩深度解读“Muse 6大焦点问题”",
+      "url": "https://wallstreetcn.com/articles/3782917?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-10-02T18:11:16+08:00",
+      "author": "李佳",
+      "summary": "Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor",
+      "content": "Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "发布23天引爆消费级Agent！大摩深度解读“Muse 6大焦点问题” Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_digital_consumer_decision",
+          "tag_name": "数智消费者的购买决策过程",
+          "tag_role": "example",
+          "confidence": 0.7,
+          "method": "rule",
+          "evidence_span": "天引爆消费级Agent！大摩深度解读“Muse 6大焦点问题” Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_technology",
+          "tag_name": "技术环境",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "23天引爆消费级Agent！大摩深度解读“Muse 6大焦点问题” Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "发布23天引爆消费级Agent！大摩深度解读“Muse 6大焦点问题” Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "发布23天引爆消费级Agent！大摩深度解读“Muse 6大焦点问题” Meta旗下AI智能体应用Muse上线仅23天便迅速引爆消费级Agent市场，成为近期增长最为迅猛的AI应用之一。市场调研机构Sensor",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3782802",
+      "title": "高盛详解代理式AI消费时代：谁将成为电商领域的最大赢家？",
+      "url": "https://wallstreetcn.com/articles/3782802?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-09-30T11:22:26+08:00",
+      "author": "赵颖",
+      "summary": "AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+      "content": "AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "高盛详解代理式AI消费时代：谁将成为电商领域的最大赢家？ AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_digital_consumer",
+          "tag_name": "数智化时代的消费者购买行为",
+          "tag_role": "example",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "高盛详解代理式AI消费时代：谁将成为电商领域的最大赢家？ AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_technology",
+          "tag_name": "技术环境",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "高盛详解代理式AI消费时代：谁将成为电商领域的最大赢家？ AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "高盛详解代理式AI消费时代：谁将成为电商领域的最大赢家？ AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "高盛详解代理式AI消费时代：谁将成为电商领域的最大赢家？ AI时代，购物链条正在被重写。据追风交易台，高盛全球投资研究的最新研报显示，AI代理将重构消费者意图的入口——从过去的用户主动搜索、比价、下",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3782775",
+      "title": "美国消费者信心骤降至2014年以来最低，消费意愿全面降温，美联储面临政策两难",
+      "url": "https://wallstreetcn.com/articles/3782775?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-09-30T07:18:00+08:00",
+      "author": "杨宸",
+      "summary": "美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩。据周二公布的",
+      "content": "美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩。据周二公布的",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_behavior",
+          "tag_name": "消费者行为",
+          "tag_role": "example",
+          "confidence": 0.8,
+          "method": "rule",
+          "evidence_span": "美国消费者信心骤降至2014年以来最低，消费意愿全面降温，美联储面临政策两难 美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "美国消费者信心骤降至2014年以来最低，消费意愿全面降温，美联储面临政策两难 美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_economic",
+          "tag_name": "经济环境",
+          "tag_role": "example",
+          "confidence": 0.7,
+          "method": "rule",
+          "evidence_span": "美联储面临政策两难 美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩。据周二公布的",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_personal_economic",
+          "tag_name": "经济因素",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "全面降温，美联储面临政策两难 美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩。据周二公布的",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "美国消费者信心骤降至2014年以来最低，消费意愿全面降温，美联储面临政策两难 美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "美国消费者信心骤降至2014年以来最低，消费意愿全面降温，美联储面临政策两难 美国消费者信心在9月大幅下滑，触及逾十年低点，能源价格高企与通胀压力持续侵蚀家庭实际收入，购房、购车及大件家电需求意愿同步收缩",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3782658",
+      "title": "美国“快乐通胀”升温：爱好类消费8月同比涨7.9%，Z世代游戏支出过去一年增20%",
+      "url": "https://wallstreetcn.com/articles/3782658?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-09-28T19:24:44+08:00",
+      "author": "李佳",
+      "summary": "美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新增",
+      "content": "美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新增",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "美国“快乐通胀”升温：爱好类消费8月同比涨7.9%，Z世代游戏支出过去一年增20% 美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新增",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_economic",
+          "tag_name": "经济环境",
+          "tag_role": "example",
+          "confidence": 0.7,
+          "method": "rule",
+          "evidence_span": "美国“快乐通胀”升温：爱好类消费8月同比涨7.9%，Z世代游戏支出过去一年增20% 美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_subculture",
+          "tag_name": "亚文化",
+          "tag_role": "example",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "美国“快乐通胀”升温：爱好类消费8月同比涨7.9%，Z世代游戏支出过去一年增20% 美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新增",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_emotion",
+          "tag_name": "情感",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "美国“快乐通胀”升温：爱好类消费8月同比涨7.9%，Z世代游戏支出过去一年增20% 美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "美国“快乐通胀”升温：爱好类消费8月同比涨7.9%，Z世代游戏支出过去一年增20% 美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新增",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "美国“快乐通胀”升温：爱好类消费8月同比涨7.9%，Z世代游戏支出过去一年增20% 美国消费者正在为休闲娱乐支付更高成本，但消费热情并未明显降温。随着旅行成本持续攀升，户外运动、电子游戏、手工艺等居家兴趣爱好正成为消费的新增",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3782551",
+      "title": "密歇根大学9月消费者信心指数降至四个月低点，未来一年通胀预期升至4.6%",
+      "url": "https://wallstreetcn.com/articles/3782551?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-09-25T22:56:33+08:00",
+      "author": "杨宸",
+      "summary": "由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+      "content": "由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_behavior",
+          "tag_name": "消费者行为",
+          "tag_role": "example",
+          "confidence": 0.8,
+          "method": "rule",
+          "evidence_span": "密歇根大学9月消费者信心指数降至四个月低点，未来一年通胀预期升至4.6% 由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "密歇根大学9月消费者信心指数降至四个月低点，未来一年通胀预期升至4.6% 由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_economic",
+          "tag_name": "经济环境",
+          "tag_role": "example",
+          "confidence": 0.7,
+          "method": "rule",
+          "evidence_span": "密歇根大学9月消费者信心指数降至四个月低点，未来一年通胀预期升至4.6% 由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "密歇根大学9月消费者信心指数降至四个月低点，未来一年通胀预期升至4.6% 由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "密歇根大学9月消费者信心指数降至四个月低点，未来一年通胀预期升至4.6% 由于对物价上涨和经济前景的担忧加剧，美国9月消费者信心指数降至四个月来的低点。根据周五公布的调查，密歇根大学9月消费者信心指数终值降至48.",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3782385",
+      "title": "为什么这一次楼市将领先于消费复苏？",
+      "url": "https://wallstreetcn.com/articles/3782385?keyword=%E6%B6%88%E8%B4%B9",
+      "published_at": "2026-09-23T19:46:50+08:00",
+      "author": "卜淑情",
+      "summary": "现房销售新政带来的机制变化最近几天，地产板块反弹，如下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+      "content": "现房销售新政带来的机制变化最近几天，地产板块反弹，如下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+      "source": "华尔街见闻",
+      "query": "消费",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_consumer_market",
+          "tag_name": "消费者与消费者市场",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "为什么这一次楼市将领先于消费复苏？ 现房销售新政带来的机制变化最近几天，地产板块反弹，如下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_economic",
+          "tag_name": "经济环境",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "为什么这一次楼市将领先于消费复苏？ 现房销售新政带来的机制变化最近几天，地产板块反弹，如下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_env_political",
+          "tag_name": "政治环境",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "为什么这一次楼市将领先于消费复苏？ 现房销售新政带来的机制变化最近几天，地产板块反弹，如下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_consumer",
+          "tag_name": "消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "为什么这一次楼市将领先于消费复苏？ 现房销售新政带来的机制变化最近几天，地产板块反弹，如下图所示，房地产指数在5个交易日内上涨了8%+。这是因为，市场在传形形色色的地产政策。然",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3777848",
+      "title": "AI进入采购支付闭环：Visa与连连完成大中华区首笔B2B智能体真实交易",
+      "url": "https://wallstreetcn.com/articles/3777848?keyword=B2B",
+      "published_at": "2026-07-24T12:40:08+08:00",
+      "author": "郑嘉意",
+      "summary": "7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华区公开披露的首",
+      "content": "7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华区公开披露的首",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "AI进入采购支付闭环：Visa与连连完成大中华区首笔B2B智能体真实交易 7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华区公开披露的首",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_buying",
+          "tag_name": "组织购买及组织购买品",
+          "tag_role": "example",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "AI进入采购支付闭环：Visa与连连完成大中华区首笔B2B智能体真实交易 7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华区公开披",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_digital_org_tech",
+          "tag_name": "数智化时代组织市场营销的技术赋能",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "AI进入采购支付闭环：Visa与连连完成大中华区首笔B2B智能体真实交易 7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "AI进入采购支付闭环：Visa与连连完成大中华区首笔B2B智能体真实交易 7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华区公开披露的首",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "AI进入采购支付闭环：Visa与连连完成大中华区首笔B2B智能体真实交易 7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华区公开披露的首",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3763269",
+      "title": "报道：SK海力士停产消费级存储器，资源转向B2B与AI服务器市场",
+      "url": "https://wallstreetcn.com/articles/3763269?keyword=B2B",
+      "published_at": "2026-01-14T16:03:17+08:00",
+      "author": "张雅琦",
+      "summary": "全球半导体产业正经历一场由人工智能（AI）需求驱动的深刻结构性变革，存储巨头纷纷通过激进的业务重组与资本开支调整，全力抢占AI算力高地。14",
+      "content": "全球半导体产业正经历一场由人工智能（AI）需求驱动的深刻结构性变革，存储巨头纷纷通过激进的业务重组与资本开支调整，全力抢占AI算力高地。14",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "报道：SK海力士停产消费级存储器，资源转向B2B与AI服务器市场 全球半导体产业正经历一场由人工智能（AI）需求驱动的深刻结构性变革，存储巨头纷纷通过激进的业务重组与资本开支调整，全力抢占AI算力高地。14",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_digital_org_tech",
+          "tag_name": "数智化时代组织市场营销的技术赋能",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "报道：SK海力士停产消费级存储器，资源转向B2B与AI服务器市场 全球半导体产业正经历一场由人工智能（AI）需求驱动的深刻结构性变革，存储巨头纷纷通过激进的业务重组与资本开支调整，全力抢占AI算力高地。14",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "报道：SK海力士停产消费级存储器，资源转向B2B与AI服务器市场 全球半导体产业正经历一场由人工智能（AI）需求驱动的深刻结构性变革，存储巨头纷纷通过激进的业务重组与资本开支调整，全力抢占AI算力高地。14",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "报道：SK海力士停产消费级存储器，资源转向B2B与AI服务器市场 全球半导体产业正经历一场由人工智能（AI）需求驱动的深刻结构性变革，存储巨头纷纷通过激进的业务重组与资本开支调整，全力抢占AI算力高地。14",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3733866",
+      "title": "阿里海外推出首个B2B领域的AI搜索引擎",
+      "url": "https://wallstreetcn.com/articles/3733866?keyword=B2B",
+      "published_at": "2024-11-13T04:10:48+08:00",
+      "author": "房家瑶",
+      "summary": "阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+      "content": "阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "阿里海外推出首个B2B领域的AI搜索引擎 阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market_concept",
+          "tag_name": "组织市场的概念",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "阿里海外推出首个B2B领域的AI搜索引擎 阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_digital_org_tech",
+          "tag_name": "数智化时代组织市场营销的技术赋能",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "阿里海外推出首个B2B领域的AI搜索引擎 阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "阿里海外推出首个B2B领域的AI搜索引擎 阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "阿里海外推出首个B2B领域的AI搜索引擎 阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3662774",
+      "title": "靠B2B走出困境？加拿大电商SAAS巨头Shopify找出路",
+      "url": "https://wallstreetcn.com/articles/3662774?keyword=B2B",
+      "published_at": "2022-06-23T12:09:49+08:00",
+      "author": "夏雨辰",
+      "summary": "随着全球疫情好转、经济重新开放，在新冠疫情期间崛起的电商巨头Shopify如今陷入了增长困境。与此同时，Shopify还遭受来自亚马逊的强大",
+      "content": "随着全球疫情好转、经济重新开放，在新冠疫情期间崛起的电商巨头Shopify如今陷入了增长困境。与此同时，Shopify还遭受来自亚马逊的强大",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "靠B2B走出困境？加拿大电商SAAS巨头Shopify找出路 随着全球疫情好转、经济重新开放，在新冠疫情期间崛起的电商巨头Shopify如今陷入了增长困境。与此同时，Shopify还遭受来自亚马逊的强大",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market_concept",
+          "tag_name": "组织市场的概念",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "靠B2B走出困境？加拿大电商SAAS巨头Shopify找出路 随着全球疫情好转、经济重新开放，在新冠疫情期间崛起的电商巨头Shopify如今陷入了增长困境。与此同时，Shopify还遭受来自亚马逊的强大",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "靠B2B走出困境？加拿大电商SAAS巨头Shopify找出路 随着全球疫情好转、经济重新开放，在新冠疫情期间崛起的电商巨头Shopify如今陷入了增长困境。与此同时，Shopify还遭受来自亚马逊的强大",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "靠B2B走出困境？加拿大电商SAAS巨头Shopify找出路 随着全球疫情好转、经济重新开放，在新冠疫情期间崛起的电商巨头Shopify如今陷入了增长困境。与此同时，Shopify还遭受来自亚马逊的强大",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3656725",
+      "title": "印度今年最大IPO：B2B电商平台OfBusiness考虑上市 融资20亿美元",
+      "url": "https://wallstreetcn.com/articles/3656725?keyword=B2B",
+      "published_at": "2022-04-12T21:49:33+08:00",
+      "author": "赵颖",
+      "summary": "据彭博社报道，印度独角兽公司OfBusiness表示将在一年内启动首次公开募股（IPO），计划融资20亿美元，或成为印度今年规模最大的IPO",
+      "content": "据彭博社报道，印度独角兽公司OfBusiness表示将在一年内启动首次公开募股（IPO），计划融资20亿美元，或成为印度今年规模最大的IPO",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "印度今年最大IPO：B2B电商平台OfBusiness考虑上市 融资20亿美元 据彭博社报道，印度独角兽公司OfBusiness表示将在一年内启动首次公开募股（IPO），计划融资20亿美元，或成为印度今年规模最大的IPO",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market_concept",
+          "tag_name": "组织市场的概念",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "印度今年最大IPO：B2B电商平台OfBusiness考虑上市 融资20亿美元 据彭博社报道，印度独角兽公司OfBusiness表示将在一年内启动首次公开募股（IPO），计划融资20亿美元，或成为印度今年规模最大的IPO",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "印度今年最大IPO：B2B电商平台OfBusiness考虑上市 融资20亿美元 据彭博社报道，印度独角兽公司OfBusiness表示将在一年内启动首次公开募股（IPO），计划融资20亿美元，或成为印度今年规模最大的IPO",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "印度今年最大IPO：B2B电商平台OfBusiness考虑上市 融资20亿美元 据彭博社报道，印度独角兽公司OfBusiness表示将在一年内启动首次公开募股（IPO），计划融资20亿美元，或成为印度今年规模最大的IPO",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3640153",
+      "title": "亚马逊“封店”潮下，跨境电商B2B、独立站迎来契机？",
+      "url": "https://awtmt.com/articles/3640153?from=wscn?keyword=B2B",
+      "published_at": "2021-09-10T20:41:18+08:00",
+      "author": "张超",
+      "summary": "本文来自全天候科技，阅读更多请登陆www.awtmt.com或华尔街见闻APP。作者|张超 编辑|罗丽娟疫情给不少行业造成了严重冲击，跨境",
+      "content": "本文来自全天候科技，阅读更多请登陆www.awtmt.com或华尔街见闻APP。作者|张超 编辑|罗丽娟疫情给不少行业造成了严重冲击，跨境",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "亚马逊“封店”潮下，跨境电商B2B、独立站迎来契机？ 本文来自全天候科技，阅读更多请登陆www.awtmt.com或华尔街见闻APP。作者|张超 编辑|罗丽娟疫情给不少行业造成了严重冲击，跨境",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market_concept",
+          "tag_name": "组织市场的概念",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "亚马逊“封店”潮下，跨境电商B2B、独立站迎来契机？ 本文来自全天候科技，阅读更多请登陆www.awtmt.com或华尔街见闻APP。作者|张超 编辑|罗丽娟疫情给不少行业造成了严重冲击，跨境",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "亚马逊“封店”潮下，跨境电商B2B、独立站迎来契机？ 本文来自全天候科技，阅读更多请登陆www.awtmt.com或华尔街见闻APP。作者|张超 编辑|罗丽娟疫情给不少行业造成了严重冲击，跨境",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "亚马逊“封店”潮下，跨境电商B2B、独立站迎来契机？ 本文来自全天候科技，阅读更多请登陆www.awtmt.com或华尔街见闻APP。作者|张超 编辑|罗丽娟疫情给不少行业造成了严重冲击，跨境",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3634358",
+      "title": "首个跨境出口B2B电商平台敦煌网 港股上市倒计时！ | IPO见闻",
+      "url": "https://wallstreetcn.com/articles/3634358?keyword=B2B",
+      "published_at": "2021-07-05T10:41:03+08:00",
+      "author": "段德甜",
+      "summary": "创始人持股超50%王树彤女士是敦煌网创始人和CEO，2004年成立首个实现中国跨境出口B2B电商行业的在线交易平台——敦煌网。IPO前，通过",
+      "content": "创始人持股超50%王树彤女士是敦煌网创始人和CEO，2004年成立首个实现中国跨境出口B2B电商行业的在线交易平台——敦煌网。IPO前，通过",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "首个跨境出口B2B电商平台敦煌网 港股上市倒计时！ | IPO见闻 创始人持股超50%王树彤女士是敦煌网创始人和CEO，2004年成立首个实现中国跨境出口B2B电商行业的在线交易平台——敦煌网。IPO前，通过",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market_concept",
+          "tag_name": "组织市场的概念",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "首个跨境出口B2B电商平台敦煌网 港股上市倒计时！ | IPO见闻 创始人持股超50%王树彤女士是敦煌网创始人和CEO，2004年成立首个实现中国跨境出口B2B电商行业的在线交易平台——敦煌网。IPO前，通过",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "首个跨境出口B2B电商平台敦煌网 港股上市倒计时！ | IPO见闻 创始人持股超50%王树彤女士是敦煌网创始人和CEO，2004年成立首个实现中国跨境出口B2B电商行业的在线交易平台——敦煌网。IPO前，通过",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "首个跨境出口B2B电商平台敦煌网 港股上市倒计时！ | IPO见闻 创始人持股超50%王树彤女士是敦煌网创始人和CEO，2004年成立首个实现中国跨境出口B2B电商行业的在线交易平台——敦煌网。IPO前，通过",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    },
+    {
+      "article_id": "wscn-3619676",
+      "title": "4.3.3 中国IT需求的特点与B2B电商快速增长期",
+      "url": "https://wallstreetcn.com/premium/articles/3619676?layout=wscn-layout?keyword=B2B",
+      "published_at": "2021-02-08T14:50:43+08:00",
+      "author": "石泽蕤",
+      "summary": "4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+      "content": "4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+      "source": "华尔街见闻",
+      "query": "B2B",
+      "is_paid": false,
+      "rights": "link+snippet",
+      "tags": [
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market",
+          "tag_name": "组织市场与购买行为概述",
+          "tag_role": "example",
+          "confidence": 0.85,
+          "method": "rule",
+          "evidence_span": "4.3.3 中国IT需求的特点与B2B电商快速增长期 4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_digital_org_market",
+          "tag_name": "数智化时代的组织市场营销",
+          "tag_role": "example",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": " 4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "knowledge_point",
+          "tag_key": "kp_org_market_concept",
+          "tag_name": "组织市场的概念",
+          "tag_role": "example",
+          "confidence": 0.6,
+          "method": "rule",
+          "evidence_span": "4.3.3 中国IT需求的特点与B2B电商快速增长期 4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "competency",
+          "tag_key": "comp_insight",
+          "tag_name": "市场与消费者洞察",
+          "tag_role": "core",
+          "confidence": 0.75,
+          "method": "rule",
+          "evidence_span": "4.3.3 中国IT需求的特点与B2B电商快速增长期 4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+          "is_gold": false,
+          "review_status": "draft"
+        },
+        {
+          "tag_type": "decision",
+          "tag_key": "dec_org",
+          "tag_name": "组织市场",
+          "tag_role": "core",
+          "confidence": 0.65,
+          "method": "rule",
+          "evidence_span": "4.3.3 中国IT需求的特点与B2B电商快速增长期 4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+          "is_gold": false,
+          "review_status": "draft"
+        }
+      ]
+    }
+  ]
+}

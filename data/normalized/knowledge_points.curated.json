@@ -1,0 +1,38 @@
+[
+  {
+    "id": "kp_organizational_market",
+    "chapter_id": "ch04",
+    "section_id": "ch4_s1",
+    "name": "组织市场",
+    "name_en": "organizational market",
+    "definition": "为生产、转售或组织运行而购买产品和服务的组织构成组织市场，包括生产者、中间商以及政府和非营利组织等购买者。与消费者市场的分界是购买的最终用途，而不是门店类型或采购数量。",
+    "keywords": ["组织购买", "生产经营", "转售", "机构运行"],
+    "examples": ["餐馆采购食材", "企业采购办公设备"],
+    "non_examples": ["家庭购买日用品", "个人购买咖啡"],
+    "aliases": ["组织购买市场", "organizational market", "组织客户市场"],
+    "difficulty": 2,
+    "competencies": ["problem_framing", "decision_tradeoff"],
+    "decisions": ["消费者洞察"],
+    "source": "data/normalized/knowledge_points.curated.json",
+    "status": "draft",
+    "parent_id": null
+  },
+  {
+    "id": "kp_brand_loyalty",
+    "chapter_id": "ch04",
+    "section_id": "ch4_s3",
+    "name": "品牌忠诚",
+    "name_en": "brand loyalty",
+    "definition": "消费者在存在可选替代品牌时，对某一品牌保持相对稳定的偏好并持续重复选择。它是偏好和选择的稳定表现；消费者学习则是经验导致认知、判断规则或行为潜能变化的过程，二者可以同时存在，但一次打卡或被折扣驱动的重复购买都不足以证明忠诚。",
+    "keywords": ["忠诚", "复购", "偏好稳定"],
+    "examples": ["在同类门店可达且价格相近时，仍长期偏好并复购同一品牌", "在取消短期促销后仍持续选择同一品牌"],
+    "non_examples": ["一次跨城打卡", "仅因顺路或短期折扣重复购买"],
+    "aliases": ["消费者忠诚", "brand loyalty", "忠诚度"],
+    "difficulty": 3,
+    "competencies": ["evidence_hypothesis", "decision_tradeoff"],
+    "decisions": ["消费者洞察"],
+    "source": "data/normalized/knowledge_points.curated.json",
+    "status": "draft",
+    "parent_id": null
+  }
+]

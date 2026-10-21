@@ -1,0 +1,306 @@
+{
+  "code": 20000,
+  "message": "OK",
+  "data": {
+    "count": 8,
+    "items": [
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/38031f1d-f1bf-49eb-8169-946a3cd34457",
+          "display_name": "郑嘉意",
+          "id": 120000004476,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3777848?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "7月24日，Visa与连连数字联合宣布，双方已完成由连连AI智能体LoopXPay执行的首笔真实B2B智能体交易。这也是大中华区公开披露的首",
+        "content_short": "",
+        "display_time": 1784868008,
+        "id": 3777848,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
+          "height": 1667,
+          "width": 2500,
+          "size": 2188263
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "AI进入采购支付闭环：Visa与连连完成大中华区首笔<em>B2B</em>智能体真实交易",
+        "uri": "https://wallstreetcn.com/articles/3777848?keyword=B2B"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/ab5b317e-54ba-4124-af71-7de4cf4b6356",
+          "display_name": "张雅琦",
+          "id": 120000004773,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3763269?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "全球半导体产业正经历一场由人工智能（AI）需求驱动的深刻结构性变革，存储巨头纷纷通过激进的业务重组与资本开支调整，全力抢占AI算力高地。14",
+        "content_short": "",
+        "display_time": 1768377797,
+        "id": 3763269,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/3b949afd-0945-478b-916d-9bbb77cb1b29.png",
+          "height": 528,
+          "width": 792,
+          "size": 582973
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "quanqiuyaowen",
+            "name": "突发要闻-Breaking News"
+          }
+        ],
+        "title": "报道：SK海力士停产消费级存储器，资源转向<em>B2B</em>与AI服务器市场",
+        "uri": "https://wallstreetcn.com/articles/3763269?keyword=B2B"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/722fed7a-69c9-425a-9e7e-9d7afc8292f3",
+          "display_name": "房家瑶",
+          "id": 120000004717,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3733866?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "阿里海外在AI的进展看起来比国内电商更快。我们了解到，11月12日，阿里在海外推出对话式AI搜索引擎 Accio，面向全球商家开放，这是全球",
+        "content_short": "",
+        "display_time": 1731442248,
+        "id": 3733866,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/b400db4b-c454-434e-9a4b-1562a5e17626.jpeg",
+          "height": 459,
+          "width": 650,
+          "size": 310858
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "晚点LatePost",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "阿里海外推出首个<em>B2B</em>领域的AI搜索引擎",
+        "uri": "https://wallstreetcn.com/articles/3733866?keyword=B2B"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/60a1d978-3500-49c7-bf41-516b8136175b",
+          "display_name": "夏雨辰",
+          "id": 120000004338,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3662774?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "随着全球疫情好转、经济重新开放，在新冠疫情期间崛起的电商巨头Shopify如今陷入了增长困境。与此同时，Shopify还遭受来自亚马逊的强大",
+        "content_short": "",
+        "display_time": 1655957389,
+        "id": 3662774,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/02fb9b68-91b1-4f2d-8888-e14109b3e4fc.jpg",
+          "height": 614,
+          "width": 1024,
+          "size": 47262
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "靠<em>B2B</em>走出困境？加拿大电商SAAS巨头Shopify找出路",
+        "uri": "https://wallstreetcn.com/articles/3662774?keyword=B2B"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/08507e99-88ee-4368-b332-c44def86720c",
+          "display_name": "赵颖",
+          "id": 120000004514,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3656725?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "据彭博社报道，印度独角兽公司OfBusiness表示将在一年内启动首次公开募股（IPO），计划融资20亿美元，或成为印度今年规模最大的IPO",
+        "content_short": "",
+        "display_time": 1649771373,
+        "id": 3656725,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/3f13c96e-5210-486f-877b-159a91768299.png",
+          "height": 676,
+          "width": 1260,
+          "size": 1698259
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "印度今年最大IPO：<em>B2B</em>电商平台OfBusiness考虑上市 融资20亿美元",
+        "uri": "https://wallstreetcn.com/articles/3656725?keyword=B2B"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/1d594005-1632-43cc-ba08-e503661bef47",
+          "display_name": "张超",
+          "id": 120000000921,
+          "is_followed": false,
+          "uri": "https://awtmt.com/articles/3640153?from=wscn?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "本文来自全天候科技，阅读更多请登陆www.awtmt.com或华尔街见闻APP。作者|张超  编辑|罗丽娟疫情给不少行业造成了严重冲击，跨境",
+        "content_short": "",
+        "display_time": 1631277678,
+        "id": 3640153,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/96ccddc2-ef22-4c6b-97cb-6d90757816a2.jpg",
+          "height": 800,
+          "width": 1200,
+          "size": 419453
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "亚马逊“封店”潮下，跨境电商<em>B2B</em>、独立站迎来契机？",
+        "uri": "https://awtmt.com/articles/3640153?from=wscn?keyword=B2B"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/8c5550eb-de09-4355-af7f-8764b0edb616",
+          "display_name": "段德甜",
+          "id": 120000004485,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3634358?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "创始人持股超50%王树彤女士是敦煌网创始人和CEO，2004年成立首个实现中国跨境出口B2B电商行业的在线交易平台——敦煌网。IPO前，通过",
+        "content_short": "",
+        "display_time": 1625452863,
+        "id": 3634358,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/97590afa-95f0-459e-ba7d-c467e53aa14b.jpg",
+          "height": 556,
+          "width": 835,
+          "size": 50362
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "首个跨境出口<em>B2B</em>电商平台敦煌网  港股上市倒计时！ | IPO见闻",
+        "uri": "https://wallstreetcn.com/articles/3634358?keyword=B2B"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/82fb6954-765f-4c5c-9c99-b1795a940d6b",
+          "display_name": "石泽蕤",
+          "id": 120000004356,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/premium/articles/3619676?layout=wscn-layout?keyword=B2B"
+        },
+        "comment_count": 0,
+        "content": "4.3.3 中国IT需求的特点与B2B电商快速增长期戳此加入武超则团队大师课《数字化投资方法论》本期摘要中国的IT需求特点：偏好提供综合解决",
+        "content_short": "",
+        "display_time": 1612767043,
+        "id": 3619676,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/cfbf89ea-d45d-4cdf-8510-824feec3b14e.png",
+          "height": 600,
+          "width": 800,
+          "size": 390321
+        },
+        "is_in_vip_privilege": true,
+        "is_paid": false,
+        "is_priced": true,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": [
+          {
+            "id": 1003613,
+            "title": "数字经济图谱指南·武超则团队 | 大师课"
+          }
+        ],
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "4.3.3 中国IT需求的特点与<em>B2B</em>电商快速增长期",
+        "uri": "https://wallstreetcn.com/premium/articles/3619676?layout=wscn-layout?keyword=B2B",
+        "vip_type": "master_course",
+        "vip_uri": "https://wallstreetcn.com/member/articles/3619676?keyword=B2B"
+      }
+    ],
+    "next_cursor": "",
+    "related_paid_article": {
+      "author": null,
+      "comment_count": 0,
+      "content": "",
+      "content_short": "财险产品开发新规正式落地，非车险综合治理进一步向产品和定价环节延伸。\n此前持续推进的“报行合一”已推动部分险种手续费率明显下降，新规将进一步规范条款设计、费率执行和产品管理，推动行业竞争从渠道费用比拼转向风险定价与承保能力竞争，头部险企的规模、数据及风控优势有望进一步强化。更重要的是，新规有望激发财险行业的盈利弹性。",
+      "display_time": 1792207937,
+      "id": 3783413,
+      "image": {
+        "uri": "https://wpimg-wscn.awtmt.com/b98791d8-19d7-4fa1-adf3-5cc7d4b79e94.png",
+        "height": 646,
+        "width": 718,
+        "size": 419091
+      },
+      "is_in_vip_privilege": true,
+      "is_paid": false,
+      "is_priced": true,
+      "is_trail": false,
+      "limited_time": 0,
+      "relate_topics": [
+        {
+          "id": 1000023,
+          "title": "见闻主编精选"
+        }
+      ],
+      "source_name": "万周",
+      "source_uri": "",
+      "subtitle": "",
+      "tag": "精选",
+      "themes": null,
+      "title": "财险反内卷进入深水区：产品新规正式落地，财险行业盈利弹性一触即发？",
+      "uri": "https://wallstreetcn.com/premium/articles/3783413?layout=wscn-layout",
+      "vip_type": "gold",
+      "vip_uri": "https://wallstreetcn.com/member/articles/3783413?keyword="
+    },
+    "search_id": ""
+  }
+}

@@ -1,0 +1,1589 @@
+{
+  "wscn-3783716": [
+    {
+      "title": "油价上涨下的零售品类诊断",
+      "type": "案例分析",
+      "background": "美国9月零售数据表面增长，但剔除汽车和汽油后明显走弱；燃油支出同比大幅上升，家庭可支配支出受到挤压。",
+      "task": "选择一家面向中等收入家庭的零售商，诊断油价上涨对其品类结构、客单价和购买频次的影响，并提出品类与促销调整建议。",
+      "dimensions": [
+        "消费者可支配收入与支出结构",
+        "品类必需性与价格弹性",
+        "购物频次、客单价与替代路径",
+        "门店与线上渠道差异",
+        "短期促销与长期客群健康"
+      ],
+      "deliverable": "一份案例分析报告，包含品类诊断、消费者行为解释和可执行的调整建议。",
+      "evaluation": "能否区分“零售读数增长”和“真实需求走弱”；能否用消费者行为解释品类迁移；建议是否具体、可执行。",
+      "kps": [
+        "kp_env_economic",
+        "kp_personal_economic",
+        "kp_consumer_market",
+        "kp_consumer_behavior"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "通胀下的价格沟通：涨价、缩量还是会员价？",
+      "type": "方案设计",
+      "background": "零售商面临成本上涨，但直接涨价可能引发顾客流失和价格公平性质疑。",
+      "task": "为一家中型超市设计价格沟通方案，比较直接涨价、缩量、会员价和组合装等做法，并说明对不同顾客群体的影响。",
+      "dimensions": [
+        "消费者价格公平感",
+        "参考价格与损失厌恶",
+        "不同收入群体的敏感度",
+        "门店与线上沟通节奏",
+        "短期销量与长期信任"
+      ],
+      "deliverable": "一份价格沟通方案，附门店和线上话术示例。",
+      "evaluation": "是否理解消费者价格心理；是否避免用短期促销透支长期信任；是否有分层沟通而不是一套话术打天下。",
+      "kps": [
+        "kp_beliefs_attitudes",
+        "kp_personal_economic",
+        "kp_consumer_market_features",
+        "kp_emotion"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_communication"
+      ]
+    }
+  ],
+  "wscn-3783524": [
+    {
+      "title": "谁在离开顶级模型？",
+      "type": "案例分析",
+      "background": "高性能模型的使用占比从55%降至14%，用户转向更便宜但“够用”的模型；厂商仍在强调“前沿性能”。",
+      "task": "对AI模型用户进行细分，分析“降级”的不同动因，选择一个目标细分，并为一家中型模型公司设计定位。",
+      "dimensions": [
+        "任务结构与使用场景",
+        "价格敏感与性能过剩",
+        "信任、隐私与风险",
+        "切换成本与习惯",
+        "用户对“前沿”的真实感知"
+      ],
+      "deliverable": "一份细分与定位报告，包含细分表、目标选择和定位陈述。",
+      "evaluation": "能否区分价格驱动、性能过剩和任务不匹配；定位是否有明确取舍；是否用证据而不是印象判断用户。",
+      "kps": [
+        "kp_consumer_behavior",
+        "kp_personal_economic",
+        "kp_digital_consumer_decision",
+        "kp_consumer_market"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_brand"
+      ]
+    },
+    {
+      "title": "企业客户的模型组合：卖“最合适”而不是“最强”",
+      "type": "B2B方案",
+      "background": "企业开始按任务难度分配模型：常规任务用低价模型，复杂推理才调用顶级模型。",
+      "task": "为一家希望降低AI支出的企业客户设计模型组合与采购方案，说明采购中心各角色、评估标准和价值主张。",
+      "dimensions": [
+        "任务分层与调用策略",
+        "总拥有成本而非单价",
+        "SLA、合规与数据安全",
+        "采购流程与决策角色",
+        "切换成本与供应商评估"
+      ],
+      "deliverable": "一份B2B方案建议书，包含角色地图、价值主张和实施路径。",
+      "evaluation": "是否识别多角色决策；是否用客户语言算账；是否处理合规、切换和内部阻力。",
+      "kps": [
+        "kp_org_market",
+        "kp_org_buying",
+        "kp_producer_participants",
+        "kp_producer_decision_process",
+        "kp_digital_org_market"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy",
+        "comp_communication"
+      ]
+    }
+  ],
+  "wscn-3783295": [
+    {
+      "title": "信心低迷时，品牌该不该促销？",
+      "type": "决策备忘录",
+      "background": "消费者信心降至低点，家庭对经济现状的感受创历史新低，消费意愿降温。",
+      "task": "选择一个品类，分析促销对短期销量和长期品牌资产的影响，给出“促/不促/怎么促”的建议。",
+      "dimensions": [
+        "消费者信心与支出意愿",
+        "促销的价格心理效应",
+        "品牌资产与参考价格",
+        "竞争反应",
+        "品类弹性与购买推迟"
+      ],
+      "deliverable": "一份决策备忘录，包含条件性建议和反例。",
+      "evaluation": "能否区分短期销量与长期品牌；是否考虑品类差异；建议是否附带触发条件和退出机制。",
+      "kps": [
+        "kp_consumer_behavior",
+        "kp_beliefs_attitudes",
+        "kp_personal_economic",
+        "kp_consumer_market_features"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "信心指数怎么用？",
+      "type": "研究提案",
+      "background": "现状指数、预期指数和通胀预期走势不同，单看一个数字容易误判。",
+      "task": "为一家耐用品企业设计“信心指标—需求预测—营销动作”的研究方案，说明用哪些指标、怎么验证、如何转化为动作。",
+      "dimensions": [
+        "指标含义与领先/滞后关系",
+        "品类与区域差异",
+        "数据来源与样本偏差",
+        "预测与验证方法",
+        "从洞察到营销动作的链路"
+      ],
+      "deliverable": "一份研究提案，包含指标框架、分析计划和决策规则。",
+      "evaluation": "是否区分不同指标的含义；是否说明数据局限；是否能把研究结论转成具体营销动作。",
+      "kps": [
+        "kp_consumer_behavior",
+        "kp_env_economic",
+        "kp_info_search",
+        "kp_evaluation"
+      ],
+      "competencies": [
+        "comp_data",
+        "comp_insight"
+      ]
+    }
+  ],
+  "wscn-3783154": [
+    {
+      "title": "人气与人均分化下的商圈营销",
+      "type": "方案设计",
+      "background": "国庆商圈客流回暖，但客均消费和人均旅游花费缺乏弹性，流量没有转化为足够价值。",
+      "task": "为一个城市商圈设计提升客单价的营销方案，要求不能只靠打折，要说明对客流结构、品类组合和体验的设计。",
+      "dimensions": [
+        "客流结构与停留时间",
+        "品类组合与租户协同",
+        "体验设计与场景营造",
+        "会员与复购",
+        "短期活动与长期定位"
+      ],
+      "deliverable": "一份商圈营销方案，包含目标客群、体验设计和租户协同机制。",
+      "evaluation": "能否区分“流量”与“价值”；是否有体验或组合创新；方案是否能落地到租户和运营。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_consumer_behavior",
+        "kp_situational",
+        "kp_emotion"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "政策信号与消费预期",
+      "type": "环境分析",
+      "background": "政策端持续聚焦“供强需弱”，但消费修复的广度仍显不足。",
+      "task": "分析政策信号如何影响消费者和商家预期，提出一家零售企业的应对策略。",
+      "dimensions": [
+        "政策类型与传导机制",
+        "消费者信心与支出",
+        "企业投资与库存",
+        "时滞与区域差异",
+        "情景分析与应对"
+      ],
+      "deliverable": "一份环境分析简报，包含传导链、情景和建议。",
+      "evaluation": "能否区分政策意图与实际效果；是否说明传导链；是否有情景而非单一预测。",
+      "kps": [
+        "kp_env_political",
+        "kp_env_economic",
+        "kp_env_analysis",
+        "kp_env_response"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3783151": [
+    {
+      "title": "拼假游、奔县游：县域目的地怎么做营销？",
+      "type": "目的地营销",
+      "background": "国庆假期长线游、跨省游、入境游和县域游多点开花，非传统旅游城市获得新机会。",
+      "task": "选择一个县域目的地，完成STP分析并设计一套目的地营销方案，吸引目标客群并兼顾本地承载能力。",
+      "dimensions": [
+        "客群细分与核心吸引物",
+        "差异化定位",
+        "渠道与内容传播",
+        "淡旺季与承载能力",
+        "本地利益相关者与可持续"
+      ],
+      "deliverable": "一份目的地营销方案，包含定位、传播主题和落地活动。",
+      "evaluation": "是否基于真实客群而非想象；是否有差异化；是否考虑承载力和本地利益。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_consumer_behavior",
+        "kp_env_culture",
+        "kp_env_natural"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_brand",
+        "comp_ethics"
+      ]
+    },
+    {
+      "title": "国庆消费的结构性机会",
+      "type": "品类策略",
+      "background": "国庆消费总体平稳，但零售、美妆、餐饮、文旅等品类表现分化。",
+      "task": "选择一个零售、美妆或餐饮品类，分析国庆数据中的机会与风险，提出节后策略。",
+      "dimensions": [
+        "节庆消费与礼赠场景",
+        "客单价、频次与渠道",
+        "区域与城市层级差异",
+        "库存与节后回落",
+        "竞争与促销强度"
+      ],
+      "deliverable": "一份品类策略报告，包含数据解读和节后动作。",
+      "evaluation": "能否读出结构而不是只看总量；是否考虑节后回落；建议是否有数据支撑。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_env_economic",
+        "kp_digital_consumer",
+        "kp_personal_economic"
+      ],
+      "competencies": [
+        "comp_data",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3783123": [
+    {
+      "title": "通胀预期下的品类机会",
+      "type": "品类分析",
+      "background": "消费者对未来一年通胀的预期升温，并预计汽油、食品、医疗、教育、租金等价格上涨。",
+      "task": "选择两个品类，分析通胀预期下的消费调整，提出营销机会和风险。",
+      "dimensions": [
+        "必需与可选品类",
+        "价格敏感与替代",
+        "囤货与延迟购买",
+        "渠道迁移",
+        "消费者情绪与预期自我实现"
+      ],
+      "deliverable": "一份品类机会简报，包含消费者调整路径和建议。",
+      "evaluation": "是否区分品类弹性；是否理解预期如何影响行为；建议是否具体。",
+      "kps": [
+        "kp_env_economic",
+        "kp_personal_economic",
+        "kp_consumer_behavior",
+        "kp_emotion"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "涨价还是缩量？",
+      "type": "定价方案",
+      "background": "成本上升，快消品牌面临直接涨价、缩量、降配或组合装等选择。",
+      "task": "为一个快消品牌设计价格包装策略，说明不同做法对消费者感知、渠道执行和品牌信任的影响。",
+      "dimensions": [
+        "参考价格与价格公平",
+        "缩量通胀的感知",
+        "品牌信任与长期关系",
+        "渠道与终端执行",
+        "不同收入群体的承受度"
+      ],
+      "deliverable": "一份定价与包装建议，包含方案比较和推荐。",
+      "evaluation": "是否理解消费者感知而非只算成本；是否考虑长期信任；是否有分层方案。",
+      "kps": [
+        "kp_personal_economic",
+        "kp_beliefs_attitudes",
+        "kp_consumer_market_features",
+        "kp_emotion"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_insight"
+      ]
+    }
+  ],
+  "wscn-3782917": [
+    {
+      "title": "消费级AI Agent的采用障碍",
+      "type": "采用策略",
+      "background": "Meta的Muse上线后下载增长很快，但成本、算力和商业化能力仍待验证。",
+      "task": "分析消费者采用消费级AI Agent的促进和阻碍因素，为一个新Agent产品设计上市策略。",
+      "dimensions": [
+        "创新扩散与感知有用/易用",
+        "信任、隐私与安全",
+        "使用场景与替代品",
+        "下载与留存的差距",
+        "早期用户与主流用户"
+      ],
+      "deliverable": "一份采用策略报告，包含目标场景、信任设计和推广路径。",
+      "evaluation": "能否区分下载热度与真实留存；是否理解信任障碍；是否有清晰的场景切入。",
+      "kps": [
+        "kp_digital_consumer",
+        "kp_digital_consumer_traits",
+        "kp_digital_consumer_decision",
+        "kp_beliefs_attitudes"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "Agent的货币化：订阅、按量还是混合？",
+      "type": "货币化提案",
+      "background": "Agent用户增长快，但服务成本高，免费与付费边界不清。",
+      "task": "为一个消费级Agent设计货币化方案，比较订阅、按使用和混合模式，说明对用户分层和流失的影响。",
+      "dimensions": [
+        "用户支付意愿",
+        "使用频率与成本结构",
+        "免费/付费边界",
+        "价格锚点与竞争",
+        "流失与升级路径"
+      ],
+      "deliverable": "一份货币化提案，包含方案比较和推荐。",
+      "evaluation": "是否区分用户类型；是否理解成本与服务成本；是否设计了可验证的价格实验。",
+      "kps": [
+        "kp_personal_economic",
+        "kp_consumer_market_features",
+        "kp_digital_consumer_decision"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_data"
+      ]
+    }
+  ],
+  "wscn-3782802": [
+    {
+      "title": "当AI代理替消费者购物，品牌还怎么营销？",
+      "type": "品牌策略",
+      "background": "购物入口从搜索框和电商页面转向AI代理，价值跟随消费者意图迁移。",
+      "task": "选择一个品牌，分析代理式购物对品牌发现、比较和忠诚的影响，提出应对策略。",
+      "dimensions": [
+        "消费者意图与决策路径",
+        "代理的信息筛选逻辑",
+        "品牌可见性与可被推荐性",
+        "信任与数据控制",
+        "渠道与内容策略"
+      ],
+      "deliverable": "一份品牌策略备忘录，包含风险判断和行动建议。",
+      "evaluation": "是否理解入口迁移；是否考虑品牌与代理的关系；建议是否可执行。",
+      "kps": [
+        "kp_digital_consumer_decision",
+        "kp_digital_consumer",
+        "kp_beliefs_attitudes",
+        "kp_env_technology"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_brand"
+      ]
+    },
+    {
+      "title": "电商平台的代理战略：自建、开放还是合作？",
+      "type": "平台战略",
+      "background": "平台、AI公司和零售商都在争夺“意图入口”，价值可能在搜索、支付、身份和商户分发之间重新分配。",
+      "task": "分析平台自建代理、开放代理和与第三方合作三种路径的利弊，提出平台策略。",
+      "dimensions": [
+        "生态角色与价值转移",
+        "流量、佣金与广告",
+        "数据与身份",
+        "商户关系",
+        "消费者信任与竞争"
+      ],
+      "deliverable": "一份平台战略分析，包含路径比较和推荐。",
+      "evaluation": "是否识别价值转移；是否考虑多方利益；是否有明确取舍。",
+      "kps": [
+        "kp_org_market",
+        "kp_digital_org_market",
+        "kp_env_competitor",
+        "kp_env_analysis"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_insight"
+      ]
+    }
+  ],
+  "wscn-3782775": [
+    {
+      "title": "大件耐用品下滑时，营销还能做什么？",
+      "type": "品类应对",
+      "background": "消费者信心骤降，购房、购车和大件家电的购买意愿同步收缩。",
+      "task": "选择一个耐用品品类，分析消费者推迟购买的原因，提出不依赖单纯降价的应对方案。",
+      "dimensions": [
+        "购买推迟与心理账户",
+        "融资、租赁与以旧换新",
+        "价格承诺与保值",
+        "体验与信任",
+        "渠道与服务"
+      ],
+      "deliverable": "一份品类应对方案，包含针对推迟购买的动作设计。",
+      "evaluation": "是否理解推迟机制；是否避免只会降价；是否有信任和服务设计。",
+      "kps": [
+        "kp_consumer_behavior",
+        "kp_personal_economic",
+        "kp_consumer_decision",
+        "kp_purchase_decision"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "信心分层：谁还在花钱？",
+      "type": "细分研究",
+      "background": "信心恶化波及各年龄、收入和地区，但并非所有细分都停止消费。",
+      "task": "识别仍具韧性的细分市场，分析其消费逻辑，提出针对性营销方案。",
+      "dimensions": [
+        "收入与资产结构",
+        "年龄与家庭阶段",
+        "必需与可选支出",
+        "情绪与替代",
+        "区域差异"
+      ],
+      "deliverable": "一份细分机会报告，包含目标细分和价值主张。",
+      "evaluation": "是否避免“平均消费者”误区；是否有证据；是否有取舍。",
+      "kps": [
+        "kp_consumer_market_features",
+        "kp_subculture",
+        "kp_social_class",
+        "kp_lifestyle"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_brand"
+      ]
+    }
+  ],
+  "wscn-3782658": [
+    {
+      "title": "情绪消费与爱好经济",
+      "type": "Campaign设计",
+      "background": "美国消费者在爱好上的支出增长快于交易笔数，单笔支出上升，“快乐通胀”升温。",
+      "task": "选择一个爱好品类，分析消费者为什么愿意支付溢价，设计一个以情绪价值为核心的campaign。",
+      "dimensions": [
+        "情绪价值与身份认同",
+        "社群与圈层",
+        "价格容忍与替代",
+        "渠道与内容",
+        "长期关系而非一次性促销"
+      ],
+      "deliverable": "一份campaign概念与传播方案。",
+      "evaluation": "是否理解情绪价值；是否避免只讲“年轻化”；是否有社群和长期关系设计。",
+      "kps": [
+        "kp_emotion",
+        "kp_subculture",
+        "kp_reference_group",
+        "kp_beliefs_attitudes"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_brand",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "Z世代游戏支出：非游戏品牌怎么合作？",
+      "type": "联名提案",
+      "background": "Z世代游戏支出过去一年增长明显，游戏社群成为品牌触达年轻人的重要场景。",
+      "task": "为一个非游戏品牌设计与游戏社群合作的联名方案，说明契合点、参与机制和长期关系。",
+      "dimensions": [
+        "亚文化与社群规范",
+        "联名契合度",
+        "参与机制与UGC",
+        "商业化边界",
+        "伦理与未成年人保护"
+      ],
+      "deliverable": "一份联名合作提案，包含创意、机制和风险控制。",
+      "evaluation": "是否理解亚文化而非符号化；是否有真实参与机制；是否考虑伦理边界。",
+      "kps": [
+        "kp_subculture",
+        "kp_reference_group",
+        "kp_emotion",
+        "kp_digital_consumer_traits"
+      ],
+      "competencies": [
+        "comp_communication",
+        "comp_insight",
+        "comp_ethics"
+      ]
+    }
+  ],
+  "wscn-3782551": [
+    {
+      "title": "油价与消费者信心",
+      "type": "环境分析",
+      "background": "汽油价格攀升，消费者信心降至四个月低点，通胀预期升温。",
+      "task": "分析油价对消费者信心的影响路径，提出一家零售或出行相关企业的应对策略。",
+      "dimensions": [
+        "可支配收入与支出挤压",
+        "通胀预期",
+        "品类替代",
+        "区域与通勤差异",
+        "沟通与价格策略"
+      ],
+      "deliverable": "一份环境分析简报，包含影响路径和应对建议。",
+      "evaluation": "能否区分直接影响和间接影响；是否有细分；是否有情景分析。",
+      "kps": [
+        "kp_env_economic",
+        "kp_personal_economic",
+        "kp_consumer_behavior",
+        "kp_env_analysis"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "信心调查怎么指导选品和促销？",
+      "type": "研究应用",
+      "background": "密歇根大学、Conference Board等多套信心指标发布，企业容易只看标题数字。",
+      "task": "为一家区域零售商设计如何使用信心数据指导选品、促销和库存。",
+      "dimensions": [
+        "指标选择与含义",
+        "领先性与时滞",
+        "区域和品类差异",
+        "数据局限",
+        "从指标到动作的决策规则"
+      ],
+      "deliverable": "一份研究应用方案，包含指标框架和动作映射。",
+      "evaluation": "是否理解指标差异；是否避免过度解读；是否连接到具体动作。",
+      "kps": [
+        "kp_info_search",
+        "kp_evaluation",
+        "kp_consumer_behavior",
+        "kp_env_economic"
+      ],
+      "competencies": [
+        "comp_data",
+        "comp_insight"
+      ]
+    }
+  ],
+  "wscn-3782385": [
+    {
+      "title": "楼市与消费的联动：财富效应还是现金流？",
+      "type": "环境分析",
+      "background": "现房销售新政改变城市生长逻辑，地产板块与食品饮料板块反应分化。",
+      "task": "分析楼市变化对家电、家居和零售的传导机制，提出企业应对。",
+      "dimensions": [
+        "财富效应与现金流",
+        "装修、迁居与耐用品",
+        "区域差异",
+        "政策时滞",
+        "消费信心"
+      ],
+      "deliverable": "一份环境分析报告，包含传导链和情景判断。",
+      "evaluation": "是否区分财富效应与现金流；是否考虑时滞；是否有区域细分。",
+      "kps": [
+        "kp_env_economic",
+        "kp_env_political",
+        "kp_env_analysis",
+        "kp_consumer_market"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "现房销售新政下的家居营销",
+      "type": "营销方案",
+      "background": "现房销售推动城市纵向生长，家居和家电需求结构随之变化。",
+      "task": "为一家家居品牌设计面向新房和改善型需求的营销方案。",
+      "dimensions": [
+        "客群与购买场景",
+        "产品组合与服务",
+        "渠道与门店体验",
+        "价格与金融方案",
+        "可持续与口碑"
+      ],
+      "deliverable": "一份营销方案，包含场景、产品和服务设计。",
+      "evaluation": "是否基于政策变化；是否理解购买场景；是否有服务而非只卖货。",
+      "kps": [
+        "kp_env_political",
+        "kp_consumer_decision",
+        "kp_situational",
+        "kp_lifestyle"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy",
+        "comp_communication"
+      ]
+    }
+  ],
+  "wscn-3777848": [
+    {
+      "title": "B2B采购智能体的信任设计",
+      "type": "B2B产品营销",
+      "background": "AI智能体在授权范围内完成供应商寻源、比价、下单和支付，企业保留监督。",
+      "task": "分析企业采购中心对采购智能体的信任障碍，提出产品营销和控制机制方案。",
+      "dimensions": [
+        "采购角色与审批",
+        "错误成本与责任",
+        "预算与权限控制",
+        "审计与可追溯",
+        "供应商关系"
+      ],
+      "deliverable": "一份B2B产品营销简报，包含信任机制和价值主张。",
+      "evaluation": "是否识别多角色；是否理解信任而非只讲效率；是否有控制与审计设计。",
+      "kps": [
+        "kp_org_buying",
+        "kp_producer_participants",
+        "kp_producer_decision_process",
+        "kp_digital_org_tech"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy",
+        "comp_ethics"
+      ]
+    },
+    {
+      "title": "支付机构的B2B客户教育",
+      "type": "客户教育",
+      "background": "智能体完成真实B2B交易是新模式，客户需要理解流程、风险和边界。",
+      "task": "为支付机构设计客户教育和试点推广方案，推动企业客户从观望到试用。",
+      "dimensions": [
+        "采用阶段与决策链",
+        "试点客户选择",
+        "价值证明",
+        "风险沟通",
+        "内部推动者"
+      ],
+      "deliverable": "一份客户教育方案，包含试点设计和内容清单。",
+      "evaluation": "是否理解B2B采用周期；是否有试点和证明；是否处理风险沟通。",
+      "kps": [
+        "kp_org_market_features",
+        "kp_producer_buying_types",
+        "kp_digital_org_demand"
+      ],
+      "competencies": [
+        "comp_communication",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3763269": [
+    {
+      "title": "产能重新分配下的B2B客户管理",
+      "type": "关键客户管理",
+      "background": "存储巨头将产能转向AI服务器和HBM，消费级存储供应紧张。",
+      "task": "为一家存储厂商制定客户优先级和沟通方案，处理产能分配带来的客户关系问题。",
+      "dimensions": [
+        "客户价值与战略重要性",
+        "合同与承诺",
+        "替代与分配规则",
+        "沟通节奏",
+        "长期关系与风险"
+      ],
+      "deliverable": "一份关键客户管理方案，包含分层、分配原则和沟通计划。",
+      "evaluation": "是否区分战略客户；是否有透明分配原则；是否考虑长期关系。",
+      "kps": [
+        "kp_org_market",
+        "kp_producer_participants",
+        "kp_producer_decision_process",
+        "kp_env_supplier"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "供应链紧张时的替代方案营销",
+      "type": "销售方案",
+      "background": "消费级存储供应紧张，客户开始寻找替代供应商。",
+      "task": "为一家二线存储供应商设计“替代方案”营销，争取被大厂供应不足困扰的客户。",
+      "dimensions": [
+        "切换成本与兼容性",
+        "可靠性与交付",
+        "服务与技术支持",
+        "价格与账期",
+        "信任与证明"
+      ],
+      "deliverable": "一份销售话术与证明材料清单。",
+      "evaluation": "是否理解B2B风险；是否有证据而非只打价格；是否可执行。",
+      "kps": [
+        "kp_env_supplier",
+        "kp_producer_buying_types",
+        "kp_org_market_features"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_communication"
+      ]
+    }
+  ],
+  "wscn-3733866": [
+    {
+      "title": "B2B搜索的用户迁移",
+      "type": "采用策略",
+      "background": "阿里海外推出面向全球商家的对话式AI搜索引擎Accio，整合供应链信息。",
+      "task": "分析B2B买家从传统搜索、展会和平台转向AI搜索的障碍，提出采用策略。",
+      "dimensions": [
+        "采购习惯与信息搜索",
+        "信任与信息质量",
+        "语言与跨境",
+        "责任与售后",
+        "替代渠道"
+      ],
+      "deliverable": "一份采用策略报告，包含目标买家、信任设计和试点路径。",
+      "evaluation": "是否理解B2B买家；是否处理信任；是否有试点而非一次性推广。",
+      "kps": [
+        "kp_org_buying",
+        "kp_org_market_features",
+        "kp_digital_org_demand",
+        "kp_info_search"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "B2B平台的双边价值主张",
+      "type": "平台GTM",
+      "background": "平台连接全球买家、卖家和供应链服务商，冷启动和信任是难点。",
+      "task": "为平台设计买家侧和卖家侧的价值主张与Go-to-Market方案。",
+      "dimensions": [
+        "买家价值",
+        "卖家价值",
+        "冷启动与网络效应",
+        "信任与质量",
+        "竞争与差异化"
+      ],
+      "deliverable": "一份平台GTM方案，包含双边主张和冷启动策略。",
+      "evaluation": "是否理解双边市场；是否解决冷启动；是否有取舍。",
+      "kps": [
+        "kp_org_market_concept",
+        "kp_digital_org_market",
+        "kp_env_competitor"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_insight"
+      ]
+    }
+  ],
+  "wscn-3662774": [
+    {
+      "title": "从DTC到B2B：Shopify的市场进入",
+      "type": "市场进入",
+      "background": "Shopify增长放缓，推出B2B业务，试图从直接面向消费者转向连接消费者。",
+      "task": "分析Shopify进入B2B市场的细分、价值主张、渠道和能力缺口，提出建议。",
+      "dimensions": [
+        "现有客户与能力复用",
+        "B2B需求与竞争",
+        "渠道与服务",
+        "品牌延伸",
+        "能力缺口"
+      ],
+      "deliverable": "一份市场进入备忘录，包含目标细分和进入路径。",
+      "evaluation": "是否利用现有优势；是否识别能力缺口；是否有取舍。",
+      "kps": [
+        "kp_org_market",
+        "kp_org_market_concept",
+        "kp_org_buying",
+        "kp_env_competitor"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_insight"
+      ]
+    },
+    {
+      "title": "B2B品牌如何说服现有客户？",
+      "type": "客户迁移",
+      "background": "现有DTC客户可能不信任Shopify的B2B能力，切换成本高。",
+      "task": "设计现有客户的交叉销售和迁移方案，推动他们试用B2B能力。",
+      "dimensions": [
+        "切换成本",
+        "信任与证明",
+        "试点设计",
+        "服务与支持",
+        "价格与合同"
+      ],
+      "deliverable": "一份客户迁移计划，包含试点和证明材料。",
+      "evaluation": "是否理解B2B采用；是否有证明；是否分阶段。",
+      "kps": [
+        "kp_producer_buying_types",
+        "kp_producer_decision_process",
+        "kp_org_market_features"
+      ],
+      "competencies": [
+        "comp_communication",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3656725": [
+    {
+      "title": "B2B电商的投资者叙事",
+      "type": "投资者沟通",
+      "background": "印度B2B电商平台OfBusiness计划IPO，市场关注其增长与风险。",
+      "task": "为一家B2B平台设计投资者叙事，说明市场机会、差异化、单位经济和风险。",
+      "dimensions": [
+        "市场机会与客户价值",
+        "收入模型与单位经济",
+        "竞争与壁垒",
+        "风险与合规",
+        "故事与证据"
+      ],
+      "deliverable": "一份投资者叙事材料，包含核心信息和证据清单。",
+      "evaluation": "是否区分故事与证据；是否理解B2B经济；是否正面处理风险。",
+      "kps": [
+        "kp_org_market",
+        "kp_org_market_concept",
+        "kp_digital_org_market"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "B2B平台的客户细分",
+      "type": "细分策略",
+      "background": "平台服务制造业和基建企业，提供原材料采购与信贷。",
+      "task": "对平台客户进行细分，选择目标客户，设计产品组合和服务模式。",
+      "dimensions": [
+        "企业规模与行业",
+        "采购频次与品类",
+        "信贷需求与风险",
+        "服务成本",
+        "客户生命周期价值"
+      ],
+      "deliverable": "一份细分与产品策略报告。",
+      "evaluation": "是否区分客户价值；是否考虑风险；是否有取舍。",
+      "kps": [
+        "kp_org_market_features",
+        "kp_producer_buying_types",
+        "kp_org_buying"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3640153": [
+    {
+      "title": "平台依赖风险与独立站迁移",
+      "type": "渠道策略",
+      "background": "亚马逊封店潮让跨境卖家重新思考平台依赖，B2B和独立站受到关注。",
+      "task": "为一家跨境卖家设计渠道组合，平衡平台、独立站和B2B，说明迁移路径和风险。",
+      "dimensions": [
+        "渠道风险与流量成本",
+        "客户资产与数据",
+        "运营能力",
+        "合规与品牌",
+        "阶段化迁移"
+      ],
+      "deliverable": "一份渠道策略备忘录，包含组合和迁移计划。",
+      "evaluation": "是否理解平台依赖；是否评估能力；是否有阶段计划。",
+      "kps": [
+        "kp_env_supplier",
+        "kp_org_market",
+        "kp_org_buying",
+        "kp_env_analysis"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_insight"
+      ]
+    },
+    {
+      "title": "跨境B2B的信任营销",
+      "type": "信任建设",
+      "background": "海外买家对跨境供应商的质量、交付和售后存在信任缺口。",
+      "task": "设计一套跨境B2B信任建设方案，帮助供应商赢得海外买家。",
+      "dimensions": [
+        "信任来源",
+        "认证与案例",
+        "交付与售后",
+        "本地化与合规",
+        "风险分担"
+      ],
+      "deliverable": "一份信任营销方案，包含证明材料和落地动作。",
+      "evaluation": "是否理解B2B信任；是否有证据；是否可执行。",
+      "kps": [
+        "kp_org_market_features",
+        "kp_producer_influences",
+        "kp_digital_org_demand"
+      ],
+      "competencies": [
+        "comp_communication",
+        "comp_ethics"
+      ]
+    }
+  ],
+  "wscn-3634358": [
+    {
+      "title": "跨境B2B平台的价值主张",
+      "type": "定位简报",
+      "background": "敦煌网作为跨境出口B2B平台冲刺港股，平台需要向卖家和买家同时说明价值。",
+      "task": "为平台设计针对卖家和买家的价值主张与传播简报。",
+      "dimensions": [
+        "双边价值",
+        "差异化与竞争",
+        "信任与合规",
+        "服务生态",
+        "证据与案例"
+      ],
+      "deliverable": "一份定位与传播简报，包含双边信息和证明。",
+      "evaluation": "是否理解双边市场；是否避免空泛；是否有证据。",
+      "kps": [
+        "kp_org_market_concept",
+        "kp_org_market_features",
+        "kp_digital_org_market"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "IPO前的品牌传播",
+      "type": "传播方案",
+      "background": "上市前需要同时面对投资者、客户和媒体，传播既要建立信心又要合规。",
+      "task": "设计IPO前后的品牌传播方案，区分不同受众和传播节奏。",
+      "dimensions": [
+        "受众与信息需求",
+        "证据与可信度",
+        "传播节奏",
+        "风险与合规",
+        "内外一致性"
+      ],
+      "deliverable": "一份传播方案，包含受众地图、信息和节奏。",
+      "evaluation": "是否区分受众；是否平衡宣传与合规；是否有证据。",
+      "kps": [
+        "kp_beliefs_attitudes",
+        "kp_reference_group",
+        "kp_org_market_features"
+      ],
+      "competencies": [
+        "comp_communication",
+        "comp_ethics"
+      ]
+    }
+  ],
+  "wscn-3619676": [
+    {
+      "title": "中国B2B客户的解决方案偏好",
+      "type": "销售策略",
+      "background": "中国IT客户更偏好综合解决方案，B2B电商加速工业品在线化。",
+      "task": "为一家IT厂商设计面向中国B2B客户的解决方案销售策略。",
+      "dimensions": [
+        "客户需求与采购角色",
+        "方案组合与服务",
+        "信任与案例",
+        "竞争与差异化",
+        "客户分层"
+      ],
+      "deliverable": "一份销售策略方案，包含客户分层和价值主张。",
+      "evaluation": "是否理解解决方案销售；是否区分产品与服务；是否有客户分层。",
+      "kps": [
+        "kp_org_buying",
+        "kp_producer_influences",
+        "kp_producer_decision_process",
+        "kp_digital_org_market"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "工业品在线化的采用障碍",
+      "type": "采用策略",
+      "background": "工业品采购仍依赖线下关系和经验，在线化面临信任和流程障碍。",
+      "task": "分析工业品买家在线采购的障碍，为B2B平台设计采用策略。",
+      "dimensions": [
+        "信任与关系",
+        "规格复杂度",
+        "售后与账期",
+        "采购流程",
+        "风险与试点"
+      ],
+      "deliverable": "一份采用策略报告，包含试点和信任设计。",
+      "evaluation": "是否理解工业品采购；是否处理风险；是否有试点。",
+      "kps": [
+        "kp_org_market_features",
+        "kp_producer_buying_types",
+        "kp_digital_org_demand"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3776984": [
+    {
+      "title": "主品牌换帅后的零售改造复盘",
+      "type": "案例分析",
+      "background": "安踏主品牌CEO徐阳因家庭原因辞任，赖世贤代理CEO；徐阳任内推动线下零售场景更新，集团强调长期战略不变。",
+      "task": "复盘这次主品牌零售改造：哪些动作值得延续，哪些需要调整？换帅对战略连续性意味着什么？",
+      "dimensions": [
+        "零售场景与门店体验",
+        "主品牌定位与产品结构",
+        "组织与营销能力",
+        "战略连续性与执行风险",
+        "消费者感知"
+      ],
+      "deliverable": "一份复盘报告，包含延续/调整清单和风险判断。",
+      "evaluation": "能否区分个人风格与组织能力；是否理解零售改造的消费者逻辑；是否给出可执行的延续方案。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_consumer_behavior",
+        "kp_beliefs_attitudes"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "营销型CEO与品牌长期战略",
+      "type": "案例讨论",
+      "background": "徐阳是安踏内部少见的营销型主帅，曾负责篮球事业部、始祖鸟大中华区，2023年回归主品牌。",
+      "task": "讨论营销型领导者对品牌战略的影响：优势、盲区，以及如何与产品、渠道、组织能力配合。",
+      "dimensions": [
+        "营销能力与产品能力",
+        "品牌长期主义",
+        "组织协同",
+        "继任与治理",
+        "外部传播"
+      ],
+      "deliverable": "一份案例讨论纪要，包含观点、反例和结论。",
+      "evaluation": "是否避免个人英雄叙事；是否理解品牌战略的系统性；是否有反例意识。",
+      "kps": [
+        "kp_beliefs_attitudes",
+        "kp_consumer_behavior"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_communication"
+      ]
+    }
+  ],
+  "wscn-3773982": [
+    {
+      "title": "ESG传播：如何避免绿色洗白",
+      "type": "传播方案",
+      "background": "安踏发布2025年ESG报告，强调可持续产品超1亿件、碳排放下降、MSCI评级升至AA。",
+      "task": "为安踏设计一套ESG传播方案，要求既传达进展，又避免被质疑绿色洗白。",
+      "dimensions": [
+        "证据与口径",
+        "受众与信息层级",
+        "第三方背书",
+        "争议与回应",
+        "长期承诺"
+      ],
+      "deliverable": "一份ESG传播方案，包含核心信息、证据和风险回应。",
+      "evaluation": "是否用可验证证据；是否区分宣传与实质；是否准备争议回应。",
+      "kps": [
+        "kp_env_natural",
+        "kp_beliefs_attitudes",
+        "kp_env_legal"
+      ],
+      "competencies": [
+        "comp_ethics",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "可持续产品如何影响消费者购买",
+      "type": "研究提案",
+      "background": "安踏可持续产品占比提升，但消费者是否愿意为环保属性支付溢价仍不确定。",
+      "task": "设计一项研究，分析可持续属性对消费者认知、偏好和支付意愿的影响，并提出产品沟通建议。",
+      "dimensions": [
+        "消费者环保态度",
+        "支付意愿",
+        "信任与怀疑",
+        "品类差异",
+        "沟通方式"
+      ],
+      "deliverable": "一份研究提案，包含研究问题、方法和应用建议。",
+      "evaluation": "是否区分态度与行为；是否考虑信任缺口；是否能把研究转成沟通策略。",
+      "kps": [
+        "kp_consumer_behavior",
+        "kp_beliefs_attitudes",
+        "kp_env_natural"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_data"
+      ]
+    }
+  ],
+  "wscn-3769997": [
+    {
+      "title": "一季度强劲但管理层谨慎：信号怎么读？",
+      "type": "分析报告",
+      "background": "安踏2026年一季度主品牌反弹、FILA加速、其他品牌高速增长，但管理层维持全年指引不变，理由是春节错位和宏观不确定性。",
+      "task": "分析这份季度成绩单：哪些是真实增长，哪些是节奏错位？管理层为何谨慎？",
+      "dimensions": [
+        "春节错位与消费前置",
+        "主品牌与FILA表现",
+        "其他品牌增长质量",
+        "库存与折扣",
+        "全年指引"
+      ],
+      "deliverable": "一份分析报告，包含数据解读和后续观察指标。",
+      "evaluation": "能否区分节奏与趋势；是否理解管理层保守的理由；是否提出可验证的观察点。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_env_economic",
+        "kp_personal_economic"
+      ],
+      "competencies": [
+        "comp_data",
+        "comp_insight"
+      ]
+    },
+    {
+      "title": "多品牌增长与主品牌反弹",
+      "type": "组合策略",
+      "background": "安踏主品牌反弹，FILA中低双位数增长，迪桑特、可隆、MAIA保持高速扩张。",
+      "task": "评价安踏的多品牌组合：各品牌扮演什么角色？资源应该如何分配？",
+      "dimensions": [
+        "品牌角色与增长阶段",
+        "目标客群重叠",
+        "渠道与资源",
+        "品牌稀释风险",
+        "组织能力"
+      ],
+      "deliverable": "一份品牌组合建议，包含角色分工和资源优先级。",
+      "evaluation": "是否理解品牌组合而非简单加总；是否识别重叠与冲突；是否有取舍。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_lifestyle",
+        "kp_subculture"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3768949": [
+    {
+      "title": "从规模到结构：安踏的“叙事真空”",
+      "type": "战略分析",
+      "background": "安踏2025年营收802亿元，但主品牌增速放缓、FILA降档，其他品牌成为增长引擎；资本市场反应平淡。",
+      "task": "分析安踏从规模增长转向结构增长时遇到的叙事问题，提出新的增长故事。",
+      "dimensions": [
+        "增长引擎切换",
+        "主品牌与FILA瓶颈",
+        "其他品牌可持续性",
+        "资本市场预期",
+        "组织与资源"
+      ],
+      "deliverable": "一份战略分析报告，包含增长叙事和验证指标。",
+      "evaluation": "是否读出结构变化；是否区分故事与证据；是否提出可执行的增长路径。",
+      "kps": [
+        "kp_env_economic",
+        "kp_env_competitor",
+        "kp_consumer_market"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_data"
+      ]
+    },
+    {
+      "title": "FILA、主品牌与其他品牌：组合角色重排",
+      "type": "品牌组合",
+      "background": "FILA接近300亿元体量但增速降至中低个位数，迪桑特、可隆成为新增长极。",
+      "task": "重新定义三大板块的角色：谁负责规模、谁负责利润、谁负责试验？",
+      "dimensions": [
+        "规模/利润/增长",
+        "品牌定位",
+        "渠道协同",
+        "资源冲突",
+        "退出与收缩"
+      ],
+      "deliverable": "一份品牌组合重排方案。",
+      "evaluation": "是否敢于做取舍；是否理解品牌生命周期；是否考虑组织执行。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_lifestyle",
+        "kp_env_competitor"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3764861": [
+    {
+      "title": "奥运赞助的传播价值怎么算？",
+      "type": "赞助激活",
+      "background": "安踏成为希腊奥委会战略合作伙伴，希腊代表团将在米兰冬奥会开幕式首个入场，品牌标识将率先进入全球转播镜头。",
+      "task": "评价这笔赞助的传播价值，并设计一套激活方案，避免“只买 logo 不做内容”。",
+      "dimensions": [
+        "曝光与场景",
+        "品牌联想",
+        "内容与社交传播",
+        "销售转化",
+        "长期资产"
+      ],
+      "deliverable": "一份赞助激活方案，包含传播主题和落地动作。",
+      "evaluation": "是否理解赞助资产的稀缺性；是否有内容而非只买曝光；是否连接销售。",
+      "kps": [
+        "kp_beliefs_attitudes",
+        "kp_reference_group",
+        "kp_env_culture"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "安踏 vs 李宁：奥运资源竞争",
+      "type": "竞争分析",
+      "background": "安踏签约希腊奥委会，李宁拿回中国奥委会赞助权，双方在米兰冬奥会的传播资源形成对照。",
+      "task": "比较两家品牌的奥运资源与传播策略，分析各自的优势、风险和差异化空间。",
+      "dimensions": [
+        "资源稀缺性",
+        "品牌联想",
+        "目标受众",
+        "传播节奏",
+        "风险"
+      ],
+      "deliverable": "一份竞争分析报告，包含对比表和策略建议。",
+      "evaluation": "是否避免只看资源大小；是否理解品牌匹配；是否有差异化建议。",
+      "kps": [
+        "kp_env_competitor",
+        "kp_env_analysis",
+        "kp_beliefs_attitudes"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3764336": [
+    {
+      "title": "收购彪马29%：全球化与品牌重塑",
+      "type": "并购案例",
+      "background": "安踏以15亿欧元收购彪马29%股份，成为最大股东；摩根大通认为这是双赢，安踏需要全球化，彪马需要重塑。",
+      "task": "分析这笔交易的战略逻辑：安踏买到了什么？彪马需要什么？整合风险在哪里？",
+      "dimensions": [
+        "全球化布局",
+        "品牌互补",
+        "治理与控制权",
+        "整合能力",
+        "财务风险"
+      ],
+      "deliverable": "一份并购案例分析，包含价值判断和风险清单。",
+      "evaluation": "是否区分股权与控制；是否理解品牌重塑能力；是否识别整合风险。",
+      "kps": [
+        "kp_env_competitor",
+        "kp_env_analysis",
+        "kp_beliefs_attitudes"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_brand"
+      ]
+    },
+    {
+      "title": "并购后的品牌组合管理",
+      "type": "品牌组合",
+      "background": "安踏已拥有安踏、FILA、迪桑特、可隆、亚玛芬、狼爪等品牌，彪马加入后组合更复杂。",
+      "task": "为安踏设计并购后的品牌组合管理原则：谁保留、谁重塑、谁协同、谁退出。",
+      "dimensions": [
+        "品牌角色",
+        "客群重叠",
+        "渠道冲突",
+        "资源分配",
+        "组织治理"
+      ],
+      "deliverable": "一份品牌组合管理方案。",
+      "evaluation": "是否理解组合管理不是品牌越多越好；是否处理重叠与冲突；是否有退出机制。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_lifestyle",
+        "kp_env_competitor"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3754479": [
+    {
+      "title": "多品牌“无限游戏”的边界",
+      "type": "战略分析",
+      "background": "安踏通过并购、孵化、协同扩张多品牌，其他品牌收入占比提升，但主品牌和FILA增速放缓。",
+      "task": "分析安踏多品牌模式的边界：什么时候该继续买，什么时候该整合，什么时候该停？",
+      "dimensions": [
+        "并购与孵化",
+        "协同效应",
+        "组织复杂度",
+        "资源稀释",
+        "退出标准"
+      ],
+      "deliverable": "一份战略分析报告，包含边界条件和决策规则。",
+      "evaluation": "是否理解多品牌的经济学；是否识别组织极限；是否有退出标准。",
+      "kps": [
+        "kp_env_competitor",
+        "kp_lifestyle",
+        "kp_consumer_market"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_brand"
+      ]
+    },
+    {
+      "title": "主品牌与子品牌如何协同？",
+      "type": "协同方案",
+      "background": "安踏主品牌、FILA、迪桑特、可隆等覆盖不同价格带和场景，渠道与客群存在重叠。",
+      "task": "设计主品牌与子品牌的协同方案：哪些资源可以共享，哪些必须隔离？",
+      "dimensions": [
+        "客群与价格带",
+        "渠道与门店",
+        "供应链",
+        "品牌形象",
+        "组织考核"
+      ],
+      "deliverable": "一份协同方案，包含共享/隔离清单。",
+      "evaluation": "是否避免协同变成相互侵蚀；是否理解品牌边界；是否可执行。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_lifestyle",
+        "kp_subculture"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    }
+  ],
+  "wscn-3746157": [
+    {
+      "title": "可持续产品的商业化",
+      "type": "产品营销",
+      "background": "安踏2024年可持续产品占比突破30%，马赫5通过再生材料与绿色能源降低约36%碳排放。",
+      "task": "为安踏设计可持续产品的商业化方案：如何让消费者愿意买，而不只是做ESG展示？",
+      "dimensions": [
+        "产品价值主张",
+        "价格与成本",
+        "消费者信任",
+        "渠道与陈列",
+        "传播证据"
+      ],
+      "deliverable": "一份产品营销方案，包含卖点、证据和渠道动作。",
+      "evaluation": "是否把可持续转成消费者价值；是否避免绿色洗白；是否有商业闭环。",
+      "kps": [
+        "kp_env_natural",
+        "kp_beliefs_attitudes",
+        "kp_consumer_behavior"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_ethics",
+        "comp_communication"
+      ]
+    },
+    {
+      "title": "碳中和目标与品牌信任",
+      "type": "信任建设",
+      "background": "安踏提出2050年碳中和目标，消费者和投资者对承诺的真实性高度敏感。",
+      "task": "设计一套面向消费者、投资者和媒体的信任建设方案。",
+      "dimensions": [
+        "目标与路径",
+        "证据与审计",
+        "受众差异",
+        "争议回应",
+        "长期承诺"
+      ],
+      "deliverable": "一份信任建设方案，包含披露原则和沟通节奏。",
+      "evaluation": "是否区分承诺与进展；是否有可验证证据；是否处理质疑。",
+      "kps": [
+        "kp_env_natural",
+        "kp_env_legal",
+        "kp_beliefs_attitudes"
+      ],
+      "competencies": [
+        "comp_ethics",
+        "comp_communication"
+      ]
+    }
+  ],
+  "wscn-3745191": [
+    {
+      "title": "2.9亿美元抄底狼爪：大众户外补位",
+      "type": "品牌重塑",
+      "background": "安踏以2.9亿美元全资收购德国户外品牌狼爪，狼爪定位大众户外，曾在中国拥有700家门店但近年掉队。",
+      "task": "分析狼爪在安踏品牌组合中的角色，设计品牌重塑方案：保留什么、改变什么、放弃什么。",
+      "dimensions": [
+        "品牌定位",
+        "目标客群",
+        "产品与技术",
+        "渠道",
+        "品牌资产"
+      ],
+      "deliverable": "一份品牌重塑方案，包含定位和行动计划。",
+      "evaluation": "是否理解大众户外与高端户外的差异；是否保留品牌资产；是否有取舍。",
+      "kps": [
+        "kp_lifestyle",
+        "kp_consumer_market",
+        "kp_env_competitor"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "收购后的渠道与品牌重塑",
+      "type": "渠道方案",
+      "background": "狼爪曾在中国拥有大量门店，但品牌势能下滑，安踏需要决定渠道策略。",
+      "task": "为狼爪设计收购后的渠道策略：直营、经销、电商如何组合？如何避免与安踏其他户外品牌冲突？",
+      "dimensions": [
+        "渠道结构",
+        "门店体验",
+        "电商与内容",
+        "价格带",
+        "品牌隔离"
+      ],
+      "deliverable": "一份渠道方案，包含组合和冲突处理。",
+      "evaluation": "是否理解渠道与品牌定位的匹配；是否处理内部竞争；是否可执行。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_lifestyle",
+        "kp_env_supplier"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_brand"
+      ]
+    }
+  ],
+  "wscn-3743764": [
+    {
+      "title": "主品牌为何重回焦点？",
+      "type": "战略分析",
+      "background": "安踏规模创新高，但主品牌和FILA触及增长瓶颈，迪桑特、可隆受小众高端定位局限，主品牌重新成为焦点。",
+      "task": "分析主品牌重回焦点的原因，提出主品牌的增长路径。",
+      "dimensions": [
+        "增长瓶颈",
+        "主品牌定位",
+        "大众市场",
+        "产品与渠道",
+        "竞争"
+      ],
+      "deliverable": "一份战略分析报告，包含增长路径和优先级。",
+      "evaluation": "是否理解主品牌的基本盘作用；是否避免回到旧模式；是否有可执行路径。",
+      "kps": [
+        "kp_consumer_market",
+        "kp_env_competitor",
+        "kp_personal_economic"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_brand"
+      ]
+    },
+    {
+      "title": "“3年超越耐克中国”目标可信吗？",
+      "type": "目标评估",
+      "background": "安踏CEO提出“3年内单品牌超越耐克中国”的目标。",
+      "task": "评估这个目标的可信度：需要什么条件？最大风险是什么？如果做不到，替代目标是什么？",
+      "dimensions": [
+        "市场规模与增速",
+        "品牌力",
+        "产品与技术",
+        "渠道",
+        "竞争反应"
+      ],
+      "deliverable": "一份目标评估报告，包含条件、风险和替代方案。",
+      "evaluation": "是否区分口号与可执行目标；是否理解竞争反应；是否有条件性判断。",
+      "kps": [
+        "kp_env_competitor",
+        "kp_env_analysis",
+        "kp_consumer_market"
+      ],
+      "competencies": [
+        "comp_strategy",
+        "comp_data"
+      ]
+    }
+  ],
+  "wscn-3739162": [
+    {
+      "title": "安踏如何寻找下一个爆款？",
+      "type": "产品策略",
+      "background": "安踏主品牌和FILA增速放缓，其他品牌高速增长，集团需要新的爆款产品。",
+      "task": "分析安踏打造爆款的条件，提出一个产品创新方向和一个验证方案。",
+      "dimensions": [
+        "消费者需求",
+        "产品差异化",
+        "技术/材料",
+        "渠道与内容",
+        "生命周期"
+      ],
+      "deliverable": "一份产品策略方案，包含概念和验证计划。",
+      "evaluation": "是否从消费者问题出发；是否有差异化；是否考虑生命周期。",
+      "kps": [
+        "kp_consumer_behavior",
+        "kp_lifestyle",
+        "kp_subculture"
+      ],
+      "competencies": [
+        "comp_insight",
+        "comp_strategy"
+      ]
+    },
+    {
+      "title": "爆款的生命周期与品牌资产",
+      "type": "生命周期管理",
+      "background": "爆款能带来短期增长，但不一定能沉淀品牌资产。",
+      "task": "为一个假设的安踏爆款设计生命周期管理方案：如何从流量款变成品牌资产？",
+      "dimensions": [
+        "导入与放量",
+        "复购与延伸",
+        "品牌联想",
+        "价格与渠道",
+        "退市管理"
+      ],
+      "deliverable": "一份生命周期管理方案。",
+      "evaluation": "是否理解爆款与品牌资产的区别；是否有复购/延伸设计；是否考虑退市。",
+      "kps": [
+        "kp_consumer_behavior",
+        "kp_beliefs_attitudes",
+        "kp_consumer_market"
+      ],
+      "competencies": [
+        "comp_brand",
+        "comp_strategy"
+      ]
+    }
+  ]
+}

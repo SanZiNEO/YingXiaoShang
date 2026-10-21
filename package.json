@@ -1,0 +1,60 @@
+{
+  "name": "learning-agent",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.28.5",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "tsc -b && tsc -p pipeline/tsconfig.json --noEmit && pnpm --dir apps/desktop exec tsc --noEmit && pnpm --dir apps/web exec tsc --noEmit",
+    "pipeline:resources": "tsx pipeline/ingest-resources.ts",
+    "pipeline:news": "tsx pipeline/ingest-news.ts",
+    "pipeline:tag": "tsx pipeline/tag-ch4.ts",
+    "db:seed": "tsx pipeline/seed-db.ts",
+    "pipeline:content-tags": "tsx pipeline/tag-content.ts",
+    "pipeline:quality": "tsx pipeline/data-quality.ts",
+    "pipeline:review": "tsx pipeline/review-tags.ts",
+    "profile:install": "tsx scripts/install-profile.ts",
+    "dev:web": "tsx scripts/dev-web.ts",
+    "web:dev": "pnpm --dir apps/web dev",
+    "web:build": "pnpm build && pnpm --dir apps/web build",
+    "web:start": "pnpm --dir apps/web start",
+    "dev:desktop": "pnpm --dir apps/desktop dev",
+    "build:desktop": "pnpm --dir apps/desktop build",
+    "package:desktop": "node scripts/package-desktop.mjs",
+    "db:seed:student": "tsx pipeline/seed-student.ts"
+  },
+  "dependencies": {
+    "@learning-agent/agent": "workspace:*",
+    "@learning-agent/db": "workspace:*",
+    "@learning-agent/export": "workspace:*",
+    "@learning-agent/news": "workspace:*",
+    "@learning-agent/questions": "workspace:*",
+    "@learning-agent/shared": "workspace:*",
+    "@learning-agent/profile": "workspace:*",
+    "@learning-agent/research": "workspace:*",
+    "@learning-agent/bp": "workspace:*",
+    "@learning-agent/skills": "workspace:*",
+    "@learning-agent/artifacts": "workspace:*",
+    "@learning-agent/matcher": "workspace:*"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "cheerio": "^1.1.0",
+    "docx": "^9.5.0",
+    "mammoth": "^1.9.0",
+    "p-limit": "^7.1.0",
+    "pdfjs-dist": "^5.3.0",
+    "playwright": "^1.55.0",
+    "react": "^19.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "word-extractor": "^1.0.4",
+    "js-yaml": "^4.1.0",
+    "@types/js-yaml": "^4.0.9"
+  }
+}

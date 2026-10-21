@@ -1,0 +1,1792 @@
+{
+  "code": 20000,
+  "message": "OK",
+  "data": {
+    "next_cursor": "eyJTbG90T2Zmc2V0IjowLCJUb3RhbENvdW50IjoyMiwiQXJ0aWNsZUxlIjoxNzkyMTgxMTgwfQ==",
+    "is_inhouse": false,
+    "item_count": 22,
+    "items": [
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/26b25eac-c662-4ef8-af15-838d4f0a5e28",
+            "display_name": "高猷嘉",
+            "id": 120000003854,
+            "uri": "https://wallstreetcn.com/authors/120000003854"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            }
+          ],
+          "content_short": "财险产品开发新规正式落地，非车险综合治理进一步向产品和定价环节延伸。\n此前持续推进的“报行合一”已推动部分险种手续费率明显下降，新规将进一步规范条款设计、费率执行和产品管理，推动行业竞争从渠道费用比拼转向风险定价与承保能力竞争，头部险企的规模、数据及风控优势有望进一步强化。更重要的是，新规有望激发财险行业的盈利弹性。",
+          "display_time": 1792207937,
+          "hang_down": {},
+          "id": 3783413,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/b98791d8-19d7-4fa1-adf3-5cc7d4b79e94.png",
+            "height": 646,
+            "width": 718,
+            "size": 419091
+          },
+          "is_in_vip_privilege": true,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": true,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "related_topics": [
+            {
+              "id": 1000023,
+              "image_uri": "https://wpimg-wscn.awtmt.com/2e229b38-047c-40a3-a1fa-d4f7f0cf0267.jpg",
+              "title": "见闻主编精选",
+              "uri": "https://wallstreetcn.com/premium/topics/1000023"
+            }
+          ],
+          "source_name": "万周",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "财险反内卷进入深水区：产品新规正式落地，财险行业盈利弹性一触即发？",
+          "uri": "https://wallstreetcn.com/member/articles/3783413",
+          "vip_type": "gold"
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/ab5b317e-54ba-4124-af71-7de4cf4b6356",
+            "display_name": "张雅琦",
+            "id": 120000004773,
+            "uri": "https://wallstreetcn.com/authors/120000004773"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            }
+          ],
+          "content_args": [],
+          "content_short": "据Politico报道，Anthropic正秘密向国会游说一项前沿AI安全监管法案草案。草案规定，仅当模型存在造成逾10亿美元损失或超50人伤亡的预测性即时风险时，政府方可干预。草案要求开发者开展独立评估与透明化测试，并由指定法院最终裁决是否暂停模型。",
+          "display_time": 1792207337,
+          "hang_down": {},
+          "id": 3783831,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/f279a966-ef5f-4347-9a39-17caa5ead389.png",
+            "height": 528,
+            "width": 792,
+            "size": 663719
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "Anthropic被曝秘密游说国会：AI造成超10亿美元损失，政府才能叫停？",
+          "uri": "https://wallstreetcn.com/articles/3783831",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "chart",
+        "resource_owner": "inhouse",
+        "resource": {
+          "id": 41960043,
+          "title": "特斯拉Roadster太疯狂！目标充电十分钟，狂飙半小时",
+          "content": "<p>特斯拉工程师拆解Roadster的动力总成，采用铝壳4680特制电芯与双面冷却系统，系统运行于800V高压平台，电量从15%充到80%只要10分钟，续航号称超480公里，可支持约30分钟赛道狂飙。</p>\n",
+          "content_text": "特斯拉工程师拆解Roadster的动力总成，采用铝壳4680特制电芯与双面冷却系统，系统运行于800V高压平台，电量从15%充到80%只要10分钟，续航号称超480公里，可支持约30分钟赛道狂飙。\n",
+          "display_time": 1792206257,
+          "is_favourite": false,
+          "is_like": false,
+          "uri": "https://wallstreetcn.com/charts/41960043",
+          "like_count": 0,
+          "like_type": "",
+          "like_image": "",
+          "is_priced": false,
+          "is_scaling": false,
+          "related_themes": [
+            {
+              "description": "",
+              "id": 1008340,
+              "image_uri": "https://wpimg-wscn.awtmt.com/0b854051-e8c1-4a3a-9067-fdaa5407454d.jpg",
+              "is_followed": false,
+              "is_priced": false,
+              "key": "huaerjielaoguanong",
+              "title": "吃瓜群众",
+              "type": "normal",
+              "uri": "https://wallstreetcn.com/themes/1008340"
+            }
+          ],
+          "related_interactives": [],
+          "images": null,
+          "cover_images": null,
+          "videos": [
+            {
+              "uri": "https://streaming-wscn.awtmt.com/a3a2d9f5-dc0a-4ad4-9e0b-2ccdd272dc51_hls.m3u8",
+              "title": "特斯拉Roadster太疯狂！目标充电十分钟，狂飙半小时",
+              "cover_img_uri": "https://wpimg-wscn.awtmt.com/bfb372a1-6133-46b1-91ae-04e1dd40d68a.png",
+              "duration": "163.433",
+              "width": 606,
+              "height": 1080,
+              "video_type": "切片",
+              "first_review_user_id": 120000004550,
+              "second_review_user_id": 120000004550
+            }
+          ],
+          "author": {
+            "display_name": "",
+            "avatar": "",
+            "uri": "",
+            "is_followed": false
+          },
+          "comment_count": 0,
+          "recommend_comments": null,
+          "type": "chart",
+          "article": null,
+          "next": null,
+          "previous": null,
+          "favorite_time": 0
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/ab5b317e-54ba-4124-af71-7de4cf4b6356",
+            "display_name": "张雅琦",
+            "id": 120000004773,
+            "uri": "https://wallstreetcn.com/authors/120000004773"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "commodities",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": " wscnph",
+              "height": "606",
+              "placeholder": "<!--image#0-->",
+              "src": "https://wpimg-wscn.awtmt.com/d60a8763-539b-48de-abbb-547dedab7501.png",
+              "type": "image",
+              "width": "1024"
+            }
+          ],
+          "content_short": "金银价格自1月高点大幅回调，实物市场结构性失衡加剧。央行在金价下跌期创纪录增持，持仓占比首超美债；白银连续六年录得供应赤字，工业需求不可替代且矿山供给响应滞后。价格下跌仅清洗投机仓位，未修复由主权增持、实物赤字及财政恶化支撑的供需裂缝。",
+          "display_time": 1792205902,
+          "hang_down": {},
+          "id": 3783830,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/d0648c0a-53e0-47be-8ce1-3e66ba6ea9d3.png",
+            "height": 281,
+            "width": 470,
+            "size": 355553
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "黄金暴跌27%，白银价格腰斩！一场更大的贵金属危机正在酝酿？",
+          "uri": "https://wallstreetcn.com/articles/3783830",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/ab5b317e-54ba-4124-af71-7de4cf4b6356",
+            "display_name": "张雅琦",
+            "id": 120000004773,
+            "uri": "https://wallstreetcn.com/authors/120000004773"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "new-energy-vehicle",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": " wscnph",
+              "height": "499",
+              "placeholder": "<!--image#0-->",
+              "src": "https://wpimg-wscn.awtmt.com/f463b7df-ff3c-4347-94cc-9931292fb363.png",
+              "type": "image",
+              "width": "980"
+            },
+            {
+              "class": " wscnph",
+              "height": "510",
+              "placeholder": "<!--image#1-->",
+              "src": "https://wpimg-wscn.awtmt.com/2b2d856f-4277-46ca-9cb7-c3f29e9de60a.png",
+              "type": "image",
+              "width": "1193"
+            },
+            {
+              "class": " wscnph",
+              "height": "491",
+              "placeholder": "<!--image#2-->",
+              "src": "https://wpimg-wscn.awtmt.com/44c8d05a-bcfd-4798-abcc-5eb13f046473.png",
+              "type": "image",
+              "width": "1193"
+            },
+            {
+              "class": " wscnph",
+              "height": "493",
+              "placeholder": "<!--image#3-->",
+              "src": "https://wpimg-wscn.awtmt.com/d9fd45f0-026b-477e-8b12-a790415a3be8.png",
+              "type": "image",
+              "width": "1193"
+            },
+            {
+              "class": " wscnph",
+              "height": "493",
+              "placeholder": "<!--image#4-->",
+              "src": "https://wpimg-wscn.awtmt.com/746dd7df-20a5-4cff-87bb-150f3eea43c6.png",
+              "type": "image",
+              "width": "1193"
+            },
+            {
+              "class": " wscnph",
+              "height": "498",
+              "placeholder": "<!--image#5-->",
+              "src": "https://wpimg-wscn.awtmt.com/fdb7deb1-6d29-4786-b135-4e8248b8d785.png",
+              "type": "image",
+              "width": "1193"
+            },
+            {
+              "class": " wscnph",
+              "height": "489",
+              "placeholder": "<!--image#6-->",
+              "src": "https://wpimg-wscn.awtmt.com/a52c3441-c134-4d49-b860-77fb51360472.png",
+              "type": "image",
+              "width": "1193"
+            }
+          ],
+          "content_short": "特斯拉车辆工程副总裁Lars Moravy介绍，Roadster采用专属4680电池与双电机后驱布局，最大功率超1兆瓦，整车目标重量将略低于1700公斤。车辆配备主动吸地风扇及SpaceX冷气推进器，顶配Rocket版0-60mph加速仅需0.55秒并具备有限离地飞行能力，展示了前沿的空气动力学与推进技术。",
+          "display_time": 1792202897,
+          "hang_down": {
+            "image": []
+          },
+          "id": 3783829,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/689fed52-996d-4762-b659-61340eb2654d.png",
+            "height": 516,
+            "width": 672,
+            "size": 280603
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "特斯拉高管详解新Roadster：放弃四驱、专用4680电池，目标车重不到1.7吨",
+          "uri": "https://wallstreetcn.com/articles/3783829",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/7b0cce93-62a1-4788-bf4c-7d0d15761ae9.png",
+            "display_name": "华尔街见闻",
+            "id": 109176,
+            "uri": "https://wallstreetcn.com/authors/109176"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "choice",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": "wscnph",
+              "height": "2008",
+              "placeholder": "<!--image#0-->",
+              "size": "3016813",
+              "src": "https://wpimg-wscn.awtmt.com/95f08245-505d-49f3-812d-97036571670d.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph editor-placeholder",
+              "cover_img_uri": "https://wpimg-wscn.awtmt.com/39b0977b-c195-4ded-8415-ee1a76667eb6.png",
+              "duration": "136.586",
+              "height": "1080",
+              "placeholder": "<!--video#1-->",
+              "show_on_global": true,
+              "title": "2027见闻历预售开启",
+              "type": "video",
+              "uri": "https://streaming-wscn.awtmt.com/ed467ba8-2f3f-4b88-862e-3e913268a72d_hls.m3u8",
+              "width": "1904"
+            },
+            {
+              "class": "wscnph",
+              "height": "367",
+              "placeholder": "<!--image#2-->",
+              "size": "640262",
+              "src": "https://wpimg-wscn.awtmt.com/c23833ed-ed8d-445a-8631-f687024cdbc6",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "1222",
+              "placeholder": "<!--image#3-->",
+              "size": "1105042",
+              "src": "https://wpimg-wscn.awtmt.com/b7ede277-e75d-4794-8e23-15d2ec7d84f3.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "2739",
+              "placeholder": "<!--image#4-->",
+              "size": "2534924",
+              "src": "https://wpimg-wscn.awtmt.com/55cbb127-4313-4492-b776-c3aa82a98bb1.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "1721",
+              "placeholder": "<!--image#5-->",
+              "size": "1317305",
+              "src": "https://wpimg-wscn.awtmt.com/32e67f07-908b-4812-81e7-9412193f14de.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "1760",
+              "placeholder": "<!--image#6-->",
+              "size": "1514110",
+              "src": "https://wpimg-wscn.awtmt.com/278e8fff-c55f-4f8a-98db-4cc029847da4.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "1512",
+              "placeholder": "<!--image#7-->",
+              "size": "1611434",
+              "src": "https://wpimg-wscn.awtmt.com/dc42db73-a221-4d95-8a9a-da0a09931297.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "1266",
+              "placeholder": "<!--image#8-->",
+              "size": "1418771",
+              "src": "https://wpimg-wscn.awtmt.com/a4427bb0-bde7-4aad-b7f6-68a4c462ad78.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "1310",
+              "placeholder": "<!--image#9-->",
+              "size": "1319345",
+              "src": "https://wpimg-wscn.awtmt.com/b964d917-aeda-402a-b066-0a9b9cf32ff5.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "2298",
+              "placeholder": "<!--image#10-->",
+              "size": "1149349",
+              "src": "https://wpimg-wscn.awtmt.com/967c2819-6810-4b36-a524-a6a36fdb2679.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "367",
+              "placeholder": "<!--image#11-->",
+              "size": "640262",
+              "src": "https://wpimg-wscn.awtmt.com/0a4905a5-91cb-4e23-90fe-5c23278471b4",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "5127",
+              "placeholder": "<!--image#12-->",
+              "size": "2066549",
+              "src": "https://wpimg-wscn.awtmt.com/58316b35-44fe-42ff-92db-54b12421afd7.png",
+              "type": "image",
+              "width": "1080"
+            },
+            {
+              "class": "wscnph",
+              "height": "420",
+              "placeholder": "<!--image#13-->",
+              "size": "420502",
+              "src": "https://wpimg-wscn.awtmt.com/8537963b-cfb9-4a5c-bca2-b56149270f81.png",
+              "type": "image",
+              "width": "750"
+            }
+          ],
+          "content_short": "投资很贵，这份日历并不贵。让2027每一个重要日子，都有备而来。\n限时预售 10.13-10.22  早鸟超值价99元。",
+          "display_time": 1792202875,
+          "hang_down": {
+            "video": [
+              {
+                "cover_img_uri": "https://wpimg-wscn.awtmt.com/39b0977b-c195-4ded-8415-ee1a76667eb6.png",
+                "duration": "136.586",
+                "height": "1080",
+                "show_global": "true",
+                "size": "1335",
+                "title": "2027见闻历预售开启",
+                "type": "video",
+                "uri": "https://streaming-wscn.awtmt.com/ed467ba8-2f3f-4b88-862e-3e913268a72d_hls.m3u8",
+                "width": "1904"
+              }
+            ]
+          },
+          "id": 3782813,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/51cb6652-1383-46b8-9b09-e9d7620f1460.png",
+            "height": 800,
+            "width": 800,
+            "size": 802685
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "华尔街见闻",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "上线了！2027见闻历超值预售99元，活动火热进行中！ ",
+          "uri": "https://wallstreetcn.com/articles/3782813",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/8c92094f-c04e-4ae0-a746-348c1b956aa2",
+            "display_name": "弋文涛",
+            "id": 120000004861,
+            "uri": "https://wallstreetcn.com/authors/120000004861"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            }
+          ],
+          "content_short": "通胀反弹推升加息预期，AI抛售引发长端美债避险买盘，利率下行难掩盈利与信用风险，板块分化或进一步加剧。",
+          "display_time": 1792200806,
+          "hang_down": {},
+          "id": 3783706,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/b6ac3011-3e08-4507-918b-09ac7ed152cb.png",
+            "height": 676,
+            "width": 1024,
+            "size": 794401
+          },
+          "is_in_vip_privilege": true,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": true,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": [
+            {
+              "id": 1008351,
+              "title": "数据追踪",
+              "image_uri": "https://wpimg-wscn.awtmt.com/e476f2d0-0316-4f83-b883-99a03f4b5ab3.png",
+              "uri": "https://wallstreetcn.com/themes/1008351",
+              "key": "yizhouhuigu"
+            }
+          ],
+          "related_topics": [
+            {
+              "id": 1000023,
+              "image_uri": "https://wpimg-wscn.awtmt.com/2e229b38-047c-40a3-a1fa-d4f7f0cf0267.jpg",
+              "title": "见闻主编精选",
+              "uri": "https://wallstreetcn.com/premium/topics/1000023"
+            }
+          ],
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "通胀鹰派但长端美债反涨：AI抛售潮的喘息还是负反馈？",
+          "uri": "https://wallstreetcn.com/member/articles/3783706",
+          "vip_type": "gold"
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/814d8326-6a36-4869-8e44-3009ef51ff65",
+            "display_name": "鲍奕龙",
+            "id": 120000004827,
+            "uri": "https://wallstreetcn.com/authors/120000004827"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "finance",
+              "property_name": ""
+            },
+            {
+              "property_key": "technology",
+              "property_name": ""
+            },
+            {
+              "property_key": "bonds",
+              "property_name": ""
+            },
+            {
+              "property_key": "other-assets",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": " wscnph",
+              "height": "518",
+              "placeholder": "<!--image#0-->",
+              "src": "https://wpimg-wscn.awtmt.com/45c6bbd5-453b-4e0f-9f47-c63db437b278.png",
+              "type": "image",
+              "width": "614"
+            },
+            {
+              "class": " wscnph",
+              "height": "346",
+              "placeholder": "<!--image#1-->",
+              "src": "https://wpimg-wscn.awtmt.com/72eb0890-9ef5-45bd-bd29-3c583e04a958.png",
+              "type": "image",
+              "width": "614"
+            },
+            {
+              "class": " wscnph",
+              "height": "425",
+              "placeholder": "<!--image#2-->",
+              "src": "https://wpimg-wscn.awtmt.com/de451b87-6c73-4183-854e-31f040566f55.png",
+              "type": "image",
+              "width": "614"
+            },
+            {
+              "class": " wscnph",
+              "height": "624",
+              "placeholder": "<!--image#3-->",
+              "src": "https://wpimg-wscn.awtmt.com/b6a3a177-0ef8-428b-8105-bda15e43aea0.png",
+              "type": "image",
+              "width": "578"
+            }
+          ],
+          "content_short": "摩根大通构建的\"民主党因子\"自8月以来累计上涨约20%，而同期标普500仅涨2.6%。预测平台对民主党横扫两院的概率已从8月的23%飙升至64%。高盛历史数据显示，该概率在投票日前平均回落约5个百分点。机构分歧明显：摩根大通主张逢低买入，美国银行警告民主党横扫将致股市下跌逾10%。",
+          "display_time": 1792199996,
+          "hang_down": {
+            "image": [
+              {
+                "height": "",
+                "isCut": "",
+                "size": "",
+                "type": "image",
+                "uri": "https://wpimg-wscn.awtmt.com/45c6bbd5-453b-4e0f-9f47-c63db437b278.png",
+                "width": ""
+              }
+            ]
+          },
+          "id": 3783825,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/content_default_9.jpg",
+            "height": 420,
+            "width": 839,
+            "size": 352865
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "华尔街开出中期选举价码：民主党因子暴涨20%，大盘却深陷“盲区”",
+          "uri": "https://wallstreetcn.com/articles/3783825",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/ab5b317e-54ba-4124-af71-7de4cf4b6356",
+            "display_name": "张雅琦",
+            "id": 120000004773,
+            "uri": "https://wallstreetcn.com/authors/120000004773"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "bonds",
+              "property_name": ""
+            },
+            {
+              "property_key": "commodities",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": " wscnph",
+              "height": "575",
+              "placeholder": "<!--image#0-->",
+              "src": "https://wpimg-wscn.awtmt.com/627df28f-180e-42c3-9bd1-d3c0eff1cfc2.png",
+              "type": "image",
+              "width": "961"
+            },
+            {
+              "class": " wscnph",
+              "height": "659",
+              "placeholder": "<!--image#1-->",
+              "src": "https://wpimg-wscn.awtmt.com/ddc4c539-04a6-423d-a70a-870b5c229a0d.png",
+              "type": "image",
+              "width": "961"
+            },
+            {
+              "class": " wscnph",
+              "height": "565",
+              "placeholder": "<!--image#2-->",
+              "src": "https://wpimg-wscn.awtmt.com/8de138b5-f7d8-423f-92c9-e48bb85f2a09.png",
+              "type": "image",
+              "width": "961"
+            },
+            {
+              "class": " wscnph",
+              "height": "565",
+              "placeholder": "<!--image#3-->",
+              "src": "https://wpimg-wscn.awtmt.com/5be2af8d-6be3-41fa-ad13-58e7b761dc14.png",
+              "type": "image",
+              "width": "961"
+            }
+          ],
+          "content_short": "AI债务风险爆发与油价骤升交织，引发美股和债市剧烈震荡。纳指单周大跌5.5%，半导体八连跌创2008年以来最长连跌，CoreWeave信用恶化引爆对AI融资成本与回报的担忧。同时油价高企重燃通胀顾虑，推动10年期美债收益率升破5.1%，双重冲击市场。",
+          "display_time": 1792199595,
+          "hang_down": {},
+          "id": 3783826,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/41f9e8c3-1a8a-47c4-b6e6-a5bfcd75b497.jpeg",
+            "height": 542,
+            "width": 792,
+            "size": 58614
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "华尔街腹背受敌：AI抛售潮蔓延至债市，110美元油价再添一把火",
+          "uri": "https://wallstreetcn.com/articles/3783826",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/814d8326-6a36-4869-8e44-3009ef51ff65",
+            "display_name": "鲍奕龙",
+            "id": 120000004827,
+            "uri": "https://wallstreetcn.com/authors/120000004827"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "forex",
+              "property_name": ""
+            },
+            {
+              "property_key": "bonds",
+              "property_name": ""
+            },
+            {
+              "property_key": "shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "finance",
+              "property_name": ""
+            }
+          ],
+          "content_args": [],
+          "content_short": "印度9月商品贸易逆差扩大至302.1亿美元，超过8月的268亿美元，加剧经常账户压力担忧。储备方面，印度央行通过特别措施筹集逾140亿美元，已动用约半数补充外汇储备，但净远期美元负债仍高达200亿美元。分析人士认为，卢比能否持续反弹，取决于深层经济压力是否得到有效缓解。",
+          "display_time": 1792196985,
+          "hang_down": {},
+          "id": 3783824,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/content_default_19.jpg",
+            "height": 1662,
+            "width": 2500,
+            "size": 2196941
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "卢比单周涨2%创七个月最大，贸易逆差却扩大至302亿美元，印度央行护盘资金已动用约一半",
+          "uri": "https://wallstreetcn.com/articles/3783824",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/814d8326-6a36-4869-8e44-3009ef51ff65",
+            "display_name": "鲍奕龙",
+            "id": 120000004827,
+            "uri": "https://wallstreetcn.com/authors/120000004827"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "finance",
+              "property_name": ""
+            },
+            {
+              "property_key": "technology",
+              "property_name": ""
+            },
+            {
+              "property_key": "enterprise",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            },
+            {
+              "property_key": "tmt-firm",
+              "property_name": ""
+            },
+            {
+              "property_key": "consumer",
+              "property_name": ""
+            },
+            {
+              "property_key": "electronic",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": " wscnph",
+              "height": "513",
+              "placeholder": "<!--image#0-->",
+              "src": "https://wpimg-wscn.awtmt.com/9c06735d-05bc-4038-8d4e-dba1b91caba3.png",
+              "type": "image",
+              "width": "846"
+            }
+          ],
+          "content_short": "苹果首款折叠屏手机iPhone Duo预购开放数分钟内，发货期即延至明年1月底，全部颜色及存储配置均受影响。彭博智库分析师上调销售预期，认为销量有望超越1400万部及280亿美元目标，周五苹果股价小幅上涨0.43%。",
+          "display_time": 1792194674,
+          "hang_down": {},
+          "id": 3783823,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/f105c61e-1b46-40be-9daa-deebe15c38fb.jpeg",
+            "height": 683,
+            "width": 1024,
+            "size": 68787
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "苹果称iPhone Duo需求\"非同寻常\"，预购开放数分钟即告罄，发货延至明年1月",
+          "uri": "https://wallstreetcn.com/articles/3783823",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/814d8326-6a36-4869-8e44-3009ef51ff65",
+            "display_name": "鲍奕龙",
+            "id": 120000004827,
+            "uri": "https://wallstreetcn.com/authors/120000004827"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "bonds",
+              "property_name": ""
+            },
+            {
+              "property_key": "commodities",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": "wscnph",
+              "height": "643",
+              "placeholder": "<!--image#0-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/63b50eb0-ffa1-4304-880d-018a64355189.png",
+              "type": "image",
+              "width": "1074"
+            },
+            {
+              "class": "wscnph",
+              "height": "693",
+              "placeholder": "<!--image#1-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/74a88e22-cde7-4278-b515-456f688453ee.png",
+              "type": "image",
+              "width": "1173"
+            },
+            {
+              "class": "wscnph",
+              "height": "635",
+              "placeholder": "<!--image#2-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/e4ad9681-2fcd-4404-9320-a51463134758.png",
+              "type": "image",
+              "width": "1021"
+            },
+            {
+              "class": "wscnph",
+              "height": "631",
+              "placeholder": "<!--image#3-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/52e2f157-a351-40e2-8a0c-99b5932f97c3.png",
+              "type": "image",
+              "width": "1073"
+            },
+            {
+              "class": "wscnph",
+              "height": "639",
+              "placeholder": "<!--image#4-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/5b0090c7-8352-4681-bca2-4eb72de1453b.png",
+              "type": "image",
+              "width": "1072"
+            },
+            {
+              "class": "wscnph",
+              "height": "632",
+              "placeholder": "<!--image#5-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/68ba3b0a-58ac-44bd-867e-c6979f3c93f5.png",
+              "type": "image",
+              "width": "1071"
+            },
+            {
+              "class": "wscnph",
+              "height": "632",
+              "placeholder": "<!--image#6-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/3a6b90a8-55f0-4287-8466-7aef69f28f0f.png",
+              "type": "image",
+              "width": "1077"
+            },
+            {
+              "class": "wscnph",
+              "height": "593",
+              "placeholder": "<!--image#7-->",
+              "size": "739102",
+              "src": "https://wpimg-wscn.awtmt.com/76b84fb4-b5d5-49a8-b0e2-fe71cdc9fdc9.png",
+              "type": "image",
+              "width": "1076"
+            },
+            {
+              "class": " wscnph",
+              "height": "628",
+              "placeholder": "<!--image#8-->",
+              "src": "https://wpimg-wscn.awtmt.com/b0924520-7d41-4a42-8376-594d2a865277.png",
+              "type": "image",
+              "width": "1068"
+            },
+            {
+              "class": " wscnph",
+              "height": "646",
+              "placeholder": "<!--image#9-->",
+              "src": "https://wpimg-wscn.awtmt.com/df386873-bdf7-47b0-be6f-23e2f297b947.png",
+              "type": "image",
+              "width": "1073"
+            },
+            {
+              "class": " wscnph",
+              "height": "641",
+              "placeholder": "<!--image#10-->",
+              "src": "https://wpimg-wscn.awtmt.com/4a5048ed-e793-4241-8a90-3fddcf1441d8.png",
+              "type": "image",
+              "width": "1071"
+            },
+            {
+              "class": "wscnph",
+              "height": "619",
+              "placeholder": "<!--image#11-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/5474ddc1-5b58-4a29-8bf1-d15d105774b2.png",
+              "type": "image",
+              "width": "1071"
+            },
+            {
+              "class": " wscnph",
+              "height": "792",
+              "placeholder": "<!--image#12-->",
+              "src": "https://wpimg-wscn.awtmt.com/10e34f65-168e-46e8-873a-c196e037777f.png",
+              "type": "image",
+              "width": "1155"
+            },
+            {
+              "class": " wscnph",
+              "height": "633",
+              "placeholder": "<!--image#13-->",
+              "src": "https://wpimg-wscn.awtmt.com/1ca710d8-4453-41eb-8f1f-45ef89a77197.png",
+              "type": "image",
+              "width": "1067"
+            },
+            {
+              "class": "wscnph",
+              "height": "633",
+              "placeholder": "<!--image#14-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/61203850-7392-4067-8d2f-47f896ba4e46.png",
+              "type": "image",
+              "width": "1063"
+            },
+            {
+              "class": "wscnph",
+              "height": "634",
+              "placeholder": "<!--image#15-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/e5d7c0e0-9dd4-47c2-ba4c-33f10f9a59c2.png",
+              "type": "image",
+              "width": "1071"
+            },
+            {
+              "class": "wscnph",
+              "height": "630",
+              "placeholder": "<!--image#16-->",
+              "size": "",
+              "src": "https://wpimg-wscn.awtmt.com/b3e82367-4b84-414e-add8-4b00a80a0a60.png",
+              "type": "image",
+              "width": "1059"
+            }
+          ],
+          "content_short": "芯片指数八连跌，美科技七巨头指数单日下挫1.6%，本周累跌2.87%。存储概念指数当天跌6.28%。存储芯片股SK海力士ADR跌超6.5%，闪迪跌超6.8%，美光科技跌超5.6%。光通信公司Coherent跌逾7%。10年期美债收益率扭转三连降。美元指数创逾两周新低，离岸人民币盘中再创四年新高。布油盘中涨超3%，美油七日连涨。",
+          "display_time": 1792193212,
+          "hang_down": {},
+          "id": 3783778,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/07bc1a0e-6558-4cfd-a253-180d0c562007.png",
+            "height": 459,
+            "width": 689,
+            "size": 551674
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "鲍奕龙、李丹、张雅琦",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "AI交易忧虑压垮美股，纳指跌超2%、CoreWeave暴跌12%，VIX一度升破22，布油涨破110",
+          "uri": "https://wallstreetcn.com/articles/3783778",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+            "display_name": "杨宸",
+            "id": 120000004919,
+            "uri": "https://wallstreetcn.com/authors/120000004919"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "bonds",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": "wscnph",
+              "height": "876",
+              "placeholder": "<!--image#0-->",
+              "size": "93411",
+              "src": "https://wpimg-wscn.awtmt.com/a54f2b21-ade0-4538-91e2-57bcb59400b8.png",
+              "type": "image",
+              "width": "1360"
+            }
+          ],
+          "content_short": "市场对AI基础设施企业债务风险的担忧持续升温，CoreWeave部分债券收益率周四一度突破15%，周五仍然维持高位，CoreWeave股价周五再度重挫12%，纳斯达克综合指数本周累计下挫约4.5%。分析指出，随着资本成本上升至难以承受的水平，各公司将不得不削减资本开支。",
+          "display_time": 1792192736,
+          "hang_down": {},
+          "id": 3783822,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/6a1d1eb4-bdde-4e6e-86b8-210a066394eb.png",
+            "height": 682,
+            "width": 1024,
+            "size": 1155227
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "信贷恐慌击穿AI交易：CoreWeave债券收益率维持高位，纳指创6月底来最大单周跌幅",
+          "uri": "https://wallstreetcn.com/articles/3783822",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://dn-wscn-avatar.qbox.me//50/0d/32/-logo.png",
+            "display_name": "朱希",
+            "id": 66068,
+            "uri": "https://wallstreetcn.com/authors/66068"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "breakfast",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": "wscnph shield-text",
+              "height": "520",
+              "placeholder": "<!--image#0-->",
+              "size": "67278",
+              "src": "https://wpimg-wscn.awtmt.com/76dac5fa-5f02-4143-86e3-86e16d814a51.jpeg",
+              "type": "image",
+              "width": "1280"
+            },
+            {
+              "class": "wscnph editor-placeholder",
+              "duration": "520.039479",
+              "placeholder": "<!--audio#1-->",
+              "size": "20809750",
+              "text": "",
+              "title": "纳指跌超2%",
+              "type": "audio",
+              "uri": "https://streaming-wscn.awtmt.com/70b9a74d-eaa8-4937-9ec6-03534204c3b4.mp3"
+            }
+          ],
+          "content_short": "五分钟看懂全球市场，尽在财经早餐。",
+          "display_time": 1792192171,
+          "hang_down": {
+            "audio": [
+              {
+                "cover_img_uri": "https://image.wscn.net/7466db5c-828c-4f30-bc83-630e511818fb.jpg",
+                "duration": "520.039479",
+                "text": "",
+                "title": "纳指跌超2%",
+                "type": "audio",
+                "uri": "https://streaming-wscn.awtmt.com/70b9a74d-eaa8-4937-9ec6-03534204c3b4.mp3"
+              }
+            ]
+          },
+          "id": 3783821,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/0eec1a28-3299-4a9b-8f33-96d316eb35b9.jpeg",
+            "height": 449,
+            "width": 1024,
+            "size": 90100
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "华尔街见闻早餐FM-Radio | 2026年10月17日",
+          "uri": "https://wallstreetcn.com/articles/3783821",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+            "display_name": "杨宸",
+            "id": 120000004919,
+            "uri": "https://wallstreetcn.com/authors/120000004919"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "bonds",
+              "property_name": ""
+            }
+          ],
+          "content_args": [],
+          "content_short": "纽约联储周五发布调查显示，10月服务业企业的销售价格涨幅升至2022年以来最快水平，投入成本涨势依然强劲，供应状况持续恶化。企业对商业前景的悲观情绪明显升温，整体商业活动指数较上月下滑12点至负20.7，创3月以来最弱读数。",
+          "display_time": 1792190171,
+          "hang_down": {},
+          "id": 3783818,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/c4611055-49e9-4f63-85e7-c3694891c5ac.png",
+            "height": 693,
+            "width": 1024,
+            "size": 857136
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "纽约联储调查：服务业提价创2022年来最快，商业活动指数跌至3月来最低",
+          "uri": "https://wallstreetcn.com/articles/3783818",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+            "display_name": "杨宸",
+            "id": 120000004919,
+            "uri": "https://wallstreetcn.com/authors/120000004919"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            }
+          ],
+          "content_args": [],
+          "content_short": "美国9月进口价格环比上涨1.1%，高于市场预期的0.8%；截至9月的12个月内，进口价格同比上涨8.1%，创2022年7月以来最大涨幅。进口燃料价格环比上涨4.8%，是主要推手。但剔除食品和燃料的核心进口价格上涨0.7%，资本品价格上涨0.9%，表明通胀已向更广泛经济层面蔓延。",
+          "display_time": 1792190110,
+          "hang_down": {},
+          "id": 3783820,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/7cf2ef46-246a-4b77-ad09-d92948f75738.jpeg",
+            "height": 573,
+            "width": 1024,
+            "size": 115208
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "美国9月进口价格涨幅超预期，核心进口与资本品齐升印证通胀扩散",
+          "uri": "https://wallstreetcn.com/articles/3783820",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/814d8326-6a36-4869-8e44-3009ef51ff65",
+            "display_name": "鲍奕龙",
+            "id": 120000004827,
+            "uri": "https://wallstreetcn.com/authors/120000004827"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "finance",
+              "property_name": ""
+            },
+            {
+              "property_key": "technology",
+              "property_name": ""
+            },
+            {
+              "property_key": "enterprise",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": " wscnph",
+              "height": "635",
+              "placeholder": "<!--image#0-->",
+              "src": "https://wpimg-wscn.awtmt.com/1f6c08a6-3191-4c33-926e-a35e53167387.png",
+              "type": "image",
+              "width": "1021"
+            },
+            {
+              "class": " wscnph",
+              "height": "622",
+              "placeholder": "<!--image#1-->",
+              "src": "https://wpimg-wscn.awtmt.com/5328d775-811b-4f23-91d3-bb6cea2bfcc4.png",
+              "type": "image",
+              "width": "1150"
+            },
+            {
+              "class": " wscnph",
+              "height": "631",
+              "placeholder": "<!--image#2-->",
+              "src": "https://wpimg-wscn.awtmt.com/79191b2d-faf5-44d1-9f9a-998ccf4acd83.png",
+              "type": "image",
+              "width": "1073"
+            },
+            {
+              "class": " wscnph",
+              "height": "643",
+              "placeholder": "<!--image#3-->",
+              "src": "https://wpimg-wscn.awtmt.com/f2c1a6ad-074a-488b-b115-48eb0961a1db.png",
+              "type": "image",
+              "width": "1074"
+            }
+          ],
+          "content_short": "本周AI投资回报前景遭市场质疑，费城半导体指数累跌11.4%，纳指单周跌超4%。CoreWeave股价周累跌逾25%，债券跌至困境水平，高息债务融资模式受到质疑。策略师警示过度看空存在踏空风险，\"木头姐\"则逆势加仓CoreWeave。",
+          "display_time": 1792186932,
+          "hang_down": {},
+          "id": 3783819,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/96ba05f9-e641-4113-981a-2a3e46ab14a4.png",
+            "height": 472,
+            "width": 708,
+            "size": 475186
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "美芯片股八连跌！2万亿美元市值蒸发，创2008年来最长跌势",
+          "uri": "https://wallstreetcn.com/articles/3783819",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://dn-wscn-avatar.qbox.me//59/4d/7c/-logo.png",
+            "display_name": "李丹",
+            "id": 75,
+            "uri": "https://wallstreetcn.com/authors/75"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "bonds",
+              "property_name": ""
+            }
+          ],
+          "content_args": [],
+          "content_short": "据美财政部报告，8月海外投资者净买入美债1089亿美元，持债规模扭转两月连降；十大持债国家地区中，8月只有中日持仓下滑，头号“债主”日本在干预汇市当月持仓创22个月新低、连降四个月，中国持仓连降三个月，一年来减少1090亿美元，第二大“债主”英国持仓两月连创历史新高，加拿大8月增持居首、增幅383亿美元，总持仓排第五，增幅第二位比利时增198亿美元。",
+          "display_time": 1792186885,
+          "hang_down": {},
+          "id": 3783815,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/88684fff-7a9c-4b82-90e3-1388f5663d9e.jpeg",
+            "height": 640,
+            "width": 960,
+            "size": 169525
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": [
+            {
+              "id": 1005683,
+              "title": "突发要闻-Breaking News",
+              "image_uri": "https://wpimg.wallstcn.com/308ec6bc-c808-4b0e-8b83-4c4271ca170e.jpg",
+              "uri": "https://wallstreetcn.com/themes/1005683",
+              "key": "quanqiuyaowen"
+            }
+          ],
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "8月海外资金重返美债市场，英国持仓首破万亿，中日继续减持、中国持债08年来新低",
+          "uri": "https://wallstreetcn.com/articles/3783815",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+            "display_name": "杨宸",
+            "id": 120000004919,
+            "uri": "https://wallstreetcn.com/authors/120000004919"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": "wscnph",
+              "height": "948",
+              "placeholder": "<!--image#0-->",
+              "size": "93432",
+              "src": "https://wpimg-wscn.awtmt.com/f77e46d6-d580-4082-8bd4-e6ef531f4482.png",
+              "type": "image",
+              "width": "1786"
+            }
+          ],
+          "content_short": "费城半导体指数连跌八日创2008年来最长跌势，CoreWeave单周暴跌逾25%，AI基础设施浪潮遭遇信心危机。英伟达CEO黄仁勋表示，眼下市场动荡\"终将过去\"，AI技术具有变革性，将对每一个行业和每一个国家产生积极影响，这一进程仍处于起点，不会因短期波动而改变。",
+          "display_time": 1792183731,
+          "hang_down": {},
+          "id": 3783817,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/content_default_3.jpg",
+            "height": 1365,
+            "width": 2048,
+            "size": 1301836
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "费城半导体连跌八个交易日，黄仁勋：“这一切终将过去”，AI变革才刚刚开始",
+          "uri": "https://wallstreetcn.com/articles/3783817",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/eee3f09d-f03e-4d67-8805-1ef98a5fa307",
+            "display_name": "杨宸",
+            "id": 120000004919,
+            "uri": "https://wallstreetcn.com/authors/120000004919"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "internal",
+              "property_name": ""
+            }
+          ],
+          "content_args": [],
+          "content_short": "三位知情人士透露，扎卡里亚于当日被解职，此时她上任还不到一周。特朗普当地时间10月9日宣布任命保守派评论员扎卡里亚出任白宫新闻秘书。不过，扎卡里亚10月13日的首场白宫简报会表现糟糕，还被指履历造假，引发人们对其能力的质疑。",
+          "display_time": 1792183606,
+          "hang_down": {},
+          "id": 3783816,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/1b9f36c2-d224-46c7-9a7b-99a7032171a9.png",
+            "height": 528,
+            "width": 792,
+            "size": 528143
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": null,
+          "source_name": "央视新闻",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "首场简报会表现糟糕，特朗普考虑更换白宫新闻秘书人选",
+          "uri": "https://wallstreetcn.com/articles/3783816",
+          "vip_type": ""
+        }
+      },
+      {
+        "resource_type": "live",
+        "resource_owner": "inhouse",
+        "resource": {
+          "article": {
+            "id": 3783817,
+            "image": {
+              "uri": "https://wpimg-wscn.awtmt.com/content_default_3.jpg",
+              "height": 1365,
+              "width": 2048,
+              "size": 1301836
+            },
+            "platforms": [
+              "wscn-platform"
+            ],
+            "title": "费城半导体连跌八个交易日，黄仁勋：“这一切终将过去”，AI变革才刚刚开始",
+            "uri": "https://wallstreetcn.com/articles/3783817"
+          },
+          "ban_comment": false,
+          "channels": [
+            "global-channel",
+            "us-stock-channel",
+            "hk-stock-channel",
+            "financing-channel"
+          ],
+          "content": "<p>英伟达公司首席执行官黄仁勋对近期人工智能（AI）板块股市大跌持乐观态度，称这项技术带来的收益很快将盖过投资者的担忧情绪。</p>\n\n<p>黄仁勋在德国柏林一场活动上对彭博电视节目主持人Emily Chang表示：“这一切终将过去，原因很简单。人工智能将带来变革，会对每一个行业、每一个国家产生极为积极的影响。这一趋势无疑会延续下去，而我们尚处在起步阶段。”</p>\n",
+          "content_more": "<p>本周黄仁勋正在欧洲访问，此番表态为本周芯片与AI基础设施企业跌宕起伏的行情画上注脚。备受关注的费城半导体指数已连续八个交易日下跌，创下2008年以来最长连跌纪录。英伟达股价在过去八个交易日中有七日收跌。投资者担忧，在借贷成本高企的环境下，AI领域的资本开支难以持续。</p>\n\n<p>即便如此，黄仁勋依旧看好AI市场及其对宏观经济的拉动作用。他认为，硬件大规模投资带来的回报最终将平复市场恐慌情绪。“至于各类消息，都是起伏不定的短期信息。”他称，“大家都知道消息层出不穷，但不会改变基本面。”</p>\n",
+          "content_text": "英伟达公司首席执行官黄仁勋对近期人工智能（AI）板块股市大跌持乐观态度，称这项技术带来的收益很快将盖过投资者的担忧情绪。\n\n黄仁勋在德国柏林一场活动上对彭博电视节目主持人Emily Chang表示：“这一切终将过去，原因很简单。人工智能将带来变革，会对每一个行业、每一个国家产生极为积极的影响。这一趋势无疑会延续下去，而我们尚处在起步阶段。”",
+          "cover_images": [],
+          "display_time": 1792182802,
+          "global_channel_name": "7x24快讯",
+          "global_more_uri": "wscn://wallstreetcn.com/live",
+          "highlight_title": "",
+          "id": 3180473,
+          "images": [],
+          "is_calendar": false,
+          "is_favourite": false,
+          "is_priced": false,
+          "is_scaling": false,
+          "reference": "",
+          "related_themes": null,
+          "score": 2,
+          "symbols": [],
+          "tags": [],
+          "title": "黄仁勋看淡AI板块大跌：这一切都会过去",
+          "type": "live",
+          "uri": "https://wallstreetcn.com/livenews/3180473"
+        }
+      },
+      {
+        "resource_type": "article",
+        "resource_owner": "inhouse",
+        "resource": {
+          "author": {
+            "avatar": "https://wpimg-wscn.awtmt.com/814d8326-6a36-4869-8e44-3009ef51ff65",
+            "display_name": "鲍奕龙",
+            "id": 120000004827,
+            "uri": "https://wallstreetcn.com/authors/120000004827"
+          },
+          "categories": [
+            {
+              "property_key": "global",
+              "property_name": ""
+            },
+            {
+              "property_key": "us-shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "shares",
+              "property_name": ""
+            },
+            {
+              "property_key": "technology",
+              "property_name": ""
+            },
+            {
+              "property_key": "finance",
+              "property_name": ""
+            },
+            {
+              "property_key": "enterprise",
+              "property_name": ""
+            },
+            {
+              "property_key": "ai",
+              "property_name": ""
+            }
+          ],
+          "content_args": [
+            {
+              "class": " wscnph",
+              "height": "781",
+              "placeholder": "<!--image#0-->",
+              "src": "https://wpimg-wscn.awtmt.com/a8bc5981-d3b7-4e29-904d-06ebfd59ef3c.png",
+              "type": "image",
+              "width": "1142"
+            }
+          ],
+          "content_short": "软银集团正就收购美国最大安保公司Allied Universal展开初步洽谈，潜在股权估值高达180亿美元，加上约120亿美元债务，交易总价值或接近300亿美元。孙正义将安保业务定位为检验机器人技术的关键试验场，契合其AI与机器人战略布局。",
+          "display_time": 1792181181,
+          "hang_down": {},
+          "id": 3783814,
+          "image": {
+            "uri": "https://wpimg-wscn.awtmt.com/cdfeee08-b5dd-4799-b834-debdb0d51325.jpeg",
+            "height": 640,
+            "width": 1024,
+            "size": 96839
+          },
+          "is_in_vip_privilege": false,
+          "is_istio_api": true,
+          "is_paid": false,
+          "is_priced": false,
+          "is_trial": false,
+          "layout": "wscn-layout",
+          "limited_time": 0,
+          "related_themes": [
+            {
+              "id": 1005683,
+              "title": "突发要闻-Breaking News",
+              "image_uri": "https://wpimg.wallstcn.com/308ec6bc-c808-4b0e-8b83-4c4271ca170e.jpg",
+              "uri": "https://wallstreetcn.com/themes/1005683",
+              "key": "quanqiuyaowen"
+            }
+          ],
+          "source_name": "",
+          "source_uri": "",
+          "subtitle": "",
+          "title": "软银ADR单日暴跌近10%，报道称公司正考虑收购美国最大安保公司Allied",
+          "uri": "https://wallstreetcn.com/articles/3783814",
+          "vip_type": ""
+        }
+      }
+    ],
+    "next_page_token": ""
+  }
+}

@@ -1,0 +1,670 @@
+{
+  "code": 20000,
+  "message": "OK",
+  "data": {
+    "count": 55,
+    "items": [
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3776984?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "安踏主品牌突发“换帅”。7月15日，安踏集团向华尔街见闻确认，原安踏品牌CEO徐阳因家庭原因辞任该职，集团执行董事、联席CEO赖世贤即日起代",
+        "content_short": "",
+        "display_time": 1784087232,
+        "id": 3776984,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_7.jpg",
+          "height": 1361,
+          "width": 2048,
+          "size": 597730
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "徐阳辞任<em>安踏</em>品牌CEO 主品牌零售改造进入复盘期",
+        "uri": "https://wallstreetcn.com/articles/3776984?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3773982?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "6月5日，世界环境日当天，安踏在中国内地首个废网球回收再造的可持续球场发布2025年度ESG报告。这是安踏连续第11年对外发布ESG报告。2",
+        "content_short": "",
+        "display_time": 1780662673,
+        "id": 3773982,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/78e92d64-1b46-4ca5-80e3-5ecfb2dc11a2.jpeg",
+          "height": 682,
+          "width": 1024,
+          "size": 266770
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>2025年ESG报告：可持续产品超1亿件，MSCI评级升至AA",
+        "uri": "https://wallstreetcn.com/articles/3773982?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/08507e99-88ee-4368-b332-c44def86720c",
+          "display_name": "赵颖",
+          "id": 120000004514,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3769997?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "安踏体育交出了一份比市场预期更好的2026年一季度零售成绩单，安踏主品牌从上季度的低个位数下滑反弹至高个位数增长，斐乐加速至低双位数，迪桑特",
+        "content_short": "",
+        "display_time": 1776222125,
+        "id": 3769997,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/2d8255b0-d467-4547-aaee-2b9729353a5f.png",
+          "height": 527,
+          "width": 792,
+          "size": 444514
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>一季度各品牌销售强劲，盈利有韧性，管理层依旧谨慎",
+        "uri": "https://wallstreetcn.com/articles/3769997?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3768949?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "2025年，安踏体育交出了一份匹配其龙头地位的成绩单：全年营收802.19亿元，同比增长13.3%，连续第四年稳居中国运动鞋服行业首位。但如",
+        "content_short": "",
+        "display_time": 1775008159,
+        "id": 3768949,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_10.jpg",
+          "height": 1664,
+          "width": 2500,
+          "size": 2603217
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "增长引擎集体降档，<em>安踏</em>进入叙事真空期",
+        "uri": "https://wallstreetcn.com/articles/3768949?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3764861?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "在米兰冬奥会开幕的倒计时声中，安踏以一种极具象征意义的方式，再度扩充了自己的奥运版图。根据安踏官宣的消息，其已正式成为希腊奥委会的战略合作伙",
+        "content_short": "",
+        "display_time": 1770122375,
+        "id": 3764861,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_11.jpg",
+          "height": 1664,
+          "width": 2500,
+          "size": 2239369
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>李宁将迎“米兰战事”",
+        "uri": "https://wallstreetcn.com/articles/3764861?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/08507e99-88ee-4368-b332-c44def86720c",
+          "display_name": "赵颖",
+          "id": 120000004514,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3764336?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "2026年1月27日盘前，安踏体育宣布以15亿欧元（约合123亿元人民币）收购彪马29%股份，成为这家全球知名运动品牌的最大股东。据追风交易",
+        "content_short": "",
+        "display_time": 1769579336,
+        "id": 3764336,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/e167a707-a7ad-43d1-bd46-e208c423f729.png",
+          "height": 528,
+          "width": 792,
+          "size": 549306
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>收购彪马是双赢！摩根大通：<em>安踏</em>需要全球化，彪马需要而<em>安踏</em>也擅长“重塑”",
+        "uri": "https://wallstreetcn.com/articles/3764336?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3764293?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "传闻落地，安踏正式出手，将PUMA近三成股权收入囊中。1月27日，安踏宣布收购运动品牌彪马（PUMA SE）29.06%的股权，现金对价15",
+        "content_short": "",
+        "display_time": 1769523046,
+        "id": 3764293,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_2.jpg",
+          "height": 1415,
+          "width": 2122,
+          "size": 1757094
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>收购PUMA：一次非典型全球化落子",
+        "uri": "https://wallstreetcn.com/articles/3764293?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/08507e99-88ee-4368-b332-c44def86720c",
+          "display_name": "赵颖",
+          "id": 120000004514,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3764214?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "1月27日，安踏体育在港交所公告称，收购PUMA SE的29.06%股权，对价为每股普通股35欧元，合共1,505,516,600欧元（不含",
+        "content_short": "",
+        "display_time": 1769501619,
+        "id": 3764214,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/9cec33d6-e5ab-4f09-a41c-5bfcc4ed9d65.png",
+          "height": 528,
+          "width": 792,
+          "size": 549306
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": [
+          {
+            "key": "quanqiuyaowen",
+            "name": "突发要闻-Breaking News"
+          }
+        ],
+        "title": "斥资15亿欧元收购29%股权，<em>安踏</em>将成彪马最大股东！",
+        "uri": "https://wallstreetcn.com/articles/3764214?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/e6a5af79-24ca-42e8-a006-fbfff2f4a4be",
+          "display_name": "董静",
+          "id": 120000004826,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3760280?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "陷入困境的德国运动品牌——Puma正引发潜在收购者关注。11月27日，据媒体报道，安踏体育等多家公司正考虑收购Puma，消息推动该公司股价周",
+        "content_short": "",
+        "display_time": 1764250631,
+        "id": 3760280,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/12c167c4-ac84-49b2-b78e-97ae76677228.png",
+          "height": 302,
+          "width": 467,
+          "size": 213362
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "Puma股价暴涨超14%，报道：<em>安踏</em>、李宁等巨头正考虑竞购",
+        "uri": "https://wallstreetcn.com/articles/3760280?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3757570?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "安踏似乎正进一步将体系内稀缺的顶级体育资源，系统性地倾斜至多品牌矩阵。近期，安踏官方宣布可隆品牌正式成为国家攀岩队的合作伙伴。更早前的今年8",
+        "content_short": "",
+        "display_time": 1761038553,
+        "id": 3757570,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_12.jpg",
+          "height": 1667,
+          "width": 2500,
+          "size": 2289493
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "可隆、迪桑特牵手国家队：<em>安踏</em>的“新奥运牌”怎么打？",
+        "uri": "https://wallstreetcn.com/articles/3757570?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3754479?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "安踏进一步巩固了龙头地位。在充满压力的市场环境下，安踏上半年仍实现了14.3%的双位数的增长，实现营收385.4亿元。旗下所有品牌上半年收入",
+        "content_short": "",
+        "display_time": 1756432551,
+        "id": 3754479,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_18.jpg",
+          "height": 1667,
+          "width": 2500,
+          "size": 3806677
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "并购、孵化、协同，<em>安踏</em>多品牌的“无限游戏”",
+        "uri": "https://wallstreetcn.com/articles/3754479?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/722fed7a-69c9-425a-9e7e-9d7afc8292f3",
+          "display_name": "房家瑶",
+          "id": 120000004717,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3754264?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "安踏体育上半年营收同比增长14%，高于市场预期，但净利润同比下降近9%。8月27日周三，安踏体育发布上半年财务业绩，具体来看：上半年营收达3",
+        "content_short": "",
+        "display_time": 1756290339,
+        "id": 3754264,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/fd614024-c669-4c1c-8376-6d0157298bf9.jpeg",
+          "height": 427,
+          "width": 640,
+          "size": 63211
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>体育上半年营收同比增长14%，净利润同比下降近9% | 财报见闻",
+        "uri": "https://wallstreetcn.com/articles/3754264?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/ab5b317e-54ba-4124-af71-7de4cf4b6356",
+          "display_name": "张雅琦",
+          "id": 120000004773,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3754089?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "在德国运动品牌彪马（Puma）过去一年市值蒸发近半后，其主要股东之一的皮诺（Pinault）家族正在评估包括出售在内的战略选项，此举或将重塑",
+        "content_short": "",
+        "display_time": 1756129489,
+        "id": 3754089,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/5813f217-8d56-4889-bbe9-42dd86a5be3f.png",
+          "height": 528,
+          "width": 792,
+          "size": 795438
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "报道：皮诺家族考虑出售彪马股份，潜在买家包括<em>安踏</em>、李宁",
+        "uri": "https://wallstreetcn.com/articles/3754089?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3752960?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "阔别四年后，安踏收购锐步传闻再起。日前市场消息称，安踏集团与美国品牌管理公司Authentic Brands Group（ABG）接近达成协",
+        "content_short": "",
+        "display_time": 1754647901,
+        "id": 3752960,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_2.jpg",
+          "height": 1415,
+          "width": 2122,
+          "size": 1846655
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>年内第三波并购风声再起",
+        "uri": "https://wallstreetcn.com/articles/3752960?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3746157?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "第56个“世界地球日”当天，安踏集团正式对外披露《2024年度ESG（环境、社会及管治）报告》。2024年，安踏集团可持续产品占比突破30%",
+        "content_short": "",
+        "display_time": 1745898835,
+        "id": 3746157,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_4.jpg",
+          "height": 1416,
+          "width": 2125,
+          "size": 900325
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "可持续产品占比超三成  <em>安踏</em>剑指2050年“碳中和”",
+        "uri": "https://wallstreetcn.com/articles/3746157?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3745191?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "安踏（2020.HK）再次打出并购牌，拿下老牌德系户外品牌Jack Wolfskin（狼爪）。根据与Topgolf Callaway Bra",
+        "content_short": "",
+        "display_time": 1744664152,
+        "id": 3745191,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_2.jpg",
+          "height": 1415,
+          "width": 2122,
+          "size": 1846655
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>2.9亿美元“抄底”狼爪逻辑：补位大众户外？",
+        "uri": "https://wallstreetcn.com/articles/3745191?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/bf080e69-1f3f-45d5-8bb4-4b9dc207789e",
+          "display_name": "王小娟",
+          "id": 120000004768,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3745042?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "作者 | 王小娟编辑 | 黄昱安踏不语，只是一味“买买买”，这一次依旧盯上的是户外赛道。4月10日，安踏集团宣布以2.9亿美元全资收购德国户",
+        "content_short": "",
+        "display_time": 1744360627,
+        "id": 3745042,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/6456ddc1-214c-4134-9008-90d5cc202341.jpeg",
+          "height": 696,
+          "width": 1024,
+          "size": 153387
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>押注下一个“始祖鸟”",
+        "uri": "https://wallstreetcn.com/articles/3745042?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/d2d49cb9-385c-459d-8559-ba1253ba0eae",
+          "display_name": "袁佳颖",
+          "id": 705666,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3744969?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "安踏体育收购Jack Wolfskin业务公告要点解读收购协议：安踏体育（02020）与Topgolf Callaway Brands Co",
+        "content_short": "",
+        "display_time": 1744277393,
+        "id": 3744969,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_7.jpg",
+          "height": 1361,
+          "width": 2048,
+          "size": 1882670
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "公告小助手",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>体育：拟2.9亿美元收购Jack Wolfskin母公司100%股权",
+        "uri": "https://wallstreetcn.com/articles/3744969?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/4dd3ac3d-9774-4a2c-88b1-211efd225046",
+          "display_name": "刘艺晨",
+          "id": 120000004819,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3743764?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "始祖鸟“远走高飞”，安踏（2020.HK）的故事迎来新的阶段。2024年，安踏的规模再度触及新高：营收同比增长13.5%至708.26亿元；",
+        "content_short": "",
+        "display_time": 1742822893,
+        "id": 3743764,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/content_default_9.jpg",
+          "height": 420,
+          "width": 839,
+          "size": 44241
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>步入规模新高下半场：发力聚焦主品牌为何重要？",
+        "uri": "https://wallstreetcn.com/articles/3743764?keyword=%E5%AE%89%E8%B8%8F"
+      },
+      {
+        "author": {
+          "avatar": "https://wpimg-wscn.awtmt.com/bf080e69-1f3f-45d5-8bb4-4b9dc207789e",
+          "display_name": "王小娟",
+          "id": 120000004768,
+          "is_followed": false,
+          "uri": "https://wallstreetcn.com/articles/3739162?keyword=%E5%AE%89%E8%B8%8F"
+        },
+        "comment_count": 0,
+        "content": "作者 | 王小娟编辑 |黄昱在去年这个体育大年，头部的体育品牌们本应该赚得盆满钵溢，但受服装行业整体下滑影响，这些品牌只是勉强稳住了业绩。近",
+        "content_short": "",
+        "display_time": 1736907317,
+        "id": 3739162,
+        "image": {
+          "uri": "https://wpimg-wscn.awtmt.com/b9cf4a88-1f40-4a35-86f4-a9ccecf33001.jpeg",
+          "height": 696,
+          "width": 1024,
+          "size": 153387
+        },
+        "is_paid": false,
+        "is_priced": false,
+        "is_trail": false,
+        "limited_time": 0,
+        "relate_topics": null,
+        "source_name": "",
+        "source_uri": "",
+        "subtitle": "",
+        "themes": null,
+        "title": "<em>安踏</em>寻觅新爆款",
+        "uri": "https://wallstreetcn.com/articles/3739162?keyword=%E5%AE%89%E8%B8%8F"
+      }
+    ],
+    "next_cursor": "2",
+    "related_paid_article": {
+      "author": null,
+      "comment_count": 0,
+      "content": "",
+      "content_short": "财险产品开发新规正式落地，非车险综合治理进一步向产品和定价环节延伸。\n此前持续推进的“报行合一”已推动部分险种手续费率明显下降，新规将进一步规范条款设计、费率执行和产品管理，推动行业竞争从渠道费用比拼转向风险定价与承保能力竞争，头部险企的规模、数据及风控优势有望进一步强化。更重要的是，新规有望激发财险行业的盈利弹性。",
+      "display_time": 1792207937,
+      "id": 3783413,
+      "image": {
+        "uri": "https://wpimg-wscn.awtmt.com/b98791d8-19d7-4fa1-adf3-5cc7d4b79e94.png",
+        "height": 646,
+        "width": 718,
+        "size": 419091
+      },
+      "is_in_vip_privilege": true,
+      "is_paid": false,
+      "is_priced": true,
+      "is_trail": false,
+      "limited_time": 0,
+      "relate_topics": [
+        {
+          "id": 1000023,
+          "title": "见闻主编精选"
+        }
+      ],
+      "source_name": "万周",
+      "source_uri": "",
+      "subtitle": "",
+      "tag": "精选",
+      "themes": null,
+      "title": "财险反内卷进入深水区：产品新规正式落地，财险行业盈利弹性一触即发？",
+      "uri": "https://wallstreetcn.com/premium/articles/3783413?layout=wscn-layout",
+      "vip_type": "gold",
+      "vip_uri": "https://wallstreetcn.com/member/articles/3783413?keyword="
+    },
+    "search_id": ""
+  }
+}

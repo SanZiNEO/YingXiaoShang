@@ -1,0 +1,2783 @@
+[
+  {
+    "kp_id": "kp_env_definition",
+    "name": "市场营销环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第1节",
+    "unit_id": "ch3_s1",
+    "parent_id": null,
+    "definition": "影响企业营销活动及其目标实现、存在于企业营销部门与系统外部的各种因素和力量；既可能带来机会，也可能造成威胁。",
+    "examples": [
+      "新华书店面对电商与数字阅读冲击，调整业态与服务",
+      "关税政策变化影响出口企业的目标市场选择"
+    ],
+    "non_examples": [
+      "企业内部的部门职责分工",
+      "企业自己的促销方案"
+    ],
+    "aliases": [
+      "营销环境",
+      "marketing environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_structure",
+    "name": "市场营销环境的结构",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第1节",
+    "unit_id": "ch3_s1",
+    "parent_id": "kp_env_definition",
+    "definition": "营销环境分为宏观环境与微观环境；宏观环境由政治、经济、社会、技术、环境、法律六大类构成，微观环境包括供应商、竞争者、营销中介、顾客和公众等。",
+    "examples": [
+      "PESTEL 分析",
+      "供应商—企业—顾客链条"
+    ],
+    "non_examples": [
+      "只分析企业内部资源",
+      "把竞争者排除在环境之外"
+    ],
+    "aliases": [
+      "宏观环境与微观环境",
+      "PESTEL"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_features",
+    "name": "市场营销环境的特征",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第1节",
+    "unit_id": "ch3_s1",
+    "parent_id": "kp_env_definition",
+    "definition": "营销环境具有差异性、多样性、相关性和动态性；不同市场、不同要素之间相互影响，并持续变化。",
+    "examples": [
+      "中美市场在政治、法律、文化上的差异",
+      "环保政策推动绿色生产技术"
+    ],
+    "non_examples": [
+      "把环境视为静态背景",
+      "只关注单一环境因素"
+    ],
+    "aliases": [
+      "环境差异性",
+      "环境动态性"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_macro",
+    "name": "宏观营销环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_definition",
+    "definition": "各类企业生存和发展的共同空间，由大范围的社会约束力量构成，通常用 PESTEL 框架分析。",
+    "examples": [
+      "人口老龄化对养老产业的影响",
+      "AI 技术对营销渠道的影响"
+    ],
+    "non_examples": [
+      "企业自身的组织架构",
+      "某一供应商的交付问题"
+    ],
+    "aliases": [
+      "宏观环境",
+      "macro environment",
+      "PESTEL"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_political",
+    "name": "政治环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_macro",
+    "definition": "国家的政治制度、政党、政府政策以及国际政治形势等，直接影响经营环境、市场准入与竞争格局。",
+    "examples": [
+      "税收政策、产业扶持政策、外商投资限制",
+      "地缘政治冲突影响供应链"
+    ],
+    "non_examples": [
+      "企业内部的党建工作",
+      "消费者个人政治态度"
+    ],
+    "aliases": [
+      "政治因素",
+      "political environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_economic",
+    "name": "经济环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_macro",
+    "definition": "企业开展市场营销活动的外部经济条件，主要涉及宏观经济环境、收入与支出，直接影响购买力与市场规模。",
+    "examples": [
+      "GDP 增速、通胀、就业",
+      "居民可支配收入变化"
+    ],
+    "non_examples": [
+      "企业自己的财务报表",
+      "单一产品的成本核算"
+    ],
+    "aliases": [
+      "经济因素",
+      "economic environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_econ_system",
+    "name": "经济体制",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_economic",
+    "definition": "政府管理经济的方式及对企业营销活动的影响，包括所有制结构、市场准入、资源配置等制度安排。",
+    "examples": [
+      "社会主义市场经济体制",
+      "全国统一大市场建设"
+    ],
+    "non_examples": [
+      "某一企业的组织结构",
+      "消费者的品牌偏好"
+    ],
+    "aliases": [
+      "经济制度",
+      "economic system"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_econ_structure",
+    "name": "经济结构",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_economic",
+    "definition": "一国产业结构、技术水平、消费结构、经济发展阶段等因素对企业营销活动的影响。",
+    "examples": [
+      "制造业转型升级",
+      "城乡消费水平差异"
+    ],
+    "non_examples": [
+      "某企业的产品组合",
+      "单一市场的促销活动"
+    ],
+    "aliases": [
+      "产业结构",
+      "消费结构"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_econ_situation",
+    "name": "经济形势",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_economic",
+    "definition": "经济增长、通货膨胀、就业、国际经济形势等因素对企业营销活动的影响。",
+    "examples": [
+      "经济回升向好",
+      "新兴市场货币贬值与资本外流"
+    ],
+    "non_examples": [
+      "企业季度营销预算",
+      "某品牌的广告创意"
+    ],
+    "aliases": [
+      "经济形势",
+      "economic situation"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_econ_policy",
+    "name": "经济政策",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_economic",
+    "definition": "各级政府为达成经济发展目标而制定的信贷、财税、外汇、贸易、产业等政策，可能带来机会或挑战。",
+    "examples": [
+      "积极的财政政策",
+      "适度宽松的货币政策",
+      "消费品以旧换新"
+    ],
+    "non_examples": [
+      "企业内部的薪酬政策",
+      "平台的推荐算法"
+    ],
+    "aliases": [
+      "财政政策",
+      "货币政策",
+      "产业政策"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_income",
+    "name": "收入与支出",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_economic",
+    "definition": "国民收入、消费者收入及其支出模式、储蓄与信贷既影响购买能力，也影响消费模式。",
+    "examples": [
+      "人均可支配收入",
+      "恩格尔系数",
+      "消费信贷"
+    ],
+    "non_examples": [
+      "企业营业收入",
+      "渠道毛利"
+    ],
+    "aliases": [
+      "消费者收入",
+      "支出模式",
+      "储蓄与信贷"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_social",
+    "name": "社会环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_macro",
+    "definition": "社会文化环境与人口环境的总称，影响消费者的价值观、生活方式与需求结构。",
+    "examples": [
+      "Z 世代消费崛起",
+      "人口老龄化"
+    ],
+    "non_examples": [
+      "企业生产线布局",
+      "供应商账期"
+    ],
+    "aliases": [
+      "社会因素",
+      "social environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_culture",
+    "name": "社会文化环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_social",
+    "definition": "价值观念、道德、信仰、行为方式、消费习俗等文化因素对消费者需求与购买行为的影响。",
+    "examples": [
+      "节日消费习俗",
+      "国潮文化",
+      "绿色消费理念"
+    ],
+    "non_examples": [
+      "企业组织结构",
+      "产品价格弹性"
+    ],
+    "aliases": [
+      "文化环境",
+      "消费习俗"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_population",
+    "name": "人口环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_social",
+    "definition": "人口规模、结构、分布、年龄、性别、家庭等人口特征对市场需求的影响。",
+    "examples": [
+      "老龄化",
+      "少子化",
+      "人口向城市群集中"
+    ],
+    "non_examples": [
+      "消费者个人收入",
+      "品牌联想"
+    ],
+    "aliases": [
+      "人口因素",
+      "demographic environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_technology",
+    "name": "技术环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_macro",
+    "definition": "技术变革、创新、数字化与人工智能等对企业营销活动的影响。",
+    "examples": [
+      "短视频与直播电商",
+      "AI 精准推荐",
+      "大数据分析"
+    ],
+    "non_examples": [
+      "企业行政流程",
+      "渠道合同条款"
+    ],
+    "aliases": [
+      "技术因素",
+      "technological environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_natural",
+    "name": "自然环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_macro",
+    "definition": "自然资源、生态环境与可持续发展要求对企业营销活动的影响。",
+    "examples": [
+      "环保法规",
+      "绿色包装",
+      "碳中和目标"
+    ],
+    "non_examples": [
+      "企业财务报表",
+      "消费者品牌态度"
+    ],
+    "aliases": [
+      "生态环境",
+      "natural environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_legal",
+    "name": "法律环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第2节",
+    "unit_id": "ch3_s2",
+    "parent_id": "kp_env_macro",
+    "definition": "法律法规、监管政策、消费者保护与合规要求对企业营销活动的影响。",
+    "examples": [
+      "广告法",
+      "个人信息保护法",
+      "消费者权益保护法"
+    ],
+    "non_examples": [
+      "企业营销创意",
+      "渠道促销折扣"
+    ],
+    "aliases": [
+      "法律因素",
+      "legal environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_micro",
+    "name": "微观营销环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第3节",
+    "unit_id": "ch3_s3",
+    "parent_id": "kp_env_definition",
+    "definition": "与企业密切联系、直接影响企业服务目标市场能力的各种力量，也称直接环境。",
+    "examples": [
+      "供应商交付能力",
+      "竞争者价格战",
+      "顾客结构变化"
+    ],
+    "non_examples": [
+      "国家人口政策",
+      "全球技术趋势"
+    ],
+    "aliases": [
+      "直接环境",
+      "micro environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_internal",
+    "name": "企业内部环境",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第3节",
+    "unit_id": "ch3_s3",
+    "parent_id": "kp_env_micro",
+    "definition": "企业自身的资源、能力、组织、文化以及部门协调等内部条件。",
+    "examples": [
+      "研发能力",
+      "营销部门与财务部门协同",
+      "企业文化"
+    ],
+    "non_examples": [
+      "供应商产能",
+      "政府监管"
+    ],
+    "aliases": [
+      "内部环境",
+      "internal environment"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_supplier",
+    "name": "供应商",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第3节",
+    "unit_id": "ch3_s3",
+    "parent_id": "kp_env_micro",
+    "definition": "向企业提供原材料、零部件、设备、服务等投入品的组织，影响成本、质量与交付。",
+    "examples": [
+      "原材料涨价",
+      "供应商断供",
+      "代工厂产能"
+    ],
+    "non_examples": [
+      "消费者品牌偏好",
+      "政府招标"
+    ],
+    "aliases": [
+      "供应者",
+      "supplier"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_intermediary",
+    "name": "营销中介",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第3节",
+    "unit_id": "ch3_s3",
+    "parent_id": "kp_env_micro",
+    "definition": "帮助企业推广、销售、分销产品给最终顾客的机构，包括中间商、物流、营销服务机构和金融机构等。",
+    "examples": [
+      "经销商",
+      "广告代理公司",
+      "物流公司",
+      "银行"
+    ],
+    "non_examples": [
+      "企业研发部门",
+      "最终消费者"
+    ],
+    "aliases": [
+      "中间商",
+      "营销服务机构"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_customer",
+    "name": "顾客",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第3节",
+    "unit_id": "ch3_s3",
+    "parent_id": "kp_env_micro",
+    "definition": "企业服务的目标市场，包括消费者市场、生产者市场、中间商市场、政府市场和非营利组织市场。",
+    "examples": [
+      "消费者",
+      "制造商采购",
+      "政府招标"
+    ],
+    "non_examples": [
+      "供应商",
+      "竞争者"
+    ],
+    "aliases": [
+      "顾客市场",
+      "customer markets"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_competitor",
+    "name": "竞争者",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第3节",
+    "unit_id": "ch3_s3",
+    "parent_id": "kp_env_micro",
+    "definition": "与企业争夺同一目标市场或顾客资源的其他组织，包括同业、替代品和潜在进入者。",
+    "examples": [
+      "价格战",
+      "替代品威胁",
+      "新品牌进入"
+    ],
+    "non_examples": [
+      "供应商",
+      "企业内部团队"
+    ],
+    "aliases": [
+      "竞争对手",
+      "competitor"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_public",
+    "name": "公众",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第3节",
+    "unit_id": "ch3_s3",
+    "parent_id": "kp_env_micro",
+    "definition": "对企业实现营销目标有实际或潜在影响的群体，包括媒体、政府、社区、内部公众和一般公众等。",
+    "examples": [
+      "媒体报道",
+      "社区投诉",
+      "环保组织"
+    ],
+    "non_examples": [
+      "企业员工个人生活",
+      "消费者购买决策"
+    ],
+    "aliases": [
+      "社会公众",
+      "publics"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_analysis",
+    "name": "环境分析与营销对策",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第4节",
+    "unit_id": "ch3_s4",
+    "parent_id": "kp_env_definition",
+    "definition": "识别环境中的机会与威胁，评估企业应对能力，并据此制定营销对策。",
+    "examples": [
+      "机会威胁矩阵",
+      "SWOT 分析"
+    ],
+    "non_examples": [
+      "只列环境事实不做判断",
+      "把所有变化都视为威胁"
+    ],
+    "aliases": [
+      "环境分析",
+      "营销对策"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_opportunity_threat",
+    "name": "机会威胁综合分析矩阵",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第4节",
+    "unit_id": "ch3_s4",
+    "parent_id": "kp_env_analysis",
+    "definition": "按机会水平与威胁水平两个维度划分业务或环境状态，形成理想、冒险、麻烦/艰难、成熟等组合。",
+    "examples": [
+      "高机会低威胁=理想营销",
+      "高机会高威胁=冒险营销"
+    ],
+    "non_examples": [
+      "只看机会不看威胁",
+      "只看威胁不看机会"
+    ],
+    "aliases": [
+      "机会威胁矩阵",
+      "opportunity-threat matrix"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_env_response",
+    "name": "营销对策",
+    "name_en": "",
+    "chapter": "第3章",
+    "section": "第4节",
+    "unit_id": "ch3_s4",
+    "parent_id": "kp_env_analysis",
+    "definition": "针对不同机会—威胁组合，采取发展、维持、收缩、退出等营销策略。",
+    "examples": [
+      "对理想业务加大投入",
+      "对麻烦业务收缩或退出"
+    ],
+    "non_examples": [
+      "对所有业务采用同一策略",
+      "不做优先级排序"
+    ],
+    "aliases": [
+      "环境对策",
+      "营销策略选择"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "环境分析"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_market",
+    "name": "消费者与消费者市场",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第1节",
+    "unit_id": "ch4_s1",
+    "parent_id": null,
+    "definition": "消费者是为生活消费而购买和使用产品或服务的个人和家庭；消费者市场是这些个人和家庭的集合。",
+    "examples": [
+      "个人购买洗发水",
+      "家庭购买家电"
+    ],
+    "non_examples": [
+      "企业采购原材料",
+      "政府招标采购"
+    ],
+    "aliases": [
+      "消费者市场",
+      "consumer market"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_definition",
+    "name": "消费者",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第1节",
+    "unit_id": "ch4_s1",
+    "parent_id": "kp_consumer_market",
+    "definition": "为生活消费而购买和使用产品或服务的个人和家庭。",
+    "examples": [
+      "个人购买咖啡",
+      "家庭购买日用品"
+    ],
+    "non_examples": [
+      "企业采购设备",
+      "政府购买公共服务"
+    ],
+    "aliases": [
+      "consumer"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_market_definition",
+    "name": "消费者市场的含义",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第1节",
+    "unit_id": "ch4_s1",
+    "parent_id": "kp_consumer_market",
+    "definition": "为生活消费而购买产品或服务的个人和家庭的集合。",
+    "examples": [
+      "城市白领咖啡市场",
+      "母婴用品市场"
+    ],
+    "non_examples": [
+      "工业品市场",
+      "政府采购市场"
+    ],
+    "aliases": [
+      "消费者市场定义",
+      "consumer market"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_market_features",
+    "name": "消费者市场的特点",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第1节",
+    "unit_id": "ch4_s1",
+    "parent_id": "kp_consumer_market",
+    "definition": "购买者多而分散、少量多次、差异大、可诱导、非专业购买等。",
+    "examples": [
+      "消费者高频少量购买",
+      "冲动消费",
+      "口碑影响"
+    ],
+    "non_examples": [
+      "企业大批量采购",
+      "专业招标"
+    ],
+    "aliases": [
+      "消费者市场特征",
+      "consumer market characteristics"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_behavior_process",
+    "name": "消费者行为的一般过程",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第2节",
+    "unit_id": "ch4_s2",
+    "parent_id": "kp_consumer_market",
+    "definition": "消费者从需求产生、信息搜索、购买到购后处理的完整活动过程。",
+    "examples": [
+      "买咖啡前的需求与选择",
+      "购后评价与复购"
+    ],
+    "non_examples": [
+      "企业采购流程",
+      "渠道分销流程"
+    ],
+    "aliases": [
+      "消费者行为",
+      "consumer behavior"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_behavior",
+    "name": "消费者行为",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第2节",
+    "unit_id": "ch4_s2",
+    "parent_id": "kp_consumer_behavior_process",
+    "definition": "消费者为满足需要而进行的购买、使用、处置产品或服务的各种活动。",
+    "examples": [
+      "选购手机",
+      "使用和处置旧手机"
+    ],
+    "non_examples": [
+      "企业生产计划",
+      "供应商管理"
+    ],
+    "aliases": [
+      "consumer behavior"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_buying_behavior",
+    "name": "消费者购买行为",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第2节",
+    "unit_id": "ch4_s2",
+    "parent_id": "kp_consumer_behavior_process",
+    "definition": "与购买商品和服务有关的各种活动的集合，常用 7W1H（谁买、买什么、为何买、何时买、何地买、如何买、谁参与、多少）描述。",
+    "examples": [
+      "谁买、买什么、为何买",
+      "购买频率与购买方式"
+    ],
+    "non_examples": [
+      "企业采购决策",
+      "品牌定位"
+    ],
+    "aliases": [
+      "7W1H",
+      "购买行为"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_behavior_model",
+    "name": "消费者购买行为模式",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第2节",
+    "unit_id": "ch4_s2",
+    "parent_id": "kp_consumer_behavior_process",
+    "definition": "解释外部刺激如何经过消费者黑箱转化为购买反应的分析框架，如刺激—反应模式。",
+    "examples": [
+      "刺激—反应模式",
+      "营销刺激与消费者反应"
+    ],
+    "non_examples": [
+      "消费者个人收入",
+      "渠道结构"
+    ],
+    "aliases": [
+      "购买行为模式",
+      "stimulus-response"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_influences",
+    "name": "消费者购买行为的影响因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_consumer_market",
+    "definition": "文化、社会、个人、心理和情境因素共同影响消费者的购买行为。",
+    "examples": [
+      "文化价值观影响送礼",
+      "家庭影响家电购买"
+    ],
+    "non_examples": [
+      "只看人口统计",
+      "把购买行为归因于单一因素"
+    ],
+    "aliases": [
+      "消费者行为影响因素",
+      "consumer behavior factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_culture",
+    "name": "文化因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_consumer_influences",
+    "definition": "文化、亚文化和社会阶层等对消费者价值观、认知与行为的影响。",
+    "examples": [
+      "节日送礼文化",
+      "国潮消费",
+      "圈层文化"
+    ],
+    "non_examples": [
+      "企业组织文化",
+      "产品价格"
+    ],
+    "aliases": [
+      "文化",
+      "culture"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_subculture",
+    "name": "亚文化",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_culture",
+    "definition": "民族、宗教、地域、年龄、兴趣等群体形成的独特文化，影响特定群体的消费偏好。",
+    "examples": [
+      "Z 世代亚文化",
+      "地域饮食文化",
+      "二次元圈层"
+    ],
+    "non_examples": [
+      "主流文化",
+      "企业品牌文化"
+    ],
+    "aliases": [
+      "subculture"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_social_class",
+    "name": "社会阶层",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_culture",
+    "definition": "按收入、职业、教育、权力等划分的社会层级，影响消费方式与品牌选择。",
+    "examples": [
+      "高收入群体购买奢侈品",
+      "中产家庭的教育消费"
+    ],
+    "non_examples": [
+      "个人性格",
+      "产品功能"
+    ],
+    "aliases": [
+      "social class"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_social",
+    "name": "社会因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_consumer_influences",
+    "definition": "参照群体、角色和家庭等社会关系对消费者行为的影响。",
+    "examples": [
+      "朋友推荐",
+      "家庭共同决策",
+      "意见领袖"
+    ],
+    "non_examples": [
+      "个人收入",
+      "产品包装"
+    ],
+    "aliases": [
+      "社会影响",
+      "social factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_reference_group",
+    "name": "参照群体",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_social",
+    "definition": "个人用来比较或参照的群体，包括成员群体、向往群体和排斥群体。",
+    "examples": [
+      "明星同款",
+      "同事推荐",
+      "小红书博主"
+    ],
+    "non_examples": [
+      "个人独立决策",
+      "企业采购委员会"
+    ],
+    "aliases": [
+      "reference group"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_roles",
+    "name": "角色",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_social",
+    "definition": "个人在不同社会情境中扮演的身份与行为期待，影响其消费选择。",
+    "examples": [
+      "职场新人购买正装",
+      "母亲购买儿童用品"
+    ],
+    "non_examples": [
+      "个人性格",
+      "产品价格"
+    ],
+    "aliases": [
+      "role"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_family",
+    "name": "家庭",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_social",
+    "definition": "以婚姻或血缘为纽带的群体，是重要的参照群体和消费单位。",
+    "examples": [
+      "家庭购买家电",
+      "家庭旅游决策"
+    ],
+    "non_examples": [
+      "个人单独购买",
+      "企业采购"
+    ],
+    "aliases": [
+      "family"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_personal",
+    "name": "个人因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_consumer_influences",
+    "definition": "经济、生理、生活方式、个性与自我概念等个人特征对购买行为的影响。",
+    "examples": [
+      "收入决定预算",
+      "生活方式影响品类选择"
+    ],
+    "non_examples": [
+      "文化价值观",
+      "参照群体"
+    ],
+    "aliases": [
+      "个人特征",
+      "personal factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_personal_economic",
+    "name": "经济因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_personal",
+    "definition": "收入、储蓄、资产、信贷等经济条件对消费者购买能力与选择的影响。",
+    "examples": [
+      "预算约束",
+      "分期付款",
+      "收入下降减少非必需消费"
+    ],
+    "non_examples": [
+      "文化偏好",
+      "品牌态度"
+    ],
+    "aliases": [
+      "经济条件",
+      "economic factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_personal_physiological",
+    "name": "生理因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_personal",
+    "definition": "年龄、性别、健康、体能等生理特征对消费需求的影响。",
+    "examples": [
+      "老年人购买助行器",
+      "婴幼儿奶粉"
+    ],
+    "non_examples": [
+      "收入水平",
+      "品牌忠诚"
+    ],
+    "aliases": [
+      "生理特征",
+      "physiological factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_lifestyle",
+    "name": "生活方式",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_personal",
+    "definition": "通过活动、兴趣、意见等表现出来的生活模式，影响消费选择。",
+    "examples": [
+      "健身人群购买运动装备",
+      "露营生活方式"
+    ],
+    "non_examples": [
+      "人口年龄",
+      "产品价格"
+    ],
+    "aliases": [
+      "lifestyle",
+      "AIO"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_personality_self",
+    "name": "个性与自我概念",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_personal",
+    "definition": "个体稳定的心理特征与自我形象，影响品牌与产品选择。",
+    "examples": [
+      "外向者偏好亮色服装",
+      "自我概念与品牌一致性"
+    ],
+    "non_examples": [
+      "家庭收入",
+      "社会阶层"
+    ],
+    "aliases": [
+      "个性",
+      "自我概念",
+      "self-concept"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "品牌与定位"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_psychological",
+    "name": "心理因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_consumer_influences",
+    "definition": "需要、动机、感觉与知觉、学习、情感、信念与态度等心理过程对购买行为的影响。",
+    "examples": [
+      "动机驱动购买",
+      "知觉影响品牌印象"
+    ],
+    "non_examples": [
+      "社会阶层",
+      "渠道结构"
+    ],
+    "aliases": [
+      "心理因素",
+      "psychological factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_needs_motives",
+    "name": "需要和动机",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_psychological",
+    "definition": "需要是购买活动的起点，动机是推动消费者采取行动的内在力量。",
+    "examples": [
+      "马斯洛需要层次",
+      "求廉动机",
+      "求名动机"
+    ],
+    "non_examples": [
+      "产品功能参数",
+      "渠道促销"
+    ],
+    "aliases": [
+      "需要",
+      "动机",
+      "needs and motives"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_perception",
+    "name": "感觉和知觉",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_psychological",
+    "definition": "消费者对刺激物的选择、组织和解释过程，包括展露、注意和理解。",
+    "examples": [
+      "选择性注意",
+      "品牌第一印象",
+      "感官营销"
+    ],
+    "non_examples": [
+      "消费者收入",
+      "购买决策阶段"
+    ],
+    "aliases": [
+      "知觉",
+      "perception"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_learning",
+    "name": "学习",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_psychological",
+    "definition": "由经验引起的行为或行为潜能的变化，影响消费者对品牌与产品的认知。",
+    "examples": [
+      "试用后形成偏好",
+      "重复购买形成习惯"
+    ],
+    "non_examples": [
+      "先天反射",
+      "产品价格"
+    ],
+    "aliases": [
+      "消费者学习",
+      "learning"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_emotion",
+    "name": "情感",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_psychological",
+    "definition": "消费者对产品或品牌的情感反应，影响态度与购买意愿。",
+    "examples": [
+      "情绪消费",
+      "品牌怀旧",
+      "愉悦体验"
+    ],
+    "non_examples": [
+      "产品规格",
+      "渠道成本"
+    ],
+    "aliases": [
+      "消费者情感",
+      "emotion"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_beliefs_attitudes",
+    "name": "信念和态度",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_psychological",
+    "definition": "消费者对事物持有的认知、评价与行为倾向，影响品牌选择与复购。",
+    "examples": [
+      "品牌信任",
+      "价格公平感",
+      "环保态度"
+    ],
+    "non_examples": [
+      "产品库存",
+      "渠道合同"
+    ],
+    "aliases": [
+      "态度",
+      "信念",
+      "beliefs and attitudes"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "品牌与定位"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_situational",
+    "name": "情境因素",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第3节",
+    "unit_id": "ch4_s3",
+    "parent_id": "kp_consumer_influences",
+    "definition": "购买时的物理、社会、时间、任务和心理情境对消费行为的影响。",
+    "examples": [
+      "节日促销",
+      "时间压力",
+      "门店氛围"
+    ],
+    "non_examples": [
+      "长期文化价值观",
+      "社会阶层"
+    ],
+    "aliases": [
+      "购买情境",
+      "situational factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_consumer_decision",
+    "name": "消费者购买决策过程",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_consumer_market",
+    "definition": "消费者从确认需要到购后行为的决策过程，包括参与者与五个阶段。",
+    "examples": [
+      "买手机的比较与选择",
+      "购后评价"
+    ],
+    "non_examples": [
+      "企业采购流程",
+      "渠道分销"
+    ],
+    "aliases": [
+      "购买决策",
+      "consumer decision process"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_decision_participants",
+    "name": "购买决策参与者",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_consumer_decision",
+    "definition": "购买决策中的发起者、影响者、决策者、购买者和使用者等角色。",
+    "examples": [
+      "家庭购车中的不同角色",
+      "儿童影响零食购买"
+    ],
+    "non_examples": [
+      "企业采购中心",
+      "政府招标"
+    ],
+    "aliases": [
+      "决策参与者",
+      "buying center"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_decision_stages",
+    "name": "购买决策过程的主要阶段",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_consumer_decision",
+    "definition": "确认需要、信息搜集、评估选择、购买决定、购后行为五个阶段。",
+    "examples": [
+      "买电脑的五阶段",
+      "购后失调"
+    ],
+    "non_examples": [
+      "企业采购八阶段",
+      "渠道设计"
+    ],
+    "aliases": [
+      "五阶段模型",
+      "decision stages"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_need_recognition",
+    "name": "确认需要",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_decision_stages",
+    "definition": "消费者意识到理想状态与现实状态存在差距，从而产生购买动机。",
+    "examples": [
+      "旧手机卡顿产生换机需求",
+      "天气转冷产生购衣需求"
+    ],
+    "non_examples": [
+      "信息搜索",
+      "购买决定"
+    ],
+    "aliases": [
+      "问题识别",
+      "need recognition"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_info_search",
+    "name": "信息搜集",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_decision_stages",
+    "definition": "消费者从内部记忆和外部来源搜索与购买相关的信息。",
+    "examples": [
+      "搜索测评",
+      "询问朋友",
+      "浏览电商评论"
+    ],
+    "non_examples": [
+      "确认需要",
+      "购后行为"
+    ],
+    "aliases": [
+      "信息搜索",
+      "information search"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_evaluation",
+    "name": "评估选择",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_decision_stages",
+    "definition": "消费者按属性、权重、信念等对备选方案进行比较和评估。",
+    "examples": [
+      "比较价格与性能",
+      "品牌排序"
+    ],
+    "non_examples": [
+      "信息搜集",
+      "购买决定"
+    ],
+    "aliases": [
+      "方案评估",
+      "alternative evaluation"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_purchase_decision",
+    "name": "购买决定",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_decision_stages",
+    "definition": "消费者形成购买意向并做出最终购买选择，可能受到他人态度和情境因素影响。",
+    "examples": [
+      "最终下单",
+      "临时改变品牌"
+    ],
+    "non_examples": [
+      "购后评价",
+      "信息搜集"
+    ],
+    "aliases": [
+      "购买意向",
+      "purchase decision"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_post_purchase",
+    "name": "购后行为",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第4节",
+    "unit_id": "ch4_s4",
+    "parent_id": "kp_decision_stages",
+    "definition": "消费者购买后的使用、评价、满意/不满意、购后失调与处置行为。",
+    "examples": [
+      "购后失调",
+      "退货",
+      "复购",
+      "推荐他人"
+    ],
+    "non_examples": [
+      "购买前的信息搜索",
+      "确认需要"
+    ],
+    "aliases": [
+      "购后评价",
+      "post-purchase behavior"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "品牌与定位"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_digital_consumer",
+    "name": "数智化时代的消费者购买行为",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第5节",
+    "unit_id": "ch4_s5",
+    "parent_id": "kp_consumer_market",
+    "definition": "数智化环境下消费者的心理、行为特征与购买决策过程的变化。",
+    "examples": [
+      "算法推荐",
+      "直播带货",
+      "社交电商",
+      "隐私敏感"
+    ],
+    "non_examples": [
+      "传统线下购物",
+      "工业品采购"
+    ],
+    "aliases": [
+      "数智消费者",
+      "digital consumer"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_digital_consumer_traits",
+    "name": "数智消费者的心理与行为特征",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第5节",
+    "unit_id": "ch4_s5",
+    "parent_id": "kp_digital_consumer",
+    "definition": "数智消费者的个性化、社交化、即时化、隐私敏感与信任矛盾等特征。",
+    "examples": [
+      "个性化推荐依赖",
+      "信息茧房",
+      "隐私与便利的权衡"
+    ],
+    "non_examples": [
+      "传统消费者的媒体习惯",
+      "企业采购行为"
+    ],
+    "aliases": [
+      "数智消费者特征",
+      "digital consumer traits"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_digital_consumer_decision",
+    "name": "数智消费者的购买决策过程",
+    "name_en": "",
+    "chapter": "第4章",
+    "section": "第5节",
+    "unit_id": "ch4_s5",
+    "parent_id": "kp_digital_consumer",
+    "definition": "数据驱动、算法推荐、全渠道与社交影响下的购买决策过程。",
+    "examples": [
+      "种草—搜索—比价—下单",
+      "直播间的即时决策"
+    ],
+    "non_examples": [
+      "传统五阶段模型",
+      "企业采购流程"
+    ],
+    "aliases": [
+      "数智购买决策",
+      "digital decision journey"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_org_market",
+    "name": "组织市场与购买行为概述",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第1节",
+    "unit_id": "ch5_s1",
+    "parent_id": null,
+    "definition": "组织市场由组织购买者构成，包括生产者、中间商、政府和非营利组织；组织购买具有不同于消费者市场的特征。",
+    "examples": [
+      "制造企业采购原材料",
+      "政府招标",
+      "学校采购设备"
+    ],
+    "non_examples": [
+      "个人购买咖啡",
+      "家庭购买家电"
+    ],
+    "aliases": [
+      "组织市场",
+      "organizational market"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_org_buying",
+    "name": "组织购买及组织购买品",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第1节",
+    "unit_id": "ch5_s1",
+    "parent_id": "kp_org_market",
+    "definition": "组织为生产、转售、政府职能或公共服务而购买产品和服务的行为与对象。",
+    "examples": [
+      "企业采购零部件",
+      "医院采购设备"
+    ],
+    "non_examples": [
+      "个人生活消费",
+      "家庭日用品"
+    ],
+    "aliases": [
+      "组织购买",
+      "organizational buying"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_org_market_concept",
+    "name": "组织市场的概念",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第1节",
+    "unit_id": "ch5_s1",
+    "parent_id": "kp_org_market",
+    "definition": "由生产者市场、中间商市场、政府市场和非营利组织市场构成的市场体系。",
+    "examples": [
+      "生产者市场",
+      "中间商市场",
+      "政府市场"
+    ],
+    "non_examples": [
+      "消费者市场",
+      "零售顾客"
+    ],
+    "aliases": [
+      "组织市场定义",
+      "business market"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_org_market_features",
+    "name": "组织市场的购买特征",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第1节",
+    "unit_id": "ch5_s1",
+    "parent_id": "kp_org_market",
+    "definition": "购买者少、批量大、专业采购、派生需求、需求弹性小、直接采购、多人决策等。",
+    "examples": [
+      "大批量采购",
+      "采购委员会",
+      "派生需求"
+    ],
+    "non_examples": [
+      "消费者少量多次购买",
+      "冲动消费"
+    ],
+    "aliases": [
+      "组织市场特征",
+      "business market characteristics"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_producer_market",
+    "name": "生产者市场与购买行为分析",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第2节",
+    "unit_id": "ch5_s2",
+    "parent_id": "kp_org_market",
+    "definition": "生产者市场是购买生产要素用于生产产品或服务并出售获利的企业和个人；其购买行为包括类型、参与者、影响因素和决策过程。",
+    "examples": [
+      "制造企业采购原材料",
+      "设备采购"
+    ],
+    "non_examples": [
+      "消费者购买日用品",
+      "政府公共服务采购"
+    ],
+    "aliases": [
+      "生产者市场",
+      "producer market"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_producer_buying_types",
+    "name": "生产者购买行为的主要类型",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第2节",
+    "unit_id": "ch5_s2",
+    "parent_id": "kp_producer_market",
+    "definition": "直接重购、修正重购和新购三种类型，决策复杂度依次上升。",
+    "examples": [
+      "直接重购办公耗材",
+      "修正重购更换规格",
+      "新购生产设备"
+    ],
+    "non_examples": [
+      "消费者冲动购买",
+      "政府招标"
+    ],
+    "aliases": [
+      "直接重购",
+      "修正重购",
+      "新购"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_producer_participants",
+    "name": "生产者购买决策的参与者",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第2节",
+    "unit_id": "ch5_s2",
+    "parent_id": "kp_producer_market",
+    "definition": "购买决策中的使用者、影响者、采购者、决策者和把关者等角色。",
+    "examples": [
+      "工程师影响设备选型",
+      "采购部门执行下单"
+    ],
+    "non_examples": [
+      "消费者家庭决策",
+      "政府招标评审"
+    ],
+    "aliases": [
+      "采购中心",
+      "buying center"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "创意与沟通"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_producer_influences",
+    "name": "影响生产者购买决策的主要因素",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第2节",
+    "unit_id": "ch5_s2",
+    "parent_id": "kp_producer_market",
+    "definition": "环境因素、组织因素、人际因素和个人因素共同影响生产者购买决策。",
+    "examples": [
+      "经济形势",
+      "企业采购政策",
+      "采购者个人偏好"
+    ],
+    "non_examples": [
+      "消费者文化因素",
+      "家庭影响"
+    ],
+    "aliases": [
+      "生产者购买影响因素",
+      "buying factors"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_producer_decision_process",
+    "name": "生产者的购买决策过程",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第2节",
+    "unit_id": "ch5_s2",
+    "parent_id": "kp_producer_market",
+    "definition": "识别需求、描述需求、寻找供应商、征求建议、选择供应商、签订合约、绩效评估等阶段。",
+    "examples": [
+      "设备采购八阶段",
+      "供应商评估"
+    ],
+    "non_examples": [
+      "消费者五阶段",
+      "零售促销"
+    ],
+    "aliases": [
+      "生产者决策过程",
+      "producer decision process"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_nonprofit_government",
+    "name": "非营利组织市场与政府市场",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第3节",
+    "unit_id": "ch5_s3",
+    "parent_id": "kp_org_market",
+    "definition": "非营利组织市场和政府市场是组织市场的重要组成部分，具有预算约束、公开采购和公共责任等特征。",
+    "examples": [
+      "学校采购",
+      "医院采购",
+      "政府采购"
+    ],
+    "non_examples": [
+      "制造企业采购",
+      "零售消费者"
+    ],
+    "aliases": [
+      "非营利组织市场",
+      "政府市场"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_nonprofit_market",
+    "name": "非营利组织市场",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第3节",
+    "unit_id": "ch5_s3",
+    "parent_id": "kp_nonprofit_government",
+    "definition": "由非营利机构和社会团体构成的市场，它们购买产品和服务是为了履行自身职能。",
+    "examples": [
+      "学校采购教学设备",
+      "慈善机构采购物资"
+    ],
+    "non_examples": [
+      "企业生产采购",
+      "政府招标"
+    ],
+    "aliases": [
+      "非营利市场",
+      "nonprofit market"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_nonprofit_buying",
+    "name": "非营利组织的购买特点与方式",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第3节",
+    "unit_id": "ch5_s3",
+    "parent_id": "kp_nonprofit_government",
+    "definition": "非营利组织购买受预算约束、强调公开与合规，常见方式包括招标、询价、直接采购等。",
+    "examples": [
+      "预算约束",
+      "公开招标",
+      "询价采购"
+    ],
+    "non_examples": [
+      "企业灵活采购",
+      "消费者冲动购买"
+    ],
+    "aliases": [
+      "非营利购买",
+      "nonprofit buying"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_government_market",
+    "name": "政府市场",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第3节",
+    "unit_id": "ch5_s3",
+    "parent_id": "kp_nonprofit_government",
+    "definition": "政府为行使行政管理职能而购买或租赁产品与服务的市场。",
+    "examples": [
+      "政府采购办公用品",
+      "政府购买公共服务"
+    ],
+    "non_examples": [
+      "企业采购原材料",
+      "个人消费"
+    ],
+    "aliases": [
+      "政府采购市场",
+      "government market"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_government_procurement",
+    "name": "政府采购",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第3节",
+    "unit_id": "ch5_s3",
+    "parent_id": "kp_nonprofit_government",
+    "definition": "政府机关及公共部门用财政性资金购买商品、工程和服务的行为，包括目的、影响因素和采购方式。",
+    "examples": [
+      "公开招标",
+      "竞争性谈判",
+      "单一来源采购"
+    ],
+    "non_examples": [
+      "企业采购",
+      "个人购买"
+    ],
+    "aliases": [
+      "公共采购",
+      "government procurement"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "伦理与可持续"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_digital_org_market",
+    "name": "数智化时代的组织市场营销",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第4节",
+    "unit_id": "ch5_s4",
+    "parent_id": "kp_org_market",
+    "definition": "数智技术对组织市场营销的技术赋能、客户需求变革与营销策略创新。",
+    "examples": [
+      "客户数据平台 CDP",
+      "智能采购",
+      "供应链协同"
+    ],
+    "non_examples": [
+      "传统关系营销",
+      "消费者直播带货"
+    ],
+    "aliases": [
+      "数智化组织营销",
+      "digital B2B marketing"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_digital_org_tech",
+    "name": "数智化时代组织市场营销的技术赋能",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第4节",
+    "unit_id": "ch5_s4",
+    "parent_id": "kp_digital_org_market",
+    "definition": "大数据、人工智能、云计算、物联网、区块链等技术在组织市场中的应用。",
+    "examples": [
+      "CDP 整合客户数据",
+      "AI 自动补货",
+      "区块链溯源"
+    ],
+    "non_examples": [
+      "传统线下拜访",
+      "人工台账"
+    ],
+    "aliases": [
+      "技术赋能",
+      "B2B technology"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "数据与效果",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_digital_org_demand",
+    "name": "数智化时代组织市场客户的需求变革",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第4节",
+    "unit_id": "ch5_s4",
+    "parent_id": "kp_digital_org_market",
+    "definition": "组织客户需求向数据驱动、实时交互、智能化、全渠道和个性化转变。",
+    "examples": [
+      "实时报价",
+      "全渠道采购",
+      "智能推荐"
+    ],
+    "non_examples": [
+      "传统年度采购计划",
+      "单一线下渠道"
+    ],
+    "aliases": [
+      "B2B 需求变革",
+      "digital demand"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  },
+  {
+    "kp_id": "kp_digital_org_strategy",
+    "name": "数智化时代的组织市场营销策略",
+    "name_en": "",
+    "chapter": "第5章",
+    "section": "第4节",
+    "unit_id": "ch5_s4",
+    "parent_id": "kp_digital_org_market",
+    "definition": "面向组织市场的客户数据平台、智能采购、内容营销、关系营销与服务策略。",
+    "examples": [
+      "CDP 驱动精准营销",
+      "智能采购方案",
+      "客户成功"
+    ],
+    "non_examples": [
+      "消费者促销",
+      "大众广告"
+    ],
+    "aliases": [
+      "B2B 营销策略",
+      "organizational marketing strategy"
+    ],
+    "prerequisites": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合",
+      "数据与效果"
+    ],
+    "decisions": [
+      "组织市场"
+    ],
+    "status": "draft",
+    "version": "v0.1"
+  }
+]

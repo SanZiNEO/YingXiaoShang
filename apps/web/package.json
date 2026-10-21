@@ -1,0 +1,35 @@
+{
+  "name": "@learning-agent/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "tsx server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@learning-agent/agent": "workspace:*",
+    "@learning-agent/artifacts": "workspace:*",
+    "@learning-agent/bp": "workspace:*",
+    "@learning-agent/db": "workspace:*",
+    "@learning-agent/matcher": "workspace:*",
+    "@learning-agent/news": "workspace:*",
+    "@learning-agent/profile": "workspace:*",
+    "@learning-agent/questions": "workspace:*",
+    "@learning-agent/research": "workspace:*",
+    "@learning-agent/shared": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsx": "^4.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  }
+}

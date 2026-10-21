@@ -1,0 +1,87 @@
+{
+  "content_blocks": 425,
+  "content_tags": 1567,
+  "blocks_with_tags": 425,
+  "knowledge_points": 84,
+  "knowledge_points_covered": 83,
+  "knowledge_points_uncovered": [
+    "kp_nonprofit_government"
+  ],
+  "chapter_blocks": {
+    "第 ３章 市场营销环境分析": 104,
+    "第 ４章 消费者市场与购买行为分析": 206,
+    "第 ５章 组织市场与购买行为分析": 115
+  },
+  "tag_type_counts": {
+    "knowledge_point": 717,
+    "competency": 425,
+    "decision": 425
+  },
+  "tag_role_counts": {
+    "example": 75,
+    "core": 1200,
+    "mention": 292
+  },
+  "top_kps": [
+    [
+      "kp_env_technology",
+      62
+    ],
+    [
+      "kp_env_economic",
+      41
+    ],
+    [
+      "kp_needs_motives",
+      30
+    ],
+    [
+      "kp_env_supplier",
+      29
+    ],
+    [
+      "kp_family",
+      23
+    ],
+    [
+      "kp_env_culture",
+      22
+    ],
+    [
+      "kp_org_market_concept",
+      22
+    ],
+    [
+      "kp_env_analysis",
+      21
+    ],
+    [
+      "kp_nonprofit_market",
+      20
+    ],
+    [
+      "kp_beliefs_attitudes",
+      17
+    ],
+    [
+      "kp_reference_group",
+      16
+    ],
+    [
+      "kp_digital_consumer",
+      16
+    ],
+    [
+      "kp_env_population",
+      15
+    ],
+    [
+      "kp_learning",
+      15
+    ],
+    [
+      "kp_government_procurement",
+      15
+    ]
+  ]
+}

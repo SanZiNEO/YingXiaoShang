@@ -1,0 +1,37 @@
+{
+  "name": "@learning-agent/shared",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./brand": {
+      "types": "./lib/types/brand.d.ts",
+      "default": "./lib/brand.js"
+    },
+    "./constants": {
+      "types": "./lib/types/constants.d.ts",
+      "default": "./lib/constants.js"
+    },
+    "./containment": {
+      "types": "./lib/types/containment.d.ts",
+      "default": "./lib/containment.js"
+    },
+    "./span": {
+      "types": "./lib/types/span.d.ts",
+      "default": "./lib/span.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib"],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "zod": "^4.1.0"
+  }
+}

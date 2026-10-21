@@ -1,0 +1,44 @@
+{
+  "name": "@learning-agent/desktop",
+  "productName": "营小商",
+  "version": "0.1.0",
+  "description": "营小商桌面端：用真实新闻和教材知识点陪学生练营销判断",
+  "private": true,
+  "type": "module",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "dist": "electron-vite build && electron-builder --win nsis"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@learning-agent/agent": "workspace:*",
+    "@learning-agent/artifacts": "workspace:*",
+    "@learning-agent/bp": "workspace:*",
+    "@learning-agent/db": "workspace:*",
+    "@learning-agent/export": "workspace:*",
+    "@learning-agent/matcher": "workspace:*",
+    "@learning-agent/news": "workspace:*",
+    "@learning-agent/profile": "workspace:*",
+    "@learning-agent/questions": "workspace:*",
+    "@learning-agent/research": "workspace:*",
+    "@learning-agent/shared": "workspace:*",
+    "@learning-agent/skills": "workspace:*",
+    "@learning-agent/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "electron": "^44.0.0",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^4.0.0",
+    "mammoth": "^1.13.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@learning-agent/export",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib"],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "docx": "^9.5.0"
+  }
+}

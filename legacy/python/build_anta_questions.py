@@ -1,0 +1,287 @@
+"""Author assignment-style questions for the selected Anta articles."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "data" / "marketing_news" / "wscn" / "normalized" / "anta_questions.json"
+
+QUESTIONS = {
+    "wscn-3776984": [
+        {
+            "title": "主品牌换帅后的零售改造复盘",
+            "type": "案例分析",
+            "background": "安踏主品牌CEO徐阳因家庭原因辞任，赖世贤代理CEO；徐阳任内推动线下零售场景更新，集团强调长期战略不变。",
+            "task": "复盘这次主品牌零售改造：哪些动作值得延续，哪些需要调整？换帅对战略连续性意味着什么？",
+            "dimensions": ["零售场景与门店体验", "主品牌定位与产品结构", "组织与营销能力", "战略连续性与执行风险", "消费者感知"],
+            "deliverable": "一份复盘报告，包含延续/调整清单和风险判断。",
+            "evaluation": "能否区分个人风格与组织能力；是否理解零售改造的消费者逻辑；是否给出可执行的延续方案。",
+            "kps": ["kp_consumer_market", "kp_consumer_behavior", "kp_beliefs_attitudes"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+        {
+            "title": "营销型CEO与品牌长期战略",
+            "type": "案例讨论",
+            "background": "徐阳是安踏内部少见的营销型主帅，曾负责篮球事业部、始祖鸟大中华区，2023年回归主品牌。",
+            "task": "讨论营销型领导者对品牌战略的影响：优势、盲区，以及如何与产品、渠道、组织能力配合。",
+            "dimensions": ["营销能力与产品能力", "品牌长期主义", "组织协同", "继任与治理", "外部传播"],
+            "deliverable": "一份案例讨论纪要，包含观点、反例和结论。",
+            "evaluation": "是否避免个人英雄叙事；是否理解品牌战略的系统性；是否有反例意识。",
+            "kps": ["kp_beliefs_attitudes", "kp_consumer_behavior"],
+            "competencies": ["comp_brand", "comp_communication"],
+        },
+    ],
+    "wscn-3773982": [
+        {
+            "title": "ESG传播：如何避免绿色洗白",
+            "type": "传播方案",
+            "background": "安踏发布2025年ESG报告，强调可持续产品超1亿件、碳排放下降、MSCI评级升至AA。",
+            "task": "为安踏设计一套ESG传播方案，要求既传达进展，又避免被质疑绿色洗白。",
+            "dimensions": ["证据与口径", "受众与信息层级", "第三方背书", "争议与回应", "长期承诺"],
+            "deliverable": "一份ESG传播方案，包含核心信息、证据和风险回应。",
+            "evaluation": "是否用可验证证据；是否区分宣传与实质；是否准备争议回应。",
+            "kps": ["kp_env_natural", "kp_beliefs_attitudes", "kp_env_legal"],
+            "competencies": ["comp_ethics", "comp_communication"],
+        },
+        {
+            "title": "可持续产品如何影响消费者购买",
+            "type": "研究提案",
+            "background": "安踏可持续产品占比提升，但消费者是否愿意为环保属性支付溢价仍不确定。",
+            "task": "设计一项研究，分析可持续属性对消费者认知、偏好和支付意愿的影响，并提出产品沟通建议。",
+            "dimensions": ["消费者环保态度", "支付意愿", "信任与怀疑", "品类差异", "沟通方式"],
+            "deliverable": "一份研究提案，包含研究问题、方法和应用建议。",
+            "evaluation": "是否区分态度与行为；是否考虑信任缺口；是否能把研究转成沟通策略。",
+            "kps": ["kp_consumer_behavior", "kp_beliefs_attitudes", "kp_env_natural"],
+            "competencies": ["comp_insight", "comp_data"],
+        },
+    ],
+    "wscn-3769997": [
+        {
+            "title": "一季度强劲但管理层谨慎：信号怎么读？",
+            "type": "分析报告",
+            "background": "安踏2026年一季度主品牌反弹、FILA加速、其他品牌高速增长，但管理层维持全年指引不变，理由是春节错位和宏观不确定性。",
+            "task": "分析这份季度成绩单：哪些是真实增长，哪些是节奏错位？管理层为何谨慎？",
+            "dimensions": ["春节错位与消费前置", "主品牌与FILA表现", "其他品牌增长质量", "库存与折扣", "全年指引"],
+            "deliverable": "一份分析报告，包含数据解读和后续观察指标。",
+            "evaluation": "能否区分节奏与趋势；是否理解管理层保守的理由；是否提出可验证的观察点。",
+            "kps": ["kp_consumer_market", "kp_env_economic", "kp_personal_economic"],
+            "competencies": ["comp_data", "comp_insight"],
+        },
+        {
+            "title": "多品牌增长与主品牌反弹",
+            "type": "组合策略",
+            "background": "安踏主品牌反弹，FILA中低双位数增长，迪桑特、可隆、MAIA保持高速扩张。",
+            "task": "评价安踏的多品牌组合：各品牌扮演什么角色？资源应该如何分配？",
+            "dimensions": ["品牌角色与增长阶段", "目标客群重叠", "渠道与资源", "品牌稀释风险", "组织能力"],
+            "deliverable": "一份品牌组合建议，包含角色分工和资源优先级。",
+            "evaluation": "是否理解品牌组合而非简单加总；是否识别重叠与冲突；是否有取舍。",
+            "kps": ["kp_consumer_market", "kp_lifestyle", "kp_subculture"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+    ],
+    "wscn-3768949": [
+        {
+            "title": "从规模到结构：安踏的“叙事真空”",
+            "type": "战略分析",
+            "background": "安踏2025年营收802亿元，但主品牌增速放缓、FILA降档，其他品牌成为增长引擎；资本市场反应平淡。",
+            "task": "分析安踏从规模增长转向结构增长时遇到的叙事问题，提出新的增长故事。",
+            "dimensions": ["增长引擎切换", "主品牌与FILA瓶颈", "其他品牌可持续性", "资本市场预期", "组织与资源"],
+            "deliverable": "一份战略分析报告，包含增长叙事和验证指标。",
+            "evaluation": "是否读出结构变化；是否区分故事与证据；是否提出可执行的增长路径。",
+            "kps": ["kp_env_economic", "kp_env_competitor", "kp_consumer_market"],
+            "competencies": ["comp_strategy", "comp_data"],
+        },
+        {
+            "title": "FILA、主品牌与其他品牌：组合角色重排",
+            "type": "品牌组合",
+            "background": "FILA接近300亿元体量但增速降至中低个位数，迪桑特、可隆成为新增长极。",
+            "task": "重新定义三大板块的角色：谁负责规模、谁负责利润、谁负责试验？",
+            "dimensions": ["规模/利润/增长", "品牌定位", "渠道协同", "资源冲突", "退出与收缩"],
+            "deliverable": "一份品牌组合重排方案。",
+            "evaluation": "是否敢于做取舍；是否理解品牌生命周期；是否考虑组织执行。",
+            "kps": ["kp_consumer_market", "kp_lifestyle", "kp_env_competitor"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+    ],
+    "wscn-3764861": [
+        {
+            "title": "奥运赞助的传播价值怎么算？",
+            "type": "赞助激活",
+            "background": "安踏成为希腊奥委会战略合作伙伴，希腊代表团将在米兰冬奥会开幕式首个入场，品牌标识将率先进入全球转播镜头。",
+            "task": "评价这笔赞助的传播价值，并设计一套激活方案，避免“只买 logo 不做内容”。",
+            "dimensions": ["曝光与场景", "品牌联想", "内容与社交传播", "销售转化", "长期资产"],
+            "deliverable": "一份赞助激活方案，包含传播主题和落地动作。",
+            "evaluation": "是否理解赞助资产的稀缺性；是否有内容而非只买曝光；是否连接销售。",
+            "kps": ["kp_beliefs_attitudes", "kp_reference_group", "kp_env_culture"],
+            "competencies": ["comp_brand", "comp_communication"],
+        },
+        {
+            "title": "安踏 vs 李宁：奥运资源竞争",
+            "type": "竞争分析",
+            "background": "安踏签约希腊奥委会，李宁拿回中国奥委会赞助权，双方在米兰冬奥会的传播资源形成对照。",
+            "task": "比较两家品牌的奥运资源与传播策略，分析各自的优势、风险和差异化空间。",
+            "dimensions": ["资源稀缺性", "品牌联想", "目标受众", "传播节奏", "风险"],
+            "deliverable": "一份竞争分析报告，包含对比表和策略建议。",
+            "evaluation": "是否避免只看资源大小；是否理解品牌匹配；是否有差异化建议。",
+            "kps": ["kp_env_competitor", "kp_env_analysis", "kp_beliefs_attitudes"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+    ],
+    "wscn-3764336": [
+        {
+            "title": "收购彪马29%：全球化与品牌重塑",
+            "type": "并购案例",
+            "background": "安踏以15亿欧元收购彪马29%股份，成为最大股东；摩根大通认为这是双赢，安踏需要全球化，彪马需要重塑。",
+            "task": "分析这笔交易的战略逻辑：安踏买到了什么？彪马需要什么？整合风险在哪里？",
+            "dimensions": ["全球化布局", "品牌互补", "治理与控制权", "整合能力", "财务风险"],
+            "deliverable": "一份并购案例分析，包含价值判断和风险清单。",
+            "evaluation": "是否区分股权与控制；是否理解品牌重塑能力；是否识别整合风险。",
+            "kps": ["kp_env_competitor", "kp_env_analysis", "kp_beliefs_attitudes"],
+            "competencies": ["comp_strategy", "comp_brand"],
+        },
+        {
+            "title": "并购后的品牌组合管理",
+            "type": "品牌组合",
+            "background": "安踏已拥有安踏、FILA、迪桑特、可隆、亚玛芬、狼爪等品牌，彪马加入后组合更复杂。",
+            "task": "为安踏设计并购后的品牌组合管理原则：谁保留、谁重塑、谁协同、谁退出。",
+            "dimensions": ["品牌角色", "客群重叠", "渠道冲突", "资源分配", "组织治理"],
+            "deliverable": "一份品牌组合管理方案。",
+            "evaluation": "是否理解组合管理不是品牌越多越好；是否处理重叠与冲突；是否有退出机制。",
+            "kps": ["kp_consumer_market", "kp_lifestyle", "kp_env_competitor"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+    ],
+    "wscn-3754479": [
+        {
+            "title": "多品牌“无限游戏”的边界",
+            "type": "战略分析",
+            "background": "安踏通过并购、孵化、协同扩张多品牌，其他品牌收入占比提升，但主品牌和FILA增速放缓。",
+            "task": "分析安踏多品牌模式的边界：什么时候该继续买，什么时候该整合，什么时候该停？",
+            "dimensions": ["并购与孵化", "协同效应", "组织复杂度", "资源稀释", "退出标准"],
+            "deliverable": "一份战略分析报告，包含边界条件和决策规则。",
+            "evaluation": "是否理解多品牌的经济学；是否识别组织极限；是否有退出标准。",
+            "kps": ["kp_env_competitor", "kp_lifestyle", "kp_consumer_market"],
+            "competencies": ["comp_strategy", "comp_brand"],
+        },
+        {
+            "title": "主品牌与子品牌如何协同？",
+            "type": "协同方案",
+            "background": "安踏主品牌、FILA、迪桑特、可隆等覆盖不同价格带和场景，渠道与客群存在重叠。",
+            "task": "设计主品牌与子品牌的协同方案：哪些资源可以共享，哪些必须隔离？",
+            "dimensions": ["客群与价格带", "渠道与门店", "供应链", "品牌形象", "组织考核"],
+            "deliverable": "一份协同方案，包含共享/隔离清单。",
+            "evaluation": "是否避免协同变成相互侵蚀；是否理解品牌边界；是否可执行。",
+            "kps": ["kp_consumer_market", "kp_lifestyle", "kp_subculture"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+    ],
+    "wscn-3746157": [
+        {
+            "title": "可持续产品的商业化",
+            "type": "产品营销",
+            "background": "安踏2024年可持续产品占比突破30%，马赫5通过再生材料与绿色能源降低约36%碳排放。",
+            "task": "为安踏设计可持续产品的商业化方案：如何让消费者愿意买，而不只是做ESG展示？",
+            "dimensions": ["产品价值主张", "价格与成本", "消费者信任", "渠道与陈列", "传播证据"],
+            "deliverable": "一份产品营销方案，包含卖点、证据和渠道动作。",
+            "evaluation": "是否把可持续转成消费者价值；是否避免绿色洗白；是否有商业闭环。",
+            "kps": ["kp_env_natural", "kp_beliefs_attitudes", "kp_consumer_behavior"],
+            "competencies": ["comp_brand", "comp_ethics", "comp_communication"],
+        },
+        {
+            "title": "碳中和目标与品牌信任",
+            "type": "信任建设",
+            "background": "安踏提出2050年碳中和目标，消费者和投资者对承诺的真实性高度敏感。",
+            "task": "设计一套面向消费者、投资者和媒体的信任建设方案。",
+            "dimensions": ["目标与路径", "证据与审计", "受众差异", "争议回应", "长期承诺"],
+            "deliverable": "一份信任建设方案，包含披露原则和沟通节奏。",
+            "evaluation": "是否区分承诺与进展；是否有可验证证据；是否处理质疑。",
+            "kps": ["kp_env_natural", "kp_env_legal", "kp_beliefs_attitudes"],
+            "competencies": ["comp_ethics", "comp_communication"],
+        },
+    ],
+    "wscn-3745191": [
+        {
+            "title": "2.9亿美元抄底狼爪：大众户外补位",
+            "type": "品牌重塑",
+            "background": "安踏以2.9亿美元全资收购德国户外品牌狼爪，狼爪定位大众户外，曾在中国拥有700家门店但近年掉队。",
+            "task": "分析狼爪在安踏品牌组合中的角色，设计品牌重塑方案：保留什么、改变什么、放弃什么。",
+            "dimensions": ["品牌定位", "目标客群", "产品与技术", "渠道", "品牌资产"],
+            "deliverable": "一份品牌重塑方案，包含定位和行动计划。",
+            "evaluation": "是否理解大众户外与高端户外的差异；是否保留品牌资产；是否有取舍。",
+            "kps": ["kp_lifestyle", "kp_consumer_market", "kp_env_competitor"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+        {
+            "title": "收购后的渠道与品牌重塑",
+            "type": "渠道方案",
+            "background": "狼爪曾在中国拥有大量门店，但品牌势能下滑，安踏需要决定渠道策略。",
+            "task": "为狼爪设计收购后的渠道策略：直营、经销、电商如何组合？如何避免与安踏其他户外品牌冲突？",
+            "dimensions": ["渠道结构", "门店体验", "电商与内容", "价格带", "品牌隔离"],
+            "deliverable": "一份渠道方案，包含组合和冲突处理。",
+            "evaluation": "是否理解渠道与品牌定位的匹配；是否处理内部竞争；是否可执行。",
+            "kps": ["kp_consumer_market", "kp_lifestyle", "kp_env_supplier"],
+            "competencies": ["comp_strategy", "comp_brand"],
+        },
+    ],
+    "wscn-3743764": [
+        {
+            "title": "主品牌为何重回焦点？",
+            "type": "战略分析",
+            "background": "安踏规模创新高，但主品牌和FILA触及增长瓶颈，迪桑特、可隆受小众高端定位局限，主品牌重新成为焦点。",
+            "task": "分析主品牌重回焦点的原因，提出主品牌的增长路径。",
+            "dimensions": ["增长瓶颈", "主品牌定位", "大众市场", "产品与渠道", "竞争"],
+            "deliverable": "一份战略分析报告，包含增长路径和优先级。",
+            "evaluation": "是否理解主品牌的基本盘作用；是否避免回到旧模式；是否有可执行路径。",
+            "kps": ["kp_consumer_market", "kp_env_competitor", "kp_personal_economic"],
+            "competencies": ["comp_strategy", "comp_brand"],
+        },
+        {
+            "title": "“3年超越耐克中国”目标可信吗？",
+            "type": "目标评估",
+            "background": "安踏CEO提出“3年内单品牌超越耐克中国”的目标。",
+            "task": "评估这个目标的可信度：需要什么条件？最大风险是什么？如果做不到，替代目标是什么？",
+            "dimensions": ["市场规模与增速", "品牌力", "产品与技术", "渠道", "竞争反应"],
+            "deliverable": "一份目标评估报告，包含条件、风险和替代方案。",
+            "evaluation": "是否区分口号与可执行目标；是否理解竞争反应；是否有条件性判断。",
+            "kps": ["kp_env_competitor", "kp_env_analysis", "kp_consumer_market"],
+            "competencies": ["comp_strategy", "comp_data"],
+        },
+    ],
+    "wscn-3739162": [
+        {
+            "title": "安踏如何寻找下一个爆款？",
+            "type": "产品策略",
+            "background": "安踏主品牌和FILA增速放缓，其他品牌高速增长，集团需要新的爆款产品。",
+            "task": "分析安踏打造爆款的条件，提出一个产品创新方向和一个验证方案。",
+            "dimensions": ["消费者需求", "产品差异化", "技术/材料", "渠道与内容", "生命周期"],
+            "deliverable": "一份产品策略方案，包含概念和验证计划。",
+            "evaluation": "是否从消费者问题出发；是否有差异化；是否考虑生命周期。",
+            "kps": ["kp_consumer_behavior", "kp_lifestyle", "kp_subculture"],
+            "competencies": ["comp_insight", "comp_strategy"],
+        },
+        {
+            "title": "爆款的生命周期与品牌资产",
+            "type": "生命周期管理",
+            "background": "爆款能带来短期增长，但不一定能沉淀品牌资产。",
+            "task": "为一个假设的安踏爆款设计生命周期管理方案：如何从流量款变成品牌资产？",
+            "dimensions": ["导入与放量", "复购与延伸", "品牌联想", "价格与渠道", "退市管理"],
+            "deliverable": "一份生命周期管理方案。",
+            "evaluation": "是否理解爆款与品牌资产的区别；是否有复购/延伸设计；是否考虑退市。",
+            "kps": ["kp_consumer_behavior", "kp_beliefs_attitudes", "kp_consumer_market"],
+            "competencies": ["comp_brand", "comp_strategy"],
+        },
+    ],
+}
+
+
+def main() -> None:
+    OUT.write_text(json.dumps(QUESTIONS, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"articles: {len(QUESTIONS)}")
+    print(f"questions: {sum(len(v) for v in QUESTIONS.values())}")
+    print(f"output: {OUT}")
+
+
+if __name__ == "__main__":
+    main()

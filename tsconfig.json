@@ -1,0 +1,63 @@
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "packages/shared"
+    },
+    {
+      "path": "packages/db"
+    },
+    {
+      "path": "packages/fs-app"
+    },
+    {
+      "path": "packages/path-gate"
+    },
+    {
+      "path": "packages/export"
+    },
+    {
+      "path": "packages/knowledge"
+    },
+    {
+      "path": "packages/news"
+    },
+    {
+      "path": "packages/matcher"
+    },
+    {
+      "path": "packages/llm-json"
+    },
+    {
+      "path": "packages/profile"
+    },
+    {
+      "path": "packages/questions"
+    },
+    {
+      "path": "packages/research"
+    },
+    {
+      "path": "packages/bp"
+    },
+    {
+      "path": "packages/api"
+    },
+    {
+      "path": "packages/ui"
+    },
+    {
+      "path": "packages/bundle"
+    },
+    {
+      "path": "packages/artifacts"
+    },
+    {
+      "path": "packages/skills"
+    },
+    {
+      "path": "packages/agent"
+    }
+  ]
+}

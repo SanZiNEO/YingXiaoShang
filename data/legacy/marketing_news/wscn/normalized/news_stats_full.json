@@ -1,0 +1,93 @@
+{
+  "articles": 20,
+  "tags": 120,
+  "content_status": {
+    "full": 13,
+    "partial": 7
+  },
+  "content_length_total": 43306,
+  "tag_type_counts": {
+    "knowledge_point": 73,
+    "competency": 27,
+    "decision": 20
+  },
+  "tag_role_counts": {
+    "example": 73,
+    "core": 47
+  },
+  "query_counts": {
+    "消费": 12,
+    "B2B": 8
+  },
+  "top_kps": [
+    [
+      "kp_consumer_market",
+      12
+    ],
+    [
+      "kp_env_economic",
+      8
+    ],
+    [
+      "kp_org_market",
+      8
+    ],
+    [
+      "kp_personal_economic",
+      6
+    ],
+    [
+      "kp_org_buying",
+      6
+    ],
+    [
+      "kp_consumer_behavior",
+      4
+    ],
+    [
+      "kp_emotion",
+      4
+    ],
+    [
+      "kp_env_supplier",
+      4
+    ],
+    [
+      "kp_org_market_concept",
+      4
+    ],
+    [
+      "kp_digital_consumer_decision",
+      3
+    ],
+    [
+      "kp_env_technology",
+      3
+    ],
+    [
+      "kp_digital_consumer",
+      3
+    ],
+    [
+      "kp_env_political",
+      2
+    ],
+    [
+      "kp_digital_org_tech",
+      2
+    ],
+    [
+      "kp_digital_org_market",
+      2
+    ],
+    [
+      "kp_subculture",
+      1
+    ],
+    [
+      "kp_government_procurement",
+      1
+    ]
+  ],
+  "articles_without_kp": []
+}

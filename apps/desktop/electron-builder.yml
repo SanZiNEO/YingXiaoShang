@@ -1,0 +1,33 @@
+# electron-builder 打包配置：安装包(NSIS)为主，产物输出到仓库根目录 release/
+appId: com.learningagent.yingxiaoshang
+productName: 营小商
+directories:
+  output: ../../release
+  buildResources: build
+files:
+  - out/**
+  - templates/**
+  - package.json
+# 首次启动自举用的种子库。放在 asar 外面，主进程直接复制到用户 home。
+extraResources:
+  - from: seed/learning.db
+    to: seed/learning.db
+  # 营小商的 6 份角色提示词（1 个入口 + 5 个分工）与 toolkit 参考资料。
+  # 改了 packages/agent/agents 里的内容必须重新打包，否则安装包跑的还是旧提示词。
+  - from: ../../packages/agent/agents
+    to: prompts/agents
+  - from: ../../packages/agent/references
+    to: prompts/references
+asar: true
+compression: maximum
+# 只保留中英文 locale，省 30-50MB
+electronLanguages:
+  - zh-CN
+  - en-US
+win:
+  target:
+    - nsis
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: 营小商

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "ch01",
+    "number": 1,
+    "title": "市场营销导论",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第1章数字资源"
+  },
+  {
+    "id": "ch02",
+    "number": 2,
+    "title": "市场营销管理哲学",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第2章数字资源"
+  },
+  {
+    "id": "ch03",
+    "number": 3,
+    "title": "市场营销环境",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第3章数字资源"
+  },
+  {
+    "id": "ch04",
+    "number": 4,
+    "title": "消费者市场与购买行为分析",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第4章数字资源"
+  },
+  {
+    "id": "ch05",
+    "number": 5,
+    "title": "组织市场与购买行为分析",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第5章数字资源"
+  },
+  {
+    "id": "ch06",
+    "number": 6,
+    "title": "市场营销调研",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第6章数字资源"
+  },
+  {
+    "id": "ch07",
+    "number": 7,
+    "title": "目标市场营销战略",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源"
+  },
+  {
+    "id": "ch08",
+    "number": 8,
+    "title": "产品策略",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第8章数字资源"
+  },
+  {
+    "id": "ch09",
+    "number": 9,
+    "title": "价格策略",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第9章数字资源"
+  },
+  {
+    "id": "ch10",
+    "number": 10,
+    "title": "渠道策略",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第10章数字资源"
+  },
+  {
+    "id": "ch11",
+    "number": 11,
+    "title": "促销策略",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第11章数字资源"
+  },
+  {
+    "id": "ch12",
+    "number": 12,
+    "title": "市场营销计划、组织与控制",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第12章数字资源"
+  },
+  {
+    "id": "ch13",
+    "number": 13,
+    "title": "市场营销新发展",
+    "source_path": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第13章数字资源"
+  }
+]

@@ -1,0 +1,37 @@
+type: student-profile
+id: student_demo
+name: 林晓
+cohort: 2024级市场营销本科
+background:
+  major: 市场营销
+  year: 大二
+  prior_courses:
+    - 市场营销学
+    - 管理学原理
+    - 统计学
+  experience: 校园咖啡店新媒体运营，负责过 3 次校园活动推广
+goals:
+  - 能用消费者行为知识解释真实营销案例，而不是只背概念
+  - 能独立设计一份小规模消费者调研
+  - 能把调研结论转成可执行的营销建议
+preferences:
+  language: zh-CN
+  feedback_style: 先追问判断，再给最小提示，最后才给示例
+  pace: 每次只推进一个问题
+  format: 短段落 + 具体例子
+constraints:
+  - 每周可投入 4 小时
+  - 没有正式实习经历
+  - 对数字和统计有畏难情绪
+self_assessment:
+  problem_framing: L2
+  evidence_hypothesis: L2
+  decision_tradeoff: L1
+  communication: L2
+reference:
+  用户原话: >
+    我每次看到案例都想直接给方案，但老师总说我没有定义清楚问题。
+  口径: >
+    这是假想学生，用于 MVP 演示；所有证据和成长数据都是合成的，不用于真实评价。
+  红线: >
+    不要替学生写作业；不要把 AI 的推断当成学生原话；证据不足时明确说证据不足。

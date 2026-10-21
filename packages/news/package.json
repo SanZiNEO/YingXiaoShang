@@ -1,0 +1,33 @@
+{
+  "name": "@learning-agent/news",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.2",
+    "@learning-agent/db": "workspace:*",
+    "@learning-agent/matcher": "workspace:*",
+    "@learning-agent/shared": "workspace:*",
+    "cheerio": "^1.1.0",
+    "p-limit": "^7.1.0",
+    "playwright": "^1.55.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0"
+  }
+}

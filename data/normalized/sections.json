@@ -1,0 +1,338 @@
+[
+  {
+    "id": "ch1_s1",
+    "chapter_id": "ch01",
+    "number": 1,
+    "title": "认识市场"
+  },
+  {
+    "id": "ch1_s2",
+    "chapter_id": "ch01",
+    "number": 2,
+    "title": "认识市场营销"
+  },
+  {
+    "id": "ch1_s3",
+    "chapter_id": "ch01",
+    "number": 3,
+    "title": "认识数智化时代的市场营销"
+  },
+  {
+    "id": "ch1_s4",
+    "chapter_id": "ch01",
+    "number": 4,
+    "title": "数字营销和数智营销"
+  },
+  {
+    "id": "ch2_s1",
+    "chapter_id": "ch02",
+    "number": 1,
+    "title": "市场营销管理"
+  },
+  {
+    "id": "ch2_s2",
+    "chapter_id": "ch02",
+    "number": 2,
+    "title": "企业导向的营销管理观念"
+  },
+  {
+    "id": "ch2_s3",
+    "chapter_id": "ch02",
+    "number": 3,
+    "title": "顾客导向的营销管理观念"
+  },
+  {
+    "id": "ch2_s4",
+    "chapter_id": "ch02",
+    "number": 4,
+    "title": "社会导向的营销管理观念"
+  },
+  {
+    "id": "ch2_s5",
+    "chapter_id": "ch02",
+    "number": 5,
+    "title": "数智化时代的营销管理观念"
+  },
+  {
+    "id": "ch3_s1",
+    "chapter_id": "ch03",
+    "number": 1,
+    "title": "市场营销环境概述"
+  },
+  {
+    "id": "ch3_s2",
+    "chapter_id": "ch03",
+    "number": 2,
+    "title": "宏观营销环境分析"
+  },
+  {
+    "id": "ch3_s3",
+    "chapter_id": "ch03",
+    "number": 3,
+    "title": "微观营销环境分析"
+  },
+  {
+    "id": "ch3_s4",
+    "chapter_id": "ch03",
+    "number": 4,
+    "title": "环境分析与营销对策"
+  },
+  {
+    "id": "ch4_s1",
+    "chapter_id": "ch04",
+    "number": 1,
+    "title": "消费者与消费者市场"
+  },
+  {
+    "id": "ch4_s2",
+    "chapter_id": "ch04",
+    "number": 2,
+    "title": "消费者行为的一般过程"
+  },
+  {
+    "id": "ch4_s3",
+    "chapter_id": "ch04",
+    "number": 3,
+    "title": "消费者购买行为的影响因素及其作用机制"
+  },
+  {
+    "id": "ch4_s4",
+    "chapter_id": "ch04",
+    "number": 4,
+    "title": "消费者购买决策过程"
+  },
+  {
+    "id": "ch4_s5",
+    "chapter_id": "ch04",
+    "number": 5,
+    "title": "数智化时代的消费者购买行为"
+  },
+  {
+    "id": "ch5_s1",
+    "chapter_id": "ch05",
+    "number": 1,
+    "title": "组织市场与购买行为概述"
+  },
+  {
+    "id": "ch5_s2",
+    "chapter_id": "ch05",
+    "number": 2,
+    "title": "生产者市场与购买行为分析"
+  },
+  {
+    "id": "ch5_s3",
+    "chapter_id": "ch05",
+    "number": 3,
+    "title": "非营利组织市场、政府市场及其购买行为分析"
+  },
+  {
+    "id": "ch5_s4",
+    "chapter_id": "ch05",
+    "number": 4,
+    "title": "数智化时代的组织市场营销"
+  },
+  {
+    "id": "ch6_s1",
+    "chapter_id": "ch06",
+    "number": 1,
+    "title": "市场营销调研概述"
+  },
+  {
+    "id": "ch6_s2",
+    "chapter_id": "ch06",
+    "number": 2,
+    "title": "市场营销调研的步骤"
+  },
+  {
+    "id": "ch6_s3",
+    "chapter_id": "ch06",
+    "number": 3,
+    "title": "市场营销调研的方法"
+  },
+  {
+    "id": "ch6_s4",
+    "chapter_id": "ch06",
+    "number": 4,
+    "title": "市场调研的技术"
+  },
+  {
+    "id": "ch6_s5",
+    "chapter_id": "ch06",
+    "number": 5,
+    "title": "数智化时代的市场营销调研"
+  },
+  {
+    "id": "ch7_s1",
+    "chapter_id": "ch07",
+    "number": 1,
+    "title": "市场细分战略"
+  },
+  {
+    "id": "ch7_s2",
+    "chapter_id": "ch07",
+    "number": 2,
+    "title": "目标市场选择战略"
+  },
+  {
+    "id": "ch7_s3",
+    "chapter_id": "ch07",
+    "number": 3,
+    "title": "市场定位战略"
+  },
+  {
+    "id": "ch7_s4",
+    "chapter_id": "ch07",
+    "number": 4,
+    "title": "品牌战略"
+  },
+  {
+    "id": "ch7_s5",
+    "chapter_id": "ch07",
+    "number": 5,
+    "title": "数智化时代的市场营销战略"
+  },
+  {
+    "id": "ch8_s1",
+    "chapter_id": "ch08",
+    "number": 1,
+    "title": "产品整体概念"
+  },
+  {
+    "id": "ch8_s2",
+    "chapter_id": "ch08",
+    "number": 2,
+    "title": "产品组合策略"
+  },
+  {
+    "id": "ch8_s3",
+    "chapter_id": "ch08",
+    "number": 3,
+    "title": "产品生命周期策略"
+  },
+  {
+    "id": "ch8_s4",
+    "chapter_id": "ch08",
+    "number": 4,
+    "title": "新产品开发策略"
+  },
+  {
+    "id": "ch8_s5",
+    "chapter_id": "ch08",
+    "number": 5,
+    "title": "数智化时代的产品策略"
+  },
+  {
+    "id": "ch9_s1",
+    "chapter_id": "ch09",
+    "number": 1,
+    "title": "影响定价的因素"
+  },
+  {
+    "id": "ch9_s2",
+    "chapter_id": "ch09",
+    "number": 2,
+    "title": "制定价格的一般程序"
+  },
+  {
+    "id": "ch9_s3",
+    "chapter_id": "ch09",
+    "number": 3,
+    "title": "定价的基本策略"
+  },
+  {
+    "id": "ch9_s4",
+    "chapter_id": "ch09",
+    "number": 4,
+    "title": "数智化时代的定价策略"
+  },
+  {
+    "id": "ch10_s1",
+    "chapter_id": "ch10",
+    "number": 1,
+    "title": "分销渠道概述"
+  },
+  {
+    "id": "ch10_s2",
+    "chapter_id": "ch10",
+    "number": 2,
+    "title": "分销渠道设计与管理"
+  },
+  {
+    "id": "ch10_s3",
+    "chapter_id": "ch10",
+    "number": 3,
+    "title": "中间商及其营销策略"
+  },
+  {
+    "id": "ch10_s4",
+    "chapter_id": "ch10",
+    "number": 4,
+    "title": "数智化时代的全渠道策略"
+  },
+  {
+    "id": "ch11_s1",
+    "chapter_id": "ch11",
+    "number": 1,
+    "title": "有效营销沟通"
+  },
+  {
+    "id": "ch11_s2",
+    "chapter_id": "ch11",
+    "number": 2,
+    "title": "常用促销工具"
+  },
+  {
+    "id": "ch11_s3",
+    "chapter_id": "ch11",
+    "number": 3,
+    "title": "数智化时代的整合营销沟通"
+  },
+  {
+    "id": "ch12_s1",
+    "chapter_id": "ch12",
+    "number": 1,
+    "title": "社交平台营销"
+  },
+  {
+    "id": "ch12_s2",
+    "chapter_id": "ch12",
+    "number": 2,
+    "title": "内容平台营销"
+  },
+  {
+    "id": "ch12_s3",
+    "chapter_id": "ch12",
+    "number": 3,
+    "title": "短视频平台营销"
+  },
+  {
+    "id": "ch12_s4",
+    "chapter_id": "ch12",
+    "number": 4,
+    "title": "直播平台营销"
+  },
+  {
+    "id": "ch13_s1",
+    "chapter_id": "ch13",
+    "number": 1,
+    "title": "市场营销计划"
+  },
+  {
+    "id": "ch13_s2",
+    "chapter_id": "ch13",
+    "number": 2,
+    "title": "市场营销组织"
+  },
+  {
+    "id": "ch13_s3",
+    "chapter_id": "ch13",
+    "number": 3,
+    "title": "市场营销控制"
+  },
+  {
+    "id": "ch13_s4",
+    "chapter_id": "ch13",
+    "number": 4,
+    "title": "商业计划书的编制"
+  }
+]
