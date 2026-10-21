@@ -2,6 +2,60 @@ import type { Context } from '@deepseek-ai/cordis'
 import { BlockAssembler, type ToolSchema } from '@deepseek-ai/dsh-llm'
 import { DEFAULT_ROUTE } from '@learning-agent/llm-json'
 import { DSML_OPEN_HINT, parseDsml } from './dsml.js'
+import { TextRetainer, formatRetentionNotice } from './output-retention.js'
+
+/** Tool results are budgeted in UTF-8 bytes, like DSH's output-retention library. */
+const DEFAULT_TOOL_MAX_BYTES = 36_000
+
+function toolMaxBytes(): number {
+  const raw = Number(process.env.LEARNING_AGENT_TOOL_MAX_BYTES)
+  return Number.isInteger(raw) && raw > 0 ? raw : DEFAULT_TOOL_MAX_BYTES
+}
+
+/** Keep head/tail plus a notice; the full result is not persisted. */
+function retainToolOutput(output: string): { text: string; rawChars: number } {
+  const rawChars = output.length
+  const rawBytes = Buffer.byteLength(output, 'utf8')
+  const maxBytes = toolMaxBytes()
+  if (rawBytes <= maxBytes) return { text: output, rawChars }
+
+  const recovery = (): string => '需要这部分就换更窄的参数重读，不要原样重试。'
+  // Reserve the worst-case notice first, exactly like dsh-spill-policy.
+  const worstNotice = formatRetentionNotice(
+    {
+      scope: '工具结果',
+      strategy: 'headTail',
+      unit: 'bytes',
+      limit: maxBytes,
+      kept: 0,
+      omitted: { kind: 'exact', count: rawBytes },
+    },
+    recovery,
+  )
+  const budget = maxBytes - Buffer.byteLength(worstNotice, 'utf8')
+  if (budget <= 0) return { text: output, rawChars }
+
+  const headBytes = Math.ceil(budget / 2)
+  const tailBytes = Math.floor(budget / 2)
+  const retainer = new TextRetainer({ kind: 'headTail', headBytes, tailBytes })
+  retainer.push(output)
+  const retained = retainer.finish()
+  const omitted = retained.omittedBytes.kind === 'exact' ? retained.omittedBytes.count : 0
+  if (omitted === 0) return { text: output, rawChars }
+
+  const footer = formatRetentionNotice(
+    {
+      scope: '工具结果',
+      strategy: 'headTail',
+      unit: 'bytes',
+      limit: { head: headBytes, tail: tailBytes },
+      kept: rawBytes - omitted,
+      omitted: { kind: 'exact', count: omitted },
+    },
+    recovery,
+  )
+  return { text: `${retained.text}\n\n[... ${footer} ...]`, rawChars }
+}
 
 /**
  * One tool an agent may call. `execute` returns text; the model sees it verbatim
@@ -29,7 +83,7 @@ export type AgentLoopEvent =
   | { type: 'round'; round: number }
   | { type: 'text'; text: string }
   | { type: 'tool-start'; name: string; args: string }
-  | { type: 'tool-end'; name: string; chars: number; cached: boolean; preview: string }
+  | { type: 'tool-end'; name: string; chars: number; rawChars: number; cached: boolean; preview: string }
 
 export interface AgentLoopHooks {
   /** Progress sink. Throwing here must never break the turn. */
@@ -42,6 +96,7 @@ export interface ToolCallRecord {
   name: string
   args: string
   chars: number
+  rawChars: number
   cached: boolean
 }
 
@@ -191,18 +246,27 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
       })),
     })
     // 同一轮里的多个工具并行执行：模型经常一口气读两三份材料，串行等于把等待叠加。
-    const inflight = new Map<string, Promise<string>>()
+    const inflight = new Map<string, Promise<{ text: string; rawChars: number }>>()
     const done = await Promise.all(toolCalls.map(async (call) => {
       called.push(call.name)
       const tool = input.tools.find((item) => item.name === call.name)
       const key = `${call.name}:${call.arguments}`
       const cached = cache.get(key)
-      if (!tool) return { output: `未知工具：${call.name}`, cached: false }
-      if (cached !== undefined) return { output: cached, cached: true }
+      if (!tool) {
+        const delivered = retainToolOutput(`未知工具：${call.name}`)
+        return { output: delivered.text, rawChars: delivered.rawChars, cached: false }
+      }
+      if (cached !== undefined) {
+        const delivered = retainToolOutput(cached)
+        return { output: delivered.text, rawChars: delivered.rawChars, cached: true }
+      }
       const running = inflight.get(key)
-      if (running) return { output: await running, cached: true }
+      if (running) {
+        const value = await running
+        return { output: value.text, rawChars: value.rawChars, cached: true }
+      }
       emit({ type: 'tool-start', name: call.name, args: call.arguments })
-      const work = (async (): Promise<string> => {
+      const work = (async (): Promise<{ text: string; rawChars: number }> => {
         try {
           const args = call.arguments.trim().length > 0
             ? (JSON.parse(call.arguments) as Record<string, unknown>)
@@ -210,38 +274,40 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
           const output = String(await tool.execute(args))
           cache.set(key, output)
           if (tool.write) written.push(tool.name)
-          return output
+          return retainToolOutput(output)
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error)
           // 参数被 token 上限截断是最常见的失败：模型会一直重试同样大小的内容。
           // 得明确告诉它"拆小"，否则它只会一遍一遍重写同一份超长 JSON。
           if (/Unterminated string|Unexpected end of JSON|Expected .* after property|position \d+/.test(message)) {
-            return `工具执行失败：参数太长，超过单次输出上限被截断了（${message}）。
-不要重写整份：把内容拆成 2–3 次调用，每次只写一小部分（1–2 个条目），系统会自动合并。`
+            return retainToolOutput(`工具执行失败：参数太长，超过单次输出上限被截断了（${message}）。
+不要重写整份：把内容拆成 2–3 次调用，每次只写一小部分（1–2 个条目），系统会自动合并。`)
           }
-          return `工具执行失败：${message}`
+          return retainToolOutput(`工具执行失败：${message}`)
         }
       })()
       inflight.set(key, work)
-      return { output: await work, cached: false }
+      const value = await work
+      return { output: value.text, rawChars: value.rawChars, cached: false }
     }))
 
     const results: Array<Record<string, unknown>> = []
     for (let index = 0; index < toolCalls.length; index++) {
       const call = toolCalls[index]!
-      const { output, cached } = done[index]!
+      const { output, rawChars, cached } = done[index]!
       emit({
         type: 'tool-end',
         name: call.name,
         chars: output.length,
+        rawChars,
         cached,
         preview: output.replace(/\s+/g, ' ').slice(0, 80),
       })
-      calls.push({ name: call.name, args: call.arguments, chars: output.length, cached })
+      calls.push({ name: call.name, args: call.arguments, chars: output.length, rawChars, cached })
       if (process.env.AGENT_DEBUG_LOOP === '1') {
-        console.log(`[loop]   ← ${call.name}${cached ? '（缓存）' : ''} ${output.length}字 ${output.replace(/\s+/g, ' ').slice(0, 100)}`)
+        console.log(`[loop]   ← ${call.name}${cached ? '（缓存）' : ''} ${output.length}字（原文 ${rawChars} 字） ${output.replace(/\s+/g, ' ').slice(0, 100)}`)
       }
-      results.push({ type: 'tool-result', id: call.id, text: output.slice(0, 12_000) })
+      results.push({ type: 'tool-result', id: call.id, text: output })
     }
     messages.push({ role: 'tool', content: results })
   }

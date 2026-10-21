@@ -187,13 +187,14 @@ export class TextRetainer {
 
 /** Standardized omission wording; the caller supplies recovery guidance. */
 export function describeOmitted(omitted: Omitted, unit: RetentionNotice['unit']): string {
+  const label = unit === 'bytes' ? '字节' : unit === 'chars' ? '字符' : unit === 'lines' ? '行' : '项'
   switch (omitted.kind) {
     case 'none':
       return ''
     case 'exact':
-      return `省略 ${omitted.count} ${unit}。`
+      return `省略 ${omitted.count} ${label}。`
     case 'unknown':
-      return `还有更多 ${unit} 被省略。`
+      return `还有更多${label}被省略。`
   }
 }
 
