@@ -144,10 +144,26 @@ export interface AgentLoopResult {
 }
 
 export interface LoopContextStats {
+  toolsChars: number
+  messageChars: number
   toolDeliveredChars: number
   toolPrunedChars: number
   toolPrunedCalls: number
   peakToolChars: number
+}
+
+function totalMessageChars(messages: ReadonlyArray<{ content: Array<Record<string, unknown>> }>): number {
+  let total = 0
+  for (const message of messages) {
+    for (const block of message.content) {
+      if ((block.type === 'text' || block.type === 'tool-result') && typeof block.text === 'string') {
+        total += block.text.length
+      } else if (block.type === 'tool-call') {
+        total += String(block.name ?? '').length + String(block.arguments ?? '').length
+      }
+    }
+  }
+  return total
 }
 
 /**
@@ -172,6 +188,8 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
   const cache = new Map<string, string>()
   const pruneState = emptyPruneState()
   const contextStats = (): LoopContextStats => ({
+    toolsChars: JSON.stringify(schemas).length,
+    messageChars: totalMessageChars(messages),
     toolDeliveredChars: totalToolResultChars(messages),
     toolPrunedChars: pruneState.prunedChars,
     toolPrunedCalls: pruneState.prunedCalls,

@@ -436,15 +436,11 @@ export class AgentService extends Service implements AgentRuntime {
       message: input.message,
       scopeOverride,
     })
-    const recentMessages = this.db.listChatMessages(sessionId)
+    // Conversation history is sent as messages, not folded into the system
+    // prompt. Current sessions are short; compaction is a later step.
+    const history = this.db.listChatMessages(sessionId)
       .filter((item) => item.seq < userMessage.seq && (item.role === 'user' || item.role === 'assistant'))
-      .slice(-10)
       .map((item) => ({ role: item.role as 'user' | 'assistant', content: item.content }))
-    const sessionSummary = this.db.listMemoryEpisodes(studentId, 20)
-      .filter((episode) => episode.session_id === sessionId)
-      .slice(0, 3)
-      .map((episode) => episode.summary)
-      .filter((summary) => summary.trim().length > 0)
 
     const team = await runTeamTurn({
       ctx: this.ctx,
@@ -456,8 +452,7 @@ export class AgentService extends Service implements AgentRuntime {
         phase: snapshot.phase,
       },
       message: input.message,
-      recentMessages,
-      sessionSummary,
+      history,
       hooks,
     })
 

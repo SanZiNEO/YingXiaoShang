@@ -1,6 +1,6 @@
 import type { Context } from '@deepseek-ai/cordis'
 import { loadAgent } from './prompts.js'
-import { runAgentLoop, type AgentLoopEvent, type AgentTool } from './tool-loop.js'
+import { runAgentLoop, type AgentLoopEvent, type AgentMessage, type AgentTool } from './tool-loop.js'
 import { finalizeArtifacts, type EmitContext } from './artifacts.js'
 import { agentTools, createToolContext, emptyLedger, READ_TOOL_NAMES } from './tools/index.js'
 import { prefetchMaterial } from './tools/material.js'
@@ -45,14 +45,24 @@ export interface TurnTrace {
   citations: number
   toolCalls: number
   artifacts: number
+  /** Character accounting by role, mirroring DSH's system/tools/message split. */
+  context: {
+    systemChars: number
+    toolsChars: number
+    messageChars: number
+    totalChars: number
+    toolResultChars: number
+    prunedCalls: number
+    prunedChars: number
+  }
 }
 
 export interface TeamTurnInput {
   ctx: Context
   scope: TeamScope
   message: string
-  recentMessages: Array<{ role: 'user' | 'assistant'; content: string }>
-  sessionSummary: string[]
+  /** Every earlier user/assistant message in this session, in order. */
+  history: Array<{ role: 'user' | 'assistant'; content: string }>
   hooks?: TeamHooks
 }
 
@@ -76,9 +86,6 @@ function environment(input: TeamTurnInput): string {
   const { ctx, scope } = input
   const sections = ctx.learningDb.listSections(scope.chapterId)
   const points = ctx.learningDb.listKpsByChapter(scope.chapterId)
-  const recent = input.recentMessages
-    .slice(-8)
-    .map((item) => `${item.role === 'user' ? '学生' : '你'}：${item.content.slice(0, 200)}`)
   return [
     '## 当前环境',
     `学生：${scope.studentId}`,
@@ -86,9 +93,24 @@ function environment(input: TeamTurnInput): string {
     `学情阶段：${scope.phase}`,
     sections.length > 0 ? `本章小节：${sections.map((section) => section.title).join(' / ')}` : '',
     points.length > 0 ? `本章知识点（${points.length} 个）：${points.slice(0, 40).map((point) => point.name).join('、')}` : '',
-    input.sessionSummary.length > 0 ? `更早的会话摘要：${input.sessionSummary.join(' / ')}` : '',
-    recent.length > 0 ? `最近对话：\n${recent.join('\n')}` : '',
   ].filter((line) => line.length > 0).join('\n')
+}
+
+/**
+ * Conversation history stays in messages, not in the system prompt — the same
+ * shape as DSH's derived history. A leading assistant message is dropped so the
+ * sequence always starts with a user turn.
+ */
+function initialMessages(input: TeamTurnInput): AgentMessage[] {
+  const history = [...input.history]
+  while (history.length > 0 && history[0]!.role === 'assistant') history.shift()
+  return [
+    ...history.map((item): AgentMessage => ({
+      role: item.role,
+      content: [{ type: 'text', text: item.content }],
+    })),
+    { role: 'user', content: [{ type: 'text', text: input.message }] },
+  ]
 }
 
 
@@ -181,7 +203,7 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
   const result = await runAgentLoop({
     ctx: input.ctx,
     system,
-    messages: [{ role: 'user', content: [{ type: 'text', text: input.message }] }],
+    messages: initialMessages(input),
     tools,
     // 单代理要自己读材料、读手册、写产物，轮次给够；收口靠"程序告诉它走到哪一步了"。
     maxRounds: 10,
@@ -222,6 +244,15 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
     citations: citations.length,
     toolCalls: result.calls.length,
     artifacts: emit.created.length,
+    context: {
+      systemChars: system.length,
+      toolsChars: result.context.toolsChars,
+      messageChars: result.context.messageChars,
+      totalChars: system.length + result.context.toolsChars + result.context.messageChars,
+      toolResultChars: result.context.toolDeliveredChars,
+      prunedCalls: result.context.toolPrunedCalls,
+      prunedChars: result.context.toolPrunedChars,
+    },
   }
   return { text: result.text, findings, called: result.called, artifacts: emit.created, citations, warnings, trace }
 }
