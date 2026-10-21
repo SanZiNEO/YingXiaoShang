@@ -3,7 +3,6 @@ import { loadAgent } from './prompts.js'
 import { runAgentLoop, type AgentLoopEvent, type AgentMessage, type AgentTool } from './tool-loop.js'
 import { finalizeArtifacts, type EmitContext } from './artifacts.js'
 import { agentTools, createToolContext, emptyLedger, READ_TOOL_NAMES } from './tools/index.js'
-import { prefetchMaterial } from './tools/material.js'
 import type { Artifact, Citation } from '@learning-agent/shared'
 
 export interface TeamScope {
@@ -86,13 +85,28 @@ function environment(input: TeamTurnInput): string {
   const { ctx, scope } = input
   const sections = ctx.learningDb.listSections(scope.chapterId)
   const points = ctx.learningDb.listKpsByChapter(scope.chapterId)
+  const sectionNames = new Map(sections.map((section) => [section.id, section.title]))
+  // A catalog, not material: name + one-line definition. The body is loaded by
+  // read_kp / read_material, matching DSH's skill catalog (summaries only).
+  const catalog = points.map((point) => {
+    const definition = Array.from(point.definition.replace(/\s+/g, ' ').trim())
+    const short = definition.length > 60 ? `${definition.slice(0, 60).join('')}…` : definition.join('')
+    const section = sectionNames.get(point.section_id) ?? ''
+    return `- ${point.name}${section.length > 0 && section !== point.name ? `（${section}）` : ''}${short.length > 0 ? `：${short}` : ''}`
+  })
   return [
     '## 当前环境',
     `学生：${scope.studentId}`,
     `章节：${scope.chapterTitle}（${scope.chapterId}）`,
     `学情阶段：${scope.phase}`,
     sections.length > 0 ? `本章小节：${sections.map((section) => section.title).join(' / ')}` : '',
-    points.length > 0 ? `本章知识点（${points.length} 个）：${points.slice(0, 40).map((point) => point.name).join('、')}` : '',
+    catalog.length > 0
+      ? [
+          `## 本章知识点目录（${catalog.length} 个）`,
+          '只用于选材料，不是原文。讲概念、案例、新闻前先调用 read_kp / read_material / read_textbook 读正文；不要拿目录当引用。',
+          ...catalog,
+        ].join('\n')
+      : '',
   ].filter((line) => line.length > 0).join('\n')
 }
 
@@ -167,16 +181,12 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
   const citations: Citation[] = []
   const reads = emptyLedger()
   const env = environment(input)
-  // 材料先备到手边，省掉几轮"再读一段"。备了也可以不用——要不要写产物是模型自己的判断，
-  // 代码不替它猜学生想要什么。
-  const material = prefetchMaterial(input.ctx, input.scope.chapterId, input.message, reads)
   const turn = createToolContext({
     ctx: input.ctx,
     chapterId: input.scope.chapterId,
     emit,
     citations,
     reads,
-    seed: material.keys,
   })
   const tools: AgentTool[] = agentTools(turn)
   const system = [
@@ -185,14 +195,7 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
     env,
     '',
     '## 本轮工具',
-    '取材料、查手册、写产物都用工具，怎么用写在工具说明里。动笔做专业内容之前先把手册读一遍。',
-    material.text.length > 0
-      ? [
-          '## 已经备好的材料',
-          '这些是系统按任务取好的：知识点定义 + 教材原文整段（带 blockId）。原文可以直接逐字引用，不用再调工具读一遍。',
-          material.text,
-        ].join('\n')
-      : '',
+    '取材料、查手册、写产物都用工具，怎么用写在工具说明里。system 里只有知识点目录，没有正文；讲概念、案例、新闻前先用读工具取正文。',
     '要调用工具时不要先写正文：正文只在不再调用工具的那一轮写。',
     '同一个材料只读一次；已经读到的原文直接接着用。',
     '产物写入后，回复里只给结构摘要、关键取舍和下一步，不要把附件正文（尤其是题目全文）抄进聊天。',
