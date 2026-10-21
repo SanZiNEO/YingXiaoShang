@@ -6,13 +6,33 @@
     "name": "组织市场",
     "name_en": "organizational market",
     "definition": "为生产、转售或组织运行而购买产品和服务的组织构成组织市场，包括生产者、中间商以及政府和非营利组织等购买者。与消费者市场的分界是购买的最终用途，而不是门店类型或采购数量。",
-    "keywords": ["组织购买", "生产经营", "转售", "机构运行"],
-    "examples": ["餐馆采购食材", "企业采购办公设备"],
-    "non_examples": ["家庭购买日用品", "个人购买咖啡"],
-    "aliases": ["组织购买市场", "organizational market", "组织客户市场"],
+    "keywords": [
+      "组织购买",
+      "生产经营",
+      "转售",
+      "机构运行"
+    ],
+    "examples": [
+      "餐馆采购食材",
+      "企业采购办公设备"
+    ],
+    "non_examples": [
+      "家庭购买日用品",
+      "个人购买咖啡"
+    ],
+    "aliases": [
+      "组织购买市场",
+      "organizational market",
+      "组织客户市场"
+    ],
     "difficulty": 2,
-    "competencies": ["problem_framing", "decision_tradeoff"],
-    "decisions": ["消费者洞察"],
+    "competencies": [
+      "problem_framing",
+      "decision_tradeoff"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
     "source": "data/normalized/knowledge_points.curated.json",
     "status": "draft",
     "parent_id": null
@@ -24,15 +44,942 @@
     "name": "品牌忠诚",
     "name_en": "brand loyalty",
     "definition": "消费者在存在可选替代品牌时，对某一品牌保持相对稳定的偏好并持续重复选择。它是偏好和选择的稳定表现；消费者学习则是经验导致认知、判断规则或行为潜能变化的过程，二者可以同时存在，但一次打卡或被折扣驱动的重复购买都不足以证明忠诚。",
-    "keywords": ["忠诚", "复购", "偏好稳定"],
-    "examples": ["在同类门店可达且价格相近时，仍长期偏好并复购同一品牌", "在取消短期促销后仍持续选择同一品牌"],
-    "non_examples": ["一次跨城打卡", "仅因顺路或短期折扣重复购买"],
-    "aliases": ["消费者忠诚", "brand loyalty", "忠诚度"],
+    "keywords": [
+      "忠诚",
+      "复购",
+      "偏好稳定"
+    ],
+    "examples": [
+      "在同类门店可达且价格相近时，仍长期偏好并复购同一品牌",
+      "在取消短期促销后仍持续选择同一品牌"
+    ],
+    "non_examples": [
+      "一次跨城打卡",
+      "仅因顺路或短期折扣重复购买"
+    ],
+    "aliases": [
+      "消费者忠诚",
+      "brand loyalty",
+      "忠诚度"
+    ],
     "difficulty": 3,
-    "competencies": ["evidence_hypothesis", "decision_tradeoff"],
-    "decisions": ["消费者洞察"],
+    "competencies": [
+      "evidence_hypothesis",
+      "decision_tradeoff"
+    ],
+    "decisions": [
+      "消费者洞察"
+    ],
     "source": "data/normalized/knowledge_points.curated.json",
     "status": "draft",
     "parent_id": null
+  },
+  {
+    "id": "kp_ch07_929b6ddd",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s2",
+    "name": "目标市场选择战略",
+    "name_en": "",
+    "definition": "目标市场选择战略是企业评估细分市场、决定为哪些购买者群体服务，并选择相应覆盖方式的战略。覆盖方式有无差异营销、差异化营销、集中化营销三种。",
+    "keywords": [
+      "评估细分市场",
+      "选择目标市场",
+      "无差异营销",
+      "差异化营销",
+      "集中化营销",
+      "市场覆盖模式"
+    ],
+    "examples": [
+      "同一款饮料用无差异营销面向全市场，只做一种规格一种包装",
+      "某品牌只做儿童护眼灯，用集中化营销深耕一个细分市场"
+    ],
+    "non_examples": [
+      "不是市场细分：细分是把整体市场切开，目标市场选择是在切开的块里挑要做的",
+      "不是市场定位：定位是选定人群之后讲差异点",
+      "资源不足时不一定选差异化营销，集中化更现实"
+    ],
+    "aliases": [
+      "目标市场营销战略",
+      "目标市场营销",
+      "T（Targeting）"
+    ],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "target_selection"
+    ],
+    "source": "教材 P152-155（第7章第2节）",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_685a95c5",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s3",
+    "name": "市场定位的方式",
+    "name_en": "",
+    "definition": "市场定位的方式是企业建立差异、在顾客心智中占据位置的具体打法，分三类：里斯与特劳特的定位方式、竞争性定位方式，以及按进入时机的初次定位与重新定位。",
+    "keywords": [
+      "领导者定位",
+      "创新式定位",
+      "反定位",
+      "避强定位",
+      "对抗定位",
+      "初次定位",
+      "重新定位"
+    ],
+    "examples": [
+      "避强定位：新品牌避开头部品牌的强势卖点，从它没占住的角度切入",
+      "对抗定位：直接以对比姿态挑战在位领导者"
+    ],
+    "non_examples": [
+      "不是市场定位的定义（那是含义与价值）",
+      "不是市场定位的依据：依据回答用「什么」定位，方式回答「怎么」定位"
+    ],
+    "aliases": [
+      "定位方式",
+      "定位策略",
+      "定位方法"
+    ],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [
+      "positioning"
+    ],
+    "source": "教材 P157-159（第7章第3节）",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_1a1dc996",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s4",
+    "name": "品牌战略的类型",
+    "name_en": "",
+    "definition": "品牌战略是企业营销战略的重要组成部分，主要包括品牌化战略、品牌名称战略、品牌延伸战略和品牌再定位战略四类。",
+    "keywords": [
+      "品牌化战略",
+      "品牌名称战略",
+      "家族品牌",
+      "品牌延伸",
+      "品牌再定位"
+    ],
+    "examples": [
+      "个别品牌名称：同一企业不同产品线各用一个品牌，避免一损俱损",
+      "品牌延伸：用已成功的品牌推出新品类，借已有声誉降低推广成本"
+    ],
+    "non_examples": [
+      "不是品牌的内涵与作用（那讲品牌是什么）",
+      "不是数智化时代的品牌战略（那讲技术条件下的新元素）",
+      "换 logo 或改包装不是品牌再定位，再定位改的是心智位置"
+    ],
+    "aliases": [
+      "品牌策略",
+      "品牌战略"
+    ],
+    "difficulty": 3,
+    "competencies": [
+      "品牌与定位",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "brand_strategy"
+    ],
+    "source": "教材 P161-163（第7章第4节）",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_26123ba2",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s3",
+    "name": "市场定位的依据",
+    "name_en": "",
+    "definition": "市场定位的依据是企业为在顾客心智中建立差异而选用的定位出发点。定位的根本目的是通过创造差异谋求竞争优势；企业会根据产品的特性、目标市场的需求以及竞争环境的变化，选择不同的定位依据，常见包括产品、价格/价值、竞争者、使用者、使用场景、产品类别等。",
+    "keywords": [
+      "定位依据",
+      "产品定位",
+      "价格价值定位",
+      "竞争者定位",
+      "使用者定位",
+      "使用场景定位",
+      "产品类别定位"
+    ],
+    "examples": [
+      "沃尔沃把安全性作为核心产品属性来定位，吸引注重安全的消费者（教材例）",
+      "高端价值定位：以高价格和高品质传递奢华、尊贵与独特价值"
+    ],
+    "non_examples": [
+      "不是市场定位的定义本身（那是含义与价值）",
+      "不是市场细分变量：细分变量用来切人群，定位依据用来选差异点",
+      "不是一句广告语，广告语只是定位的表达形式"
+    ],
+    "aliases": [
+      "定位依据",
+      "定位基础",
+      "市场定位基础"
+    ],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [
+      "positioning"
+    ],
+    "source": "教材 P156-157（第7章第3节；官方 docx 正文缺失，按教材补）",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_dd96b585",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s5",
+    "name": "数智化时代的品牌战略",
+    "name_en": "",
+    "definition": "数智化时代的品牌战略指企业在数智技术条件下重构品牌元素与品牌资产管理的战略，主要包括两方面：（1）数智化时代的品牌新元素——智能客服、虚拟代言人等新兴元素成为品牌与消费者互动的重要纽带，品牌资产的构建不再只依赖名称、标志等传统元素；（2）数智化时代的品牌战略调整。",
+    "keywords": [
+      "数智化品牌战略",
+      "智能客服",
+      "虚拟代言人",
+      "品牌新元素",
+      "品牌资产"
+    ],
+    "examples": [
+      "天猫精灵：把品牌从电商延伸到智能硬件，并借助人工智能与大数据提供更贴合需求的品牌体验（教材例）"
+    ],
+    "non_examples": [
+      "不是数智化时代的市场营销：那节讲 STP 的精准化、聚焦化、情感化",
+      "不是单纯上线小程序或做直播，渠道变化不等于品牌战略调整"
+    ],
+    "aliases": [
+      "数智化品牌战略",
+      "数字化品牌战略"
+    ],
+    "difficulty": 3,
+    "competencies": [
+      "品牌与定位",
+      "数据与效果"
+    ],
+    "decisions": [
+      "brand_strategy"
+    ],
+    "source": "教材 P164-166（第7章第5节；官方 docx 正文缺失，按教材补）",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_cb411063",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "细分市场的原则",
+    "name_en": "",
+    "definition": "有效的市场细分需满足四条原则：（1）可衡量性：细分市场的规模与购买力能够被测量；（2）可实现性：企业有能力进入并服务该市场；（3）可盈利性：市场容量足以带来利润；（4）可区分性：不同细分市场对营销组合的反应存在明显差异。",
+    "keywords": [
+      "可衡量性",
+      "可实现性",
+      "可盈利性",
+      "可区分性",
+      "细分原则"
+    ],
+    "examples": [
+      "某细分人群规模无法测量，就违反可衡量性，不能作为决策依据"
+    ],
+    "non_examples": [
+      "不是细分变量：变量回答「按什么切」，原则回答「切得对不对」"
+    ],
+    "aliases": [
+      "有效细分标准",
+      "细分原则"
+    ],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [],
+    "source": "教材第7章第1节（官方知识点表格未列，正文有；口径待老师确认）",
+    "status": "draft",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_4421c820",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "市场细分的内涵",
+    "name_en": "",
+    "definition": "市场细分是企业根据自身条件和营销意图，以消费需求的某些特征或变量为依据，区分具有不同需求的顾客群体的过程。经过市场细分所形成的具有相同需求的顾客群体称为细分市场或分市场、子市场。在同类产品市场上，同一细分市场的顾客需求具有较多的共性，不同细分市场之间的需求具有明显的差异性，企业应明确有多少细分市场及各细分市场的主要特征。",
+    "keywords": [
+      "市场细分"
+    ],
+    "examples": [],
+    "non_examples": [
+      "把同一需求的人群硬拆成两个细分市场：细分的前提是需求确有差异，不是切小块就算",
+      "把细分等同于给产品分类：产品分类看功能属性，市场细分看顾客需求"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_2249a576",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "市场细分的理论依据",
+    "name_en": "",
+    "definition": "顾客需求的异质性是市场细分的内在依据。顾客需求千差万别并不断变化，即顾客需要、欲望及购买行为呈现异质性，使得顾客需求的满足呈现差异性。",
+    "keywords": [
+      "细分依据"
+    ],
+    "examples": [],
+    "non_examples": [
+      "把「需求异质性」理解成「顾客越多差异越大」：异质性讲的是需求结构不同，不是人数多少",
+      "把「竞争激烈」当作细分依据：竞争结构属于营销环境分析，不是细分的内在依据"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_79318caf",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "市场细分变量",
+    "name_en": "",
+    "definition": "市场细分变量是企业用来把整体市场切成不同顾客群体的依据变量。消费者市场主要有地理、人口、心理、行为四类；组织市场与国际市场另有各自变量。",
+    "keywords": [
+      "细分变量"
+    ],
+    "examples": [],
+    "non_examples": [
+      "按行业分类（如「餐饮业」「美妆业」）划分市场：行业是市场边界，不是从顾客需求出发的切分依据",
+      "按企业自己的产品线划分市场：那是产品结构，不是细分"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_9d991cff",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "市场细分战略的产生和发展",
+    "name_en": "",
+    "definition": "企业大批量生产、分销品种规格单一的产品，目的是降低生产和分销成本，谋求价格优势。大量化营销的市场条件是卖方市场，消费者对价格敏感。",
+    "keywords": [
+      "市场细分战略"
+    ],
+    "examples": [],
+    "non_examples": [
+      "把「产品差异化营销阶段」当成市场细分：那一阶段仍是同一套营销面向所有顾客，只是提供更多品种让顾客挑",
+      "认为大量化营销的出现是因为消费者需求多样：它成立的条件恰恰是卖方市场且需求相对同质"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_1ccf1bd3",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s3",
+    "name": "市场定位的含义与价值",
+    "name_en": "",
+    "definition": "市场定位也称产品定位或竞争性定位，是企业为了使自己生产或销售的产品获得稳定的销量，而从多个方面为产品塑造出一定的特色，树立与众不同的市场形象，以求在顾客心目中形成一种特殊的偏好，使该产品在细分市场上占据强有力的竞争地位。",
+    "keywords": [
+      "市场定位"
+    ],
+    "examples": [],
+    "non_examples": [
+      "把定位理解为给产品加功能或换包装：定位改的是顾客心里的位置，不是产品规格",
+      "把「卖得贵」当成定位：高价只是价格策略，顾客若不认为它对应某种独特价值，就不构成定位"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_a4ac7375",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s4",
+    "name": "品牌的内涵与作用",
+    "name_en": "",
+    "definition": "品牌是一个名称、术语、标记、符号或设计，或是它们的组合，用以识别一个销售者或一群销售者的产品或服务，并使之同竞争对手的产品和服务区别开来。",
+    "keywords": [
+      "品牌"
+    ],
+    "examples": [],
+    "non_examples": [
+      "把商标等同于品牌：商标是法律概念，品牌是顾客心智中的识别与联想",
+      "认为注册了名字就有品牌：没有顾客认知与联想，那只是一个名称"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_87b6fd28",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s4",
+    "name": "品牌的类型与层次",
+    "name_en": "",
+    "definition": "从品牌归属即品牌所有者角度，可以将品牌分为制造商品牌和零售商品牌。按照品牌的市场地位，可以将品牌分为领导品牌、强势品牌和弱势品牌。按照品牌在市场上存在的时间，可以将品牌分为老字号品牌和新品牌。",
+    "keywords": [
+      "品牌类型",
+      "品牌层次"
+    ],
+    "examples": [],
+    "non_examples": [
+      "把「产品品牌/企业品牌/集团品牌」三层次与「制造商品牌/零售商品牌」两类混为一谈：前者按结构层次分，后者按品牌归属分",
+      "把「领导品牌/强势品牌/弱势品牌」当作层次：那是按市场地位分类，不涉及结构层级"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_80ce761a",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s5",
+    "name": "数智化时代的市场营销",
+    "name_en": "",
+    "definition": "数智化时代的市场营销指企业借助数据与智能技术，使市场细分更精准、目标市场更聚焦、市场定位更情感化。",
+    "keywords": [
+      "数智化时代的STP"
+    ],
+    "examples": [],
+    "non_examples": [
+      "把「上小程序、开直播」当成数智化营销：渠道线上化不等于 STP 三件事的做法变了",
+      "认为数智化只是投放更准：它改变的是细分、目标选择与定位本身"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合",
+      "数据与效果"
+    ],
+    "decisions": [],
+    "source": "E:\\Documents\\GitHub\\learning-agent\\resources\\《市场营销学》（第5版）数字资源（不含课件）\\第7章数字资源\\第7章 知识点与关键词.docx",
+    "status": "reviewed",
+    "parent_id": null
+  },
+  {
+    "id": "kp_ch07_seg_consumer",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "消费者市场细分变量",
+    "name_en": "",
+    "definition": "消费者市场用四类变量细分：地理变量（城市规模、地形气候、交通条件、人口密度）、人口变量（年龄、性别、收入、职业、教育、家庭规模与生命周期、宗教、民族）、心理变量（生活方式、个性）、行为变量（购买时机、追求利益、使用者情况、使用率、品牌忠诚度、待购阶段、对产品的态度）。",
+    "keywords": [
+      "地理细分",
+      "人口细分",
+      "心理细分",
+      "行为细分"
+    ],
+    "examples": [
+      "按人口变量把护肤品市场切成 25-35 岁城市女性"
+    ],
+    "non_examples": [
+      "把整个市场当作一个人群，不做任何变量区分"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_79318caf"
+  },
+  {
+    "id": "kp_ch07_seg_org",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "组织市场细分变量",
+    "name_en": "",
+    "definition": "组织市场细分沿用部分消费者市场变量（地理因素、追求利益、使用率、品牌忠诚度、待购阶段、对产品的态度），另以最终用户和客户规模作为常用变量；产业用户在采购规模上的差别通常远大于消费者市场。",
+    "keywords": [
+      "组织市场细分",
+      "最终用户",
+      "客户规模"
+    ],
+    "examples": [
+      "按采购规模把客户分成大客户与小客户并配不同制度"
+    ],
+    "non_examples": [
+      "只按客户所在行业细分，忽略采购规模差异"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_79318caf"
+  },
+  {
+    "id": "kp_ch07_seg_intl",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s1",
+    "name": "国际市场细分变量",
+    "name_en": "",
+    "definition": "国际市场细分通常使用地理、经济、政治法律、文化四类变量。",
+    "keywords": [
+      "国际市场细分",
+      "经济变量",
+      "文化变量"
+    ],
+    "examples": [
+      "进入东南亚市场前按经济发展水平与文化距离筛国家"
+    ],
+    "non_examples": [
+      "把海外市场当成一个同质整体"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "市场与消费者洞察",
+      "数据与效果"
+    ],
+    "decisions": [],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_79318caf"
+  },
+  {
+    "id": "kp_ch07_target_evaluate",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s2",
+    "name": "评估细分市场",
+    "name_en": "",
+    "definition": "评估细分市场有两个依据：细分市场的吸引力（外在条件）与企业的目标和资源（内在条件）。",
+    "keywords": [
+      "评估细分市场",
+      "细分市场吸引力"
+    ],
+    "examples": [
+      "某细分市场增长快但企业缺渠道资源，评估后放弃"
+    ],
+    "non_examples": [
+      "只看市场规模，不看企业自身资源"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "target_selection"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_929b6ddd"
+  },
+  {
+    "id": "kp_ch07_target_select",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s2",
+    "name": "选择目标市场",
+    "name_en": "",
+    "definition": "目标市场是企业决定为之服务的、具有共同需要和特点的购买者群体。选择时要考虑进入的业务领域与地理区域，可采用五种市场覆盖模式。",
+    "keywords": [
+      "选择目标市场",
+      "市场覆盖模式"
+    ],
+    "examples": [
+      "企业决定只做华东地区的连锁餐饮客户"
+    ],
+    "non_examples": [
+      "把全部消费者都当作目标市场"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "target_selection"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_929b6ddd"
+  },
+  {
+    "id": "kp_ch07_undifferentiated",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s2",
+    "name": "无差异营销",
+    "name_en": "",
+    "definition": "无差异营销是把整体市场视为一个同质市场，用一套产品、价格、渠道与促销覆盖全部顾客。",
+    "keywords": [
+      "无差异营销",
+      "大量营销"
+    ],
+    "examples": [
+      "一款可乐、一种包装、一套广告面向全国销售"
+    ],
+    "non_examples": [
+      "同一品牌下面向不同人群推出不同产品线"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "target_selection"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_929b6ddd"
+  },
+  {
+    "id": "kp_ch07_differentiated",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s2",
+    "name": "差异化营销",
+    "name_en": "",
+    "definition": "差异化营销是同时进入多个细分市场，为每个细分市场设计不同的产品与营销组合。",
+    "keywords": [
+      "差异化营销",
+      "多细分覆盖"
+    ],
+    "examples": [
+      "同一集团用主品牌、高端品牌、专业品牌分别覆盖不同人群"
+    ],
+    "non_examples": [
+      "把所有资源压在一个细分市场"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "target_selection"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_929b6ddd"
+  },
+  {
+    "id": "kp_ch07_concentrated",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s2",
+    "name": "集中化营销",
+    "name_en": "",
+    "definition": "集中化营销是把资源集中在一个或少数几个细分市场，用一套针对性方案深耕，以在局部取得强势地位。",
+    "keywords": [
+      "集中化营销",
+      "密集性营销"
+    ],
+    "examples": [
+      "企业只做儿童护眼灯，把这个细分做到头部"
+    ],
+    "non_examples": [
+      "资源有限却同时铺开多个细分市场"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "target_selection"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_929b6ddd"
+  },
+  {
+    "id": "kp_ch07_target_factors",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s2",
+    "name": "选择目标市场营销战略的考虑因素",
+    "name_en": "",
+    "definition": "选择覆盖方式需考虑六方面：企业资源、产品的同质性、产品所处的生命周期阶段、市场的类同性、竞争对手的战略、目标市场选择中的社会责任。",
+    "keywords": [
+      "企业资源",
+      "产品同质性",
+      "生命周期阶段",
+      "市场类同性",
+      "社会责任"
+    ],
+    "examples": [
+      "产品处在导入期且资源有限时倾向集中化营销"
+    ],
+    "non_examples": [
+      "不看资源与竞争，一律选差异化营销"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "target_selection"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_929b6ddd"
+  },
+  {
+    "id": "kp_ch07_pos_ries",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s3",
+    "name": "里斯与特劳特的定位方式",
+    "name_en": "",
+    "definition": "里斯和特劳特提出的三种定位打法：领导者定位（占据第一）、创新式定位（开辟新品类或新位置）、反定位（站到对手的对立面）。",
+    "keywords": [
+      "领导者定位",
+      "创新式定位",
+      "反定位"
+    ],
+    "examples": [
+      "新品牌宣称「非浓缩」站到主流浓缩洗衣液的对立面"
+    ],
+    "non_examples": [
+      "与领导者用同一种说法争同一个位置"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [
+      "positioning"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_685a95c5"
+  },
+  {
+    "id": "kp_ch07_pos_competitive",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s3",
+    "name": "竞争性定位方式",
+    "name_en": "",
+    "definition": "竞争性定位分为避强定位与对抗定位：避强是避开强者的强势领域、另立一个位置；对抗是正面争夺同一位置。",
+    "keywords": [
+      "避强定位",
+      "对抗定位"
+    ],
+    "examples": [
+      "避开头部品牌的强卖点，从它没占住的角度切入"
+    ],
+    "non_examples": [
+      "资源不足却直接与行业领导者正面拼同一诉求"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [
+      "positioning"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_685a95c5"
+  },
+  {
+    "id": "kp_ch07_pos_timing",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s3",
+    "name": "初次定位与重新定位",
+    "name_en": "",
+    "definition": "初次定位是企业进入市场时确立位置；重新定位是全部或局部调整、改变原有定位，使品牌与原有形象或竞争品牌区别开。",
+    "keywords": [
+      "初次定位",
+      "重新定位"
+    ],
+    "examples": [
+      "老品牌从「低价」转向「性价比+专业」的心智调整"
+    ],
+    "non_examples": [
+      "只换包装或 logo 就宣称完成重新定位"
+    ],
+    "aliases": [],
+    "difficulty": 2,
+    "competencies": [
+      "品牌与定位"
+    ],
+    "decisions": [
+      "positioning"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_685a95c5"
+  },
+  {
+    "id": "kp_ch07_brand_branding",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s4",
+    "name": "品牌化战略",
+    "name_en": "",
+    "definition": "品牌化战略回答的问题是：企业是否需要给产品建立一个品牌。",
+    "keywords": [
+      "品牌化战略",
+      "有无品牌"
+    ],
+    "examples": [
+      "农产品散装销售不建品牌，改为礼盒装并注册商标"
+    ],
+    "non_examples": [
+      "所有产品都必须建品牌"
+    ],
+    "aliases": [],
+    "difficulty": 3,
+    "competencies": [
+      "品牌与定位",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "brand_strategy"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_1a1dc996"
+  },
+  {
+    "id": "kp_ch07_brand_naming",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s4",
+    "name": "品牌名称战略",
+    "name_en": "",
+    "definition": "品牌名称战略决定不同种类、规格、质量的产品用不同品牌名还是统一名称，有四种选择：个别品牌名称、统一的家族品牌名称、分类的家族品牌名称、企业名称与个别品牌并用。",
+    "keywords": [
+      "个别品牌名称",
+      "家族品牌",
+      "分类家族品牌",
+      "企业名与个别品牌并用"
+    ],
+    "examples": [
+      "同一企业的不同产品线各用一个品牌，避免一损俱损"
+    ],
+    "non_examples": [
+      "所有产品共用一个品牌名，风险集中"
+    ],
+    "aliases": [],
+    "difficulty": 3,
+    "competencies": [
+      "品牌与定位",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "brand_strategy"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_1a1dc996"
+  },
+  {
+    "id": "kp_ch07_brand_extension",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s4",
+    "name": "品牌延伸战略",
+    "name_en": "",
+    "definition": "品牌延伸也称品牌扩展，指企业利用成功品牌的声誉来推出改良产品或新产品。",
+    "keywords": [
+      "品牌延伸",
+      "品牌扩展"
+    ],
+    "examples": [
+      "用已成功的成人服装品牌推出童装线"
+    ],
+    "non_examples": [
+      "老品牌的核心联想无法迁移到新品类时仍强行延伸"
+    ],
+    "aliases": [],
+    "difficulty": 3,
+    "competencies": [
+      "品牌与定位",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "brand_strategy"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_1a1dc996"
+  },
+  {
+    "id": "kp_ch07_brand_reposition",
+    "chapter_id": "ch07",
+    "section_id": "ch7_s4",
+    "name": "品牌再定位战略",
+    "name_en": "",
+    "definition": "品牌再定位是全部或局部调整、改变品牌在市场上的原有定位，呈现出新的形象，目的是与原有品牌或竞争品牌区别开；决策时需权衡再定位成本与再定位后的收益。",
+    "keywords": [
+      "品牌再定位",
+      "再定位成本"
+    ],
+    "examples": [
+      "中高端品牌在潮流市场疲软后转向专业运动心智"
+    ],
+    "non_examples": [
+      "把品牌再定位当作改口号，不调整产品与渠道"
+    ],
+    "aliases": [],
+    "difficulty": 3,
+    "competencies": [
+      "品牌与定位",
+      "营销策略与组合"
+    ],
+    "decisions": [
+      "brand_strategy"
+    ],
+    "source": "教材第7章（父知识点小点拆分，按 #2 方案 B）",
+    "status": "reviewed",
+    "parent_id": "kp_ch07_1a1dc996"
   }
 ]
