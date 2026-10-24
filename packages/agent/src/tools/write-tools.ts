@@ -4,8 +4,7 @@ import { asString, asStringArray, collect, sourceRefsOf, type ArtifactSpec } fro
 import type { ToolSpec } from './types.js'
 
 /**
- * 模型只认知识点中文名，不知道 `kp_*` 这类内部 id。让工具自己翻译：
- * 存进去的是 id，模型说的是人话，谁也不欠谁的。
+ * 模型只认知识点中文名，不知道 `kp_*` 这类内部 id；这里统一翻译成 id 再落库。
  */
 function resolveKpIds(context: Context, chapterId: string, value: unknown): string[] {
   const points = context.learningDb.listKpsByChapter(chapterId)
@@ -22,8 +21,7 @@ function resolveKpIds(context: Context, chapterId: string, value: unknown): stri
 }
 
 /**
- * 默认产物：模型直接写成页面。
- * 好不好在「怎么组织、怎么举例、怎么排版才讲得清」，那是模型擅长、模板不擅长的事。
+ * 默认产物：模型直接写成页面。怎么组织、怎么举例、怎么排版由模型决定，模板不介入。
  */
 const PAGE: ArtifactSpec = {
   type: 'page',

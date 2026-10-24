@@ -381,7 +381,7 @@ const REVIEW_STATUS_LABEL: Record<string, string> = {
 const EVIDENCE_LEVEL_LABEL: Record<string, string> = { auto: '自动', verified: '已核验', gold: '金标' }
 const MATCH_METHOD_LABEL: Record<string, string> = { rule: '规则匹配', llm: 'LLM 匹配', hybrid: '混合匹配', human: '人工匹配' }
 
-/** Mirrors news-lab's teachingReady gate, and never trusts an explicit candidate flag. */
+/** 审核门：candidate 不能为 true，且 status 与 evidenceLevel 都要在已审核集合内。 */
 function isReviewedMatch(match: Record<string, unknown>): boolean {
   return match.candidate !== true
     && REVIEWED_STATUS[str(match.reviewStatus)] === true

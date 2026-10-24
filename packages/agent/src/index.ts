@@ -121,10 +121,9 @@ const NEWS_PATTERN = /新闻|报道|资讯|文章/
 const STUDENT_NEWS_PATTERN = /https?:\/\/|报一条新闻|我(?:看|找)到一条新闻|这条新闻|这篇报道|最新(?:的)?(?:消息|新闻)|根据最新|用第\s*\d+\s*章.*(?:分析|出题)|分析.*新闻.*(?:出题|题目)/
 const SEARCH_NEWS_PATTERN = /搜一下|查一下|搜索.*(?:新闻|案例)|找.*(?:新闻|案例)|最新.*新闻|web\s*search/i
 /**
- * "Use the news to teach me X" / "analyse this with the news" — the user wants
- * the local library as teaching material rather than a fresh search or crawl.
- * Kept separate from STUDENT_NEWS_PATTERN so an explicit URL, "这条新闻" or
- * "搜一下" still wins and goes through the search/crawl path.
+ * "Use the news to teach me X": the local library is the teaching material, not
+ * a fresh search. Kept separate from STUDENT_NEWS_PATTERN so an explicit URL,
+ * "这条新闻" or "搜一下" still wins and takes the search/crawl path.
  */
 const NEWS_AS_MATERIAL_PATTERN = /(?:根据|结合|用|拿|参考).{0,12}(?:新闻|报道|资讯)|(?:新闻|报道|资讯).{0,8}(?:讲|分析|解释|说明)|(?:新闻|报道|资讯)(?:里|中)/
 const CASE_ENTITY_PATTERN = /胖东来|永辉|步步高/
@@ -394,9 +393,9 @@ export class AgentService extends Service implements AgentRuntime {
   }
 
   /**
-   * The conversational path: the team lead decides, dispatches members, reads
-   * course material itself, and writes the single reply. No step pipeline and no
-   * pre-selected material — see `runTeamTurn`.
+   * The conversational path: the agent reads material, writes artifacts as
+   * needed, and writes the single reply. No step pipeline, no pre-selected
+   * material — see `runTeamTurn`.
    */
   async handleConversation(input: HandleTurnInput, hooks?: TeamHooks): Promise<HandleTurnOutput> {
     const studentId = input.studentId
@@ -436,8 +435,7 @@ export class AgentService extends Service implements AgentRuntime {
       message: input.message,
       scopeOverride,
     })
-    // Conversation history is sent as messages, not folded into the system
-    // prompt. Current sessions are short; compaction is a later step.
+    // Conversation history is sent as messages, not folded into the system prompt.
     const history = this.db.listChatMessages(sessionId)
       .filter((item) => item.seq < userMessage.seq && (item.role === 'user' || item.role === 'assistant'))
       .map((item) => ({ role: item.role as 'user' | 'assistant', content: item.content }))

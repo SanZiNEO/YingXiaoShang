@@ -181,7 +181,7 @@ export function Empty({ children }: { children: ReactNode }) {
 
 /**
  * 模型写的页面只跑在沙箱里：禁脚本、禁同源、禁外链，只留内联样式。
- * 页面里的任何东西都进不了主界面，也就带不走学生数据。
+ * 页面内容进不了主界面，也就碰不到宿主数据。
  */
 const HTML_CSP = ["default-src 'none'", "style-src 'unsafe-inline'", 'img-src data:', 'font-src data:'].join('; ')
 

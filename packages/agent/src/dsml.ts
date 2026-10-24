@@ -1,9 +1,7 @@
 /**
- * DeepSeek 偶尔不按 JSON 的 tool_calls 返回，而是把工具调用写成一段正文
- * （DSML 标记，形如 `<｜｜DSML｜｜ calls>`）。这段标记必须当成工具调用解析，
- * 否则学生会在聊天里直接看到这堆乱码。
- *
- * 它有两种竖线：半角 `||` 和全角 `｜｜`，两种都要认。
+ * DeepSeek 偶尔不按 JSON 的 tool_calls 返回，而是把工具调用写成正文（DSML 标记，
+ * 形如 `<｜｜DSML｜｜ calls>`）。必须当成工具调用解析，否则学生会看到乱码。
+ * 标记有两种竖线：半角 `||` 和全角 `｜｜`，两种都要认。
  */
 const MARKER = '[|｜]{2}'
 const OPEN = `<${MARKER}DSML${MARKER}\\s*(?:tool_calls|calls)>`

@@ -5,12 +5,9 @@ import type { NewsSource, RawArticle, RawListItem } from './types.js'
 
 const BASE = 'https://socialbeta.com/'
 
-// Verified live 2026-10-18 with fetch + cheerio:
-// - the homepage exposes detail links as absolute
-//   https://socialbeta.com/article/<id> and .../campaign/<id> in both <a href>
-//   and hero <li data-href>;
-// - article pages use .tit_art / .info_art / .cont_art .content;
-// - campaign pages use .tit_cam / .info_cam / .cont_cam .content.
+// Selectors: the homepage exposes absolute .../article/<id> and .../campaign/<id>
+// links in both <a href> and hero <li data-href>; article pages use .tit_art /
+// .info_art / .cont_art .content, campaign pages .tit_cam / .info_cam / .cont_cam .content.
 export const socialbeta: NewsSource = {
   id: 'socialbeta',
 

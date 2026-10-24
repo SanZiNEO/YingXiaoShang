@@ -101,10 +101,9 @@ for (const guide of guides) {
   db.setState('resource', `guide/${guide.chapter_id}`, guide)
 }
 
-// Fresh installs must have textbook tags without running a manual pipeline.
-// Tagging is deterministic and offline by default; every row stays auto/draft.
-// CONTENT_TAGS_LLM=1 adds validated model pre-labels for blocks the rules
-// cannot ground, still auto/draft.
+// Fresh installs need textbook tags without a manual pipeline run: rules are
+// deterministic and offline, and every row stays auto/draft. CONTENT_TAGS_LLM=1
+// adds validated model pre-labels for blocks the rules cannot ground.
 let contentTagCount = 0
 const contentCoverage: Array<Record<string, unknown>> = []
 for (const chapter of chapters) {

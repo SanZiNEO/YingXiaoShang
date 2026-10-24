@@ -67,7 +67,7 @@ function markdownToBlocks(markdown: string): DocBlock[] {
 function questionDocument(content: unknown, markdown: string): string {
   const parsed = QuestionSetContentSchema.safeParse(content)
   if (!parsed.success || parsed.data.questions.length === 0) {
-    // Older question papers used this template before structured content existed.
+    // Fallback for question papers without structured content.
     const questionHeading = /^##\s+题目\s*$/m.exec(markdown)
     const answerHeading = /^##\s+答案与解析\s*$/m.exec(markdown)
     if (questionHeading && answerHeading && questionHeading.index < answerHeading.index) {

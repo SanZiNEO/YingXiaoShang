@@ -14,7 +14,7 @@ docs/
 ├── 10-long-term/                 # 长远产品/系统/评价设计（2 份）
 ├── 20-features/                  # 可独立推进的单点方案（3 份）
 ├── 30-research/                  # 外部项目与竞品调研（1 份）
-├── screenshots/                  # 界面截图
+├── screenshots/                  # 历史界面截图（早期 Web 版，当前只有桌面端）
 └── 90-archive/                   # 历史版本，已被取代
 ```
 
@@ -40,7 +40,7 @@ docs/
 | [`20-features/商科真实案例库-数据与项目方案-v0.1.md`](20-features/商科真实案例库-数据与项目方案-v0.1.md) | 新闻 → 案例卡 → 情景题的资产流水线 | 后续功能，不是 MVP 必做 |
 | [`20-features/知识点目录与按需读取-v0.1.md`](20-features/知识点目录与按需读取-v0.1.md) | 为什么去掉材料预取；system 只给知识点目录，正文由读工具按需取 | **当前已实现**，与 MVP §5.4 对应 |
 | [`30-research/参考项目清单-多智能体课堂与学习评价-v0.1.md`](30-research/参考项目清单-多智能体课堂与学习评价-v0.1.md) | 同类项目选型与差异化 | 不随代码更新 |
-| [`screenshots/`](screenshots/) | 界面截图与说明 | 图示用，不是规范 |
+| [`screenshots/`](screenshots/) | 早期 Web 版界面截图（历史记录，当前只提供桌面端） | 图示用，不是规范 |
 
 ## 4. 归档
 
@@ -65,7 +65,7 @@ docs/
 | 每轮写一条 episode | 每轮写 `turns`，状态写 `learning_states`，摘要写 `summary_ledger` |
 | 6 维能力 | MVP 先做 4 维（问题建构 / 证据与假设 / 决策与取舍 / 沟通与影响） |
 | Postgres + pgvector + Meilisearch | 当前本地 SQLite |
-| Web 优先 | 桌面端与网页版共用同一份 React 界面 |
+| Web 优先 | 只做桌面端（Electron） |
 | 多用户 | MVP 单学生本地库（`student_demo`） |
 
 ## 6. 维护规则

@@ -1599,10 +1599,9 @@ export default class LearningDb extends Service {
   }
 
   /**
-   * List student memory episodes. The two deterministic seed-student demo
-   * rows are kept in the table for provenance but excluded by default so chat
-   * compression cannot present them as real learning history. The filter
-   * matches the exact id + session pair, never a broad `demo_*` prefix.
+   * The two seed-student demo rows stay in the table for provenance but are
+   * excluded by exact id + session pair (never a `demo_*` prefix) so chat
+   * compression cannot present them as real learning history.
    */
   listMemoryEpisodes(
     studentId: string,
@@ -1850,19 +1849,10 @@ export default class LearningDb extends Service {
   }
 
   /**
-   * Merge duplicate knowledge points into one canonical id, remap every
-   * persisted reference, and keep old ids resolvable through kp_canonical_map.
-   *
-   * Two sources feed the merge:
-   *  1. Exact same-name rows within a chapter (deterministic, always applied).
-   *  2. `manualMerges`: an adjudicated old_id -> canonical_id alias map for
-   *     synonyms whose names differ (e.g. 情境因素 vs 影响消费者购买的情境因素).
-   *     Manual entries are validated: both rows must physically exist, must be
-   *     in the same chapter, and must not form a cycle. Genuine parent/child
-   *     concept hierarchy is never merged here.
-   *
-   * Idempotent: a second run finds no same-name group and every already
-   * collapsed manual old_id is physically gone (still resolvable via the map).
+   * Merge duplicate knowledge points into one canonical id, remap all persisted
+   * references, and keep old ids resolvable via kp_canonical_map. Manual merges
+   * must both exist in the same chapter and stay acyclic; parent/child hierarchy
+   * is never merged. Idempotent: a second run finds nothing left to collapse.
    */
   mergeDuplicateKps(
     manualMerges: ReadonlyArray<{ oldId: string; canonicalId: string }> = [],
@@ -1876,8 +1866,7 @@ export default class LearningDb extends Service {
       )
       .all() as Row[]
 
-    // Validate manual alias map up front so a bad mapping fails loudly instead
-    // of silently merging the wrong concept.
+    // Fail loudly on a bad alias map instead of silently merging the wrong concept.
     const physicalRow = (id: string): Row | undefined =>
       this.db.prepare('SELECT * FROM knowledge_points WHERE id=?').get(id) as Row | undefined
     const manualGroups: Array<{ canonicalId: string; oldIds: string[] }> = []
@@ -2009,9 +1998,7 @@ export default class LearningDb extends Service {
       }
     }
     this.transaction(() => {
-      // Collapse one set of duplicate rows into a single canonical point.
-      // Without forcedCanonicalId the canonical is the highest-ranked row;
-      // with it the adjudicated canonical always wins regardless of rank.
+      // Canonical is the highest-ranked row, or forcedCanonicalId when adjudicated.
       const mergeOneGroup = (points: KnowledgePoint[], forcedCanonicalId?: string): number => {
         if (points.length < 2) return 0
         const ranked = [...points].sort((left, right) => {
@@ -2123,11 +2110,7 @@ export default class LearningDb extends Service {
       + Math.round(number(row.confidence) * 100)
   }
 
-  /**
-   * Move knowledge-point tag rows from one key to another without silently
-   * deleting human review. Rejected rows are tombstones: they survive next to
-   * an accepted row and are only collapsed with another rejected duplicate.
-   */
+  /** Move tag rows from one key to another; human review is never silently dropped. */
   private remapTagKey(
     table: 'content_tags' | 'news_tags',
     ownerColumn: 'block_id' | 'article_id',
@@ -2155,8 +2138,7 @@ export default class LearningDb extends Service {
       const rowRejected = text(row.review_status) === 'rejected'
       const bestRejected = text(best.review_status) === 'rejected'
       if (rowRejected || bestRejected) {
-        // Preserve the rejection tombstone. Two rejected rows collapse to the
-        // stronger one; a rejected and an accepted row intentionally coexist.
+        // Tombstones: two rejected rows collapse to the stronger; accepted coexists.
         if (rowRejected && bestRejected && this.tagRowScore(row) <= this.tagRowScore(best)) {
           remove.run(text(row.id))
         } else {
@@ -2207,8 +2189,7 @@ export default class LearningDb extends Service {
       )
       if (bestRejected) {
         keep.add(number(bestRejected.rid))
-        // A draft must not shadow a rejected tombstone; reviewed rows may
-        // coexist with it because the rejection remains useful audit history.
+        // A draft must not shadow a rejected tombstone; a reviewed row may coexist.
         if (bestActive && this.tagRowScore(bestActive) > this.tagRowScore(bestRejected)) {
           keep.add(number(bestActive.rid))
         }
@@ -2348,16 +2329,10 @@ export default class LearningDb extends Service {
   }
 
   /**
-   * Cut a chapter over to freshly normalized blocks without discarding human
-   * review:
-   * 1. upsert the target blocks (old rows stay alive);
-   * 2. remap reviewed/adjudicated/published/rejected tags onto the canonical
-   *    target block when their evidence quote still locates there;
-   * 3. keep the old block and its tags when the quote cannot relocate, so it
-   *    can be re-reviewed instead of silently deleted;
-   * 4. record old-id -> canonical-id mappings before deleting stale blocks so
-   *    historical artifact citations remain resolvable;
-   * 5. delete only mapped stale blocks that no longer carry human review.
+   * Cut a chapter over to normalized blocks without losing human review: remap
+   * reviewed tags whose quote still locates, keep the old block otherwise, and
+   * record old -> canonical ids before deleting stale blocks so historical
+   * citations stay resolvable. Only unmapped, review-free blocks are deleted.
    */
   syncBlocksForChapter(
     chapterId: string,
@@ -2619,9 +2594,8 @@ export default class LearningDb extends Service {
   }
 
   /**
-   * Record block ids that were merged/dropped by normalization and remap the
-   * persisted references we can update. Old ids remain resolvable through
-   * block_canonical_map even after the fragment row is deleted.
+   * Record block ids merged/dropped by normalization and remap the references we
+   * can update; old ids stay resolvable via block_canonical_map.
    */
   recordBlockCanonicalMap(entries: BlockCanonicalMapping[]): number {
     if (entries.length === 0) return 0
@@ -2699,8 +2673,7 @@ export default class LearningDb extends Service {
           if (row && (HUMAN_REVIEW_STATUS[text(row.review_status)] === true || text(row.method) === 'human')) {
             continue
           }
-          // A human rejection is a tombstone for this semantic tag: regenerated
-          // drafts must not resurrect it, even under a new role/version/id.
+          // A human rejection blocks regenerated drafts even under a new role/version/id.
           const human = existingHuman.get(tag.block_id, tag.tag_type, tag.tag_key)
           if (human) continue
         }
@@ -2725,10 +2698,7 @@ export default class LearningDb extends Service {
     })
   }
 
-  /**
-   * Recompute automatic tags only. Rejected and reviewed rows are human
-   * decisions and must survive a re-seed or `tag-content --force`.
-   */
+  /** Delete auto tags only; reviewed/rejected rows must survive `tag-content --force`. */
   deleteAutoContentTags(chapterId?: string): number {
     const result = chapterId
       ? this.db
@@ -2885,8 +2855,7 @@ export default class LearningDb extends Service {
         const contentHash = createHash('sha256').update(article.content).digest('hex')
         const existing = findExisting.get(article.url) as Row | undefined
         if (existing && text(existing.content_hash) !== contentHash) {
-          // Body changed under the same URL: stale auto candidates no longer
-          // describe the text, so drop the drafts and let re-tagging run.
+          // Body changed under the same URL: drop stale auto drafts so re-tagging runs.
           const articleId = text(existing.id)
           dropMatches.run(articleId)
           dropTags.run(articleId)
@@ -2994,11 +2963,9 @@ export default class LearningDb extends Service {
     ideology: IdeologyMatch[],
     opts: { chapterId?: string } = {},
   ): void {
-    // Auto/rule refreshes may replace drafts, but must never overwrite or
-    // resurrect a human reviewed/adjudicated/published/rejected row. Rejected
-    // rows stay as tombstones so a re-run cannot turn them back into drafts.
-    // A chapter-scoped refresh only clears that chapter's drafts, so matching
-    // one chapter cannot wipe another chapter's candidates for the same article.
+    // Refreshes replace drafts only; human rows (incl. rejected tombstones) survive.
+    // A chapter-scoped refresh clears just that chapter's drafts, so matching one
+    // chapter cannot wipe another chapter's candidates for the same article.
     const chapterId = opts.chapterId
     const delMatches = this.db.prepare(
       chapterId
@@ -3120,9 +3087,8 @@ export default class LearningDb extends Service {
         )
       }
     })
-    // Only a whole-library pass marks the article as tagged; a chapter-scoped
-    // pass leaves the tag hash alone so the backfill still covers other chapters.
-    // An empty result also counts as attempted, so backfill cannot loop forever.
+    // Only a whole-library pass marks the article tagged, so a chapter-scoped pass
+    // leaves other chapters to the backfill; an empty result also counts as attempted.
     if (!chapterId) this.markNewsTagged(articleId)
   }
 
@@ -3722,10 +3688,7 @@ export default class LearningDb extends Service {
       })
   }
 
-  /**
-   * Remove only the precise mock pollution written by the old LLM plumbing
-   * test. Never touches user evidence, reviewed rows, or unrelated data.
-   */
+  /** Remove only the mock rows written by the LLM plumbing test; never touches user data. */
   cleanMockPollution(): { matches: number; tags: number; cache: number } {
     let matches = 0
     let tags = 0
@@ -3748,10 +3711,7 @@ export default class LearningDb extends Service {
     return { matches, tags, cache }
   }
 
-  /**
-   * Delete only questions created by the old plumbing test (`（测试 <n>）`)
-   * that have never been attempted. User-authored questions are untouched.
-   */
+  /** Delete only never-attempted questions tagged `（测试 <n>）` by the plumbing test. */
   cleanTestQuestions(): number {
     let deleted = 0
     this.transaction(() => {

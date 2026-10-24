@@ -5,7 +5,7 @@ import { DSML_OPEN_HINT, parseDsml } from './dsml.js'
 import { TextRetainer, formatRetentionNotice } from './output-retention.js'
 import { emptyPruneState, pruneToolResults, totalToolResultChars } from './tool-result-pruner.js'
 
-/** Tool results are budgeted in UTF-8 bytes, like DSH's output-retention library. */
+/** Tool results are budgeted in UTF-8 bytes. */
 const DEFAULT_TOOL_MAX_BYTES = 36_000
 
 /** Trigger old-result pruning once this turn carries more than this many code points. */
@@ -29,7 +29,7 @@ function retainToolOutput(output: string): { text: string; rawChars: number } {
   if (rawBytes <= maxBytes) return { text: output, rawChars }
 
   const recovery = (): string => '需要这部分就换更窄的参数重读，不要原样重试。'
-  // Reserve the worst-case notice first, exactly like dsh-spill-policy.
+  // Reserve the worst-case notice first so the notice itself stays inside the budget.
   const worstNotice = formatRetentionNotice(
     {
       scope: '工具结果',
@@ -119,8 +119,7 @@ export interface AgentLoopInput {
   maxTokens?: number
   /**
    * 程序维护的进度事实，每轮注入一次（只有一条，就地替换，不累积）。
-   * 借鉴 OpenHands / Cline 的 step state：模型反复读材料，往往是因为它不知道
-   * 自己已经走到第几步、还差什么没交。让状态由代码算，而不是让模型自己记。
+   * 模型反复读材料往往是因为不知道走到第几步、还差什么，所以状态由代码算。
    */
   status?: (state: LoopState) => string
   hooks?: AgentLoopHooks
@@ -167,13 +166,9 @@ function totalMessageChars(messages: ReadonlyArray<{ content: Array<Record<strin
 }
 
 /**
- * Tool-calling loop, mirroring dsh's shape: send tools → if the model asks for
- * tools, run them and feed the results back → repeat until it answers in text.
- * There is no template fallback: if the model never settles, this throws.
- *
- * Repeated identical calls (same name + same arguments) are served from the
- * call cache: the model sometimes asks twice while it re-reads its own plan,
- * and paying a second round trip for the same bytes is pure latency.
+ * Send tools → run requested calls → feed results back → repeat until the model
+ * answers in text; never settling throws. Identical calls (name + args) come
+ * from the cache: a second round trip for the same bytes is pure latency.
  */
 export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResult> {
   const maxRounds = input.maxRounds ?? 8
@@ -211,8 +206,8 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
    * the tool calls it asked for plus whatever prose came with them.
    */
   const request = async (round: number, schemas: ToolSchema[]): Promise<{ toolCalls: ToolCall[]; text: string }> => {
-    // DSH prunes the surface before re-measuring; here the surface is this
-    // turn's messages, so the same deterministic prune runs before each request.
+    // Prune before each request: the surface is this turn's messages, so the budget
+    // is measured on what is actually sent.
     pruneToolResults(messages, pruneState, turnToolMaxChars())
     const assembler = new BlockAssembler()
     /**
@@ -251,8 +246,8 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
     // 压住的尾巴如果是 DSML 标记就丢掉，否则补发出去。
     if (held.length > 0 && !DSML_OPEN_HINT.test(held)) emit({ type: 'text', text: held })
     const blocks = assembler.blocks()
-    // `blocks()` returns dsh's merge-extensible block union; tool calls are its
-    // own discriminated member, so this narrows to the documented shape.
+    // `blocks()` returns a merge-extensible block union; tool calls are one
+    // discriminated member, so narrow to that shape.
     const structured = blocks.filter((block) => block.type === 'tool-call') as ToolCall[]
     const rawText = blocks
       .map((block) => (block.type === 'text' ? block.text : ''))

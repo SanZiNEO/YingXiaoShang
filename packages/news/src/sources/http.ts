@@ -7,9 +7,8 @@ const REQUEST_INTERVAL_MS = 1_000
 const REQUEST_TIMEOUT_MS = 30_000
 
 /**
- * Per-source request gate. Sources are polite independently: each source
- * starts at most one request per second, while `p-limit(2)` in the pipeline
- * caps in-flight detail work.
+ * Per-source request gate: each source starts at most one request per second,
+ * while `p-limit(2)` in the pipeline caps in-flight detail work.
  */
 class RateLimiter {
   private lastStart = 0
@@ -41,7 +40,7 @@ export interface FetchOptions {
   source: string
   signal?: AbortSignal
   headers?: Record<string, string>
-  /** Ask the Playwright fallback for `document.body.innerText` instead of HTML. */
+  /** Request JSON: sets the Accept header and makes the Playwright fallback read `document.body.innerText`. */
   json?: boolean
 }
 
@@ -71,7 +70,7 @@ function decodeBody(buffer: Buffer, contentType: string | null): string {
   const charset = (headerCharset ?? metaCharset)?.toLowerCase()
   if (!charset || charset === 'utf-8' || charset === 'utf8') return buffer.toString('utf8')
   try {
-    // Linkshop still serves GB2312; WHATWG labels it as GBK.
+    // Linkshop serves GB2312; WHATWG labels it as GBK.
     return new TextDecoder(charset === 'gb2312' ? 'gbk' : charset).decode(buffer)
   } catch {
     return buffer.toString('utf8')
@@ -100,9 +99,9 @@ let browserPromise: Promise<Browser> | undefined
 let chromiumPromise: Promise<BrowserType> | undefined
 
 /**
- * Playwright is loaded on demand: the four bundled sources all work over plain
- * `fetch`, so a build without the Playwright package (or without its browsers)
- * must still start and refresh. Only the challenge-retry path needs it.
+ * Playwright is loaded on demand: the bundled sources work over plain `fetch`,
+ * so a build without Playwright (or its browsers) must still start and refresh.
+ * Only the challenge-retry path needs it.
  */
 function loadChromium(): Promise<BrowserType> {
   chromiumPromise ??= import('playwright')

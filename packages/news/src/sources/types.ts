@@ -1,8 +1,7 @@
 /**
- * Contract implemented by every news source adapter.
- *
- * `list()` returns lightweight list entries; `fetchDetail()` turns one entry
- * into the raw fields the normalizer needs. Adapters never touch the database.
+ * Contract implemented by every news source adapter. `list()` returns lightweight
+ * entries; `fetchDetail()` turns one entry into the raw fields the normalizer
+ * needs. Adapters never touch the database.
  */
 export interface NewsSource {
   readonly id: string

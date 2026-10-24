@@ -40,9 +40,8 @@ const DEFINITION_MARKERS = /是指|指的是|定义为|含义|集合|模式|过�
 const EXAMPLE_MARKERS = /例如|比如|举例|案例|如.*购买|如.*选择/
 
 /**
- * Widen a bare term match to its containing sentence. Textbook tags are used
- * as retrieval evidence downstream, and a lone term carries no teaching
- * content, so the stored span must be a sentence (or the whole block) instead.
+ * Widen a bare term match to its containing sentence: tags are retrieval evidence
+ * downstream, and a lone term carries no teaching content.
  */
 function expandToSentence(
   text: string,
@@ -301,11 +300,9 @@ function extractJsonArray(value: string): unknown[] {
 }
 
 /**
- * Optional structured pre-labeling for blocks the deterministic rules cannot
- * ground. The model may only choose a controlled KP from the same section and
- * must return a verbatim quote; every suggestion is re-located in the block
- * before it becomes an auto/draft tag. The model never creates gold/verified
- * evidence and never changes the coverage denominator.
+ * Optional model pre-labeling for blocks the rules cannot ground: a controlled KP
+ * from the same section plus a verbatim quote, re-located in the block before it
+ * becomes an auto/draft tag. Never gold/verified, never changes the denominator.
  */
 export async function tagContentBlocksWithLlm(
   blocks: ContentBlock[],

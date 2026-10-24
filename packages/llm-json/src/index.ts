@@ -31,9 +31,8 @@ export class StructuredCallError extends Error {
 }
 
 /**
- * Call the configured model with exactly one synthetic tool and return the
- * parsed tool arguments. DeepSeek has no JSON mode, so a tool call is the
- * structured-output contract.
+ * Call the configured model with exactly one synthetic tool and return the parsed
+ * arguments. DeepSeek has no JSON mode, so a tool call is the structured-output contract.
  */
 export async function callStructuredTool<T>(input: StructuredCallInput): Promise<T> {
   const route = input.route ?? DEFAULT_ROUTE

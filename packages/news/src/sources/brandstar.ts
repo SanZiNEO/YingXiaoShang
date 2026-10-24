@@ -39,10 +39,9 @@ function collectJsonLd($: CheerioAPI): unknown[] {
   return nodes
 }
 
-// Verified live 2026-10-18 with fetch + cheerio:
-// - the SSR homepage links /in-depth/<id> and /news/<id>;
-// - detail pages use .art-title, .art-sum, .art-body, plus JSON-LD Article
-//   nodes carrying datePublished and author.name.
+// Selectors: the SSR homepage links /in-depth/<id> and /news/<id>; detail pages
+// use .art-title, .art-sum, .art-body, plus JSON-LD Article nodes carrying
+// datePublished and author.name.
 export const brandstar: NewsSource = {
   id: 'brandstar',
 

@@ -353,9 +353,8 @@ export function buildChapterKnowledge(params: {
   for (const record of legacyRecords) {
     const official = officialForLegacy(record, officialRows, legacyById)
     const exactOfficial = officialByNorm.get(normalizeName(record.name))
-    // The official table already owns this concept. Its legacy record was
-    // merged into the official knowledge point above; emitting a second row
-    // is what created the ch04 same-name duplicates.
+    // The official table already owns this concept; emitting a second row is
+    // what created the ch04 same-name duplicates.
     if (exactOfficial) continue
     const parentId = official?.id ?? null
     const id = uniqueId(record.kp_id, usedIds)

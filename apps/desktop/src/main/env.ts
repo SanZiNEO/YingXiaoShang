@@ -2,8 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 /**
- * 读 .env。桌面端直接从仓库根/应用目录启动时不会自动带环境变量，
- * 而安装包用户把 key 写在 .env 里也期望生效；这里补上，已存在的环境变量优先。
+ * 读 .env 补进 process.env。Electron 启动时不自动加载 .env；已存在的变量优先。
  */
 export function loadDotEnv(roots: string[]): void {
   for (const root of roots) {

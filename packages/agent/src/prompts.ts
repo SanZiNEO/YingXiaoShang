@@ -2,13 +2,9 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 /**
- * Agent prompts are content, not code: they live as markdown under
- * `packages/agent/agents/` (copied verbatim from the course design) and are
- * shipped to the packaged app as `resources/prompts`.
- *
- * Search roots, in order:
- *   1. LEARNING_AGENT_PROMPTS_DIR  (explicit override)
- *   2. LEARNING_AGENT_PROMPT_ROOTS (`;`-separated, set by the desktop/web host)
+ * Prompts are content, not code: markdown under `packages/agent/agents/`, shipped
+ * as `resources/prompts`. Roots, in order: LEARNING_AGENT_PROMPTS_DIR, then
+ * LEARNING_AGENT_PROMPT_ROOTS (`;`-separated, set by the desktop/web host).
  */
 function roots(): string[] {
   const explicit = process.env.LEARNING_AGENT_PROMPTS_DIR ?? ''

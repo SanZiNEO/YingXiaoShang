@@ -1,9 +1,7 @@
 /**
- * Byte-budgeted text retention, ported from DSH `@deepseek-ai/dsh-output-retention`.
- *
- * The library owns only "what was kept, what was omitted"; the caller owns the
- * recovery words and any tool-specific framing. Text budgets are UTF-8 bytes so
- * a cut can never introduce a replacement character at the boundary.
+ * Byte-budgeted text retention. Budgets are UTF-8 bytes so a cut can never
+ * introduce a replacement character at the boundary. The library owns only
+ * "what was kept, what was omitted"; the caller owns the recovery wording.
  */
 
 /** How much content the retainer omitted. */

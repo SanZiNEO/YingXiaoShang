@@ -123,7 +123,7 @@ export class DeepSeekLlm {
     if (!response.ok) throw new Error(`DeepSeek API ${response.status}: ${await response.text()}`)
     if (!response.body) throw new Error('DeepSeek 没有返回流式响应')
 
-    // 真流式：边读边吐，界面才有可能在第一个字到达时就显示出来。
+    // 真流式：边读边吐，第一个字到达即可显示。
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
     let buffer = ''

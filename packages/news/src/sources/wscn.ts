@@ -45,10 +45,9 @@ function resolveSeedPath(): string {
   throw new Error(`WSCN seed file not found; looked in: ${candidates.join(', ')}`)
 }
 
-// Verified live 2026-10-18: the detail endpoint returns
-// {code: 20000, data: {content, content_short, display_time, author, ...}}.
-// display_time is Unix seconds. The seed file supplies list entries and the
-// fallback payload when the API is unavailable or returns a paywalled stub.
+// Detail endpoint returns {code: 20000, data: {content, content_short,
+// display_time, author, ...}}; display_time is Unix seconds. The seed file supplies
+// list entries and the fallback payload when the API is unavailable or paywalled.
 export const wscn: NewsSource = {
   id: 'wscn',
 

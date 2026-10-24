@@ -23,12 +23,9 @@ export interface ContentBlockNormalization {
 }
 
 /**
- * Turn parser fragments into teachable blocks:
- * - keyword-only lines are metadata, not content blocks;
- * - short heading fragments are merged into substantive paragraphs in the
- *   same section, so they can never inflate tag coverage.
- * Old fragment ids are returned in `mapping` so persisted citations can stay
- * resolvable after the fragment rows are removed.
+ * Turn parser fragments into teachable blocks: keyword-only lines are metadata,
+ * short headings merge into their section's paragraphs, and the old fragment ids
+ * come back in `mapping` so persisted citations stay resolvable.
  */
 export function normalizeContentBlocksWithMap(blocks: ContentBlock[]): ContentBlockNormalization {
   const groups = new Map<string, ContentBlock[]>()

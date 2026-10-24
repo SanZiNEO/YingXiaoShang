@@ -11,10 +11,9 @@ import type {
 } from '@learning-agent/shared'
 
 /**
- * Material layer for case lessons. Nothing in this file is a fixed lesson:
- * knowledge points are resolved from the course DB, evidence is recalled from
- * tagged textbook blocks or verified news sentences, and every quote is
- * checked against its source before it can become a citation.
+ * Material layer for case lessons: knowledge points come from the course DB,
+ * evidence from tagged textbook blocks or verified news sentences, and every
+ * quote is checked against its source before it can become a citation.
  */
 
 export interface MaterialDb {

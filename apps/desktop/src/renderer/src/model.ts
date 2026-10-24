@@ -117,7 +117,7 @@ export type SourceDetail =
 
 export type SessionStatus = 'active' | 'awaiting_confirmation' | 'awaiting_input' | 'new_artifact' | 'organized'
 
-/** Per-session summary rendered in the left rail; backend may omit it on older builds. */
+/** Per-session summary rendered in the left rail; the backend may omit it. */
 export interface SessionSummary {
   id: string
   title?: string

@@ -417,7 +417,7 @@ export const ArtifactSchema = z.object({
     'page',
     // 需要学生动手、动完手系统还要接着算的，才走结构化。
     'question_set',
-    // 旧管线（skills / research / bp / news-lab）仍在写这些类型，保留枚举。
+    // 结构化产物：研究设计、问卷、BP 大纲/章节、成长卡等。
     'research_design',
     'questionnaire',
     'bp_outline',
@@ -547,7 +547,6 @@ export const TurnStepSchema = z.object({
   input: z.record(z.string(), z.unknown()).default({}),
   outputSchema: z.string().default(''),
   /**
-   * Codex-style routing keeps read-heavy work parallel and write work serial.
    * `read` steps may run concurrently; `write` steps produce artifacts and run
    * one at a time in plan order.
    */
@@ -754,8 +753,7 @@ export const TurnRowSchema = z.object({
 /* ------------------------------------------------------------------ */
 
 /**
- * 一份由模型直接写成的 HTML 页面。右栏按沙箱 iframe 渲染，所以这份内容
- * 不需要后端再做任何转换——它就是最终形态。
+ * 模型直接写成的 HTML 页面；右栏按沙箱 iframe 渲染，无需后端再转换。
  */
 export const PageContentSchema = z.object({
   title: z.string().default(''),
@@ -852,10 +850,8 @@ export const NewsAnalysisContentSchema = z.object({
 })
 
 /**
- * Case-first lesson: every knowledge point starts with its definition, then
- * maps the definition onto concrete case evidence, then explains it through a
- * short student/mentor dialogue. This is the canonical shape for the
- * "定义先行 + 案例对话" presentation.
+ * 案例式课：每个知识点先给定义，再映射到案例证据，最后用师生对话解释
+ * （"定义先行 + 案例对话"）。
  */
 export const CaseStudyContentSchema = z.object({
   case: z.object({
@@ -878,7 +874,7 @@ export const CaseStudyContentSchema = z.object({
           quote: z.string(),
           sourceId: z.string().default(''),
           sourceTitle: z.string().default(''),
-          // Legacy rows predate typed evidence and were all news quotes.
+          // Untyped evidence rows are news quotes, hence the default.
           sourceType: z.enum(['kp', 'news', 'textbook', 'resource']).default('news'),
         }),
       ).default([]),
@@ -1005,8 +1001,8 @@ export interface KpIndex {
 
 /**
  * Canonical knowledge-point resolution: id, name, English name and aliases all
- * point at exactly one knowledge point. Consumers should resolve before using
- * a kp id/name from user text, tags, questions or persisted legacy rows.
+ * point at one knowledge point. Resolve before using a kp id/name from user
+ * text, tags, questions or stored rows.
  */
 export function createKpIndex(points: KnowledgePoint[]): KpIndex {
   const byId = new Map<string, KnowledgePoint>()

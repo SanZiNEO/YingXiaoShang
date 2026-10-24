@@ -5,11 +5,9 @@ import type { NewsSource, RawArticle, RawListItem } from './types.js'
 
 const BASE = 'http://www.linkshop.com/news/'
 
-// Verified live 2026-10-18 with fetch + cheerio:
-// - /news/ is GB2312 (decoded as GBK) and currently exposes 161 detail links
-//   matching /news/<id>.shtml;
-// - detail pages use article.page header h1, .info .author, .info .time, and
-//   the first article.page > section as the body.
+// Selectors: /news/ is GB2312 (decoded as GBK) and lists /news/<id>.shtml
+// detail links; detail pages use article.page header h1, .info .author,
+// .info .time, and the first article.page > section as the body.
 export const linkshop: NewsSource = {
   id: 'linkshop',
 

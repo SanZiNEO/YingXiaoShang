@@ -39,7 +39,7 @@ cp .env.example .env   # 填入 DEEPSEEK_API_KEY（可选：不填也能离线�
 产品名、home 变量、数据库文件名集中在
 `packages/shared/src/brand.ts`，改这一个文件即可换名。
 
-首次使用时初始化课程和演示学生。桌面与 Web 若要共享进度，请显式使用同一数据目录：
+首次使用时初始化课程和演示学生。桌面端与命令行脚本若要共享同一份进度，请显式指定同一数据目录：
 
 ```sh
 LEARNING_AGENT_HOME="$PWD/.learning-agent" pnpm run db:seed
@@ -89,22 +89,21 @@ pnpm run typecheck
 pnpm run build
 ```
 
-行为验收靠把服务真跑起来，用 `.env` 里的真实 key 走一轮，不靠脚本里的假模型：
+行为验收靠把桌面端真跑起来，用 `.env` 里的真实 key 走一轮，不靠脚本里的假模型：
 
 ```sh
 pnpm run db:seed      # 首次：灌课程数据
 pnpm run db:seed:student
-pnpm run web:dev      # 后端 + Web
-pnpm run dev:desktop  # 或直接开桌面端
+pnpm run dev:desktop
 ```
 
 此前 `scripts/test-*.ts` 那一批会在进程内塞一个返回固定字符串的假 `llm`，
-再断言这个假回复——测的是桩，不是产品，已经全部删除。要验证行为就把服务
+再断言这个假回复——测的是桩，不是产品，已经全部删除。要验证行为就把桌面端
 拉起来真跑一轮；`scripts/` 现在只留启动与打包用的工具。
 
 ## Run
 
-桌面端（推荐）：
+桌面端：
 
 ```sh
 pnpm run build:desktop
@@ -117,20 +116,9 @@ pnpm run dev:desktop
 - 中栏：唯一聊天主线，支持诊断、解释、案例、练习和产物附件
 - 右栏：可关闭的文档标签；按需打开产物、依据、过程、文件与任务概览
 
-Web 端（可长驻部署，复用同一份 React 界面）：
-
-```sh
-pnpm run web:build
-LEARNING_AGENT_HOME="$PWD/.learning-agent" pnpm run web:start
-# http://127.0.0.1:3081
-```
-
-Web 端默认只监听回环地址；要对外提供服务必须设置 `LEARNING_AGENT_ACCESS_TOKEN`，
-并且放在 HTTPS 反向代理之后。细节见 `apps/web/README.md`。
-
 容器部署不在当前 MVP 范围。
 
-旧版 `pnpm run dev:web` 仍保留，用于 DSH profile 调试，不是本产品 Web 入口。
+`pnpm run dev:web` 保留用于 DSH profile 调试，不是本产品的运行入口。
 
 ## Layout
 
@@ -150,10 +138,9 @@ packages/artifacts   产物落盘、模板渲染、MD/DOCX 导出
 packages/profile     档案、记忆、证据、前后测、成长卡
 packages/export      DOCX/Markdown export
 packages/api         LearningRemote (@Remote) service
-packages/ui          营小商 Web pages + client bundle
+packages/ui          DSH 客户端界面 bundle
 packages/bundle      cordis.patch.yml + four agent presets
 apps/desktop         Electron 三栏桌面端（主进程 IPC + React renderer）
-apps/web             Web 长驻服务：同一份 React 界面 + HTTP API
 pipeline/            TypeScript ingestion scripts
 profiles/learning-agent/  learning profile package + overrides
 ```

@@ -22,10 +22,9 @@ const MIN_CONTENT_LENGTH = 300
 const MAX_ARTICLES = 3
 
 /**
- * Deterministic local retrieval: no network, no model. Ranks the stored news
- * library against the chapter's knowledge-point vocabulary, then falls back to
- * the newest article so a chapter with no keyword hits still gets material to
- * analyse instead of an empty answer.
+ * Deterministic local retrieval: no network, no model. Ranks stored news against
+ * the chapter's vocabulary, then falls back to the newest article so a chapter
+ * with no keyword hits still gets material instead of an empty answer.
  */
 export function selectRelevantNews(
   db: Pick<LearningDb, 'listKpsByChapter' | 'listAllKps' | 'listNews'>,

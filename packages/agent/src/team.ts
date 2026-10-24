@@ -44,7 +44,7 @@ export interface TurnTrace {
   citations: number
   toolCalls: number
   artifacts: number
-  /** Character accounting by role, mirroring DSH's system/tools/message split. */
+  /** Character accounting by role: system / tools / messages. */
   context: {
     systemChars: number
     toolsChars: number
@@ -87,7 +87,7 @@ function environment(input: TeamTurnInput): string {
   const points = ctx.learningDb.listKpsByChapter(scope.chapterId)
   const sectionNames = new Map(sections.map((section) => [section.id, section.title]))
   // A catalog, not material: name + one-line definition. The body is loaded by
-  // read_kp / read_material, matching DSH's skill catalog (summaries only).
+  // read_kp / read_material, so the catalog must never be quoted.
   const catalog = points.map((point) => {
     const definition = Array.from(point.definition.replace(/\s+/g, ' ').trim())
     const short = definition.length > 60 ? `${definition.slice(0, 60).join('')}…` : definition.join('')
@@ -111,9 +111,8 @@ function environment(input: TeamTurnInput): string {
 }
 
 /**
- * Conversation history stays in messages, not in the system prompt — the same
- * shape as DSH's derived history. A leading assistant message is dropped so the
- * sequence always starts with a user turn.
+ * Conversation history stays in messages, not in the system prompt. A leading
+ * assistant message is dropped so the sequence always starts with a user turn.
  */
 function initialMessages(input: TeamTurnInput): AgentMessage[] {
   const history = [...input.history]
@@ -163,10 +162,9 @@ function forward(input: TeamTurnInput, agent: string, event: AgentLoopEvent): vo
 
 
 /**
- * Run one conversational turn: the agent reads course material when it needs to,
- * consults a playbook when the task calls for one, writes any artifact the
- * student asked for, and writes the single reply. Nothing here pre-selects
- * material or picks a role.
+ * One conversational turn: the agent reads material, consults a playbook and
+ * writes artifacts as needed, then writes the single reply. Nothing is
+ * pre-selected and no role is picked.
  */
 export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult> {
   const findings: TeamFinding[] = []
@@ -211,9 +209,7 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
     // 单代理要自己读材料、读手册、写产物，轮次给够；收口靠"程序告诉它走到哪一步了"。
     maxRounds: 10,
     maxTokens: 8192,
-    // 不强制写：学生没要产物的一轮，一段正文就是完整答复。
-    // 逼它写只会让「谢谢你」也变成一份附件。
-    // 它反复读材料，是因为不知道自己走到第几步。把事实摊开给它看。
+    // 不强制写：学生没要产物时，一段正文就是完整答复；逼它写会让「谢谢你」也变成附件。
     status: ({ calls, written }) => {
       const readCount = calls.filter((call) => READ_TOOL.has(call.name)).length
       const made = [...new Set(written)]

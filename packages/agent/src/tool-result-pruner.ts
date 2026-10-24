@@ -1,9 +1,7 @@
 /**
- * Deterministic middle pruning for old tool results, ported from DSH
- * `@deepseek-ai/dsh-compaction-tool-result-pruner`.
- *
- * The budget is counted in Unicode code points (not bytes) exactly like the
- * DSH pruner, so a retained boundary cannot split a surrogate pair.
+ * Deterministic middle pruning for old tool results. The budget is counted in
+ * Unicode code points (not bytes) so a retained boundary cannot split a
+ * surrogate pair.
  */
 
 export const PRUNE_MARKER = '\n\n[... tool result middle pruned ...]\n\n'

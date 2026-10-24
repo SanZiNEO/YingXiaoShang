@@ -88,8 +88,7 @@ export class NewsService extends Service {
   }
 
   /**
-   * DeepSeek Search API. The key is read lazily from the desktop settings.
-   * Search results are not persisted here; `searchAndIngest` does that.
+   * DeepSeek Search API. Results are not persisted here; `searchAndIngest` does that.
    */
   async webSearch(query: string, count = 5): Promise<WebSearchItem[]> {
     const key = this.apiKey()
@@ -271,10 +270,9 @@ export class NewsService extends Service {
   }
 
   /**
-   * Tag freshly ingested articles right away so a search result is analysable
-   * without waiting for the periodic backfill. Deterministic only: no model
-   * call, so this works without an API key. A missing matcher is not fatal —
-   * the periodic backfill covers the article later.
+   * Tag freshly ingested articles so a search result is analysable without waiting
+   * for the periodic backfill. Deterministic only, so it needs no API key; a missing
+   * matcher is not fatal because the backfill covers the article later.
    */
   private async tagArticles(articles: NewsArticle[]): Promise<void> {
     const matcher = this.ctx.get('matcher')

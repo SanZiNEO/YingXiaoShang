@@ -170,10 +170,8 @@ function hasStream(value: unknown): value is { stream: unknown } {
 const IDEOLOGY_REQUIREMENT_PREFIX = /^(举出|分析|说明|能够|培养|树立|认识|理解|掌握|通过|了解|引导|增强|深刻|正确|全面|强化|加深|明晰|学习|探究|介绍|讨论|运用|把握|体会|感受|明确|学会|提升)/
 
 /**
- * The ideology table mixes real 课程思政点 with the requirement sentences they
- * come from ("举出违背社会营销观的企业营销实例，剖析危害。") and source
- * documents ("中共中央办公厅《…》"). Only noun-phrase names can be matched as
- * points; anything else would surface as a nonsense "思政点".
+ * The ideology table mixes real 课程思政点 with requirement sentences
+ * ("举出…，剖析…") and source documents; only noun-phrase names can match.
  */
 function plausibleIdeologyPoint(name: string): boolean {
   const trimmed = name.trim()
@@ -183,9 +181,9 @@ function plausibleIdeologyPoint(name: string): boolean {
 }
 
 /**
- * Deterministic three-stage candidate generation: textbook tag inverted
- * recall, lexical char-bigram vector supplement (explicitly non-semantic),
- * then role/quality/diversity ranking. No model call and no network.
+ * Three-stage deterministic recall: textbook tag inverted index, char-bigram
+ * lexical supplement (non-semantic), then role/quality/diversity ranking.
+ * No model call, no network.
  */
 export function generateDeterministicMatches(
   db: LearningDb,
@@ -310,10 +308,9 @@ export function generateDeterministicMatches(
     sectionCounts.set(section, count + 1)
   }
 
-  // Ideology rows mix real points with textbook *requirements* ("举出…实例",
-  // "理解…") and source documents. Matching those by token overlap against a
-  // news article produces noise, so only plausible point names are considered
-  // and the evidence must hit at least two distinct name terms.
+  // Token overlap against news text is noisy for these rows; only plausible
+  // point names are considered and the evidence must hit at least two distinct
+  // name terms.
   const ideology: IdeologyMatch[] = []
   for (const point of db.listIdeology()) {
     if (!plausibleIdeologyPoint(point.name)) continue
@@ -351,9 +348,9 @@ export class Matcher extends Service {
   }
 
   /**
-   * Stored candidates only; no model call. If none exist (or refresh=true),
-   * runs the deterministic tag/lexical/rank pipeline and persists draft rows.
-   * This is the API teaching surfaces should use for "candidate, not answer".
+   * Stored candidates only; if none exist (or refresh=true) run the
+   * deterministic pipeline and persist draft rows. Teaching surfaces get a
+   * candidate, never an answer.
    */
   async candidates(
     articleId: string,
@@ -374,9 +371,9 @@ export class Matcher extends Service {
   }
 
   /**
-   * Whole-library auto tagging for articles whose text was never tagged (or
-   * changed since). Deliberately chapter-free: a backfilled article carries
-   * candidates from every chapter, so chapter-scoped surfaces can filter later.
+   * Whole-library auto tagging for articles never tagged (or changed since).
+   * Deliberately chapter-free: a backfilled article carries candidates from
+   * every chapter, so chapter-scoped surfaces filter later.
    */
   async backfill(limit = 20): Promise<{ processed: number; tagged: number; errors: number }> {
     const pending = this.ctx.learningDb.listNewsNeedingTags(limit)

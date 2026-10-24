@@ -22,7 +22,6 @@ lib/
 apps/desktop/out/
 apps/desktop/dist/
 apps/desktop/seed/
-apps/web/dist/
 *.tsbuildinfo
 packages/*/src/**/*.js
 packages/*/src/**/*.js.map
