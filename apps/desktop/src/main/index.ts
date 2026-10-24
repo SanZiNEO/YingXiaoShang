@@ -1,6 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu, shell, type OpenDialogOptions } from 'electron'
 import { Context } from '@deepseek-ai/cordis'
-import { homedir } from 'node:os'
 import { basename, dirname, extname, join } from 'node:path'
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
@@ -18,8 +17,9 @@ import { NewsService } from '@learning-agent/news'
 import { DeepSeekLlm } from './llm.js'
 import { loadDotEnv } from './env.js'
 import { SettingsStore } from './settings.js'
+import { defaultBounds, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, readWindowState, resolveAppHome, trackWindowState } from './window-state.js'
 
-/** The local demo identity. Every service call still receives it explicitly. */
+/** Local demo identity; every service call receives it explicitly. */
 const DEMO_STUDENT_ID = 'student_demo'
 
 let window: BrowserWindow | undefined
@@ -37,7 +37,7 @@ let settings: SettingsStore
 let llm: DeepSeekLlm
 
 async function initServices(): Promise<void> {
-  // 老师习惯把 key 写在 .env；Electron 不会自动读，这里补上（已存在环境变量优先）。
+  // Electron 不读 .env；这里补进 process.env，已有变量优先。
   loadDotEnv([
     process.cwd(),
     join(app.getAppPath(), '..', '..'),
@@ -48,9 +48,8 @@ async function initServices(): Promise<void> {
     join(process.resourcesPath, 'prompts'),
     join(app.getAppPath(), '..', '..', 'packages', 'agent'),
   ].join(';')
-  // Adding `productName` renamed Electron's userData directory, so settings
-  // written by an earlier build live under the package name. Carry them over
-  // once instead of silently losing the student's API key.
+  // `productName` changes Electron's userData dir; older settings sit under the
+  // package name. Copy once, otherwise the stored API key is lost.
   const settingsPath = join(app.getPath('userData'), 'settings.json')
   if (!existsSync(settingsPath)) {
     const legacyPath = join(app.getPath('appData'), '@learning-agent', 'desktop', 'settings.json')
@@ -61,10 +60,9 @@ async function initServices(): Promise<void> {
   }
   settings = new SettingsStore(settingsPath)
   llm = new DeepSeekLlm(() => settings.read())
-  const appHome = process.env.LEARNING_AGENT_HOME || join(homedir(), '.learning-agent')
-  // A packaged build ships a seeded database (electron-builder `extraResources`,
-  // so it sits beside app.asar). Copy it on first run so the app opens with
-  // chapters, textbook tags, and news instead of an empty schema.
+  const appHome = resolveAppHome()
+  // Packaged builds ship a seeded database via electron-builder `extraResources`,
+  // so it sits beside app.asar. Copy it on first run or the schema starts empty.
   const dbPath = join(appHome, 'data', 'learning.db')
   if (!existsSync(dbPath)) {
     const seedPath = [
@@ -109,11 +107,16 @@ function startNewsAutomation(): void {
 }
 
 function createWindow(): void {
+  // 上次关闭时的位置；显示器被拔掉时 readWindowState 会返回 undefined。
+  const saved = readWindowState()
+  const bounds = saved ?? defaultBounds()
   window = new BrowserWindow({
-    width: 1480,
-    height: 940,
-    minWidth: 1080,
-    minHeight: 700,
+    x: bounds.x,
+    y: bounds.y,
+    width: bounds.width,
+    height: bounds.height,
+    minWidth: MIN_WINDOW_WIDTH,
+    minHeight: MIN_WINDOW_HEIGHT,
     title: '营小商',
     backgroundColor: '#f7f7f5',
     webPreferences: {
@@ -123,6 +126,8 @@ function createWindow(): void {
       sandbox: false,
     },
   })
+  trackWindowState(window)
+  if (saved?.maximized) window.maximize()
   window.on('closed', () => {
     window = undefined
   })
@@ -366,7 +371,7 @@ async function invoke(method: string, input: unknown): Promise<unknown> {
 }
 
 /**
- * 学生只该看到可执行的中文提示；上游英文栈留在日志里。
+ * 只把可执行的中文提示交给界面；上游英文栈留在日志里。
  */
 function friendlyError(error: unknown): Error {
   const raw = error instanceof Error ? error.message : String(error)

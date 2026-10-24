@@ -35,6 +35,8 @@ function isPage(artifact: Artifact): boolean {
 }
 
 export interface WorkspaceProps {
+  fullscreen: boolean
+  onToggleFullscreen: () => void
   tabs: DocTab[]
   activeId?: string
   artifacts: Artifact[]
@@ -274,6 +276,7 @@ function SourceView({ source }: { source: SourceDetail }) {
 
 export function Workspace(props: WorkspaceProps) {
   const {
+    fullscreen, onToggleFullscreen,
     tabs, activeId, artifacts, attemptsByArtifact, citations, citationLabels, kpNames, capabilities, chapters,
     ledger, newsStatus, snapshot, turns,
     onActivate, onClose, onNew, onOpenLocal, onOpenArtifact, onOpenCitation, onSubmitSet, onExport, onReveal,
@@ -281,7 +284,6 @@ export function Workspace(props: WorkspaceProps) {
   } = props
   const [menuOpen, setMenuOpen] = useState(false)
   const [exportMenuOpen, setExportMenuOpen] = useState(false)
-  const [fullscreen, setFullscreen] = useState(false)
   const tabBarRef = useRef<HTMLDivElement>(null)
   const active = tabs.find((tab) => tab.id === activeId)
   const artifact = active ? artifactOf(active, artifacts) : undefined
@@ -362,7 +364,7 @@ export function Workspace(props: WorkspaceProps) {
       >
         <QuoteIcon size={14} />
       </button>
-      <button type="button" title={fullscreen ? '还原' : '全屏'} aria-label={fullscreen ? '还原' : '全屏'} onClick={() => setFullscreen((value) => !value)} style={iconActionStyle}>
+      <button type="button" title={fullscreen ? '还原' : '全屏'} aria-label={fullscreen ? '还原' : '全屏'} onClick={onToggleFullscreen} style={iconActionStyle}>
         <ExpandIcon size={14} />
       </button>
     </div>
@@ -370,8 +372,8 @@ export function Workspace(props: WorkspaceProps) {
 
   return (
     <aside style={{
-      width: fullscreen ? '100vw' : 460,
-      flex: fullscreen ? '1 1 auto' : '0 0 460px',
+      width: fullscreen ? '100vw' : '100%',
+      height: '100%',
       position: fullscreen ? 'fixed' : 'relative',
       inset: fullscreen ? 0 : undefined,
       zIndex: fullscreen ? 40 : 1,
@@ -380,6 +382,7 @@ export function Workspace(props: WorkspaceProps) {
       display: 'flex',
       flexDirection: 'column',
       minWidth: 0,
+      overflow: 'hidden',
     }}>
       <div ref={tabBarRef} style={{ display: 'flex', alignItems: 'center', gap: 4, borderBottom: `1px solid ${COLORS.border}`, padding: '6px 8px', overflowX: 'auto' }}>
         {tabs.map((tab) => (

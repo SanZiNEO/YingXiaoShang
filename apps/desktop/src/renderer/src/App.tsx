@@ -41,6 +41,20 @@ import { locateSpan } from '@learning-agent/shared'
 import { Button, COLORS, Empty, Tag } from './ui'
 import { MarkdownView } from './markdown'
 import { Workspace } from './workspace'
+import { DragHandle } from './layout/DragHandle'
+import { useViewportWidth } from './layout/useViewportWidth'
+import {
+  CENTER_MIN,
+  SIDEBAR_AUTO_COLLAPSE,
+  SIDEBAR_DEFAULT,
+  SIDEBAR_MAX,
+  SIDEBAR_MIN,
+  WORKSPACE_DEFAULT_RATIO,
+  WORKSPACE_MAX_RATIO,
+  WORKSPACE_MIN,
+  clampWidth,
+  computeColumns,
+} from './layout/columns'
 import { CHAPTER_SHORT, chapterText, phaseLabel } from './labels'
 import {
   ArtifactIcon,
@@ -89,13 +103,65 @@ const EMPTY_LEDGER: LedgerStatus = {
   counts: { summarized: 0, pending: 0, stale: 0, failed: 0 },
 }
 
+const SIDEBAR_STORAGE_KEY = 'yingxiaoshang.layout.sidebar'
+const WORKSPACE_STORAGE_KEY = 'yingxiaoshang.layout.workspace'
+
+type WorkspacePref = { ratio: number } | { px: number }
+
+function readNumber(key: string, fallback: number): number {
+  try {
+    const raw = window.localStorage.getItem(key)
+    const value = raw === null ? Number.NaN : Number(raw)
+    return Number.isFinite(value) ? value : fallback
+  } catch {
+    return fallback
+  }
+}
+
+function persistNumber(key: string, value: number): void {
+  try {
+    window.localStorage.setItem(key, String(value))
+  } catch {
+    // 存储被禁用时保持内存态即可。
+  }
+}
+
+function readWorkspacePref(): WorkspacePref {
+  try {
+    const raw = window.localStorage.getItem(WORKSPACE_STORAGE_KEY)
+    if (raw) {
+      const parsed: unknown = JSON.parse(raw)
+      if (parsed && typeof parsed === 'object') {
+        const record = parsed as Record<string, unknown>
+        if (typeof record.ratio === 'number' && Number.isFinite(record.ratio)) {
+          return { ratio: Math.min(Math.max(record.ratio, 0), WORKSPACE_MAX_RATIO) }
+        }
+        if (typeof record.px === 'number' && Number.isFinite(record.px) && record.px > 0) {
+          return { px: record.px }
+        }
+      }
+    }
+  } catch {
+    // 旧值或损坏的 JSON 都回落到默认比例。
+  }
+  return { ratio: WORKSPACE_DEFAULT_RATIO }
+}
+
+function persistWorkspacePref(pref: WorkspacePref): void {
+  try {
+    window.localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(pref))
+  } catch {
+    // 存储被禁用时保持内存态即可。
+  }
+}
+
 const SUGGESTIONS = [
   '我想学消费者行为',
   '直播间为什么让人冲动消费',
   '给我出 3 道题',
 ]
 
-/** 工具名 → 学生看得懂的动作。进度提示不暴露内部实现。 */
+/** 一轮对话中主进程推给界面的进度事件。 */
 interface ChatStreamEvent {
   requestId: string
   agent: string
@@ -105,6 +171,7 @@ interface ChatStreamEvent {
   tool?: string
 }
 
+/** 工具名 → 用户可读的动作文案；进度提示不暴露内部工具名。 */
 const TOOL_LABEL: Record<string, string> = {
   'list_chapter_kps': '正在看本章有哪些知识点',
   'read_material': '正在取教材材料',
@@ -411,6 +478,16 @@ export function App() {
   const [contextOpen, setContextOpen] = useState(false)
   const [tabs, setTabs] = useState<DocTab[]>([])
   const [activeTab, setActiveTab] = useState<string>()
+  const layoutRef = useRef<HTMLDivElement | null>(null)
+  const viewport = useViewportWidth(layoutRef)
+  const [sidebarWidth, setSidebarWidth] = useState(() => readNumber(SIDEBAR_STORAGE_KEY, SIDEBAR_DEFAULT))
+  const [workspacePref, setWorkspacePref] = useState<WorkspacePref>(readWorkspacePref)
+  const [narrowExpanded, setNarrowExpanded] = useState(false)
+  const [workspaceFullscreen, setWorkspaceFullscreen] = useState(false)
+  const sidebarBaseRef = useRef(SIDEBAR_DEFAULT)
+  const sidebarLiveRef = useRef(sidebarWidth)
+  const workspaceBaseRef = useRef(WORKSPACE_MIN)
+  const workspaceLiveRef = useRef(WORKSPACE_MIN)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [apiKey, setApiKey] = useState('')
   const [hasApiKey, setHasApiKey] = useState(false)
@@ -428,6 +505,74 @@ export function App() {
   const sendRef = useRef<((text?: string) => Promise<void>) | undefined>(undefined)
   const studentId = student?.studentId
   const capabilities = window.learning.capabilities ?? { localFiles: true, revealFiles: true, downloadArtifacts: 'desktop' as const }
+
+  const sidebarCollapsed = viewport < SIDEBAR_AUTO_COLLAPSE ? !narrowExpanded : sidebarWidth === 0
+  const effectiveSidebar = sidebarCollapsed ? 0 : (sidebarWidth || SIDEBAR_DEFAULT)
+  const workspaceWidth = 'ratio' in workspacePref ? Math.round(viewport * workspacePref.ratio) : workspacePref.px
+  const workspaceOpen = view === 'chat' && tabs.length > 0 && !workspaceFullscreen
+  const cols = computeColumns(viewport, effectiveSidebar, workspaceOpen ? workspaceWidth : 0)
+  const workspaceMax = cols.workspace === 0 ? 0 : clampWidth(workspaceWidth, WORKSPACE_MIN, viewport * WORKSPACE_MAX_RATIO)
+  const gridTemplateColumns = `${cols.sidebar}px minmax(${cols.workspace === 0 ? 0 : CENTER_MIN}px, 1fr) minmax(0px, ${workspaceMax}px)`
+  const previousTabCount = useRef(tabs.length)
+
+  useEffect(() => {
+    const grew = tabs.length > previousTabCount.current
+    previousTabCount.current = tabs.length
+    if (grew && viewport > 0 && viewport < SIDEBAR_AUTO_COLLAPSE) setNarrowExpanded(false)
+    if (tabs.length === 0 && workspaceFullscreen) setWorkspaceFullscreen(false)
+  }, [tabs.length, viewport, workspaceFullscreen])
+
+  const startSidebarDrag = () => {
+    sidebarBaseRef.current = cols.sidebar > 0 ? cols.sidebar : SIDEBAR_DEFAULT
+    sidebarLiveRef.current = sidebarBaseRef.current
+  }
+
+  const dragSidebar = (dx: number) => {
+    const next = Math.round(clampWidth(sidebarBaseRef.current + dx, SIDEBAR_MIN, SIDEBAR_MAX))
+    sidebarLiveRef.current = next
+    setSidebarWidth(next)
+  }
+
+  const endSidebarDrag = () => {
+    persistNumber(SIDEBAR_STORAGE_KEY, sidebarLiveRef.current)
+  }
+
+  const resetSidebar = () => {
+    sidebarLiveRef.current = SIDEBAR_DEFAULT
+    setSidebarWidth(SIDEBAR_DEFAULT)
+    persistNumber(SIDEBAR_STORAGE_KEY, SIDEBAR_DEFAULT)
+  }
+
+  const toggleSidebar = () => {
+    if (viewport < SIDEBAR_AUTO_COLLAPSE) {
+      setNarrowExpanded((value) => !value)
+      return
+    }
+    const next = sidebarWidth === 0 ? SIDEBAR_DEFAULT : 0
+    sidebarLiveRef.current = next
+    setSidebarWidth(next)
+    persistNumber(SIDEBAR_STORAGE_KEY, next)
+  }
+
+  const startWorkspaceDrag = () => {
+    workspaceBaseRef.current = cols.workspace
+    workspaceLiveRef.current = cols.workspace
+  }
+
+  const dragWorkspace = (dx: number) => {
+    const next = Math.round(clampWidth(workspaceBaseRef.current - dx, WORKSPACE_MIN, viewport * WORKSPACE_MAX_RATIO))
+    workspaceLiveRef.current = next
+    setWorkspacePref({ px: next })
+  }
+
+  const endWorkspaceDrag = () => {
+    persistWorkspacePref({ px: workspaceLiveRef.current })
+  }
+
+  const resetWorkspace = () => {
+    setWorkspacePref({ ratio: WORKSPACE_DEFAULT_RATIO })
+    persistWorkspacePref({ ratio: WORKSPACE_DEFAULT_RATIO })
+  }
 
   const refreshAll = useCallback(async (sid?: string) => {
     if (!studentId) return
@@ -469,7 +614,7 @@ export function App() {
         const summaries = await window.learning.invoke('agent.sessions', { studentId }) as SessionSummary[]
         setSessionSummaries(Object.fromEntries(summaries.map((summary) => [summary.id, summary])))
       } catch {
-        // Older backends do not expose session summaries; the rail still shows titles.
+        // 摘要接口可能不存在；左侧栏仍能用标题。
         setSessionSummaries({})
       }
       if (sid) {
@@ -789,9 +934,11 @@ export function App() {
       const caseLesson = result.plan.steps.some((step) => step.agent === 'case')
         ? result.artifacts.find((artifact) => artifact.type === 'case_study')
         : undefined
+      const pageArtifact = result.artifacts.find((artifact) => artifact.type === 'page')
       if (questionSet) openArtifact(questionSet)
-      if (caseLesson) openArtifact(caseLesson)
-      if (!questionSet && !caseLesson
+      else if (caseLesson) openArtifact(caseLesson)
+      else if (pageArtifact) openArtifact(pageArtifact)
+      if (!questionSet && !caseLesson && !pageArtifact
         && (result.citations.length > 0 || result.plan.steps.some((step) => step.agent === 'knowledge'))) {
         openTab('evidence')
       }
@@ -1053,8 +1200,18 @@ export function App() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
-      <aside style={{ width: 208, flex: '0 0 208px', background: '#fbfbfa', borderRight: `1px solid ${COLORS.border}`, display: 'flex', flexDirection: 'column', padding: '14px 9px 9px' }}>
+    <div
+      ref={layoutRef}
+      style={{
+        display: 'grid',
+        gridTemplateColumns,
+        gridTemplateRows: 'minmax(0, 1fr)',
+        height: '100%',
+        overflow: 'hidden',
+        position: 'relative',
+      }}
+    >
+      <aside style={{ width: '100%', minWidth: 0, overflow: 'hidden', background: '#fbfbfa', borderRight: sidebarCollapsed ? 'none' : `1px solid ${COLORS.border}`, display: 'flex', flexDirection: 'column', padding: sidebarCollapsed ? 0 : '14px 9px 9px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 8px 14px' }}>
           <div style={{ width: 28, height: 28, borderRadius: 9, background: '#edf4f1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <BrandMark size={17} />
@@ -1130,7 +1287,7 @@ export function App() {
         </button>
       </aside>
 
-      <main style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+      <main style={{ minWidth: 0, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
         {view === 'profile' ? (
           <ProfileView
             student={student}
@@ -1148,7 +1305,18 @@ export function App() {
         ) : (
           <>
             <header style={{ padding: '10px 22px 8px', borderBottom: `1px solid ${COLORS.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-              <h1 style={{ fontSize: 16, margin: 0, fontWeight: 650 }}>营小商</h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                <button
+                  type="button"
+                  aria-label={sidebarCollapsed ? '展开侧栏' : '收起侧栏'}
+                  title={sidebarCollapsed ? '展开侧栏' : '收起侧栏'}
+                  onClick={toggleSidebar}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: '0 0 26px', border: 'none', background: 'transparent', color: COLORS.muted, borderRadius: 7, width: 26, height: 26, padding: 0, cursor: 'pointer' }}
+                >
+                  <ChevronRightIcon size={15} style={{ transform: sidebarCollapsed ? 'none' : 'rotate(180deg)', transition: 'transform 120ms ease' }} />
+                </button>
+                <h1 style={{ fontSize: 16, margin: 0, fontWeight: 650 }}>营小商</h1>
+              </div>
               <div ref={headerMenusRef} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                 <div style={{ position: 'relative' }}>
                   <button
@@ -1244,7 +1412,7 @@ export function App() {
             </header>
 
             <div style={{ flex: 1, overflow: 'auto', padding: '18px 22px' }}>
-              <div style={{ width: '100%', maxWidth: 840, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 13 }}>
+              <div style={{ width: '100%', maxWidth: 'clamp(680px, 64%, 920px)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 13 }}>
               {events.length === 0 ? (
                 <div style={{ maxWidth: 600, margin: '48px auto', textAlign: 'center' }}>
                   <EmptyChatArt width={210} />
@@ -1306,7 +1474,7 @@ export function App() {
             </div>
 
             <div style={{ padding: '10px 22px 14px' }}>
-              <div style={{ width: '100%', maxWidth: 840, margin: '0 auto' }}>
+              <div style={{ width: '100%', maxWidth: 'clamp(680px, 64%, 920px)', margin: '0 auto' }}>
               {queue.length > 0 ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6, fontSize: 10.5, color: COLORS.muted }}>
                   <span>排队 {queue.length}</span>
@@ -1364,8 +1532,32 @@ export function App() {
         )}
       </main>
 
+      {!sidebarCollapsed && !workspaceFullscreen ? (
+        <DragHandle
+          side="sidebar"
+          left={cols.sidebar}
+          onStart={startSidebarDrag}
+          onDrag={dragSidebar}
+          onEnd={endSidebarDrag}
+          onReset={resetSidebar}
+        />
+      ) : null}
+
+      {workspaceOpen && cols.workspace > 0 ? (
+        <DragHandle
+          side="workspace"
+          left={viewport - cols.workspace}
+          onStart={startWorkspaceDrag}
+          onDrag={dragWorkspace}
+          onEnd={endWorkspaceDrag}
+          onReset={resetWorkspace}
+        />
+      ) : null}
+
       {view === 'chat' && tabs.length > 0 ? (
         <Workspace
+          fullscreen={workspaceFullscreen}
+          onToggleFullscreen={() => setWorkspaceFullscreen((value) => !value)}
           tabs={tabs}
           activeId={activeTab}
           artifacts={artifacts}
