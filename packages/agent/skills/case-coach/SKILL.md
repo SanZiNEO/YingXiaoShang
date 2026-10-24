@@ -6,7 +6,7 @@ description: 当需要把一条商业新闻、一个品牌案例或一个营销�
 # 案例精讲 skill
 
 > 这个 skill 只做一件事：**判断一份案例精讲合不合格，以及不合格时该往哪改。**
-> 内容怎么写，看 `../references/case-playbook.md`；产物长什么样，看 `../references/artifact-schemas.md`。
+> 内容怎么写，看 `../../references/case-playbook.md`；产物长什么样，看 `../../references/artifact-schemas.md`。
 > 本文件不重复它们，只给判据。
 
 ## 一、什么时候用
@@ -37,6 +37,7 @@ description: 当需要把一条商业新闻、一个品牌案例或一个营销�
 - 交付前跑一次机器校验：
 
 ```bash
+# 在仓库根目录执行
 python3 tools/verify-case-quotes.py docs/cases/<案例文件>.md --news-id <id>
 ```
 
@@ -75,7 +76,7 @@ python3 tools/verify-case-quotes.py docs/cases/<案例文件>.md --news-id <id>
 
 ## 四、输出形状
 
-按 `../references/artifact-schemas.md` 的 `case_study` 结构产出。要点：
+按 `../../references/artifact-schemas.md` 的 `case_study` 结构产出。要点：
 
 - `case` 里必须有 `sourceNote`（媒体名 + 报道日期），缺日期的新闻不得作为出题锚点。
 - `knowledgePoints[]` 每项都带 `definitionSource`（教材章节/页码）。
