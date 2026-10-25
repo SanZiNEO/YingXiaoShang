@@ -1,8 +1,6 @@
 # 营小商
 
-**营小商 · 市场营销伴学**
-
-本地优先的营销学习助手，数据落在本地 SQLite；
+**营小商** —— 本地优先的营销学习桌面软件，数据落在本地 SQLite；
 当前 MVP 是**单学生本地演示库**（`student_demo`），没有登录/多租户；
 多用户、教师端和完整 review/assessment 流程不在当前 MVP 范围。
 
@@ -17,7 +15,7 @@
 
 验收切片是第 4 章「消费者市场与购买行为分析」。
 
-完整口径见 [`docs/00-mvp/营小商-MVP-v2.0.md`](docs/00-mvp/营小商-MVP-v2.0.md)。
+完整口径见 [`docs/mvp/mvp-v3.md`](docs/mvp/mvp-v3.md)。
 
 ## Prerequisites
 
@@ -37,7 +35,8 @@ cp .env.example .env   # 填入 DEEPSEEK_API_KEY（可选：不填也能离线�
 `~/.learning-agent`，可用环境变量覆盖。应用只在这里写入：
 `data/learning.db`、`artifacts/`、`exports/`、`tmp/`、`raw/`、`spill/`。
 产品名、home 变量、数据库文件名集中在
-`packages/shared/src/brand.ts`，改这一个文件即可换名。
+`packages/shared/src/brand.ts`；桌面端窗口标题、界面文案与安装包配置仍直接写
+「营小商」，换名需连同 `apps/desktop` 一起搜。
 
 首次使用时初始化课程和演示学生。桌面端与命令行脚本若要共享同一份进度，请显式指定同一数据目录：
 
@@ -71,14 +70,14 @@ pnpm run pipeline:quality --chapter ch04
 
 ## Design docs
 
-文档地图见 `docs/README.md`。当前只有一份文档定义口径：
+文档地图见 `docs/README.md`。口径只有一处，按顺序读：
 
-- `docs/00-mvp/营小商-MVP-v2.0.md`：**产品口径，唯一权威**。边界、展示什么、一轮怎么走、输出格式规则、工具、谁说话、验收、现状与差距。
-- `docs/00-mvp/` 其余四份：需求分层、现状不足与可借鉴、多专家团模式参考、代码卫生检查。
-- `docs/10-long-term/`：长远系统拆解与能力评价需求，不约束 MVP。
-- `docs/20-features/`：案例库、碎片化知识体系等单点方案；知识体系是当前数据底座。
-- `docs/30-research/`：同类项目调研。
-- `docs/90-archive/`：历史文档与合并前源材料，只读追溯。
+- `docs/principles/single-agent.md`：**设计原则，唯一权威**。一个智能体；功能只落位到提示词 / 工具 / skill；上下文按需取；产物默认 HTML。
+- `docs/mvp/mvp-v3.md`：**这一轮交付什么**。20 项需求的 MVP 验收点、端到端场景、不做清单。
+- `docs/requirements/`：**一个需求一份文档**（R01–R20），每份八节：要什么 / 落位 / 行为 / 契约 / 边界 / 验收 / 现状与差距 / MVP 范围。
+- `docs/requirements/backlog.md`：未立项需求（多租户、六维评价、案例卡库等），不混进 MVP。
+- `docs/30-research/`：同类项目调研，只作参考。
+- `docs/90-archive/`：拆分前的全部旧文档，只读追溯，不作为实现依据。
 
 ## Verification
 
