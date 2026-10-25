@@ -164,7 +164,7 @@ export function KnowledgePage({ client }: { client: ClientContext }) {
       actions={
         <>
           <Button onClick={() => startPreset(client, 'knowledge-news', '这条新闻体现了哪些消费者行为知识点？请先让我判断，再给证据。')}>
-            和案例教练对话
+            和营小商对话
           </Button>
           <Button kind="primary" onClick={() => panel(client, 'question')}>去出题</Button>
         </>
@@ -177,7 +177,7 @@ export function KnowledgePage({ client }: { client: ClientContext }) {
       {remoteMissing ? (
         <Card>
           <Empty>
-            数据接口尚未挂载。你仍然可以直接和「知识库·新闻」智能体对话，它会检索本地知识库和新闻。
+            数据接口尚未挂载。你仍然可以直接和营小商对话，它会检索本地知识库和新闻。
           </Empty>
         </Card>
       ) : null}
@@ -270,7 +270,7 @@ export function KnowledgePage({ client }: { client: ClientContext }) {
                     kind="primary"
                     onClick={() => startPreset(client, 'question-gen', `请围绕知识点「${selected.name}」生成 2 道简答题。`)}
                   >
-                    让出题智能体出题
+                    让营小商出题
                   </Button>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export function KnowledgePage({ client }: { client: ClientContext }) {
                     生成题目
                   </Button>
                   <Button onClick={() => startPreset(client, 'knowledge-news', `请分析新闻「${selectedNews.title}」体现了哪些消费者行为知识点。`)}>
-                    和案例教练对话
+                    和营小商对话
                   </Button>
                 </div>
               </div>
@@ -411,7 +411,7 @@ export function QuestionPage({ client }: { client: ClientContext }) {
       actions={
         <>
           <Button onClick={() => startPreset(client, 'question-gen', '请先确认来源、题型、难度和数量，再出题。')}>
-            和出题智能体对话
+            和营小商对话
           </Button>
           <Button kind="primary" onClick={() => panel(client, 'knowledge')}>回知识库</Button>
         </>
@@ -534,11 +534,11 @@ export function ResearchPage({ client }: { client: ClientContext }) {
 
   return (
     <Page
-      title="调研教练"
+      title="调研"
       subtitle="先问清决策问题、研究问题、目标人群和约束，再给方法；每个方法都要说明取舍和风险。"
       actions={
         <Button kind="primary" onClick={() => startPreset(client, 'research', brief)}>
-          和调研教练对话
+          和营小商对话
         </Button>
       }
     >
@@ -621,11 +621,11 @@ export function BpPage({ client }: { client: ClientContext }) {
 
   return (
     <Page
-      title="商业计划书教练"
+      title="商业计划书"
       subtitle="每个数字都要标来源或假设；没有来源就写「假设」，不要编造市场数据。"
       actions={
         <Button kind="primary" onClick={() => startPreset(client, 'bp', idea)}>
-          和 BP 教练对话
+          和营小商对话
         </Button>
       }
     >

@@ -87,7 +87,7 @@
       name: '@deepseek-ai/dsh-agent-preset'
       config:
         id: research
-        name: 调研教练
+        name: 调研
         order: 2
         plugins:
           - id: persona
@@ -106,7 +106,7 @@
       name: '@deepseek-ai/dsh-agent-preset'
       config:
         id: bp
-        name: 商业计划书教练
+        name: 商业计划书
         order: 3
         plugins:
           - id: persona

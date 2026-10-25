@@ -38,7 +38,7 @@ export function apply(ctx: Context) {
     },
     {
       id: 'research',
-      label: '调研教练',
+      label: '调研',
       order: 30,
       component: () => <ResearchPage client={client} />,
     },

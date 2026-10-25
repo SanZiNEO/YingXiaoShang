@@ -68,7 +68,7 @@ export interface ClientContext {
 
 export class RemoteUnavailableError extends Error {
   constructor() {
-    super('数据接口尚未挂载；请先在对话中使用对应智能体。')
+    super('数据接口尚未挂载；请先在对话中提出你的需求。')
     this.name = 'RemoteUnavailableError'
   }
 }
