@@ -1,3 +1,12 @@
+/** Mirrors `PublicSettings` in `src/main/settings.ts`. */
+interface PublicSettingsView {
+  hasApiKey: boolean
+  model: string
+  apiKeySource?: 'env' | 'stored' | 'none'
+  /** Set when the settings file exists but cannot be parsed. */
+  configError?: string
+}
+
 interface LearningBridge {
   capabilities?: {
     localFiles: boolean
@@ -32,8 +41,8 @@ interface LearningBridge {
     chapterId?: string
   }): Promise<unknown>
   settings: {
-    get(): Promise<{ hasApiKey: boolean; model: string; apiKeySource?: 'env' | 'stored' | 'none' }>
-    set(value: { apiKey?: string; model?: string; clearApiKey?: boolean }): Promise<{ hasApiKey: boolean; model: string; apiKeySource?: 'env' | 'stored' | 'none' }>
+    get(): Promise<PublicSettingsView>
+    set(value: { apiKey?: string; model?: string; clearApiKey?: boolean }): Promise<PublicSettingsView>
   }
 }
 
