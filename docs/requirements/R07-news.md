@@ -99,7 +99,7 @@
 
 ## 7. 现状与差距（代码事实）
 
-- 四个源已实现：`packages/news/src/sources/socialbeta.ts`、`linkshop.ts`、`brandstar.ts`、`wscn.ts`；`NEWS_SOURCES` 在 `sources/index.ts:7`。
+- 四个源已实现：`packages/news/src/sources/socialbeta.ts`、`linkshop.ts`、`brandstar.ts`、`wscn.ts`；`NEWS_SOURCES` 在 `packages/news/src/sources/index.ts:7`。
 - 限速与超时：`sources/http.ts:6-7`（1 秒 / 30 秒），`RateLimiter` 在 `:20-37`，`limiters` 按 source 分桶（`:28`）。
 - 正文分级：`packages/news/src/normalize.ts:16-18` 拒绝 <300 字；`:32` 按 1000 字分 `full` / `partial`。`unavailable` 在 schema 里存在，但当前不会写入。
 - 刷新：`packages/news/src/index.ts:55-56`、`:251-259`、`:356-360`；单源抓取 `:305-345`（30 条、`pLimit(2)`）；失败计 `errors` 并把 ingest run 标为 `partial`（`:333-341`）。
