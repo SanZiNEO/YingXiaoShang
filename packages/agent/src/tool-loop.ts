@@ -11,6 +11,26 @@ const DEFAULT_TOOL_MAX_BYTES = 36_000
 /** Trigger old-result pruning once this turn carries more than this many code points. */
 const DEFAULT_TURN_TOOL_MAX_CHARS = 48_000
 
+/**
+ * 一轮最多几次模型往返。
+ *
+ * 耗时几乎是「轮数 × 单次往返」，所以这个数字直接决定学生等多久（见 R21）。
+ * 轮次用完不等于失败：下面还有一次「收口轮」，把查资料的口子关掉，逼模型用
+ * 已拿到的材料出结论——所以调小是降级，不是报错。
+ */
+const DEFAULT_MAX_ROUNDS = 3
+
+/** 再大也只是把「转半天」还回去，上限拦一下。 */
+const MAX_ROUNDS_LIMIT = 10
+
+function resolveMaxRounds(configured?: number): number {
+  const pick = (value: number): number | null =>
+    Number.isInteger(value) && value > 0 ? Math.min(value, MAX_ROUNDS_LIMIT) : null
+  const fromCaller = configured === undefined ? null : pick(configured)
+  if (fromCaller !== null) return fromCaller
+  return pick(Number(process.env.LEARNING_AGENT_MAX_ROUNDS)) ?? DEFAULT_MAX_ROUNDS
+}
+
 function toolMaxBytes(): number {
   const raw = Number(process.env.LEARNING_AGENT_TOOL_MAX_BYTES)
   return Number.isInteger(raw) && raw > 0 ? raw : DEFAULT_TOOL_MAX_BYTES
@@ -131,6 +151,14 @@ export interface LoopState {
   written: string[]
 }
 
+export interface AgentLoopTimings {
+  /** Wall time of each model round trip, in order. */
+  roundMs: number[]
+  /** Time until the first text delta reached the student; null when nothing streamed. */
+  firstTokenMs: number | null
+  totalMs: number
+}
+
 export interface AgentLoopResult {
   text: string
   rounds: number
@@ -140,6 +168,8 @@ export interface AgentLoopResult {
   calls: ToolCallRecord[]
   /** Program-side context accounting for this turn. */
   context: LoopContextStats
+  /** 每轮往返耗时，定位「转半天」转在哪一步（见 R21）。 */
+  timings: AgentLoopTimings
 }
 
 export interface LoopContextStats {
@@ -171,7 +201,15 @@ function totalMessageChars(messages: ReadonlyArray<{ content: Array<Record<strin
  * from the cache: a second round trip for the same bytes is pure latency.
  */
 export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResult> {
-  const maxRounds = input.maxRounds ?? 8
+  const maxRounds = resolveMaxRounds(input.maxRounds)
+  const startedAt = Date.now()
+  const roundMs: number[] = []
+  let firstTokenMs: number | null = null
+  const timings = (): AgentLoopTimings => ({
+    roundMs: [...roundMs],
+    firstTokenMs,
+    totalMs: Date.now() - startedAt,
+  })
   const schemas: ToolSchema[] = input.tools.map((tool) => ({
     name: tool.name,
     description: tool.description,
@@ -215,16 +253,40 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
      * 等下一片再判断它是不是标记。
      */
     let held = ''
+    /**
+     * 本轮正文已经让位给工具标记。标记一旦出现，后面全是工具参数，
+     * 学生一个字都不该看到——所以后续 delta 直接丢掉，不再逐片猜。
+     * （按片猜会漏：嵌套标签会把 `lastIndexOf('<')` 往前推，前面那半截就被
+     * 当正文发出去了，学生看到 `<||DSML||tool_calls>` 这种乱码。）
+     */
+    let markupSeen = false
     const pushText = (delta: string): void => {
+      if (markupSeen) return
       held += delta
+      const hintAt = held.search(DSML_OPEN_HINT)
+      if (hintAt >= 0) {
+        markupSeen = true
+        const safe = held.slice(0, hintAt)
+        held = ''
+        if (safe.length > 0) {
+          firstTokenMs ??= Date.now() - startedAt
+          emit({ type: 'text', text: safe })
+        }
+        return
+      }
+      // 标记可能被切成几片（`<|` + `|DSML||`），'<' 开头的尾巴先压住。
       const tagStart = held.lastIndexOf('<')
       if (tagStart >= 0 && held.length - tagStart <= 40) {
         const safe = held.slice(0, tagStart)
         held = held.slice(tagStart)
-        if (safe.length > 0) emit({ type: 'text', text: safe })
+        if (safe.length > 0) {
+          firstTokenMs ??= Date.now() - startedAt
+          emit({ type: 'text', text: safe })
+        }
         return
       }
       if (held.length > 0) {
+        firstTokenMs ??= Date.now() - startedAt
         emit({ type: 'text', text: held })
         held = ''
       }
@@ -377,11 +439,13 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
   for (let round = 1; round <= maxRounds; round++) {
     injectStatus()
     emit({ type: 'round', round })
+    const roundStartedAt = Date.now()
     const { toolCalls, text } = await request(round, schemas)
+    roundMs.push(Date.now() - roundStartedAt)
     if (text.length > 0) lastText = text
     if (toolCalls.length === 0) {
       if (text.length === 0) throw new Error('模型没有返回任何内容')
-      return { text, rounds: round, called, calls, context: contextStats() }
+      return { text, rounds: round, called, calls, context: contextStats(), timings: timings() }
     }
     await runCalls(toolCalls, round)
   }
@@ -402,7 +466,9 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
     }],
   })
   emit({ type: 'round', round: closingRound })
+  const closingStartedAt = Date.now()
   const closing = await request(closingRound, writerSchemas)
+  roundMs.push(Date.now() - closingStartedAt)
   if (closing.toolCalls.length > 0) await runCalls(closing.toolCalls, closingRound)
   const closingText = closing.text
 
@@ -413,9 +479,10 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
       called,
       calls,
       context: contextStats(),
+      timings: timings(),
     }
   }
-  if (closingText.length > 0) return { text: closingText, rounds: closingRound, called, calls, context: contextStats() }
-  if (lastText.length > 0) return { text: lastText, rounds: closingRound, called, calls, context: contextStats() }
+  if (closingText.length > 0) return { text: closingText, rounds: closingRound, called, calls, context: contextStats(), timings: timings() }
+  if (lastText.length > 0) return { text: lastText, rounds: closingRound, called, calls, context: contextStats(), timings: timings() }
   throw new Error(`模型在 ${maxRounds} 轮内没有结束工具调用（${[...new Set(called)].join(', ')}）`)
 }
