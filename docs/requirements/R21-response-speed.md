@@ -36,7 +36,8 @@
 
 要补的：
 
-5. **轮次预算**：`maxRounds` 默认从 8 降到 3；复杂任务由调用方显式传 5（`tool-loop.ts:174`）。
+5. **轮次预算**：`tool-loop` 默认从 8 降到 3（`tool-loop.ts:174`）；真正生效的
+   是 `team.ts:210` 写死的 `maxRounds: 10`，**这一处不改等于没改**，一并交给工具层统一决定。
 6. **耗时打点**：每轮记录 `round`、`tRoundMs`、`tFirstTokenMs`，整轮结束汇总进 `TurnRecord`。
 7. **阶段细化**：`tool-start` 增加 `index`/`total`（第 n 步 / 预计 m 步），界面显示「第 2 步 · 查知识点」。
 8. **超时预期**：超过 15 秒，阶段行追加「已用 15 秒，大约还要 30 秒」。
@@ -66,7 +67,7 @@ type AgentLoopEvent =
 **参数**
 
 ```ts
-runToolLoop({ ..., maxRounds: 3 })   // 默认值改 3；上限 5
+runAgentLoop({ ..., maxRounds: 3 })   // 默认 3；上限 10，可由 LEARNING_AGENT_MAX_ROUNDS 覆盖
 ```
 
 ## 5. 边界（不做什么）
@@ -92,7 +93,7 @@ runToolLoop({ ..., maxRounds: 3 })   // 默认值改 3；上限 5
 |---|---|---|
 | 流式文本 | ✅ 已有（`llm.stream` + `emit text`） | 首 token 时间未测 |
 | 工具阶段文案 | ✅ 已有（`tool-start` → 中文标签） | 没有「第几步/共几步」 |
-| 轮次上限 | ⚠️ 默认 8（`tool-loop.ts:174`） | 太宽，最坏 80–160 秒 |
+| 轮次上限 | ⚠️ `tool-loop` 默认 8，但 `team.ts:210` 写死 10 → 实际最坏 11 次往返 | 太宽，按单次 10–15 秒算就是 1 分半 |
 | 耗时打点 | ❌ 无 | 无法定位慢在哪一轮 |
 | 超时预期 | ❌ 无 | 长时间静止无解释 |
 | 并行工具 | ❌ 无 | 互不依赖的读操作仍串行 |
@@ -101,7 +102,7 @@ runToolLoop({ ..., maxRounds: 3 })   // 默认值改 3；上限 5
 
 **MVP（本轮）**
 
-1. `maxRounds` 默认 3，上限 5
+1. `maxRounds` 默认 3，上限 10（去掉 `team.ts` 的写死值）
 2. 每轮打点，写入 `TurnRecord`
 3. `tool-start` 带 `index`，界面显示「第 n 步 · xxx」
 4. 超过 15 秒追加预估
