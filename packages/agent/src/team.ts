@@ -44,6 +44,12 @@ export interface TurnTrace {
   citations: number
   toolCalls: number
   artifacts: number
+  /** 每轮模型往返耗时，用于定位「转半天」到底转在哪一轮（见 R21）。 */
+  timings?: {
+    roundMs: number[]
+    firstTokenMs: number | null
+    totalMs: number
+  }
   /** Character accounting by role: system / tools / messages. */
   context: {
     systemChars: number
@@ -206,8 +212,8 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
     system,
     messages: initialMessages(input),
     tools,
-    // 单代理要自己读材料、读手册、写产物，轮次给够；收口靠"程序告诉它走到哪一步了"。
-    maxRounds: 10,
+    // 不传 maxRounds：默认值由 tool-loop 统一决定（现为 3），
+    // 以前这里写死 10，最坏 11 次模型往返就是一分多钟。
     maxTokens: 8192,
     // 不强制写：学生没要产物时，一段正文就是完整答复；逼它写会让「谢谢你」也变成附件。
     status: ({ calls, written }) => {
@@ -243,6 +249,7 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
     citations: citations.length,
     toolCalls: result.calls.length,
     artifacts: emit.created.length,
+    timings: result.timings,
     context: {
       systemChars: system.length,
       toolsChars: result.context.toolsChars,
