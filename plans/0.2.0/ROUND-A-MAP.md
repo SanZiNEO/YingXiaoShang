@@ -5,10 +5,11 @@
 
 ## 〇、本轮口径
 
-1. **只核实，不实施**：A 轮结束时产出的是一份「要挂哪些组件、怎么挂、哪里挂不上」的结论，不是代码。
-2. **版本全钉死**：审计 §4.11 要求「固定匹配版本、验证真实导出」。不用 `^`、不用 `latest`。
-3. **不整套搬**：`dsh-base` 全量配置不搬（审计 §4.3「明确不搬」）。
-4. **协议先核实再换**：现有适配器走 `/chat/completions`，本地 example 的 `dsh-llm-deepseek` 走 Messages。**不核实清楚不许动 provider**。
+1. **只核实，不实施**：A 轮结束时产出的是一份「要挂哪些组件、怎么挂、哪里挂不上」的结论，不是产品代码。**但可以做一次抛包试验**（A0）：把 DSH 整套装进一个独立试验目录跑起来，验证它能跑——这是证据，不进产品代码。
+2. **先全量堆上去，再砍**（学长口径）：不先挑「只要 llm + loop」，而是把 DSH 能跑的东西先搭起来，再剪。理由：先挑后接，剪掉的边界倚靠猜测；先堆后剪，砍哪一刀都能亲眼看到影响。
+3. **版本全钉死**：审计 §4.11 要求「固定匹配版本、验证真实导出」。不用 `^`、不用 `latest`。
+4. **不整套搬进产品**：试验目录里可以全量，产品树里只留真用得上的（审计 §4.3「明确不搬」清单仍然生效）。
+5. **协议先核实再换**：现有适配器走 `/chat/completions`，`dsh-llm-deepseek` 走 Messages。**不核实清楚不许动 provider**。
 
 ## 一、范围
 
@@ -31,13 +32,14 @@
 
 ## 三、任务清单
 
-| 编号 | 目标（一句话） | 验收 |
-|---|---|---|
-| A1 | 版本与可达性核对 | ☐ 上表 A1-1…A1-6 已核，缺的 9 个包确认同版本可装 |
-| A2 | provider 协议核对：现有 `/chat/completions` 与 `dsh-llm-deepseek` 的 Messages 差异，以及所选模型是否支持 | ☐ 写清「能直接用原生 provider / 需要最小适配 / 不可行」三者之一，附端点和报文对照 |
-| A3 | session 持久化与投影：`create/resume/close` 的调用条件、数据落在哪个目录 | ☐ 写清挂载顺序与离开顺序，以及和现有 `%APPDATA%/营小商` 的关系 |
-| A4 | 产品资源根与打包：原生 skill filesystem 的 `includeDefaultRoots: false` + 自定义根在 electron-builder 下能否打进去 | ☐ 写清资源目录路径、打包产物里应出现的文件、缺失时怎么发现 |
-| A5 | 挂载结论：一份「挂什么/不挂什么/为什么」清单 | ☐ 清单可直接被 B 轮照着实施，含被否方案与理由 |
+| 编号 | 目标（一句话） | 材料 | 交付物 | 验收 |
+|---|---|---|---|---|
+| A0 | 在仓库外建一个抛包试验，把 DSH 整套跑起来（不看业务） | `example/deepseek-harness-master`、npm `@deepseek-ai/*@0.2.1-rc.2` | `G:/市场营销ai/probe/a0-dsh/` 下的 `package.json` + 启动脚本 + 一段对话输出 | 能跑通一次「发一句话 → 模型流式回包 → 自然结束」；输出日志归档到 `probe/a0-dsh/run.log` |
+| A1 | 版本与可达性核对 | 上表 A1-1…A1-6 | 本文件 §2 表格更新 | ☐ 9 个缺包确认同版本可装且互相 peer 不冲突 |
+| A2 | provider 协议核对：现有 `/chat/completions` 与 Messages 的差异，以及所选模型是否支持 | `apps/desktop/src/main/llm.ts`、`dsh-llm-deepseek` README | 一节对比（端点 / 报文 / 终态 / 错误） | ☐ 写清「能直接用 / 需最小适配 / 不可行」三者之一，附报文对照 |
+| A3 | session 持久化与投影：`create/resume/close` 调用条件、数据落哪 | `dsh-session`、`dsh-session-persistence*`、`dsh-session-projection` | 一节挂载顺序与卸载顺序 | ☐ 写清与现有 `%APPDATA%/营小商` 的关系 |
+| A4 | 产品资源根与打包：skill filesystem 的 `includeDefaultRoots: false` + 自定义根能否打进安装包 | `dsh-skill-filesystem`、`electron-builder.yml` | 一节路径与打包清单 | ☐ 写清资源目录、产物里应出现的文件、缺失时怎么发现 |
+| A5 | 挂载结论：一份「挂什么/不挂什么/为什么」清单 | A0–A4 全部结果 | `plans/0.2.0/ROUND-A-CONCLUSION.md` | ☐ B 轮能直接照着实施，含被否方案与理由 |
 
 ## 四、待裁决（阻塞项）
 
