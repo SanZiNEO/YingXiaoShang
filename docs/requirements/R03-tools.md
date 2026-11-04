@@ -103,11 +103,11 @@ interface ToolContext {
 加一个工具的步骤：
 
 1. 选 `kind`：只取材料写 `read`，落产物写 `write`。
-2. 在 `read-tools.ts` 或 `write-tools.ts` 加一条 `ToolSpec`；`AGENT_TOOLS` 自动收录，不改 `tools/index.ts`。
+2. 在 `read-tools.ts` 或 `write-tools.ts` 加一条 `ToolSpec`；`AGENT_TOOLS` 自动收录，不改 `packages/agent/src/tools/index.ts`。
 3. 参数用 JSON Schema；`description` 写清「什么时候用」和「返回什么」。
 4. 读工具写 `reads` / `cite`；写工具复用 `ArtifactSpec` + `collect`。
 5. 在 `agents/mentor.md` 的手册/工具表里加一句何时用（不是必需，但推荐）。
-6. 不改 `tool-loop.ts`、`team.ts`、`tools/types.ts` 的调度逻辑。
+6. 不改 `tool-loop.ts`、`team.ts`、`packages/agent/src/tools/types.ts` 的调度逻辑。
 
 ## 5. 边界（不做什么、失败怎么表现）
 
@@ -122,7 +122,7 @@ interface ToolContext {
 
 | # | 场景 | 期望 |
 |---|---|---|
-| 1 | 新增一个 `read_section` 工具，只改 `read-tools.ts` 并在提示词加一句 | 模型能调用；`tool-loop.ts`、`team.ts`、`tools/index.ts` 无需改动；`trace.toolCalls` 正常计数 |
+| 1 | 新增一个 `read_section` 工具，只改 `read-tools.ts` 并在提示词加一句 | 模型能调用；`tool-loop.ts`、`team.ts`、`packages/agent/src/tools/index.ts` 无需改动；`trace.toolCalls` 正常计数 |
 | 2 | 模型调用一个未注册的工具名 | 返回 `未知工具：x`；本轮不崩溃；模型能改调已注册工具 |
 | 3 | 读一份超长教材 | 返回头尾 + 「省略 N 字节」；模型按建议换窄参数，而不是原样重试 |
 | 4 | 工具抛异常 | 返回 `工具执行失败：…`；聊天里不出现英文堆栈；本轮其余工具结果不受影响 |

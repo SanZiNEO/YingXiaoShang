@@ -65,7 +65,7 @@
 | 题源 | 取什么 | 门槛 |
 |---|---|---|
 | 知识点 | 定义、关键词、例子、反例 | 知识点必须存在 |
-| 新闻 | 标题、来源、时间、链接、摘要、正文前 8000 字 | 匹配必须是 `reviewed/adjudicated/published` + `verified/gold`（`questions/src/index.ts:196-201`、`:1055-1075`） |
+| 新闻 | 标题、来源、时间、链接、摘要、正文前 8000 字 | 匹配必须是 `reviewed/adjudicated/published` + `verified/gold`（`packages/questions/src/index.ts:196-201`、`:1055-1075`） |
 | 自定义文本 | 学生给的文本 | 必须同时给至少一个知识点 |
 | 教学资源 | 教学指南或已有题目 | 章节知识点或原题知识点存在 |
 | 案例卡 | 事实、约束、决策问题 | 属后续，见 §8 |
@@ -98,10 +98,10 @@
 
 ### 4.6 去重与导出
 
-- 题目 id：`q_` + `stableId(sourceType:sourceId:stem)`（`questions/src/index.ts:218-224`）；同源同题干稳定同 id。
+- 题目 id：`q_` + `stableId(sourceType:sourceId:stem)`（`packages/questions/src/index.ts:218-224`）；同源同题干稳定同 id。
 - 题干归一：去首尾空白、压缩空白（`:226-228`）。
 - 同源已有题干集合参与校验（`:1234-1240`）；`question_bank` 以 `stem_hash` 唯一去重（`packages/db/src/index.ts:386-400`）。
-- 导出：`export_questions` 支持 `json`、`csv`（UTF-8 BOM）、`docx`，写到 `LEARNING_AGENT_HOME/exports/questions-<timestamp>.*`（`questions/src/index.ts:968-1048`）。
+- 导出：`export_questions` 支持 `json`、`csv`（UTF-8 BOM）、`docx`，写到 `LEARNING_AGENT_HOME/exports/questions-<timestamp>.*`（`packages/questions/src/index.ts:968-1048`）。
 
 ## 5. 边界（不做什么、失败怎么表现）
 

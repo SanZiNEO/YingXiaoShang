@@ -108,7 +108,7 @@
 
 | 现状 | 位置 | 差距 |
 |---|---|---|
-| 三栏 grid，列宽由 `computeColumns` 计算 | `apps/desktop/src/renderer/src/App.tsx:514-515,1206-1213`、`layout/columns.ts:1-40` | 符合 |
+| 三栏 grid，列宽由 `computeColumns` 计算 | `apps/desktop/src/renderer/src/App.tsx:514-515,1206-1213`、`layout/columns.ts:1-36` | 符合 |
 | 左栏：新对话、最近对话、学习档案、设置 | `App.tsx:1214-1288` | 无角色选择入口，符合；会话搜索待补 |
 | 中栏标题栏有「调整章节」可选覆盖 | `App.tsx:1324-1352` | 可保留为可选覆盖，但不得变成必须先选 |
 | 中栏「本轮实际读到的材料」显示模型调用次数、工具调用次数、教材段数 | `App.tsx:1369-1400` | 暴露内部计数，应改成「读过哪些知识点/原文」的中文清单 |
