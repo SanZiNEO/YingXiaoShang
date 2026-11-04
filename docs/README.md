@@ -27,6 +27,7 @@ docs/
 │   ├── R01-single-agent.md … R20-run-verify.md
 │   └── backlog.md                  # 未立项需求（不混进 MVP）
 ├── 30-research/                    # 同类项目调研
+├── onboarding.md                   # 新人入门：目标 / 架构 / 思路 / 工作流
 ├── agent-runtime-audit-and-rebuild-guide.md   # 运行链调查与原生运行时接入指导
 ├── cases/                          # 案例材料与预览
 ├── screenshots/                    # 历史界面截图
@@ -40,6 +41,7 @@ docs/
 
 | 你要做的事 | 先看 |
 |---|---|
+| **刚加入，想快速上手** | [`onboarding.md`](onboarding.md) |
 | 判断一个功能该不该做、该放哪 | 原则 §2（提示词 / 工具 / skill）、§7（五问） |
 | 写代码前确认行为 | 对应需求 §2 落位、§4 契约、§6 验收 |
 | 加一个新能力 | 需求 §2；落不了位就进 `backlog.md` |
