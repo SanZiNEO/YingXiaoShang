@@ -492,6 +492,8 @@ export function App() {
   const [apiKey, setApiKey] = useState('')
   const [hasApiKey, setHasApiKey] = useState(false)
   const [apiKeySource, setApiKeySource] = useState<'env' | 'stored' | 'none'>('none')
+  /** Settings file exists but is unparsable (e.g. saved with a BOM). */
+  const [configError, setConfigError] = useState<string | undefined>(undefined)
   const [model, setModel] = useState('deepseek-chat')
   const [settingsSaved, setSettingsSaved] = useState('')
   const [notice, setNotice] = useState('')
@@ -742,6 +744,7 @@ export function App() {
       setApiKey('')
       setHasApiKey(value.hasApiKey)
       setApiKeySource(value.apiKeySource ?? 'none')
+      setConfigError(value.configError)
       setModel(value.model)
     })
   }, [settingsOpen])
@@ -1094,6 +1097,7 @@ export function App() {
     setApiKey('')
     setHasApiKey(value.hasApiKey)
     setApiKeySource(value.apiKeySource ?? 'none')
+    setConfigError(value.configError)
     setModel(value.model)
     setSettingsSaved(value.apiKeySource === 'env'
       ? '已保存；当前生效的是环境变量 DEEPSEEK_API_KEY'
@@ -1105,6 +1109,7 @@ export function App() {
     setApiKey('')
     setHasApiKey(value.hasApiKey)
     setApiKeySource(value.apiKeySource ?? 'none')
+    setConfigError(value.configError)
     setSettingsSaved(value.apiKeySource === 'env'
       ? '已清除本机保存的 Key；环境变量 DEEPSEEK_API_KEY 仍在生效'
       : '已清除本机 Key')
@@ -1599,6 +1604,13 @@ export function App() {
                 ? ' 当前生效的是环境变量 DEEPSEEK_API_KEY；这里只能清除本机保存的 Key，不能清除环境变量。'
                 : hasApiKey ? ' 当前已配置，留空保存会保留原 Key。' : ' 当前未配置。'}
             </p>
+            {configError ? (
+              <p style={{ margin: '0 0 14px', padding: '8px 10px', borderRadius: 8, background: '#fdecec', color: '#a33', fontSize: 12, lineHeight: 1.5 }}>
+                本机配置文件读不出来，已忽略：{configError}
+                <br />
+                在这里填一次 Key 点保存就会覆盖掉坏文件，不用手动改。
+              </p>
+            ) : null}
             <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, color: COLORS.muted }}>
               DEEPSEEK_API_KEY
               <input
