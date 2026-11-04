@@ -27,6 +27,7 @@ docs/
 │   ├── R01-single-agent.md … R20-run-verify.md
 │   └── backlog.md                  # 未立项需求（不混进 MVP）
 ├── 30-research/                    # 同类项目调研
+├── agent-runtime-audit-and-rebuild-guide.md   # 运行链调查与原生运行时接入指导
 ├── cases/                          # 案例材料与预览
 ├── screenshots/                    # 历史界面截图
 └── 90-archive/
@@ -43,6 +44,7 @@ docs/
 | 写代码前确认行为 | 对应需求 §2 落位、§4 契约、§6 验收 |
 | 加一个新能力 | 需求 §2；落不了位就进 `backlog.md` |
 | 验收一轮对话 | MVP §3 场景 + 对应需求 §6 |
+| 改运行时 / 接原生 loop | [`agent-runtime-audit-and-rebuild-guide.md`](agent-runtime-audit-and-rebuild-guide.md)，实现指导，不另立需求 |
 | 改文案 / 品牌 | R19 |
 | 查历史为什么这么设计 | `90-archive/`，只读 |
 
