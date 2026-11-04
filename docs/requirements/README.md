@@ -36,6 +36,7 @@
 | [R18](R18-model-runtime.md) | 模型运行时 | MVP | R01、R17 | `apps/desktop/src/main/llm.ts` |
 | [R19](R19-brand-copy.md) | 品牌与文案 | MVP | —（横切所有上屏文案） | `packages/shared/src/brand.ts`、`apps/desktop` |
 | [R20](R20-run-verify.md) | 运行与验收 | MVP | R01–R19 | `package.json`、`scripts/`、`apps/desktop` |
+| [R21](R21-response-speed.md) | 响应速度 | MVP | R01、R16、R18 | `packages/agent/src/tool-loop.ts`、`apps/desktop/src/renderer/src/App.tsx` |
 
 「依赖」是阅读与契约顺序，不是构建顺序；数据层被多处使用，按各文档第 4 节的契约取用即可。
 
