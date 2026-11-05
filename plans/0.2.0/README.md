@@ -41,8 +41,8 @@ plans/0.2.0/
 | 轮次 | 主题 | 小轮 | 状态 |
 |---|---|---|---|
 | 0 | 交付（打包 BOM 修复 + 使用说明 + 意见表） | 0-1 打包　0-2 说明　0-3 收集 | 🔵 |
-| A | 原生组合与兼容边界 | A1 版本可达性　A2 provider 协议　A3 session/持久化　A4 资源根与打包　A5 挂载结论 | 🔵 A1 已核 |
-| B | 最小原生链路跑通 | B1 llm/provider　B2 agent/loop　B3 session　B4 tools　B5 system-prompt | ☐ |
+| A | 原生组合与兼容边界 | A1 版本可达性　A2 provider 协议　A3 session/持久化　A4 资源根与打包　A5 挂载结论 | ✅ 关单，见 [A 轮结论](ROUND-A-CONCLUSION.md) |
+| B | 最小原生链路跑通 | B1 llm/provider　B2 agent/loop　B3 session　B4 tools　B5 system-prompt | 🔵 进行中 |
 | C | 接业务内容与真实工具 | C1 提示词　C2 skill　C3 读工具　C4 写工具/产物　C5 题目提交　C6 profile/recorder | ☐ |
 | D | 接原生 context 与桌面视图 | D1 skill 目录　D2 token-meter/compaction　D3 业务 context　D4 事件→IPC　D5 不撤字　D6 取消 | ☐ |
 | E | 单次切换与清理 | E1 单一入口　E2 删旧 loop　E3 更新 R02/R04/R05/R14　E4 打包资源 | ☐ |

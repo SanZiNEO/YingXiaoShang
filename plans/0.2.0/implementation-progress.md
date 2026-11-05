@@ -37,8 +37,8 @@
 | 轮次 | 结论 / 交付物 | 状态 |
 |---|---|---|
 | 0 交付 | 待定（见 `pending-discussions.md` P-1） | 🟡 |
-| A 原生组合与兼容边界 | A1 已核（缺 9 包、latest 是旧的）；A0 装包成功、CLI 卡在 node-pty；**A2 已核：原生 provider 直接可用，不写适配层** | 🔵 |
-| B 最小原生链路 | — | ☐ |
+| A 原生组合与兼容边界 | ✅ 关单：A0 装包+CLI 路线否；A1 store 已齐（缺声明）；A2 原生 provider 直连可跑；A3 session 三约束；A4 skill 根方案；A5 见 ROUND-A-CONCLUSION.md | ✅ |
+| B 最小原生链路 | 已开工：先在仓库外跑通编程装配，再接 Electron | 🔵 |
 | C 业务接入 | — | ☐ |
 | D context 与桌面视图 | — | ☐ |
 | E 切换与清理 | — | ☐ |
