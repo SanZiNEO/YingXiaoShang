@@ -25,6 +25,7 @@ plans/0.2.0/
 ├── 主代理-轮次任务模板.md        # 派单/验收/红线（配 ROUND-X-MAP 一起用）
 ├── implementation-progress.md   # 全量进度真源（P0/F 编号逐个划）
 ├── pending-discussions.md       # 未决项，需要人拍板
+├── decisions.md                 # 已裁决记录（谁定的、依据是什么）
 └── ROUND-A-MAP.md … ROUND-F-MAP.md   # 逐轮派单，开工时才建
 ```
 
