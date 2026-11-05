@@ -36,14 +36,15 @@
 
 ---
 
-## P-3 🔴 provider 协议最终走哪条
+## P-3 ✅ provider 协议（已定 2026-11-04，见 `ROUND-A-MAP.md` §6）
 
 - 现有：`/chat/completions`（OpenAI 兼容），`apps/desktop/src/main/llm.ts`。
 - 原生：`dsh-llm-deepseek` 用 Messages 协议，默认基址和路径都不同。
 
-**待定**：所选模型/端点是否支持 Messages？若不支持，允许写多厚的适配层？
+**已定**：官方同时提供两套端点，实测 Messages 可用且有真实终态（`end_turn` / `tool_use`）。
+**直接用原生 provider，不写适配层。** 注意实际模型名是 `deepseek-flash`。
 
-**影响**：这决定 B 轮第一小轮是做「接线」还是做「适配」。
+**残留**：Messages 与 chat/completions 的限流/计费是否一致未验证，B 轮顺带记录。
 
 ---
 

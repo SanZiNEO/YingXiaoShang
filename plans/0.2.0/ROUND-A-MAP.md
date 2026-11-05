@@ -36,7 +36,7 @@
 |---|---|---|---|---|
 | A0 | 在仓库外建一个抛包试验，把 DSH 整套跑起来（不看业务） | `example/deepseek-harness-master`、npm `@deepseek-ai/*@0.2.1-rc.2` | `G:/市场营销ai/probe/a0-dsh/` 下的 `package.json` + 启动脚本 + 一段对话输出 | 能跑通一次「发一句话 → 模型流式回包 → 自然结束」；输出日志归档到 `probe/a0-dsh/run.log` |
 | A1 | 版本与可达性核对 | 上表 A1-1…A1-6 | 本文件 §2 表格更新 | ☐ 9 个缺包确认同版本可装且互相 peer 不冲突 |
-| A2 | provider 协议核对：现有 `/chat/completions` 与 Messages 的差异，以及所选模型是否支持 | `apps/desktop/src/main/llm.ts`、`dsh-llm-deepseek` README | 一节对比（端点 / 报文 / 终态 / 错误） | ☐ 写清「能直接用 / 需最小适配 / 不可行」三者之一，附报文对照 |
+| A2 | provider 协议核对 | `apps/desktop/src/main/llm.ts`、`dsh-llm-deepseek` README | §6 实测记录 | ✅ **能直接用，不需要适配层**（2026-11-04 实测，见 §6） |
 | A3 | session 持久化与投影：`create/resume/close` 调用条件、数据落哪 | `dsh-session`、`dsh-session-persistence*`、`dsh-session-projection` | 一节挂载顺序与卸载顺序 | ☐ 写清与现有 `%APPDATA%/营小商` 的关系 |
 | A4 | 产品资源根与打包：skill filesystem 的 `includeDefaultRoots: false` + 自定义根能否打进安装包 | `dsh-skill-filesystem`、`electron-builder.yml` | 一节路径与打包清单 | ☐ 写清资源目录、产物里应出现的文件、缺失时怎么发现 |
 | A5 | 挂载结论：一份「挂什么/不挂什么/为什么」清单 | A0–A4 全部结果 | `plans/0.2.0/ROUND-A-CONCLUSION.md` | ☐ B 轮能直接照着实施，含被否方案与理由 |
@@ -53,3 +53,27 @@
 - 一次对话从 UI 到模型再到写库，经过哪些原生服务、在哪个点拿到 turn 终态？
 - 哪些现有代码会被删、哪些会被改、哪些一行不动？
 - 有没有哪一条在 Electron/Node 环境根本走不通？
+
+## 六、A2 实测记录（2026-11-04）
+
+`dsh-llm-deepseek` 用 **Messages 协议**，默认 `baseURL = https://api.deepseek.com/anthropic`。
+用**同一个 key、同一个模型**实测三件事：
+
+| # | 请求 | 结果 |
+|---|---|---|
+| A | `POST https://api.deepseek.com/chat/completions`（现有链路） | ✅ 200 / 0.8s；注意返回 `model` 是 **`deepseek-flash`**，即使请求写的是 `deepseek-chat` |
+| B | `POST https://api.deepseek.com/anthropic/v1/messages` | ✅ 200 / 0.2s，返回含 `thinking` 块 + `text` 块，`stop_reason: end_turn` |
+| C | 同上 + 声明一个 `tools`（`input_schema`） | ✅ 200 / 0.6s，返回 `tool_use` 块（`read_kp({"kpId":"kp-101"})`），`stop_reason: tool_use` |
+
+**结论**：
+
+1. **不需要写 provider 适配层**。原生 `dsh-llm-deepseek` 直接指向官方 Messages 端点即可，
+   与审计 §4.3.1「不能把旧 chat/completions 基址直接塞给 Messages」并不冲突——官方两边都提供。
+2. **终态是真实的**：`end_turn` / `tool_use` /（可预期的）`max_tokens`。这正是 F02 要的东西，
+   比现有「一律发 finish: stop」准确。
+3. **模型名要按实际写**：请求 `deepseek-chat` 会被路由到 `deepseek-flash`。
+   配置里写哪个都行，但日志要记**实际返回的 model**，否则排查时会看错模型（对应 F19）。
+4. **thinking 块默认返回**。界面按「不展示思考过程」处理即可——不渲染，不是不存在。
+
+**残留风险**：Messages 端点的限流、并发、长上下文计费与 chat/completions 是否一致，未验证。
+B 轮跑真实对话时顺手记录 token 用量对照。
