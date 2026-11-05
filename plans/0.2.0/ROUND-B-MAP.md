@@ -17,8 +17,8 @@
 |---|---|---|---|
 | B1 | 按 A 轮顺序把原生插件挂起来 | 8 个插件 `✅`，`ctx.llm/sessions/tools/agents/systemPrompt/sessionProjections` 全部可见 | ✅ 通过 |
 | B2 | 建一个 agent 并拿到句柄 | `ctx.agents.create({sessionId, agentOptions})` 返回 `{agent, dispose}`，句柄方法含 `followup/steer/inject/cancel/whenIdle/kick` | ✅ 通过 |
-| B3 | 发一句话收到模型返回 | `followup(...)` 后 `whenIdle()` 结束，且拿到非空 assistant 文本 | ❌ **阻塞**，见 §3 |
-| B4 | 带一个工具跑通 `tool_use → 执行 → end_turn` | 事件里出现工具调用与结果，最终 `end_turn` | ☐ 待 B3 |
+| B3 | 发一句话收到模型返回 | `followup(...)` 后 `whenIdle()` 结束，且拿到非空 assistant 文本 | ✅ **通过**（答复「收到」，终态 `completed`，见 §5） |
+| B4 | 带一个工具跑通 `tool_use → 执行 → end_turn` | 事件里出现工具调用与结果，最终 `end_turn` | ✅ **通过**（`tool/call` + `tool/result`，工具执行恰 1 次，1.7s，见 §5） |
 | B5 | 取消 | `cancel()` 后不再发新请求、不再起新工具，已出文字保留 | ☐ 待 B3 |
 | B6 | 事件接到界面 | `started / stream / tool start / tool end / terminal` 齐全且 `terminal` 恰好一次 | ☐ 待 B3 |
 
@@ -66,6 +66,55 @@ kick 完成
 3. 退路：`npm approve-scripts` 放行 `node-pty`，用 `dsh --profile sdk-minimal` 跑通一次，把它的运行时配置树打印出来对照。
 
 **注意**：不要为了绕过这个错误去改产品代码或自写循环——那正是审计 §4.3.2 禁止的。
+
+## 五、B3 / B4 通过记录（2026-11-04）
+
+### 根因：user 消息缺 `role` 字段
+
+`followup({ content: [...], source: { kind: 'user' } })` 能进收件箱，但派生出的消息**没有 `role`**：
+
+```json
+{ "content": [{ "type": "text", "text": "…" }], "source": { "kind": "user" } }
+```
+
+适配器认不出这是 user 消息，于是整轮被报成 **`DeepSeek Messages transport failed`（TRANSPORT）**——
+一个误导性极强的错误：看起来像网络问题，实际是消息结构问题。补上 `role: 'user'` 立刻 HTTP 200。
+
+**这条必须写进 C 轮**：业务侧组装用户输入时，`role` 和 `source.kind` 一个都不能少。
+
+### 其余两个坑（也会耗时间）
+
+1. `preparedCall.stream(request)` 要求 `request` 的配置**逐字段等于** `prepared.config`；
+   自己另写一份 `{provider, model, ...}` 会报 `INVALID_PREPARED_CALL`。
+2. 工具注册用 `ctx.tools.register(defineTool({...}))`，参数是 **schema DSL**
+   （`{ kpId: { type: 'string', required: true } }`），不是 JSON Schema。
+
+### B3 实测
+
+```
+events: turn/start, step/start, system/message, user/message, request/header,
+        request/context, assistant/message, step/end, turn/end
+答复：「收到」   终态：completed
+```
+
+### B4 实测（带工具）
+
+```
+用时 1.7s（2 个 step）
+tool/call   → read_kp({"kpId":"kp-101"})
+tool/result → 工具执行 1 次
+最终答复：「kp-101 讲的是**消费者行为**，即消费者在获取、使用和处置产品或服务时所表现出的行为。」
+终态：completed
+```
+
+**关键结论**：原生循环在纯 Node 里跑通了「模型 → 工具 → 再问模型 → 自然结束」，
+**没有固定轮次、没有强制收口**。这正是审计 §4.4 要的完成语义。
+
+### 未解决（B6 要查）
+
+`agent/assistant-stream` 事件**一次都没触发**，虽然 assistant/message 内容完整。
+界面要逐字显示就必须有增量帧，所以 B6 要先定位：
+是事件名不对、需要注册 projector，还是只有在特定 stream 模式下才发。
 
 ## 四、B3 通过后立刻要验的五条
 
