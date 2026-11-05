@@ -38,7 +38,7 @@
 |---|---|---|
 | 0 交付 | 待定（见 `pending-discussions.md` P-1） | 🟡 |
 | A 原生组合与兼容边界 | ✅ 关单：A0 装包+CLI 路线否；A1 store 已齐（缺声明）；A2 原生 provider 直连可跑；A3 session 三约束；A4 skill 根方案；A5 见 ROUND-A-CONCLUSION.md | ✅ |
-| B 最小原生链路 | B1 挂载 ✅　B2 建 agent ✅　B3 真实对话 ✅　B4 工具调用 ✅（1.7s）　B6 增量帧 ✅；B5 取消待做 | 🔵 |
+| B 最小原生链路 | B1 挂载 ✅　B2 建 agent ✅　B3 真实对话 ✅　B4 工具调用 ✅（1.7s）　B6 增量帧 ✅；B5 取消 🟡（终态 aborted 成立，文字保留待判别实验） | 🔵 |
 | C 业务接入 | — | ☐ |
 | D context 与桌面视图 | — | ☐ |
 | E 切换与清理 | — | ☐ |

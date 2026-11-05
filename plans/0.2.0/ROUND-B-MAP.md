@@ -19,7 +19,7 @@
 | B2 | 建一个 agent 并拿到句柄 | `ctx.agents.create({sessionId, agentOptions})` 返回 `{agent, dispose}`，句柄方法含 `followup/steer/inject/cancel/whenIdle/kick` | ✅ 通过 |
 | B3 | 发一句话收到模型返回 | `followup(...)` 后 `whenIdle()` 结束，且拿到非空 assistant 文本 | ✅ **通过**（答复「收到」，终态 `completed`，见 §5） |
 | B4 | 带一个工具跑通 `tool_use → 执行 → end_turn` | 事件里出现工具调用与结果，最终 `end_turn` | ✅ **通过**（`tool/call` + `tool/result`，工具执行恰 1 次，1.7s，见 §5） |
-| B5 | 取消 | `cancel()` 后不再发新请求、不再起新工具，已出文字保留 | ☐ 待 B3 |
+| B5 | 取消 | `cancel()` 后不再发新请求、已出文字保留 | 🟡 **部分通过**：取消与终态成立，文字保留未复现（见 §7） |
 | B6 | 事件接到界面 | `started / stream / tool start / tool end / terminal` 齐全且 `terminal` 恰好一次 | ✅ 增量帧已拿到（见 §6），`terminal` 映射待 D 轮 |
 
 ## 二、B1 / B2 已确认的事实（可复用）
@@ -137,3 +137,26 @@ tool/result → 工具执行 1 次
 3. `stop_reason` 是否原样保留（`end_turn` / `tool_use` / `max_tokens`）。
 4. 重启后 `resume` 同一 session 能否继续。
 5. token 用量与 chat/completions 端点对照（A2 残留项）。
+
+## 七、B5 取消：部分通过（2026-11-04）
+
+**已证实**：
+
+```
+h.agent.cancel({ kind: 'user' })      → 无异常
+turn/end                             → { "kind": "aborted", "reason": { "kind": "user" } }
+assistant/message (interrupted=true) → 1 条
+取消后 1.2s 内增量字数不再增长         → 没有新请求
+```
+
+**这正是审计 §4.9.1 要的**：终态带原因（`aborted/user`），不是伪装成 `completed`；
+被中断的回复单独记一条 `interrupted` 消息，而不是丢弃。
+
+**未复现**：这个场景里增量帧一次都没到（`已出字数 0`），所以「已出文字保留」
+没有被真正验证。而 B6 里同样的订阅方式是能拿到帧的。两种可能：
+
+1. 订阅点不对：帧可能只在根 `ctx` 或只在 `agent.ctx` 上派发，B6 当时两处都订了，无法区分。
+2. 该轮在 1.2–2.2 秒内全部耗在 reasoning 上，没有 text 帧（`thinking` 默认开启）。
+
+**D 轮开工前必须做一次判别实验**：只订一处、打印帧计数，确定唯一正确的订阅点，
+并确认 reasoning 帧与 text 帧分别长什么样（界面要决定是否显示思考过程）。
