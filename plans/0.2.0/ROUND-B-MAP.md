@@ -20,7 +20,7 @@
 | B3 | 发一句话收到模型返回 | `followup(...)` 后 `whenIdle()` 结束，且拿到非空 assistant 文本 | ✅ **通过**（答复「收到」，终态 `completed`，见 §5） |
 | B4 | 带一个工具跑通 `tool_use → 执行 → end_turn` | 事件里出现工具调用与结果，最终 `end_turn` | ✅ **通过**（`tool/call` + `tool/result`，工具执行恰 1 次，1.7s，见 §5） |
 | B5 | 取消 | `cancel()` 后不再发新请求、不再起新工具，已出文字保留 | ☐ 待 B3 |
-| B6 | 事件接到界面 | `started / stream / tool start / tool end / terminal` 齐全且 `terminal` 恰好一次 | ☐ 待 B3 |
+| B6 | 事件接到界面 | `started / stream / tool start / tool end / terminal` 齐全且 `terminal` 恰好一次 | ✅ 增量帧已拿到（见 §6），`terminal` 映射待 D 轮 |
 
 ## 二、B1 / B2 已确认的事实（可复用）
 
@@ -110,11 +110,25 @@ tool/result → 工具执行 1 次
 **关键结论**：原生循环在纯 Node 里跑通了「模型 → 工具 → 再问模型 → 自然结束」，
 **没有固定轮次、没有强制收口**。这正是审计 §4.4 要的完成语义。
 
-### 未解决（B6 要查）
+### B6 已解决（增量帧拿到了）
 
-`agent/assistant-stream` 事件**一次都没触发**，虽然 assistant/message 内容完整。
-界面要逐字显示就必须有增量帧，所以 B6 要先定位：
-是事件名不对、需要注册 projector，还是只有在特定 stream 模式下才发。
+之前「一次都没触发」是**我的取字段写错**，不是运行时的问题。真实结构：
+
+```jsonc
+// event = { frame: { … } }
+{ "type": "start", "attemptId": 1, "revision": 1, "turn": 1, "step": 1 }
+{ "type": "chunk", "attemptId": 1, "revision": 1, "index": 1, "time": …,
+  "chunk": { "type": "text-delta", "text": "一" } }
+```
+
+**取文本要走 `frame.chunk.text`**（`frame.type` 是 `chunk`，不是 `text-delta`）。
+实测一轮 90–190 个帧，拼出「一一、、二二、、三三」。
+
+**必须记住的坑**：同时订阅根 `ctx.on(...)` 与 `agent.ctx.on(...)` 会**让每个 delta 重复两遍**
+（上面那句「一一、、二二」就是这么来的）。界面只能订阅一处。
+
+**对 D 轮的输入**：`frame.attemptId / revision / turn / step` 正好是实现审计 §4.9.1
+「终态后旧 attempt 的晚到 delta 不得重新打开气泡」所需要的身份字段。
 
 ## 四、B3 通过后立刻要验的五条
 
