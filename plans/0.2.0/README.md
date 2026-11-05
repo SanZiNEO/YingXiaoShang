@@ -26,6 +26,7 @@ plans/0.2.0/
 ├── implementation-progress.md   # 全量进度真源（P0/F 编号逐个划）
 ├── pending-discussions.md       # 未决项，需要人拍板
 ├── decisions.md                 # 已裁决记录（谁定的、依据是什么）
+├── track-0-delivery.md          # 轨道 0：给老师同学的交付包与手机端评估
 └── ROUND-A-MAP.md … ROUND-F-MAP.md   # 逐轮派单，开工时才建
 ```
 
@@ -40,7 +41,7 @@ plans/0.2.0/
 
 | 轮次 | 主题 | 小轮 | 状态 |
 |---|---|---|---|
-| 0 | 交付（打包 BOM 修复 + 使用说明 + 意见表） | 0-1 打包　0-2 说明　0-3 收集 | 🔵 |
+| 0 | 交付（解压即用包） | 0-1 打包　0-2 说明　0-3 收集 | 🟡 包已出（见 [交付说明](track-0-delivery.md)），等反馈 |
 | A | 原生组合与兼容边界 | A1 版本可达性　A2 provider 协议　A3 session/持久化　A4 资源根与打包　A5 挂载结论 | ✅ 关单，见 [A 轮结论](ROUND-A-CONCLUSION.md) |
 | B | 最小原生链路跑通 | B1 llm/provider　B2 agent/loop　B3 session　B4 tools　B5 system-prompt | 🔵 进行中 |
 | C | 接业务内容与真实工具 | C1 提示词　C2 skill　C3 读工具　C4 写工具/产物　C5 题目提交　C6 profile/recorder | ☐ |
