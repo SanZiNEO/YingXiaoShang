@@ -57,6 +57,17 @@ try {
   check('写回后 Key 保留', repair.read().apiKey === KEY)
   const raw = (await import('node:fs')).readFileSync(repairPath, 'utf8')
   check('写回后文件不再有 BOM', raw.charCodeAt(0) !== 0xfeff)
+
+  // 6. 先坏后修：外部把文件改好之后，configError 不能常驻
+  const healPath = join(dir, 'heal.json')
+  writeFileSync(healPath, '{oops', 'utf8')
+  const heal = new SettingsStore(healPath)
+  const broken = heal.readPublic()
+  check('坏文件先报 configError', typeof broken.configError === 'string')
+  writeFileSync(healPath, JSON.stringify({ apiKey: KEY }), 'utf8')
+  const healed = heal.readPublic()
+  check('文件改好后 configError 被清掉', healed.configError === undefined, healed.configError ?? '(已清)')
+  check('文件改好后能读出 Key', healed.hasApiKey === true)
 } finally {
   rmSync(dir, { recursive: true, force: true })
 }

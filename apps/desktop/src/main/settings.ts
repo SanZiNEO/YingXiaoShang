@@ -25,6 +25,8 @@ export class SettingsStore {
   constructor(private readonly path: string) {}
 
   private stored(): Partial<DeepSeekSettings> {
+    // 每次读取都重新判定：文件被外部修好之后，旧的错误不能常驻。
+    this.configError = undefined
     let raw: string
     try {
       raw = readFileSync(this.path, 'utf8')

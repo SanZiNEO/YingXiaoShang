@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import subprocess
 import sys
@@ -84,6 +85,7 @@ def main() -> int:
 
     checked = skipped = 0
     missing: list[tuple[str, int, str]] = []
+    external: list[tuple[str, int, str]] = []
     ambiguous: list[tuple[str, int, str, list[str]]] = []
     overflow: list[tuple[str, int, str, int, int]] = []
 
@@ -95,13 +97,24 @@ def main() -> int:
                 if any(p.search(ref) for p in SKIP_PATTERNS):
                     skipped += 1
                     continue
-                # 文档里的路径可能相对仓库根，也可能相对 docs/
+                # 文档里的路径可能相对仓库根，也可能相对 docs/；
+                # 必须做 `..` 归一，否则 `../packages/x.ts` 会被当成仓库里的
+                # `docs/../packages/x.ts` 而查不到，进而落到同名文件误判歧义。
                 target = None
+                outside = False
                 for prefix in ("", "docs/"):
-                    candidate = (prefix + ref).replace("//", "/")
+                    candidate = os.path.normpath(prefix + ref).replace("\\", "/")
+                    if candidate.startswith(".."):
+                        # 指向仓库外（例如被 .gitignore 排除的 example/）：
+                        # 不算错，单独统计，否则会掩盖真正的问题。
+                        outside = True
+                        continue
                     if candidate in fileset:
                         target = candidate
                         break
+                if target is None and outside:
+                    external.append((doc, lineno, ref))
+                    continue
                 if target is None:
                     hits = by_name.get(Path(ref).name, [])
                     if len(hits) == 1:
@@ -129,6 +142,13 @@ def main() -> int:
         return f"\n        上下文：{line.strip()[:120]}"
 
     print(f"活跃文档 {len(docs)} 份，核对引用 {checked} 条（跳过 {skipped} 条）")
+
+    if external:
+        print(f"\n指向仓库外 {len(external)} 处（例如被 .gitignore 排除的 example/，不算错）：")
+        for doc, lineno, ref in external[:8]:
+            print(f"  {doc}:{lineno} → {ref}")
+        if len(external) > 8:
+            print(f"  …另有 {len(external) - 8} 处")
 
     if overflow:
         print(f"\n行号越界 {len(overflow)} 处：")

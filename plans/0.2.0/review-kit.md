@@ -106,12 +106,14 @@
 ## 八、跑得动的验证命令
 
 ```bash
-pnpm run typecheck                          # 全仓库类型检查
-pnpm exec tsx scripts/verify-max-rounds.ts  # 轮次/事件/DSML 抑制
-pnpm exec tsx scripts/verify-settings-bom.ts# 配置读取
-python tools/verify-doc-refs.py             # 文档「文件:行号」引用
-python tools/verify-case-quotes.py          # 案例引文回原文
+pnpm run typecheck                           # 全仓库类型检查，期望退出码 0
+pnpm exec tsx scripts/verify-settings-bom.ts # 配置读取（BOM/坏文件/先坏后修），期望「全部通过」
+python tools/verify-doc-refs.py              # 文档「文件:行号」引用，期望「全部对得上」
+python tools/verify-case-quotes.py <md 文件> --news-id <新闻 id>   # 案例引文回原文，需参数
 ```
+
+**注意**：`scripts/verify-max-rounds.ts` 曾存在于已关闭的 `perf/max-rounds` 分支，
+**不在 main 上**。旧循环将被替换，那个脚本不再需要，不要在本仓库里找它。
 
 任何一条跑不起来，本身就是一条 P1（说明仓库不干净或依赖缺失）。
 

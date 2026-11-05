@@ -21,9 +21,9 @@
 
 | 编号 | 事实 | 依据 |
 |---|---|---|
-| A1-1 | 仓库已声明 16 个 `@deepseek-ai/*` 包，版本统一 `0.2.1-rc.2`，`cordis` 为 `~4.0.5` | `package.json`、各 `packages/*/package.json` |
-| A1-2 | **实际装到的只有 4 个**：`cordis`、`dsh-llm`、`dsh-skill`、`dsh-tools`（分布在 `packages/agent`、`packages/api`、`packages/bp`） | `node_modules/.pnpm` |
-| A1-3 | **要接原生 loop 还缺 9 个包**：`dsh-agent-loop`、`dsh-system-prompt`、`dsh-session-persistence*`、`dsh-session-projection`、`dsh-skill-filesystem`、`dsh-tool-skill`、`dsh-token-meter`、`dsh-compaction-basic`、`dsh-compaction-tool-result-pruner` | 审计 §4.3.1 清单 × 实际 store |
+| A1-1 | 仓库声明 17 个去重后的 `@deepseek-ai/*` 包，版本统一 `0.2.1-rc.2`，`cordis` 为 `~4.0.5`（`grep -rho '"@deepseek-ai/[^"]*"' package.json packages/*/package.json apps/desktop/package.json \| sort -u \| wc -l` = 17） | 各 `package.json` |
+| A1-2 | **store 里有一套完整的**（`node_modules/.pnpm` 下 263 个 `@deepseek-ai` 条目，含真实 `lib/*.js`）；但**工作区包只 link 了少数几个**：`packages/agent` 有 `cordis`+`dsh-llm`，`packages/api` 有 `cordis`+`dsh-agent`+`dsh-session`+`dsh-typert-protocol`，`packages/bp` 有 `cordis`+`dsh-llm`+`dsh-tools`。**所以「装不到」= 没声明、没 link，不是磁盘上没有** | `ls node_modules/.pnpm \| grep -c @deepseek-ai` = 263；`ls packages/*/node_modules/@deepseek-ai` |
+| A1-3 | 接原生 loop 需要的 9 个包**已在 store 里且版本正确**（`dsh-agent-loop`、`dsh-system-prompt`、`dsh-session-persistence`、`dsh-session-projection`、`dsh-skill-filesystem`、`dsh-tool-skill`、`dsh-token-meter`、`dsh-compaction*`，均为 `0.2.1-rc.2`），**只是没写进 package.json**。→ B 轮开工**不需要重新下载**，加依赖声明后 `pnpm install --offline` 应可 link | `ls -d node_modules/.pnpm/@deepseek-ai+dsh-agent-loop*`（注意目录名是 `包名_hash`，不是 `包名@版本`，用错 glob 会误判成缺包） |
 | A1-4 | 上述 9 个包 **npm 上都有**，且与核心包**同批次发版**（每个包 43 个版本，`0.2.1-rc.2` 均存在） | `registry.npmjs.org` |
 | A1-5 | **`latest` 标签是旧的**：`dsh-agent-loop` 的 latest 是 `0.1.0-rc.6`，`dsh-system-prompt`/`dsh-token-meter`/`dsh-skill` 的 latest 是 `0.0.1-rc.1` | 同上 |
 | A1-6 | `dsh-agent-loop@0.1.0-rc.6` 的 peer 要求 `^0.1.0-rc.6` 的 llm/agent/tools/session/system-prompt/persistence —— **和仓库现有 `0.2.1-rc.2` 不兼容** | `registry.npmjs.org` peerDependencies |
@@ -35,7 +35,7 @@
 | 编号 | 目标（一句话） | 材料 | 交付物 | 验收 |
 |---|---|---|---|---|
 | A0 | 在仓库外建一个抛包试验，把 DSH 整套跑起来（不看业务） | `example/deepseek-harness-master`、npm `@deepseek-ai/*@0.2.1-rc.2` | `G:/市场营销ai/probe/a0-dsh/` 下的 `package.json` + 启动脚本 + 一段对话输出 | 能跑通一次「发一句话 → 模型流式回包 → 自然结束」；输出日志归档到 `probe/a0-dsh/run.log` |
-| A1 | 版本与可达性核对 | 上表 A1-1…A1-6 | 本文件 §2 表格更新 | ☐ 9 个缺包确认同版本可装且互相 peer 不冲突 |
+| A1 | 版本与可达性核对 | 上表 A1-1…A1-6 | 本文件 §2 表格更新 | ✅ 已核（2026-11-04 修正：store 已齐，缺的是声明与 link） |
 | A2 | provider 协议核对 | `apps/desktop/src/main/llm.ts`、`dsh-llm-deepseek` README | §6 实测记录 | ✅ **能直接用，不需要适配层**（2026-11-04 实测，见 §6） |
 | A3 | session 持久化与投影 | `dsh-session-persistence` / `-jsonl` README | §7 记录 | ✅ 核对完成（关键约束见 §7） |
 | A4 | 产品资源根与打包 | `dsh-skill-filesystem` README | §7 记录 | ✅ 方案明确（`bundledSkillDir` + `includeDefaultRoots:false`），打包验证留 B 轮 |
