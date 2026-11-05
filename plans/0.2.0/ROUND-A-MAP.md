@@ -37,8 +37,8 @@
 | A0 | 在仓库外建一个抛包试验，把 DSH 整套跑起来（不看业务） | `example/deepseek-harness-master`、npm `@deepseek-ai/*@0.2.1-rc.2` | `G:/市场营销ai/probe/a0-dsh/` 下的 `package.json` + 启动脚本 + 一段对话输出 | 能跑通一次「发一句话 → 模型流式回包 → 自然结束」；输出日志归档到 `probe/a0-dsh/run.log` |
 | A1 | 版本与可达性核对 | 上表 A1-1…A1-6 | 本文件 §2 表格更新 | ☐ 9 个缺包确认同版本可装且互相 peer 不冲突 |
 | A2 | provider 协议核对 | `apps/desktop/src/main/llm.ts`、`dsh-llm-deepseek` README | §6 实测记录 | ✅ **能直接用，不需要适配层**（2026-11-04 实测，见 §6） |
-| A3 | session 持久化与投影：`create/resume/close` 调用条件、数据落哪 | `dsh-session`、`dsh-session-persistence*`、`dsh-session-projection` | 一节挂载顺序与卸载顺序 | ☐ 写清与现有 `%APPDATA%/营小商` 的关系 |
-| A4 | 产品资源根与打包：skill filesystem 的 `includeDefaultRoots: false` + 自定义根能否打进安装包 | `dsh-skill-filesystem`、`electron-builder.yml` | 一节路径与打包清单 | ☐ 写清资源目录、产物里应出现的文件、缺失时怎么发现 |
+| A3 | session 持久化与投影 | `dsh-session-persistence` / `-jsonl` README | §7 记录 | ✅ 核对完成（关键约束见 §7） |
+| A4 | 产品资源根与打包 | `dsh-skill-filesystem` README | §7 记录 | ✅ 方案明确（`bundledSkillDir` + `includeDefaultRoots:false`），打包验证留 B 轮 |
 | A5 | 挂载结论：一份「挂什么/不挂什么/为什么」清单 | A0–A4 全部结果 | `plans/0.2.0/ROUND-A-CONCLUSION.md` | ☐ B 轮能直接照着实施，含被否方案与理由 |
 
 ## 四、待裁决（阻塞项）
@@ -77,3 +77,30 @@
 
 **残留风险**：Messages 端点的限流、并发、长上下文计费与 chat/completions 是否一致，未验证。
 B 轮跑真实对话时顺手记录 token 用量对照。
+
+## 七、A3 / A4 核对记录（2026-11-04，读上游 README）
+
+### A3 session 持久化（三条硬约束）
+
+1. **只有通过句柄获取的会话才持久化**。`ctx.sessions.create` + flush 不存任何东西；
+   `agent-loop` 才是生产环境的获取点。→ 挂载顺序：持久化后端 → 投影 → agent-loop。
+2. **JSONL 后端每个会话一份 `.jsonl.zstd` 仅追加日志**；`session/flush` 是持久性屏障，
+   `session/disposed` 做最终排空。`close()` 会先排空再释放所有权，所以关应用不会丢数据。
+3. **崩溃恢复**：未闭合的最后一轮会被补上合成的 `tool/result` 错误、`step/end`、
+   `turn/end {interrupted}`。撕裂的尾部不会到达读取方。
+
+**与现有 `%APPDATA%/营小商` 的关系**：`DSH_HOME` 决定 harness 配置根（其下 `sessions/`）。
+规划：`DSH_HOME = %APPDATA%/营小商/dsh`，与现有 `learning.db` 并列，**不再另建全局 `~/.dsh`**
+（对应 R17「运行日志也归同一 app home」）。迁移前做含 WAL 的在线备份。
+
+### A4 产品资源根与打包
+
+- `skill-filesystem` 支持 `includeDefaultRoots: false`，此时只认 `customSkillDirs`，
+  不会把开发机个人 skills 暴露给学生（审计 §4.5.4 的要求）。
+- `bundledSkillDir`（rank 600）用于**随包发布**的教学 skill 根。
+- 布局只认两种：`<name>/SKILL.md` 或平铺 `<name>.md`；**不支持嵌套 `**/SKILL.md`**。
+  → 现有 `packages/agent/skills/case-coach/SKILL.md` 正好符合，可直接作 bundled 根。
+- 缺文件的行为：provider 可能只告警跳过，**不等于**满足 R04 的启动检查。
+  → 打包后必须有一条自检（启动时列目录条目，缺 `case-coach` 就失败），不能假设「挂上就有」。
+
+**打包验证留 B 轮**：在 electron-builder 产物里真实读一次目录条目。
