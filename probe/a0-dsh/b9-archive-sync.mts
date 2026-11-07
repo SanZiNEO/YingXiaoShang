@@ -61,7 +61,12 @@ console.log('使用会话:', sessionId, '章节:', existing?.chapter_id || '(空
 
 const t0 = Date.now()
 const out = await runtime.handleConversation(
-  { studentId, sessionId, message: '我的理解是：消费者市场的特点就是人多但需求分散，所以要先做细分再谈定位。你看我这个说法对吗？' },
+  {
+    studentId,
+    sessionId,
+    message: process.env.LA_UTTERANCE
+      ?? '我的理解是：消费者市场的特点就是人多但需求分散，所以要先做细分再谈定位。你看我这个说法对吗？',
+  },
   { onEvent: () => {} },
 )
 console.log(`\n本轮 ${((Date.now() - t0) / 1000).toFixed(1)}s，正文 ${out.text.length} 字`)
@@ -92,6 +97,11 @@ console.log(`4. memory_episodes 行数: ${episodes.length}`)
 const evidence = db.listEvidence?.({ studentId, limit: 500 }) ?? []
 console.log(`5. evidence 行数: ${evidence.length}（本轮若抽到证据会 +N）`)
 const pendingFail = ledgers.filter((l: any) => l.status === 'failed')
+const rec = (() => { try { return JSON.parse(typeof last?.record_json === 'string' ? last.record_json : JSON.stringify(last?.record_json)) } catch { return {} } })()
+console.log(`7. record.phaseBefore → phaseAfter: ${rec.phaseBefore} → ${rec.phaseAfter}`)
+let growth: any[] = []
+try { growth = db.listGrowthSnapshots?.(studentId, (rec.scope ?? {}).chapterId ?? '') ?? [] } catch { growth = [] }
+console.log(`8. growth_snapshots 行数: ${growth.length}`)
 console.log(`6. failed ledger: ${pendingFail.length} ${pendingFail.length === 0 ? '✅' : '❌ ' + JSON.stringify(pendingFail[0]?.last_error)}`)
 
 process.exit(0)

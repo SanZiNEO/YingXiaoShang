@@ -115,7 +115,7 @@ export interface ReadLedger {
 | 2 | 目录只含名称、小节、定义前 60 字，并明确标注不是原文 | `packages/agent/src/team.ts:91-106` |
 | 3 | `createToolContext()` 支持 `seed`，但 `runTeamTurn()` 没有传；业务材料没有预取入口 | `packages/agent/src/tools/index.ts:39-49`、`packages/agent/src/team.ts:182-188` |
 | 4 | `firstTime` / `seen` / `cite` 都在本轮上下文里，工具自己不持有状态 | `packages/agent/src/tools/types.ts:25-45`、`packages/agent/src/tools/index.ts:50-66` |
-| 5 | `read_kp`、`read_textbook`、`read_material` 写 `reads` 与 `citations` | `packages/agent/src/tools/read-tools.ts:58-59`、`:169-177`、`:224-243` |
+| 5 | `read_kp`、`read_textbook`、`read_material` 写 `reads` 与 `citations` | `packages/agent/src/tools/read-tools.ts:73-74`、`:169-177`、`:224-243` |
 | 6 | `read_reference` 只写 `reads.references`，不写引用 | `packages/agent/src/tools/read-tools.ts:311` |
 | 7 | `search_news` 只写 `reads.queries`；`read_news` 才写 `reads.news` 与引用 | `packages/agent/src/tools/read-tools.ts:350`、`:382-383` |
 | 8 | `list_chapter_kps` 不写 `reads`、不写 `citations`；它是看全章的兜底，主路径仍要求 `read_kp` / `read_material` 记账 | `packages/agent/src/tools/read-tools.ts:18-37` |

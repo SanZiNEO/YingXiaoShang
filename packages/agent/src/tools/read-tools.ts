@@ -54,7 +54,10 @@ export const READ_TOOLS: ToolSpec[] = [
     execute(args, turn) {
       const batch = Array.isArray(args.names)
         ? (args.names as unknown[]).filter((item): item is string => typeof item === 'string')
-        : []
+        : typeof args.names === 'string' && (args.names as string).trim().length > 0
+          // 模型常把 names 写成字符串，按单个处理，不要报「缺少参数」。
+          ? [args.names as string]
+          : []
       const queries = batch.length > 0
         ? batch
         : [typeof args.name === 'string' ? (args.name as string) : '']

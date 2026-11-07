@@ -492,7 +492,10 @@ export class AgentService extends Service implements AgentRuntime {
         trace: team.trace,
       },
     })
-    const snapshotAfter = this.projector.project({ studentId, sessionId, message: '' })
+    // 同一个投影口径：phase 判定（如「我写完了」→ post）只看 message，
+    // 所以这里必须把本轮原话传进去，否则 phaseAfter 会倒退回 learning，
+    // 后测快照（growth_records）就永远不会被触发。
+    const snapshotAfter = this.projector.project({ studentId, sessionId, message: input.message })
     // 记录器只认完整的 TurnRecord。以前这里写的是 `{}`，记录器读不出来就
     // 直接跳出，水位永远停在 0，学情/成长档案因此从来没更新过。
     const record: TurnRecord = {

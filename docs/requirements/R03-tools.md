@@ -67,7 +67,7 @@ interface ToolContext {
 | 类别 | 工具 | 参数 | 有界返回 |
 |---|---|---|---|
 | 读 | `list_chapter_kps` | `chapterId?` | 全章知识点，每个一行 |
-| 读 | `read_kp` | `name` | 一个知识点的定义、别名、例子、非例子 |
+| 读 | `read_kp` | `name` 或 `names`（数组，一次读多个）| 每个知识点的定义、别名、例子、非例子 |
 | 读 | `read_textbook` | `kps?`（≤4）、`kp?`、`query?`、`limit?`（1–6） | 每个知识点最多 6 段原文 |
 | 读 | `read_material` | `kps`（1–4）、`query?`、`limit?`（1–4） | 整次返回 ≤ 12,000 字符 |
 | 读 | `read_reference` | `name`（7 份之一） | 单份手册全文（当前最大 4,269 字符） |
