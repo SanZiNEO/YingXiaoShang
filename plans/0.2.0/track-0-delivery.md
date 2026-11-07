@@ -152,3 +152,38 @@ TCP 443     : 32 ms
 **仍不能保证的**：速度。快慢取决于那根网到 DeepSeek 的链路，本机直连实测 0.78 秒；
 校园网可能慢几十倍，而这版软件**没有超时**（审计 F01/F02），慢的时候只会转圈。
 所以包里保留 `检查网络.bat`：一屏就能看出是「网慢」还是「软件问题」。
+
+---
+
+## 重打 app.asar（不需要 pnpm install 也能做）
+
+`pnpm install` 在本机会卡在 851/851，但**构建和重打包都不需要它**。
+2026-11-07 实测走通这条路，把「一次读够 + 学情档案修复」打进了交付包：
+
+```bash
+# 1. 构建渲染层与主进程（产物在 apps/desktop/out）
+cd apps/desktop && ./node_modules/.bin/electron-vite build
+
+# 2. 解包里已有的 app.asar（保留 node_modules，因为那是运行时依赖）
+node <asar bin> extract resources/app.asar asar-tmp
+
+# 3. 整目录替换 out（不要只覆盖，旧 assets 会残留，index.html 可能指向不存在文件）
+rm -rf asar-tmp/out && cp -r apps/desktop/out asar-tmp/out
+
+# 4. 重新打包
+node <asar bin> pack asar-tmp resources/app.asar
+```
+
+`<asar bin>` = `learning-agent/node_modules/.pnpm/@electron+asar@3.4.1/node_modules/@electron/asar/bin/asar.js`
+
+**验证三步**（缺一不可）：
+
+1. `asar extract` 回一个临时目录，`grep` 新代码里的特征串（例如 `缺少参数 name 或 names`、`entry-chip__dot`）；
+2. 启动 `营小商-core.exe`，`Get-Process` 看 `MainWindowTitle` 是「营小商」、内存约 150–170MB；
+3. 关掉进程，确认没有新的 stderr 致命错误（`MODULE_TYPELESS_PACKAGE_JSON` 是既有警告，可忽略）。
+
+## 已知风险（重打包路线）
+
+包里 `node_modules` 仍是 0.1.0 时期那份，而 `out/main/index.js` 是**当前源码**构建的。
+如果哪天新增了运行时依赖（不是被打进 bundle 的那种），只换 `out` 会缺模块。
+判断方法：冒烟测试能起窗口只是第一步，还要真的发一条消息看有没有报错。
