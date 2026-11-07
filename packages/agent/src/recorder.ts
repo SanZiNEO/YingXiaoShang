@@ -135,7 +135,17 @@ export class RecorderAgent {
         // watermark until its record lands.
         if (turn.seq_end > limit) break
         const record = asRecord(turn.record_json)
-        if (!record) break
+        if (!record) {
+          // 已完成但 record 缺失：老版本（0.1.x）把 record_json 写成 `{}`，
+          // 这种轮次没有可消费的结论，但不能让它把水位永久卡住——
+          // 跳过它、把水位推过去，后面补齐的轮次才能被处理。
+          // 仍在进行中的轮次必须挡住（消息还没写完）。
+          if (turn.status !== 'running') {
+            watermark = Math.max(watermark, turn.seq_end)
+            continue
+          }
+          break
+        }
         consumed.push({ turn, record })
         watermark = Math.max(watermark, turn.seq_end)
       }

@@ -492,13 +492,38 @@ export class AgentService extends Service implements AgentRuntime {
         trace: team.trace,
       },
     })
+    const snapshotAfter = this.projector.project({ studentId, sessionId, message: '' })
+    // 记录器只认完整的 TurnRecord。以前这里写的是 `{}`，记录器读不出来就
+    // 直接跳出，水位永远停在 0，学情/成长档案因此从来没更新过。
+    const record: TurnRecord = {
+      turnId,
+      sessionId,
+      status: team.warnings.length > 0 ? 'partial' : 'completed',
+      phaseBefore: snapshot.phase,
+      phaseAfter: snapshotAfter.phase,
+      scope: snapshotAfter.scope,
+      subagents: [],
+      artifactIds: team.artifacts.map((artifact) => artifact.id),
+      evidenceArtifactIds: [],
+      // 对话轮次本身不产出结构化证据候选：学生原话由记录器交给
+      // profile.extractEvidence 抽取，候选为空是正常的。
+      evidenceCandidateCount: 0,
+      attemptIds: [],
+      ledgerWatermark: assistantMessage.seq,
+      errors: team.warnings,
+      startedAt,
+      finishedAt,
+      evidenceCandidates: [],
+      facts: [],
+      openQuestions: [],
+    }
     this.db.upsertTurn({
       id: `turn_${turnId}`,
       session_id: sessionId,
       turn_id: turnId,
-      status: 'completed',
+      status: record.status,
       plan_json: plan,
-      record_json: {},
+      record_json: record,
       seq_start: userMessage.seq,
       seq_end: assistantMessage.seq,
       started_at: startedAt,
@@ -517,7 +542,7 @@ export class AgentService extends Service implements AgentRuntime {
       asks: [],
       evidence: [],
       ledger: this.db.getSummaryLedger('session', sessionId),
-      snapshot: this.projector.project({ studentId, sessionId, message: '' }),
+      snapshot: snapshotAfter,
       warnings: team.warnings,
     }
   }

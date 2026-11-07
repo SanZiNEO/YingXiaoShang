@@ -134,3 +134,12 @@ input::placeholder {
   outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
   outline-offset: 1px;
 }
+
+/* 有新内容时的小圆点：不抢注意力，但能看出「里面多了东西」。 */
+.entry-chip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--warning);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--warning) 22%, transparent);
+}

@@ -477,6 +477,8 @@ export function App() {
   const [scopeMenuOpen, setScopeMenuOpen] = useState(false)
   const [contextOpen, setContextOpen] = useState(false)
   const [tabs, setTabs] = useState<DocTab[]>([])
+  // 一轮结束后任务概览里会多出本轮计划/进度/产物，用一个小圆点提示「有新东西」。
+  const [overviewUnread, setOverviewUnread] = useState(false)
   const [activeTab, setActiveTab] = useState<string>()
   const layoutRef = useRef<HTMLDivElement | null>(null)
   const viewport = useViewportWidth(layoutRef)
@@ -765,6 +767,8 @@ export function App() {
   }, [studentId])
 
   const openTab = useCallback((kind: DocKind, title = docTitle(kind)) => {
+    // 打开任务概览就把「有新内容」的提示消掉：学生已经看过了。
+    if (kind === 'overview') setOverviewUnread(false)
     setTabs((current) => current.some((tab) => tab.id === kind)
       ? current
       : [...current, { id: kind, kind, title }])
@@ -945,6 +949,7 @@ export function App() {
         && (result.citations.length > 0 || result.plan.steps.some((step) => step.agent === 'knowledge'))) {
         openTab('evidence')
       }
+      setOverviewUnread(true)
     } catch (error) {
       setNotice(error instanceof Error ? error.message : String(error))
       await refreshAll(sessionId)
@@ -1413,6 +1418,7 @@ export function App() {
                 >
                   <DocIcon size={14} />
                   任务概览
+                  {overviewUnread ? <span className="entry-chip__dot" aria-label="有新内容" /> : null}
                 </button>
               </div>
             </header>
