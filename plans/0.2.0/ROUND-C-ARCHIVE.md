@@ -1,6 +1,6 @@
 # C 轮（切片一）：学情档案闭环
 
-> 状态：**已实现、已自测、复核中**。提交 `211d36f`。
+> 状态：**已实现、已自测、独立复核通过（可合）**。提交 `211d36f`、`c6b75a1`。
 > 这一片只解决「档案不更新」，不动运行时（原生替换仍是 B 轮）。
 
 ---
@@ -78,3 +78,37 @@ episode 数、evidence 数、failed ledger 数。
 - 聊天里抽出的证据 `review_status='draft'`，老师侧还没有审核入口（E 轮）；
 - 历史轮次里真正有价值的学生原话**不会补抽**证据——只推进水位，不追溯。
   这是有意的：补抽要重跑历史模型调用，成本和不确定性都高，且学生已看不到那些轮次。
+
+---
+
+## 七、独立复核发现并已修的问题（`c6b75a1`）
+
+复核按 `review-kit.md` 判据查出三条，全部属实：
+
+| 级别 | 问题 | 修法 |
+|---|---|---|
+| P1 | `snapshotAfter` 用 `message: ''` 投影，而 phase 判定（`state.ts:177` 的 `postRequest` 等）只看 message → 学生说「我写完了」时 `phaseBefore=post`、`phaseAfter=learning` 倒退 | 改成用本轮原话投影，`phaseBefore` 与 `phaseAfter` 同一口径 |
+| P1 | 上面那条的直接后果：`recorder.ts` 里 `record.phaseAfter === 'post'` 永不成立 → `growth_snapshots` 从聊天轮次永远写不进去 | 同上，分支现在可达 |
+| P1 | `R03-tools.md:70`、`R06-knowledge.md:64` 仍写 `read_kp` 的 `name` 必填 | 同步为 `name` 或 `names`，注明不能同时为空 |
+| P2 | `R05-context-on-demand.md:118` 引用的 `read-tools.ts:58-59` 已因批量改造偏移 | 改为 `:73-74` |
+| P2 | `names` 传成字符串时误报「缺少参数」 | 字符串按单个处理 |
+
+**这条 P1 很关键**：如果不修，我这一轮等于只修了「水位能前进」，
+但「学生做完作业 → 记一次成长快照」这条链仍然断着，而那正是老师最想看的。
+
+实测（`LA_UTTERANCE='我写完了，帮我看看这份作业的问题在哪？'`）：
+
+```
+record.phaseBefore → phaseAfter: post → post     （修前 post → learning）
+```
+
+## 八、复核怎么做的（可复用）
+
+按 `plans/0.2.0/主代理-轮次任务模板.md` 派单，模板 `review`，brief 里给三样东西：
+
+1. **范围**：认提交号，不认口述；
+2. **背景**：说清「这一版还跑自研循环，原生替换是 B 轮」，否则会被当成原则违背；
+3. **必答三问**：字段与 schema 是否一致、有没有只在我本机成立的前提、工具契约有没有被破坏。
+
+复核独立跑了 typecheck 与 `verify-doc-refs.py`，没有采信我的自测数字。
+它给的证据是 `文件:行号` + 代码摘录，符合 review-kit 第五节格式。
