@@ -38,36 +38,51 @@ export const READ_TOOLS: ToolSpec[] = [
   {
     name: 'read_kp',
     kind: 'read',
-    description: '读一个知识点的完整定义：别名、关键词、教材例子、非例子、所属章节与小节。',
+    description: '读知识点的完整定义：别名、关键词、教材例子、非例子、所属章节与小节。需要几个概念就一次给几个（names），不要一个概念调一次。',
     parameters: {
       type: 'object',
       additionalProperties: false,
       properties: {
-        name: { type: 'string', description: '知识点中文名或 id' },
+        name: { type: 'string', description: '知识点中文名或 id（只读一个时用）' },
+        names: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '知识点中文名或 id 的列表。要同时看几个概念时，把它们一次放进 names',
+        },
       },
-      required: ['name'],
     },
     execute(args, turn) {
-      const query = typeof args.name === 'string' ? args.name.trim() : ''
-      if (query.length === 0) return '缺少参数 name。'
-      const point = findKp(turn.ctx, turn.chapterId, query)
-      if (!point) return `当前章节里没有找到知识点「${query}」。可先调用 list_chapter_kps。`
-      if (!turn.firstTime(`kp:${point.name}`)) {
-        return `「${point.name}」这个知识点的定义、别名、例子你在本轮已经读过一次，内容完全相同，不再重复返回。直接用手上已有的材料写结论。`
+      const batch = Array.isArray(args.names)
+        ? (args.names as unknown[]).filter((item): item is string => typeof item === 'string')
+        : []
+      const queries = batch.length > 0
+        ? batch
+        : [typeof args.name === 'string' ? (args.name as string) : '']
+      const filled = queries.map((item) => item.trim()).filter((item) => item.length > 0)
+      if (filled.length === 0) return '缺少参数 name 或 names。'
+
+      const readOne = (query: string): string => {
+        const point = findKp(turn.ctx, turn.chapterId, query)
+        if (!point) return `当前章节里没有找到知识点「${query}」。可先调用 list_chapter_kps。`
+        if (!turn.firstTime(`kp:${point.name}`)) {
+          return `「${point.name}」这个知识点的定义、别名、例子你在本轮已经读过一次，内容完全相同，不再重复返回。直接用手上已有的材料写结论。`
+        }
+        turn.cite({ sourceType: 'kp', sourceId: point.id, quote: point.definition, locator: { name: point.name, chapterId: point.chapter_id } })
+        turn.reads.kps.add(point.name)
+        return [
+          `# ${point.name}`,
+          `章节：${chapterTitle(turn.ctx, point.chapter_id)}（${point.chapter_id}）`,
+          `小节：${sectionTitle(turn.ctx, point.chapter_id, point.section_id)}`,
+          `定义：${point.definition}`,
+          point.aliases.length > 0 ? `别名：${point.aliases.join('、')}` : '',
+          point.keywords.length > 0 ? `关键词：${point.keywords.join('、')}` : '',
+          point.examples.length > 0 ? `教材例子：${point.examples.join('；')}` : '',
+          point.non_examples.length > 0 ? `非例子：${point.non_examples.join('；')}` : '',
+          `难度：${point.difficulty}`,
+        ].filter((line) => line.length > 0).join('\n')
       }
-      turn.cite({ sourceType: 'kp', sourceId: point.id, quote: point.definition, locator: { name: point.name, chapterId: point.chapter_id } })
-      turn.reads.kps.add(point.name)
-      return [
-        `# ${point.name}`,
-        `章节：${chapterTitle(turn.ctx, point.chapter_id)}（${point.chapter_id}）`,
-        `小节：${sectionTitle(turn.ctx, point.chapter_id, point.section_id)}`,
-        `定义：${point.definition}`,
-        point.aliases.length > 0 ? `别名：${point.aliases.join('、')}` : '',
-        point.keywords.length > 0 ? `关键词：${point.keywords.join('、')}` : '',
-        point.examples.length > 0 ? `教材例子：${point.examples.join('；')}` : '',
-        point.non_examples.length > 0 ? `非例子：${point.non_examples.join('；')}` : '',
-        `难度：${point.difficulty}`,
-      ].filter((line) => line.length > 0).join('\n')
+
+      return filled.map(readOne).join('\n\n---\n\n')
     },
   },
   {

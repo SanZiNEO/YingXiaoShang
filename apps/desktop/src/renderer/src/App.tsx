@@ -1406,12 +1406,13 @@ export function App() {
                 </div>
                 <button
                   type="button"
+                  className="entry-chip"
                   aria-label="任务概览"
-                  title="任务概览"
+                  title="任务概览：本轮计划、走到第几步、产物入口"
                   onClick={() => openTab('overview')}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', background: 'transparent', color: COLORS.muted, borderRadius: 7, width: 26, height: 26, cursor: 'pointer' }}
                 >
-                  <DocIcon size={15} />
+                  <DocIcon size={14} />
+                  任务概览
                 </button>
               </div>
             </header>
