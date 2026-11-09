@@ -60,8 +60,10 @@ export interface TeamTurnInput {
   ctx: Context
   scope: TeamScope
   message: string
-  /** Every earlier user/assistant message in this session, in order. */
+  /** 最近几轮的原文（已经过压缩，见 history.ts）。 */
   history: Array<{ role: 'user' | 'assistant'; content: string }>
+  /** 更早对话的压缩摘要；为空表示历史还短，不需要。 */
+  historyDigest?: string
   hooks?: TeamHooks
 }
 
@@ -192,6 +194,10 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
     '',
     env,
     '',
+    // 早期对话压缩成一段，替代整段重放；标注清楚它不是学生原话。
+    ...(input.historyDigest && input.historyDigest.length > 0
+      ? ['## 之前聊过什么（程序压缩，不是学生原话）', input.historyDigest, '']
+      : []),
     '## 本轮工具',
     '取材料、查手册、写产物都用工具，怎么用写在工具说明里。system 里只有知识点目录，没有正文；讲概念、案例、新闻前先用读工具取正文。',
     // 每多一轮就多一次完整模型往返（10~20 秒），把试探式阅读压掉。

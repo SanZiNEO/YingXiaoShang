@@ -28,6 +28,7 @@ import type {} from '@learning-agent/matcher'
 import { StateProjector } from './state.js'
 import { FeedbackAgent } from './subagents.js'
 import { RecorderAgent, type RecorderStatus } from './recorder.js'
+import { buildHistoryView } from './history.js'
 import { runTeamTurn, type TeamHooks, type TurnTrace } from './team.js'
 
 export type { TeamHooks, TeamEvent, TurnTrace } from './team.js'
@@ -435,10 +436,19 @@ export class AgentService extends Service implements AgentRuntime {
       message: input.message,
       scopeOverride,
     })
-    // Conversation history is sent as messages, not folded into the system prompt.
-    const history = this.db.listChatMessages(sessionId)
+    // 历史不做全量重放：最近几轮逐字，更早的压成摘要（见 history.ts）。
+    // 不压缩的话，同一会话越聊越慢（实测 2.8s → 61.3s → 76.4s）。
+    const rawHistory = this.db.listChatMessages(sessionId)
       .filter((item) => item.seq < userMessage.seq && (item.role === 'user' || item.role === 'assistant'))
       .map((item) => ({ role: item.role as 'user' | 'assistant', content: item.content }))
+    const historyView = buildHistoryView({
+      messages: rawHistory,
+      episodeSummaries: this.db
+        .listMemoryEpisodes(studentId, 50)
+        .filter((episode) => episode.session_id === sessionId)
+        .map((episode) => episode.summary)
+        .reverse(),
+    })
 
     const team = await runTeamTurn({
       ctx: this.ctx,
@@ -450,7 +460,8 @@ export class AgentService extends Service implements AgentRuntime {
         phase: snapshot.phase,
       },
       message: input.message,
-      history,
+      history: historyView.messages,
+      historyDigest: historyView.digest,
       hooks,
     })
 
