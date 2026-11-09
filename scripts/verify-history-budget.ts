@@ -32,6 +32,7 @@ console.log('1. 长历史必须有上限（200 轮也不能无限膨胀）')
   const view = buildHistoryView({ messages })
   // 用绝对阈值而不是常量本身：改常量时这条必须还能报警。
   check('逐字部分不超过 8000 字符', view.stats.keptChars <= 8000, `实际 ${view.stats.keptChars}`)
+  check('逐字消息条数不超过 6（3 轮）', view.stats.keptMessages <= 6, `实际 ${view.stats.keptMessages}`)
   check('摘要不超过 800 字符', view.stats.digestChars <= 800, `实际 ${view.stats.digestChars}`)
   check('确实折掉了大部分消息', view.stats.foldedMessages > 380, `实际 ${view.stats.foldedMessages}`)
   check('保留的是最后几条', view.messages.at(-1)?.content.startsWith('第199个回答'), view.messages.at(-1)?.content.slice(0, 20))
@@ -73,6 +74,51 @@ console.log('2b. 最近几轮本身超预算时，必须继续往前折（不能
   check('超预算时逐字部分被压到 7000 以内', view.stats.keptChars <= 7000, `实际 ${view.stats.keptChars}`)
   check('被搬走的轮次进了摘要', view.stats.foldedMessages > 0 && view.digest.length > 0)
   check('仍然以学生发言开头', view.messages[0]?.role === 'user')
+}
+
+console.log('2c. 学生贴了一大段（30k）也不能撑爆预算')
+{
+  const messages = [
+    message('user', '开头正常问题'),
+    message('assistant', '正常回答'),
+    message('user', '把作业全文贴过来：' + '作'.repeat(30_000)),
+    message('assistant', '收到，我看看'),
+    message('user', '继续'),
+    message('assistant', '好'),
+  ]
+  const view = buildHistoryView({ messages })
+  check('学生消息也被截断', view.stats.truncatedMessages >= 1, String(view.stats.truncatedMessages))
+  check('逐字部分仍在 7000 以内', view.stats.keptChars <= 7000, `实际 ${view.stats.keptChars}`)
+  check('摘要不超过 800', view.stats.digestChars <= 800, `实际 ${view.stats.digestChars}`)
+  check('极端输入下总量仍 ≤ 9000', view.stats.keptChars + view.stats.digestChars <= 9000,
+    `实际 ${view.stats.keptChars + view.stats.digestChars}`)
+}
+
+console.log('2d. 摘要截断时必须先丢旧的、留下最新的')
+{
+  const messages = []
+  for (let i = 0; i < 12; i += 1) {
+    messages.push(message('user', `早期问题${i}`))
+    messages.push(message('assistant', `早期回答${i}`))
+  }
+  // 每条摘要都写满 200 字，确保 12 条一定超过 700 的摘要上限（否则这条用例是假覆盖）
+  const filler = '细节'.repeat(100)
+  const episodes = Array.from({ length: 12 }, (_, i) => `第${i + 1}轮「本轮主题${i}」learning→learning；章节 ch04；${filler}`)
+  const view = buildHistoryView({ messages, episodeSummaries: episodes })
+  check('摘要里有最新一轮的主题', view.digest.includes('本轮主题11'), view.digest.slice(0, 80))
+  check('超限时丢弃的是最旧的那条', !view.digest.includes('本轮主题0'), view.digest.slice(0, 80))
+  check('摘要长度仍受限', view.digest.length <= 800, String(view.digest.length))
+}
+
+console.log('2e. 本会话产物标题要进摘要（否则「上次那份题目」认不出）')
+{
+  const messages = []
+  for (let i = 0; i < 10; i += 1) {
+    messages.push(message('user', `问题${i}`))
+    messages.push(message('assistant', `回答${i}`))
+  }
+  const view = buildHistoryView({ messages, artifactTitles: ['《第4章 消费者行为 20题》'] })
+  check('产物标题出现在摘要里', view.digest.includes('20题'), view.digest)
 }
 
 console.log('3. 助手长回答要截断（答案可能几千字，没必要整段重发）')

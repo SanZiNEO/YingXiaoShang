@@ -27,6 +27,19 @@ const runtime = new (await load('agent', 'AgentService'))(ctx)
 const db = (ctx as any).learningDb
 
 const studentId = process.env.LA_STUDENT ?? 'student_demo'
+// 数据副本可能没有该学生档案，先补一条，否则 chat_sessions 外键失败
+if (!db.getStudentProfile(studentId)) {
+  db.upsertStudentProfile({
+    id: studentId,
+    name: '演示学生',
+    cohort: '',
+    background: {},
+    goals: [],
+    preferences: {},
+    constraints: [],
+    self_assessment: {},
+  })
+}
 const sessionId = db.createChatSession({ studentId, chapterId: 'ch04', title: 'b10 历史预算' })
 console.log('会话:', sessionId)
 

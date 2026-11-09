@@ -448,6 +448,9 @@ export class AgentService extends Service implements AgentRuntime {
         .filter((episode) => episode.session_id === sessionId)
         .map((episode) => episode.summary)
         .reverse(),
+      artifactTitles: this.db.listArtifacts(studentId, 20)
+        .filter((artifact) => artifact.session_id === sessionId)
+        .map((artifact) => `《${artifact.title}》`),
     })
 
     const team = await runTeamTurn({

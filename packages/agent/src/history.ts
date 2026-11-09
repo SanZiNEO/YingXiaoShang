@@ -43,6 +43,10 @@ export interface BuildHistoryInput {
   maxChars?: number
   /** 单条助手消息的字符上限（回答可能很长，但没必要整段重发）。 */
   assistantMaxChars?: number
+  /** 单条学生消息的字符上限（贴一大段作业/PDF 摘录时同样会撑爆请求）。 */
+  userMaxChars?: number
+  /** 本会话已产出的附件标题（新→旧），让「上次那份题目」还能被认出来。 */
+  artifactTitles?: string[]
   /** 摘要的字符上限。 */
   digestMaxChars?: number
 }
@@ -50,6 +54,7 @@ export interface BuildHistoryInput {
 export const HISTORY_KEEP_TURNS = 3
 export const HISTORY_MAX_CHARS = 7000
 export const HISTORY_ASSISTANT_MAX_CHARS = 1200
+export const HISTORY_USER_MAX_CHARS = 600
 export const HISTORY_DIGEST_MAX_CHARS = 700
 
 const ELLIPSIS = '…（后略）'
@@ -79,13 +84,12 @@ function userLine(content: string): string {
 function buildDigest(input: {
   folded: HistoryMessage[]
   episodeSummaries: string[]
+  artifactTitles: string[]
   maxChars: number
 }): string {
+  // 顺序很关键：越界截断是从尾部截的，所以「最新的」必须排在最前面，
+  // 否则长会话里会先把最近发生的事丢掉、留下最早的几段。
   const parts: string[] = []
-  for (const summary of input.episodeSummaries) {
-    const line = summary.replace(/\s+/g, ' ').trim()
-    if (line.length > 0) parts.push(clip(line, 200))
-  }
   const asks = input.folded
     .filter((message) => message.role === 'user')
     .map((message) => userLine(message.content))
@@ -94,24 +98,32 @@ function buildDigest(input: {
     // 只留最近 8 句，避免摘要自己变成新的膨胀源。
     parts.push(`学生之前问过：${asks.slice(-8).join(' / ')}`)
   }
-  const joined = parts.join('\n')
-  return clip(joined, input.maxChars)
+  if (input.artifactTitles.length > 0) {
+    parts.push(`本会话已产出：${input.artifactTitles.slice(0, 5).join('、')}`)
+  }
+  // 会话摘要按「新 → 旧」排，保证截断先丢最早的。
+  for (const summary of [...input.episodeSummaries].reverse()) {
+    const line = summary.replace(/\s+/g, ' ').trim()
+    if (line.length > 0) parts.push(clip(line, 200))
+  }
+  return clip(parts.join('\n'), input.maxChars)
 }
 
 export function buildHistoryView(input: BuildHistoryInput): HistoryView {
   const keepTurns = Math.max(1, input.keepTurns ?? HISTORY_KEEP_TURNS)
   const maxChars = Math.max(400, input.maxChars ?? HISTORY_MAX_CHARS)
   const assistantMaxChars = Math.max(200, input.assistantMaxChars ?? HISTORY_ASSISTANT_MAX_CHARS)
+  const userMaxChars = Math.max(200, input.userMaxChars ?? HISTORY_USER_MAX_CHARS)
   const digestMaxChars = Math.max(0, input.digestMaxChars ?? HISTORY_DIGEST_MAX_CHARS)
 
   let truncatedMessages = 0
   const prepared: HistoryMessage[] = input.messages
     .filter((message) => (message.role === 'user' || message.role === 'assistant') && message.content.trim().length > 0)
     .map((message) => {
-      if (message.role !== 'assistant') return { role: message.role, content: message.content }
-      if (chars(message.content) <= assistantMaxChars) return { role: message.role, content: message.content }
+      const limit = message.role === 'assistant' ? assistantMaxChars : userMaxChars
+      if (chars(message.content) <= limit) return { role: message.role, content: message.content }
       truncatedMessages += 1
-      return { role: message.role, content: clip(message.content, assistantMaxChars) }
+      return { role: message.role, content: clip(message.content, limit) }
     })
 
   // 最近几轮逐字保留；一条助手消息开头时，它属于更早的那一轮。
@@ -131,6 +143,13 @@ export function buildHistoryView(input: BuildHistoryInput): HistoryView {
   }
   while (trimmed.length > 0 && trimmed[0]!.role !== 'user') trimmed = trimmed.slice(1)
 
+  // 兜底：单条上限调得很大时，逐字部分仍可能超预算；按整轮继续往摘要里搬。
+  while (total > maxChars && trimmed.length > 1) {
+    trimmed = trimmed.slice(1)
+    while (trimmed.length > 0 && trimmed[0]!.role !== 'user') trimmed = trimmed.slice(1)
+    total = trimmed.reduce((sum, message) => sum + chars(message.content), 0)
+  }
+
   const movedOut = kept.slice(0, kept.length - trimmed.length)
   const foldedAll = [...folded, ...movedOut]
   const digest = digestMaxChars === 0
@@ -138,6 +157,7 @@ export function buildHistoryView(input: BuildHistoryInput): HistoryView {
     : buildDigest({
         folded: foldedAll,
         episodeSummaries: input.episodeSummaries ?? [],
+        artifactTitles: input.artifactTitles ?? [],
         maxChars: digestMaxChars,
       })
 
