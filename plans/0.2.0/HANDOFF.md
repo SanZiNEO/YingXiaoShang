@@ -80,6 +80,22 @@ pnpm exec tsx scripts/verify-settings-bom.ts # 配置读取自查
 **注意**：本机 `pnpm install` 会卡在 851/851（`.bin` 不生成），**不要把它当第一步**；
 仓库里现有依赖够跑类型检查和脚本，但**打不出新的安装包**——打包必须在完整环境做。
 
+## 五之半、git 推送（本机特有，务必先做）
+
+`~/.gitconfig` 里有 `http.https://github.com.proxy=http://127.0.0.1:10809`。
+代理一关，`git push` 会报 `Failed to connect to github.com port 443 via 127.0.0.1`——
+看起来像 GitHub 挂了，其实是本地代理配置。
+
+仓库里已经设了本地覆盖（不影响你其它项目）：
+
+```bash
+git config --local "http.https://github.com.proxy" ""
+```
+
+排查顺序：`git ls-remote --heads origin` → 通就直接推；不通再检查代理端口
+（10809/7890/7897）是否在听，都关着说明代理没开，关掉覆盖走直连即可。
+2026-11-07 实测直连 `github.com:443` 与 `api.github.com` 都通。
+
 ## 六、五个必须知道的坑
 
 1. **用户消息必须带 `role: 'user'` 和 `source: { kind: 'user' }`**。缺 `role` 时能进收件箱，
