@@ -94,7 +94,17 @@ git config --local "http.https://github.com.proxy" ""
 
 排查顺序：`git ls-remote --heads origin` → 通就直接推；不通再检查代理端口
 （10809/7890/7897）是否在听，都关着说明代理没开，关掉覆盖走直连即可。
-2026-11-07 实测直连 `github.com:443` 与 `api.github.com` 都通。
+
+**直连时 DNS 给的入口会抽风**：`github.com` 解析到 `20.205.243.166`，这个 IP
+时通时断（`Recv failure: Connection was reset`）。已在本仓库钉一个能用的入口：
+
+```bash
+git config --local http.curloptResolve "github.com:443:140.82.113.3"
+```
+
+换 IP 时用 `git -c http.curloptResolve=github.com:443:<ip> ls-remote --heads origin` 逐个试，
+2026-11-07 实测可用：`140.82.113.3`、`140.82.112.4`；不可用：`140.82.114.3`、`20.27.177.113`。
+`api.github.com` 一直通，只读排查可以走它。
 
 ## 六、五个必须知道的坑
 
