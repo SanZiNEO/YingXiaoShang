@@ -1,3 +1,4 @@
+import { normalizeQuestionType } from '@learning-agent/shared'
 import { useMemo, useState } from 'react'
 import type { Artifact, CaseStudyContent, QuestionAttempt } from '@learning-agent/shared'
 import type { SetSubmissionStatus } from './model'
@@ -110,7 +111,9 @@ function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet }: Artif
         const type = str(question.type, '简答')
         const options = arr(question.options).map((option) => label(option))
         const attempt = attemptByQuestion.get(id)
-        const multiple = type === '多选'
+        // 题型可能是 single_choice / multiple_choice 这类英文 token，
+        // 统一归一后再判断，否则多选题会被当成单选（只能点一个）。
+        const multiple = normalizeQuestionType(type) === '多选'
         const chosen = selected[id] ?? ''
         const locked = Boolean(attempt) || submitted
         const existingCorrect = attempt ? num(attempt.score) >= 0.99 : undefined

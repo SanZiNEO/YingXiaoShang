@@ -205,6 +205,43 @@ export const QuestionTypeSchema = z.enum([
   '案例分析',
 ])
 
+/**
+ * 题型在系统里有唯一的中文口径。模型产出的题目常用英文 token
+ * （multiple_choice / single_choice / judgment …），入库和判题都按这里归一，
+ * 否则界面会把多选题当单选、判题会把选择题当简答题。
+ */
+const QUESTION_TYPE_ALIASES: Record<string, QuestionType> = {
+  '名词解释': '名词解释', term: '名词解释', definition: '名词解释', glossary: '名词解释',
+  '填空': '填空', fill: '填空', fill_blank: '填空', blank: '填空',
+  '判断': '判断', judgment: '判断', judgement: '判断', true_false: '判断', truefalse: '判断', tf: '判断', boolean: '判断',
+  '单选': '单选', single: '单选', single_choice: '单选', singlechoice: '单选', radio: '单选', choice: '单选',
+  '多选': '多选', multi: '多选', multiple: '多选', multiple_choice: '多选', multiplechoice: '多选',
+  multi_select: '多选', multiselect: '多选', checkbox: '多选', multi_choice: '多选',
+  '简答': '简答', short: '简答', short_answer: '简答', shortanswer: '简答', essay: '简答', text: '简答',
+  '案例分析': '案例分析', case: '案例分析', case_analysis: '案例分析', caseanalysis: '案例分析',
+  case_study: '案例分析', casestudy: '案例分析',
+}
+
+export function normalizeQuestionType(raw: unknown, fallback: QuestionType = '简答'): QuestionType {
+  if (typeof raw !== 'string') return fallback
+  const key = raw.trim().toLowerCase().replace(/[\s\-]+/g, '_')
+  const direct = QUESTION_TYPE_ALIASES[raw.trim()]
+  if (direct) return direct
+  const aliased = QUESTION_TYPE_ALIASES[key]
+  if (aliased) return aliased
+  // 「多选题」「单选题」这类带后缀的中文写法
+  const compact = raw.replace(/[\s·\-]/g, '')
+  for (const type of ['名词解释', '案例分析', '填空', '判断', '单选', '多选', '简答'] as QuestionType[]) {
+    if (compact === `${type}题` || compact === type) return type
+  }
+  return fallback
+}
+
+export function isChoiceQuestion(type: unknown): boolean {
+  const normalized = normalizeQuestionType(type, '简答')
+  return normalized === '单选' || normalized === '多选'
+}
+
 export const QuestionSchema = z.object({
   id: z.string(),
   source_type: z.enum(['news', 'kp', 'text', 'resource']),

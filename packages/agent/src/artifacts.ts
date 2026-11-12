@@ -1,5 +1,6 @@
 import type { Context } from '@deepseek-ai/cordis'
 import { type Artifact } from '@learning-agent/shared'
+import { registerArtifactQuestions } from './question-registry.js'
 
 export interface EmitContext {
   ctx: Context
@@ -106,6 +107,28 @@ export async function finalizeArtifacts(emit: EmitContext, warnings: string[] = 
       warnings.push(`这轮有产物没生成（${pending.spec.type}），内容不完整；可以让我重做一次。`)
       continue
     }
+    // 题目集要落进 questions 表，否则判题与作答记录都拿不到题（外键也过不去）。
+    let registeredContent = contentJson
+    if (pending.spec.type === 'question_set') {
+      try {
+        const registered = registerArtifactQuestions({
+          // 顺手把题型归一（multiple_choice → 多选）并给出全局唯一 id
+          db: emit.ctx.learningDb,
+          artifact: {
+            id: `pending_${emit.sessionId}_${emit.created.length}_${pending.spec.type}`,
+            type: pending.spec.type,
+            content_json: contentJson,
+          },
+          chapterId: emit.chapterId,
+          preferGlobalIds: true,
+        })
+        registeredContent = registered.contentJson
+      } catch (error) {
+        console.warn(`[artifacts] 题目登记失败：${error instanceof Error ? error.message : String(error)}`)
+        warnings.push('这轮题目集没能登记到题库，交卷可能失败；可以让我重做一次。')
+      }
+    }
+    contentJson = registeredContent
     const body = pending.body.length > 0
       ? pending.body
       : `# ${pending.title}\n\n\`\`\`json\n${JSON.stringify(contentJson, null, 2)}\n\`\`\`\n`

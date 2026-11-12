@@ -1,3 +1,4 @@
+import { normalizeQuestionType } from '@learning-agent/shared'
 import type { Chapter, Question, QuestionType } from '@learning-agent/shared'
 
 const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f']
@@ -132,8 +133,11 @@ export function scoreAnswer(question: Question, answer: string): {
   const submitted = normalize(answer)
   if (submitted.length === 0) return { correct: false, partial: false, score: 0 }
 
-  if (question.type === '单选' || question.type === '多选') {
-    if (question.type === '单选') {
+  // 题型可能来自模型（single_choice / multiple_choice …），先归一，
+  // 否则多选题会被当成简答题按文本相似度打分。
+  const type = normalizeQuestionType(question.type)
+  if (type === '单选' || type === '多选') {
+    if (type === '单选') {
       const expected = optionIndex(question.options, question.answer)
       const actual = optionIndex(question.options, answer)
       const correct = expected >= 0 && actual >= 0 && expected === actual
@@ -152,7 +156,7 @@ export function scoreAnswer(question: Question, answer: string): {
     }
   }
 
-  if (question.type === '判断') {
+  if (type === '判断') {
     const truth = (value: string): boolean | undefined => {
       const text = normalize(value)
       if (/^(正确|对|是|true|t|yes|y)$/.test(text)) return true

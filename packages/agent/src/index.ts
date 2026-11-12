@@ -29,6 +29,7 @@ import { StateProjector } from './state.js'
 import { FeedbackAgent } from './subagents.js'
 import { RecorderAgent, type RecorderStatus } from './recorder.js'
 import { buildHistoryView } from './history.js'
+import { registerArtifactQuestions } from './question-registry.js'
 import { runTeamTurn, type TeamHooks, type TurnTrace } from './team.js'
 
 export type { TeamHooks, TeamEvent, TurnTrace } from './team.js'
@@ -568,7 +569,10 @@ export class AgentService extends Service implements AgentRuntime {
     this.ensureStudent(input.studentId)
     this.assertSessionOwner(input.studentId, input.sessionId)
     if (input.artifactId) {
-      const artifact = this.assertQuestionSetOwner(input.studentId, input.sessionId, input.artifactId)
+      const artifact = this.ensureArtifactQuestions(
+        this.assertQuestionSetOwner(input.studentId, input.sessionId, input.artifactId),
+        input.chapterId,
+      )
       this.assertQuestionMember(artifact, input.questionId)
     }
     if (!this.db.getQuestion(input.questionId)) {
@@ -698,7 +702,10 @@ export class AgentService extends Service implements AgentRuntime {
   async answerQuestionSet(input: AnswerSetInput): Promise<AnswerSetOutput> {
     this.ensureStudent(input.studentId)
     this.assertSessionOwner(input.studentId, input.sessionId)
-    const artifact = this.assertQuestionSetOwner(input.studentId, input.sessionId, input.artifactId)
+    const artifact = this.ensureArtifactQuestions(
+      this.assertQuestionSetOwner(input.studentId, input.sessionId, input.artifactId),
+      input.chapterId,
+    )
     const memberIds = new Set(this.questionIdsOf(artifact))
     if (!Array.isArray(input.answers) || input.answers.length === 0) {
       throw new Error('交卷失败：答卷为空，没有写入任何答题记录。')
@@ -737,6 +744,29 @@ export class AgentService extends Service implements AgentRuntime {
       return await task
     } finally {
       this.inFlightSubmissions.delete(key)
+    }
+  }
+
+  /**
+   * 把题目集里的题目补登记到 `questions` 表。
+   *
+   * 0.1.x 生成的题目只存在 artifact 的 content_json 里，`question_attempts`
+   * 的外键和判题取题都要求表里有行，于是老题目一交卷就报「题目数据缺失」。
+   * 这里就地补登记：能给原 id 就给原 id（界面已经渲染的题号不变）。
+   */
+  private ensureArtifactQuestions(artifact: Artifact, chapterId?: string) {
+    if (artifact.type !== 'question_set') return artifact
+    try {
+      const registered = registerArtifactQuestions({
+        db: this.db,
+        artifact: { id: artifact.id, type: artifact.type, content_json: artifact.content_json },
+        chapterId,
+        preferGlobalIds: false,
+      })
+      return { ...artifact, content_json: registered.contentJson }
+    } catch (error) {
+      console.warn(`[agent] 题目补登记失败：${error instanceof Error ? error.message : String(error)}`)
+      return artifact
     }
   }
 
