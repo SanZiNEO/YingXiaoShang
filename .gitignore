@@ -42,3 +42,6 @@ apps/desktop/electron.vite.config.*.mjs
 
 # 参考用的上游源码，只读，不入库
 /example
+
+# 临时/探针产物（不进仓库）
+probe-tmp/
