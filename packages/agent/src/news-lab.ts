@@ -1,4 +1,5 @@
 import type { Context } from '@deepseek-ai/cordis'
+import { withTimeout } from './tools/read-tools.js'
 import type {
   ArtifactDraft,
   CaseMatch,
@@ -288,7 +289,12 @@ export class NewsLabAgent {
       }
     } else if (source === 'search' || (source === undefined && wantsSearch)) {
       try {
-        const result = await this.ctx.news.searchAndIngest(query, 3)
+        // 联网检索必须有上限：没有超时会让学生干等一两分钟，还以为是卡死。
+        const result = await withTimeout(
+          this.ctx.news.searchAndIngest(query, 3),
+          45_000,
+          '联网检索超过 45 秒，已放弃；没有拿无关文章凑数。',
+        )
         searched = result.articles.length
         warnings.push(...result.errors.slice(0, 3))
         targets = result.articles

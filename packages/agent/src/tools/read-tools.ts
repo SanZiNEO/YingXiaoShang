@@ -15,6 +15,63 @@ const MAX_BODY = 4_000
  * 取材料的工具。它们只把教材、知识点、新闻库摊开，不判断什么跟当前任务相关。
  * 工具对外说人话（「给我这一章的材料」），内部怎么查表是工具自己的事。
  */
+const ONLINE_NEWS_TIMEOUT_MS = 45_000
+
+/**
+ * 新闻检索排序：关键词命中 > 新鲜度 > 发布时间。
+ * 之前是「拉 500 条关键词过滤」，同一关键词下最新的一条可能排在很后面，
+ * 模型因此常常判断成"库里没有"，转头去联网。
+ */
+export function rankNews<T extends { title: string; summary: string; content: string; published_at: string }>(
+  articles: T[],
+  terms: string[],
+  now = Date.now(),
+): Array<{ article: T; score: number }> {
+  const days = (iso: string): number => {
+    const at = Date.parse(iso)
+    if (!Number.isFinite(at)) return 999
+    return Math.max(0, (now - at) / 86_400_000)
+  }
+  return articles
+    .map((article) => {
+      let score = 0
+      for (const term of terms) {
+        if (article.title.includes(term)) score += 6
+        if (article.summary.includes(term)) score += 3
+        if (article.content.includes(term)) score += 1
+      }
+      // 有查询词时，只有真的命中才谈新鲜度；否则「今天发的无关新闻」
+      // 会靠时间加分混进结果（这就是测试 5 抓到的那个错）。
+      if (terms.length === 0) {
+        score += 1
+        const age = days(article.published_at)
+        if (age <= 7) score += 3
+        else if (age <= 30) score += 1
+        return { article, score }
+      }
+      if (score === 0) return { article, score: 0 }
+      const age = days(article.published_at)
+      if (age <= 7) score += 3
+      else if (age <= 30) score += 1
+      return { article, score }
+    })
+    .filter((item) => item.score > 0)
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score
+      return right.article.published_at.localeCompare(left.article.published_at)
+    })
+}
+
+export function withTimeout<T>(task: Promise<T>, ms: number, message: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(message)), ms)
+    task.then(
+      (value) => { clearTimeout(timer); resolve(value) },
+      (error) => { clearTimeout(timer); reject(error) },
+    )
+  })
+}
+
 export const READ_TOOLS: ToolSpec[] = [
   {
     name: 'list_chapter_kps',
@@ -333,46 +390,71 @@ export const READ_TOOLS: ToolSpec[] = [
   {
     name: 'search_news',
     kind: 'read',
-    description: '在本地新闻库里按关键词检索，返回候选列表（标题、来源、时间、摘要）。选哪条由你判断。',
+    description: [
+      '在本地新闻库里检索，返回候选（标题、来源、时间、摘要）。选哪条由你判断。',
+      '默认只查本地库，很快；库里没有就如实说没有，不要自己编。',
+      '只有学生明确要「最新 / 今天 / 最近 / 联网查」时，才把 online 设 true：',
+      '那会实时联网补抓，通常 30 秒以上，还可能失败。',
+    ].join(''),
     parameters: {
       type: 'object',
       additionalProperties: false,
       properties: {
         query: { type: 'string', description: '关键词，可留空表示最新新闻' },
         limit: { type: 'integer', description: '最多返回几条，默认 8' },
+        online: {
+          type: 'boolean',
+          description: '是否允许联网补抓（默认 false；只有学生明确要求最新/联机时才用）',
+        },
       },
     },
-    execute(args, turn) {
+    async execute(args, turn) {
       const query = typeof args.query === 'string' ? args.query.trim() : ''
       const limit = Math.min(Math.max(Number(args.limit ?? 8), 1), 20)
-      const articles = turn.ctx.learningDb.listNews({ limit: 500 })
-        .filter((article) => article.content.length >= 300)
+      const online = args.online === true
       const terms = query.split(/[\s,，、]+/).filter((term) => term.length >= 2)
-      const scored = articles
-        .map((article) => {
-          let score = 0
-          for (const term of terms) {
-            if (article.title.includes(term)) score += 4
-            if (article.summary.includes(term)) score += 2
-            if (article.content.includes(term)) score += 1
-          }
-          return { article, score }
-        })
-        .filter((item) => terms.length === 0 || item.score > 0)
-        .sort((left, right) => {
-          if (right.score !== left.score) return right.score - left.score
-          return right.article.published_at.localeCompare(left.article.published_at)
-        })
-        .slice(0, limit)
-      if (scored.length === 0) return `新闻库里没有找到与「${query}」相关的文章。`
+
+      const search = () =>
+        rankNews(turn.ctx.learningDb.listNews({ limit: 500 }).filter((article) => article.content.length >= 300), terms)
+
+      let scored = search()
+      let onlineNote = ''
+      if (scored.length === 0 && online) {
+        // 联网只在显式要求时发生，并且有上限：宁可说「没查到」，也不让学生等两分钟。
+        const started = Date.now()
+        try {
+          const result = await withTimeout(
+            turn.ctx.news.searchAndIngest(query, 3),
+            ONLINE_NEWS_TIMEOUT_MS,
+            `联网检索超过 ${Math.round(ONLINE_NEWS_TIMEOUT_MS / 1000)} 秒，已放弃（没有把这次等待算成答案）。`,
+          )
+          const failed = result.errors.slice(0, 2)
+          onlineNote = failed.length > 0
+            ? `联网补抓部分失败：${failed.join('；')}`
+            : `联网补抓到 ${result.articles.length} 条（用时 ${((Date.now() - started) / 1000).toFixed(0)} 秒）。`
+          scored = search()
+        } catch (error) {
+          onlineNote = error instanceof Error ? error.message : String(error)
+        }
+      }
+
+      if (scored.length === 0) {
+        if (query.length === 0) return '新闻库里还没有入库文章。'
+        return online
+          ? `联网也没查到与「${query}」相关的可用文章${onlineNote ? `（${onlineNote}）` : ''}。不要编造新闻。`
+          : `本地新闻库里没有与「${query}」相关的文章（这里只查本地库）。`
+            + `如果学生确实需要最新资讯，可以再调一次 search_news 并把 online 设为 true（会联网，约 30 秒以上）。`
+      }
       if (query.length > 0) turn.reads.queries.add(query)
-      return scored
+      const body = scored
+        .slice(0, limit)
         .map((item, index) => [
           `【${index + 1}】${item.article.title}`,
           `id：${item.article.id}｜${item.article.source}｜${item.article.published_at.slice(0, 10)}`,
           item.article.summary.slice(0, 160),
         ].join('\n'))
         .join('\n\n')
+      return onlineNote.length > 0 ? `${onlineNote}\n\n${body}` : body
     },
   },
   {
