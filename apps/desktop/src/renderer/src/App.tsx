@@ -500,6 +500,8 @@ export function App() {
   const [settingsSaved, setSettingsSaved] = useState('')
   const [notice, setNotice] = useState('')
   const [stream, setStream] = useState<{ requestId: string; text: string; step: string } | null>(null)
+  // 一轮多久了。慢的时候没有秒数，学生会以为软件死了（查资料一轮可能 1-3 分钟）。
+  const [elapsed, setElapsed] = useState(0)
   /** 上一轮的实际执行轨迹（程序统计，去重后）。 */
   const [lastTrace, setLastTrace] = useState<TurnTrace | null>(null)
 
@@ -716,6 +718,17 @@ export function App() {
       document.removeEventListener('keydown', onKeyDown)
     }
   }, [contextOpen, scopeMenuOpen])
+
+  useEffect(() => {
+    if (!busy) {
+      setElapsed(0)
+      return
+    }
+    const startedAt = Date.now()
+    setElapsed(0)
+    const timer = setInterval(() => setElapsed(Math.floor((Date.now() - startedAt) / 1000)), 1000)
+    return () => clearInterval(timer)
+  }, [busy])
 
   // 本轮执行进度：先显示"在读什么"，再逐字出正文。
   useEffect(() => {
@@ -1478,6 +1491,12 @@ export function App() {
                   <div style={{ color: COLORS.muted, fontSize: 11.5, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <ClockIcon size={13} />
                     <span>{stream?.step || '正在判断并整理…'}</span>
+                    {elapsed >= 3 ? (
+                      <span style={{ color: COLORS.muted, opacity: 0.85 }}>
+                        · 已 {elapsed >= 60 ? `${Math.floor(elapsed / 60)} 分 ${elapsed % 60} 秒` : `${elapsed} 秒`}
+                        {elapsed >= 90 ? '（查资料会慢一些，不必重复点发送）' : ''}
+                      </span>
+                    ) : null}
                   </div>
                 )
               ) : null}
