@@ -33,6 +33,9 @@ export function friendlyError(error: unknown, options: FriendlyOptions = {}): Er
   if (/402|insufficient|balance|quota/i.test(stripped)) {
     return new Error('模型账户余额/额度不足，请先在 DeepSeek 后台充值后再试。')
   }
+  if (/400|Model Not Exist|model.*(not found|invalid)|invalid.*model/i.test(stripped)) {
+    return new Error('模型名不对：在「设置」里把模型改回 deepseek-chat 再试。')
+  }
   if (/429|rate.?limit|too many requests/i.test(stripped)) {
     return new Error('模型调用太频繁了，等几秒再发一次。')
   }

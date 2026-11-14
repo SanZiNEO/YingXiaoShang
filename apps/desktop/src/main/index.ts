@@ -1,7 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu, shell, type OpenDialogOptions } from 'electron'
 import { Context } from '@deepseek-ai/cordis'
 import { basename, dirname, extname, join } from 'node:path'
-import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, renameSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import mammoth from 'mammoth'
@@ -16,7 +16,7 @@ import { AgentService } from '@learning-agent/agent'
 import { NewsService } from '@learning-agent/news'
 import { DeepSeekLlm } from './llm.js'
 import { friendlyError } from './errors.js'
-import { startupHealth } from './health.js'
+import { startupFailure, startupHealth } from './health.js'
 import { loadDotEnv } from './env.js'
 import { SettingsStore } from './settings.js'
 import { defaultBounds, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, readWindowState, resolveAppHome, trackWindowState } from './window-state.js'
@@ -377,7 +377,50 @@ async function invoke(method: string, input: unknown): Promise<unknown> {
  */
 app.whenReady().then(async () => {
   Menu.setApplicationMenu(null)
-  await initServices()
+  try {
+    await initServices()
+  } catch (error) {
+    // 窗口还没建，学生只会看到「双击没反应」。这里必须自己说出来，并给一条自救路径。
+    const failure = startupFailure(error)
+    const appHome = resolveAppHome()
+    const detail = `\n\n数据目录：${appHome}`
+    if (!failure.canResetLocalData) {
+      dialog.showErrorBox(failure.title, `${failure.body}${detail}`)
+      app.exit(1)
+      return
+    }
+    const choice = dialog.showMessageBoxSync({
+      type: 'error',
+      title: failure.title,
+      message: failure.title,
+      detail: `${failure.body}${detail}`,
+      buttons: ['备份旧数据并重置', '退出'],
+      defaultId: 0,
+      cancelId: 1,
+    })
+    if (choice !== 0) {
+      app.exit(1)
+      return
+    }
+    try {
+      const dbPath = join(appHome, 'data', 'learning.db')
+      if (existsSync(dbPath)) {
+        const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+        renameSync(dbPath, `${dbPath}.broken-${stamp}`)
+      }
+      for (const suffix of ['-wal', '-shm']) {
+        const sidecar = `${dbPath}${suffix}`
+        if (existsSync(sidecar)) renameSync(sidecar, `${sidecar}.broken-${new Date().toISOString().replace(/[:.]/g, '-')}`)
+      }
+    } catch (resetError) {
+      dialog.showErrorBox('重置失败', `没能移动旧数据文件：${resetError instanceof Error ? resetError.message : String(resetError)}${detail}`)
+      app.exit(1)
+      return
+    }
+    app.relaunch()
+    app.exit(0)
+    return
+  }
 
   ipcMain.handle('learning:invoke', (_event, method: string, input: unknown) => invoke(method, input))
   // 每一轮对话一个控制器：学生点「停止」就中断在途模型请求。
@@ -421,6 +464,8 @@ app.whenReady().then(async () => {
             if (event.sender.isDestroyed()) return
             event.sender.send('learning:chat-event', { requestId, ...step })
           },
+          // 必须真的把 signal 交给执行链，否则停止按钮只是界面上停、模型还在跑。
+          signal: controller.signal,
         },
       )
     } catch (error) {

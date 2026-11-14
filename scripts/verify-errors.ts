@@ -28,6 +28,7 @@ const cases: Array<[string, unknown, RegExp]> = [
   ['key 无效', new Error('401 Unauthorized: Invalid credential'), /密钥无效/],
   ['余额不足', new Error('402 Insufficient Balance'), /余额/],
   ['限流', new Error('429 rate limit exceeded'), /太频繁/],
+  ['模型名错', new Error('DeepSeek API 400: {"error":{"message":"Model Not Exist"}}'), /deepseek-chat/],
   ['断网', new TypeError('fetch failed'), /网络/],
   ['DNS 失败', new Error('getaddrinfo EAI_AGAIN api.deepseek.com'), /网络/],
   ['连接被重置', new Error('ECONNRESET socket hang up'), /网络/],

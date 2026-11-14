@@ -33,3 +33,49 @@ export function startupHealth(input: StartupHealthInput): StartupHealth {
   }
   return { ok: warnings.length === 0, warnings, notices }
 }
+
+/**
+ * 启动失败时该让学生看到什么。
+ *
+ * 最糟的情况是「双击没反应」：initServices 抛错时窗口还没创建，学生只能猜。
+ * 这里把错误分成「可以自己修（本地数据坏了 → 备份后重置）」和「要找人」两类。
+ */
+export interface StartupFailure {
+  title: string
+  body: string
+  canResetLocalData: boolean
+}
+
+export function startupFailure(error: unknown): StartupFailure {
+  const raw = error instanceof Error ? error.message : String(error)
+  const isCorruptDb = /file is not a database|database disk image is malformed|SQLITE_CORRUPT|SQLITE_NOTADB/i.test(raw)
+  const isPermission = /EACCES|EPERM|read-only database|SQLITE_CANTOPEN|unable to open database/i.test(raw)
+  const isDiskFull = /ENOSPC|SQLITE_FULL|disk I\/O error/i.test(raw)
+
+  if (isCorruptDb) {
+    return {
+      title: '本地数据损坏，营小商打不开',
+      body: '可以点「备份旧数据并重置」：旧文件会改名保留，新的空白数据库会重新建立，课程内容会从安装包恢复。',
+      canResetLocalData: true,
+    }
+  }
+  if (isDiskFull) {
+    return {
+      title: '磁盘空间不足，营小商打不开',
+      body: '请清理磁盘（至少留 500MB）后再启动。也可以点「备份旧数据并重置」重新建立本地数据库。',
+      canResetLocalData: true,
+    }
+  }
+  if (isPermission) {
+    return {
+      title: '没有权限读写本地数据',
+      body: '可能是杀毒软件拦截，或者软件装在只读目录。把营小商换到普通文件夹（例如 D 盘新建一个文件夹）再试。',
+      canResetLocalData: false,
+    }
+  }
+  return {
+    title: '营小商启动失败',
+    body: `错误信息：${raw}\n\n把这句话截图发给老师，附上下面显示的数据目录路径。`,
+    canResetLocalData: false,
+  }
+}
