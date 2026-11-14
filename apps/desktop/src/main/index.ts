@@ -15,6 +15,7 @@ import { ArtifactService } from '@learning-agent/artifacts'
 import { AgentService } from '@learning-agent/agent'
 import { NewsService } from '@learning-agent/news'
 import { DeepSeekLlm } from './llm.js'
+import { friendlyError } from './errors.js'
 import { loadDotEnv } from './env.js'
 import { SettingsStore } from './settings.js'
 import { defaultBounds, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, readWindowState, resolveAppHome, trackWindowState } from './window-state.js'
@@ -373,24 +374,6 @@ async function invoke(method: string, input: unknown): Promise<unknown> {
 /**
  * 只把可执行的中文提示交给界面；上游英文栈留在日志里。
  */
-function friendlyError(error: unknown): Error {
-  const raw = error instanceof Error ? error.message : String(error)
-  const stripped = raw.replace(/^Error invoking remote method '[^']+':\s*(Error:\s*)?/, '')
-  if (/DEEPSEEK_API_KEY is not configured|请先在设置中填写/.test(stripped)) {
-    return new Error('还没配置模型密钥：点左下角「设置」填入 DeepSeek Key 后再发一次。')
-  }
-  if (/401|invalid.?api.?key|unauthori[sz]ed/i.test(stripped)) {
-    return new Error('模型密钥无效或已过期，请在「设置」里重新填写。')
-  }
-  if (/429|rate.?limit/i.test(stripped)) {
-    return new Error('模型调用太频繁了，等几秒再发一次。')
-  }
-  if (/timeout|aborted|ETIMEDOUT|ECONNRESET/i.test(stripped)) {
-    return new Error('模型响应超时，这一段没有记成你的作答，可以直接重发。')
-  }
-  return new Error(stripped)
-}
-
 app.whenReady().then(async () => {
   Menu.setApplicationMenu(null)
   await initServices()
@@ -451,13 +434,20 @@ app.whenReady().then(async () => {
     artifactId: string
     answers: Array<{ questionId: string; answer: string }>
     chapterId?: string
-  }) => agentRuntime.answerQuestionSet({
-    studentId: input.studentId || DEMO_STUDENT_ID,
-    sessionId: input.sessionId,
-    artifactId: input.artifactId,
-    answers: Array.isArray(input.answers) ? input.answers : [],
-    chapterId: input.chapterId,
-  }))
+  }) => {
+    try {
+      return await agentRuntime.answerQuestionSet({
+        studentId: input.studentId || DEMO_STUDENT_ID,
+        sessionId: input.sessionId,
+        artifactId: input.artifactId,
+        answers: Array.isArray(input.answers) ? input.answers : [],
+        chapterId: input.chapterId,
+      })
+    } catch (error) {
+      // 交卷失败要说清「这次没记成成绩」，否则学生以为白答了。
+      throw friendlyError(error, { context: 'answer' })
+    }
+  })
   ipcMain.handle('learning:settings:get', () => settings.readPublic())
   ipcMain.handle('learning:settings:set', (_event, value: { apiKey?: string; model?: string; clearApiKey?: boolean }) => settings.write(value))
 
