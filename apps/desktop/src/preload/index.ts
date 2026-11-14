@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld('learning', {
     chapterId?: string
     requestId?: string
   }) => ipcRenderer.invoke('learning:chat', input),
+  cancel: (requestId: string) => ipcRenderer.invoke('learning:cancel', requestId),
   onChatEvent: (handler: (event: unknown) => void) => {
     const listener = (_event: unknown, payload: unknown): void => handler(payload)
     ipcRenderer.on('learning:chat-event', listener)

@@ -23,6 +23,8 @@ interface LearningBridge {
     chapterId?: string
     requestId?: string
   }): Promise<unknown>
+  /** 停止本轮（中断在途模型请求）。返回是否真的停下了。 */
+  cancel?(requestId: string): Promise<{ cancelled: boolean }>
   /** 订阅本轮执行进度；返回取消订阅函数。 */
   onChatEvent?(handler: (event: unknown) => void): () => void
   answer(input: {

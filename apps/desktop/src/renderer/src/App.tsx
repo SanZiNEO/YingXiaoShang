@@ -507,6 +507,8 @@ export function App() {
 
   const headerMenusRef = useRef<HTMLDivElement | null>(null)
   const queueRef = useRef<string[]>([])
+  // 当前在跑的那一轮，停止按钮要用它找到对应的请求
+  const activeRequestRef = useRef<string | null>(null)
   const busyRef = useRef(false)
   const sendRef = useRef<((text?: string) => Promise<void>) | undefined>(undefined)
   const studentId = student?.studentId
@@ -925,6 +927,7 @@ export function App() {
     setDraft('')
     setNotice('')
     const requestId = `req_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
+    activeRequestRef.current = requestId
     setStream({ requestId, text: '', step: '正在判断这一句该怎么接…' })
     setEvents((current) => [...current, {
       id: `local_${Date.now()}`,
@@ -967,6 +970,7 @@ export function App() {
       setNotice(error instanceof Error ? error.message : String(error))
       await refreshAll(sessionId)
     } finally {
+      activeRequestRef.current = null
       busyRef.current = false
       setBusy(false)
       setStream(null)
@@ -1491,6 +1495,20 @@ export function App() {
                   <div style={{ color: COLORS.muted, fontSize: 11.5, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <ClockIcon size={13} />
                     <span>{stream?.step || '正在判断并整理…'}</span>
+                    {busy ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const id = activeRequestRef.current
+                          if (!id) return
+                          void window.learning.cancel?.(id)
+                          setNotice('已按你的要求停止这一轮；这次回答没有保存。')
+                        }}
+                        style={{ marginLeft: 4, border: `1px solid ${COLORS.border}`, background: 'transparent', color: COLORS.muted, borderRadius: 6, padding: '1px 7px', fontSize: 10.5, cursor: 'pointer' }}
+                      >
+                        停止
+                      </button>
+                    ) : null}
                     {elapsed >= 3 ? (
                       <span style={{ color: COLORS.muted, opacity: 0.85 }}>
                         · 已 {elapsed >= 60 ? `${Math.floor(elapsed / 60)} 分 ${elapsed % 60} 秒` : `${elapsed} 秒`}

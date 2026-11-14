@@ -27,6 +27,8 @@ export interface TeamEvent {
 
 export interface TeamHooks {
   onEvent?: (event: TeamEvent) => void
+  /** 学生点「停止」时中断在途模型请求。 */
+  signal?: AbortSignal
 }
 
 /** Program-side record of the turn: what ran, what was read. Never model-written. */
@@ -226,6 +228,7 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
         : '还没写产物（学生没要就不用写）'
       return `你在第 ${calls.length + 1} 步；已读材料 ${readCount} 次；${stage}。`
     },
+    signal: input.hooks?.signal,
     hooks: {
       streamText: true,
       onEvent: (event: AgentLoopEvent) => {

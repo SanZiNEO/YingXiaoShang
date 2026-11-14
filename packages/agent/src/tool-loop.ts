@@ -123,6 +123,8 @@ export interface AgentLoopInput {
    */
   status?: (state: LoopState) => string
   hooks?: AgentLoopHooks
+  /** 学生点「停止」时中断在途请求；没有它就只能干等。 */
+  signal?: AbortSignal
 }
 
 export interface LoopState {
@@ -229,6 +231,7 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
         held = ''
       }
     }
+    if (input.signal?.aborted) throw new Error('已停止（你点了停止按钮）')
     for await (const chunk of input.ctx.llm.stream({
       provider: DEFAULT_ROUTE.provider,
       model: DEFAULT_ROUTE.model,
@@ -236,6 +239,7 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
       messages: messages as unknown as Parameters<Context['llm']['stream']>[0]['messages'],
       tools: schemas,
       maxTokens: input.maxTokens ?? 8192,
+      signal: input.signal,
     })) {
       const delta = chunk as { type?: string; text?: string }
       if (delta.type === 'text-delta' && typeof delta.text === 'string' && input.hooks?.streamText) {
@@ -375,6 +379,7 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
   }
 
   for (let round = 1; round <= maxRounds; round++) {
+    if (input.signal?.aborted) throw new Error('已停止（你点了停止按钮）')
     injectStatus()
     emit({ type: 'round', round })
     const { toolCalls, text } = await request(round, schemas)

@@ -17,6 +17,9 @@ export function friendlyError(error: unknown, options: FriendlyOptions = {}): Er
     ? '这次作答没有记成成绩，可以直接重试。'
     : '刚才这一轮没有保存成结果，可以直接重发。'
 
+  if (/已停止/.test(stripped)) {
+    return new Error('已停止这一轮（你点的停止）。这次没有保存结果，可以重新提问。')
+  }
   if (/DEEPSEEK_API_KEY is not configured|请先在设置中填写|apiKey.*(empty|missing)/i.test(stripped)) {
     return new Error('还没配置模型密钥：点左下角「设置」填入 DeepSeek Key 后再发一次。')
   }

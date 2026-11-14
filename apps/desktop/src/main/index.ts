@@ -379,6 +379,17 @@ app.whenReady().then(async () => {
   await initServices()
 
   ipcMain.handle('learning:invoke', (_event, method: string, input: unknown) => invoke(method, input))
+  // 每一轮对话一个控制器：学生点「停止」就中断在途模型请求。
+  const turnControllers = new Map<string, AbortController>()
+  ipcMain.handle('learning:cancel', (_event, requestId: unknown) => {
+    const id = typeof requestId === 'string' ? requestId : ''
+    const controller = turnControllers.get(id)
+    if (!controller) return { cancelled: false }
+    controller.abort()
+    turnControllers.delete(id)
+    return { cancelled: true }
+  })
+
   ipcMain.handle('learning:chat', async (event, input: {
     studentId?: string
     sessionId?: string
@@ -392,6 +403,8 @@ app.whenReady().then(async () => {
       throw new Error('消息不能为空')
     }
     const requestId = typeof input.requestId === 'string' ? input.requestId : ''
+    const controller = new AbortController()
+    if (requestId) turnControllers.set(requestId, controller)
     try {
       return await agentRuntime.handleConversation(
         {
@@ -411,6 +424,8 @@ app.whenReady().then(async () => {
       )
     } catch (error) {
       throw friendlyError(error)
+    } finally {
+      if (requestId) turnControllers.delete(requestId)
     }
   })
   ipcMain.handle('learning:answer', async (_event, input: {
