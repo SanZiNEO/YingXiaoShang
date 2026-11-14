@@ -721,6 +721,16 @@ export function App() {
     }
   }, [contextOpen, scopeMenuOpen])
 
+  // 启动自检：安装包不完整时章节/知识点会是 0，界面能开但什么也教不了，必须说出来。
+  useEffect(() => {
+    void window.learning.health?.().then((health) => {
+      const warning = health?.warnings?.[0] ?? ''
+      const notice = health?.notices?.[0] ?? ''
+      if (warning) setNotice(warning)
+      else if (notice) setNotice(notice)
+    }).catch(() => { /* 老版本主进程没有这个接口，忽略 */ })
+  }, [])
+
   useEffect(() => {
     if (!busy) {
       setElapsed(0)

@@ -16,6 +16,7 @@ import { AgentService } from '@learning-agent/agent'
 import { NewsService } from '@learning-agent/news'
 import { DeepSeekLlm } from './llm.js'
 import { friendlyError } from './errors.js'
+import { startupHealth } from './health.js'
 import { loadDotEnv } from './env.js'
 import { SettingsStore } from './settings.js'
 import { defaultBounds, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, readWindowState, resolveAppHome, trackWindowState } from './window-state.js'
@@ -462,6 +463,14 @@ app.whenReady().then(async () => {
       // 交卷失败要说清「这次没记成成绩」，否则学生以为白答了。
       throw friendlyError(error, { context: 'answer' })
     }
+  })
+  ipcMain.handle('learning:health', () => {
+    const health = startupHealth({
+      chapters: db.listChapters().length,
+      knowledgePoints: db.listChapters().reduce((sum, chapter) => sum + db.listKpsByChapter(chapter.id).length, 0),
+      newsArticles: db.countNews(),
+    })
+    return { ...health, appHome: resolveAppHome() }
   })
   ipcMain.handle('learning:settings:get', () => settings.readPublic())
   ipcMain.handle('learning:settings:set', (_event, value: { apiKey?: string; model?: string; clearApiKey?: boolean }) => settings.write(value))
