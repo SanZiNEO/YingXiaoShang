@@ -56,8 +56,8 @@ import {
   computeColumns,
 } from './layout/columns'
 import { CHAPTER_SHORT, chapterText, phaseLabel } from './labels'
-import {
 import { applyStreamEvent, type ChatStreamEvent } from './stream-state'
+import {
   ArtifactIcon,
   BrandMark,
   ChevronDownIcon,

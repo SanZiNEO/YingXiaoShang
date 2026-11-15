@@ -1,3 +1,7 @@
+// 空类型导入：`ctx.news` 由 packages/news 的 `declare module '@deepseek-ai/cordis'`
+// 增强而来，那个增强只有在本文件 import 了该包时才会被加载。
+// 之前一直靠 tsc 增量缓存通过，清掉缓存就报「Property 'news' does not exist」。
+import type {} from '@learning-agent/news'
 import { REFERENCE_NAMES, loadReference } from '../prompts.js'
 import {
   chapterTitle,
