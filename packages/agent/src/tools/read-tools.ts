@@ -15,7 +15,7 @@ const MAX_BODY = 4_000
  * 取材料的工具。它们只把教材、知识点、新闻库摊开，不判断什么跟当前任务相关。
  * 工具对外说人话（「给我这一章的材料」），内部怎么查表是工具自己的事。
  */
-const ONLINE_NEWS_TIMEOUT_MS = 45_000
+const ONLINE_NEWS_TIMEOUT_MS = 15_000
 
 /**
  * 新闻检索排序：关键词命中 > 新鲜度 > 发布时间。
@@ -60,6 +60,29 @@ export function rankNews<T extends { title: string; summary: string; content: st
       if (right.score !== left.score) return right.score - left.score
       return right.article.published_at.localeCompare(left.article.published_at)
     })
+}
+
+const FRESH_INTENT = /最新|今天|今日|昨日|昨天|刚刚|本周|这周|最近|近期|新闻|动态|消息/
+
+/**
+ * 该不该联网补抓。
+ *
+ * 之前默认只查本地库，学生问「黄仁勋辞职」时模型只看到旧的本地新闻，
+ * 却回「我查到了最新消息」——等于拿旧数据冒充最新。实测 DeepSeek Search
+ * 0.3-0.4 秒就返回真实结果，所以本地没有、或者学生明确要最新时，直接联网。
+ */
+export function shouldSearchOnline(input: {
+  query: string
+  localHits: number
+  localNewestAt?: string
+  now?: number
+}): boolean {
+  const now = input.now ?? Date.now()
+  if (input.localHits === 0) return true
+  if (!FRESH_INTENT.test(input.query)) return false
+  const newest = input.localNewestAt ? Date.parse(input.localNewestAt) : NaN
+  if (!Number.isFinite(newest)) return true
+  return now - newest > 2 * 86_400_000
 }
 
 export function withTimeout<T>(task: Promise<T>, ms: number, message: string): Promise<T> {
@@ -411,20 +434,31 @@ export const READ_TOOLS: ToolSpec[] = [
     async execute(args, turn) {
       const query = typeof args.query === 'string' ? args.query.trim() : ''
       const limit = Math.min(Math.max(Number(args.limit ?? 8), 1), 20)
-      const online = args.online === true
+      const explicitOnline = args.online === true
       const terms = query.split(/[\s,，、]+/).filter((term) => term.length >= 2)
 
       const search = () =>
         rankNews(turn.ctx.learningDb.listNews({ limit: 500 }).filter((article) => article.content.length >= 300), terms)
 
       let scored = search()
+      const localAll = turn.ctx.learningDb.listNews({ limit: 500 }).filter((article) => article.content.length >= 300)
+      const localNewestAt = localAll
+        .map((article) => article.published_at)
+        .sort()
+        .at(-1) ?? ''
+      const online = explicitOnline || shouldSearchOnline({
+        query,
+        localHits: scored.length,
+        localNewestAt,
+      })
       let onlineNote = ''
-      if (scored.length === 0 && online) {
+      if (online) {
         // 联网只在显式要求时发生，并且有上限：宁可说「没查到」，也不让学生等两分钟。
         const started = Date.now()
         try {
           const result = await withTimeout(
-            turn.ctx.news.searchAndIngest(query, 3),
+            // 不爬网页：搜索 API 自带正文，0.3-0.5 秒就回来；爬网页才是三分钟的元凶。
+            turn.ctx.news.searchAndIngest(query, 5, { crawl: false }),
             ONLINE_NEWS_TIMEOUT_MS,
             `联网检索超过 ${Math.round(ONLINE_NEWS_TIMEOUT_MS / 1000)} 秒，已放弃（没有把这次等待算成答案）。`,
           )
@@ -442,10 +476,17 @@ export const READ_TOOLS: ToolSpec[] = [
         if (query.length === 0) return '新闻库里还没有入库文章。'
         return online
           ? `联网也没查到与「${query}」相关的可用文章${onlineNote ? `（${onlineNote}）` : ''}。不要编造新闻。`
-          : `本地新闻库里没有与「${query}」相关的文章（这里只查本地库）。`
-            + `如果学生确实需要最新资讯，可以再调一次 search_news 并把 online 设为 true（会联网，约 30 秒以上）。`
+          : `本地新闻库里没有与「${query}」相关的文章。`
+            + `如果学生确实需要最新资讯，可以再调一次 search_news 并把 online 设为 true（会联网补抓，通常几秒内）。`
       }
       if (query.length > 0) turn.reads.queries.add(query)
+      // 把「本地库到哪一天」写进结果：否则模型会拿旧新闻说成最新。
+      const freshness = [
+        `本地库：${localAll.length} 条，最新 ${localNewestAt ? localNewestAt.slice(0, 10) : '无'}`,
+        online
+          ? (onlineNote || '已联网检索')
+          : '未联网（本地检索）',
+      ].join('｜')
       const body = scored
         .slice(0, limit)
         .map((item, index) => [
@@ -454,7 +495,7 @@ export const READ_TOOLS: ToolSpec[] = [
           item.article.summary.slice(0, 160),
         ].join('\n'))
         .join('\n\n')
-      return onlineNote.length > 0 ? `${onlineNote}\n\n${body}` : body
+      return `${freshness}\n\n${body}`
     },
   },
   {

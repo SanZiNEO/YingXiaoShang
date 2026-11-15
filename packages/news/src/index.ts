@@ -201,20 +201,37 @@ export class NewsService extends Service {
   }
 
   /** Search the web, fetch content when needed, and persist usable results. */
-  async searchAndIngest(query: string, count = 5): Promise<SearchIngestResult> {
+  /**
+   * 搜索 + 入库。
+   *
+   * `crawl: false` 用于「问答中途查新闻」：只用搜索 API 自带的正文，
+   * **不去逐个爬网页**。爬网页是 30 秒/次 + 每秒限流，5 篇串行就是几分钟，
+   * 学生看到的就是「查一条新闻卡三分钟」。正文不够的条目直接跳过并记进 errors，
+   * 候选列表照样返回标题/摘要，够模型判断要不要深读。
+   */
+  async searchAndIngest(
+    query: string,
+    count = 5,
+    opts: { crawl?: boolean } = {},
+  ): Promise<SearchIngestResult> {
     const results = await this.webSearch(query, count)
     const articles: NewsArticle[] = []
     const errors: string[] = []
+    const crawl = opts.crawl !== false
     for (const result of results) {
       try {
         let content = result.content.trim()
-        if (content.length < 300) {
+        if (crawl && content.length < 300) {
           const page = await this.deepSeekFetch(result.url).catch(() => undefined)
           content = page?.content?.trim() ?? content
         }
-        if (content.length < 300) {
+        if (crawl && content.length < 300) {
           const raw = await this.crawlHtml(result.url)
           content = raw.content
+        }
+        if (content.length < 300 && !crawl) {
+          errors.push(`${result.title || result.url}: 正文太短（${content.length} 字），跳过入库`)
+          continue
         }
         const normalized = normalizeArticle('web', {
           sourceId: stableId('u', result.url),

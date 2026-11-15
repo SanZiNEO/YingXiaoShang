@@ -7,7 +7,7 @@
  * 根因之一：库里没有命中时会静默转去实时抓网页（60-200 秒、无超时）。
  * 现在的约定：默认只查本地库，联网要显式 online:true，并且有超时上限。
  */
-import { rankNews, withTimeout } from '../packages/agent/src/tools/read-tools.js'
+import { rankNews, shouldSearchOnline, withTimeout } from '../packages/agent/src/tools/read-tools.js'
 
 let failed = 0
 function check(name: string, condition: boolean, detail = ''): void {
@@ -67,6 +67,20 @@ console.log('5. 完全不相关就别硬凑')
 {
   const ranked = rankNews([article('苹果发布新机', 1)], ['汽车销量'], now)
   check('无命中返回空', ranked.length === 0)
+}
+
+console.log('5b. 什么时候该自动联网（本地没有 / 学生要最新且本地太旧）')
+{
+  // now 固定为 2026-11-07；本地最新 6 天前
+  const base = { query: '黄仁勋辞职', localHits: 3, localNewestAt: '2026-11-01T00:00:00Z', now }
+  check('本地没命中 → 联网', shouldSearchOnline({ ...base, localHits: 0 }))
+  check('本地命中、普通提问 → 不联网', !shouldSearchOnline(base))
+  check('学生说「最新」且本地 6 天前 → 联网', shouldSearchOnline({ ...base, query: '英伟达最新消息' }))
+  check('学生说「最新」且本地今天就有时 → 不联网',
+    !shouldSearchOnline({ ...base, query: '英伟达最新消息', localNewestAt: '2026-11-06T18:00:00Z' }))
+  check('要最新但不知道本地最新到哪天 → 联网',
+    shouldSearchOnline({ ...base, query: '英伟达最新消息', localNewestAt: undefined }))
+  check('普通提问且本地有时间 → 不联网', !shouldSearchOnline(base))
 }
 
 console.log('6. 联网必须有超时兜底（否则就是干等）')
