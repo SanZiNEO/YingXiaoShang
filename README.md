@@ -17,6 +17,13 @@
 
 完整口径见 [`docs/mvp/mvp-v3.md`](docs/mvp/mvp-v3.md)。
 
+## 从哪开始读
+
+- **完全新手接手**：`docs/新手接手说明书.md`（项目是什么、效果、设计、工作流、踩过的坑）
+- **要知道现在走到哪**：`plans/0.2.0/ROADMAP.md`（阶段 M1/M2/M3、需要老师运作的事）
+- **要动代码**：`docs/onboarding.md` + `plans/0.2.0/HANDOFF.md`
+
+
 ## Prerequisites
 
 - Node `^22.19.0 || >=24.0.0`
