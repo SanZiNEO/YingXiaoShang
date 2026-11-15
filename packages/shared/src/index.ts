@@ -810,7 +810,8 @@ export const QuestionSetContentSchema = z.object({
       kpIds: z.array(z.string()).default([]),
       difficulty: z.number().int().default(2),
     }),
-  ).default([]),
+  // 空题目集是「学生打开一片空白」的来源：宁可这轮不生成，也不要落一个不能做的附件。
+  ).min(1, '题目集至少要有一道题'),
 })
 
 export const ResearchDesignContentSchema = z.object({

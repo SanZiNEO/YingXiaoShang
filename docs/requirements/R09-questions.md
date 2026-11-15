@@ -140,7 +140,7 @@
 - 知识点绑定差距：`resolveKpIds` 对认不出的中文名静默丢弃（`write-tools.ts:9-21`），不会报错；模型写错知识点名时会生成 `kpIds=[]` 的题，违反「每题必须绑定知识点」。修复：未识别名称回错给模型，或拒绝该题。
 - 难度约束差距：`emit_question_set` 只把非法难度回落 2，不封顶 3（`write-tools.ts:57-62`）；模型给 4 会原样落库，`QuestionSetContentSchema` 也不校验范围（`packages/shared/src/index.ts:763-779`），与工具说明的 1–3 不一致。
 - 选项与答案校验差距：`emit_question_set` 不检查选项数、选项是否重复、答案是否对应某个选项；这些规则只在 `validateQuestion`（`packages/questions/src/index.ts:298-424`）与 `scoreAnswer` 里，产物通道目前不调用它们。
-- 旧路径：`packages/agent/src/news-lab.ts:404-426` 仍构造 `question_set` 产物；属旧多角色管线，收敛见 [R01](R01-single-agent.md)。
+- 旧路径：`news-lab.ts` 曾构造 `question_set` 产物；该文件已于 2026-11-07 删除（零引用），收敛见 [R01](R01-single-agent.md)。
 - 待核对：`data/normalized/questions.json` 现有 456 道种子题；本地库实际题数、attempt 数、证据条数以 `pipeline:quality` 与运行库为准。
 
 ## 8. MVP 范围与后续

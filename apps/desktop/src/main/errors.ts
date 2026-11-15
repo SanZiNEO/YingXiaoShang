@@ -33,7 +33,18 @@ export function friendlyError(error: unknown, options: FriendlyOptions = {}): Er
   if (/402|insufficient|balance|quota/i.test(stripped)) {
     return new Error('模型账户余额/额度不足，请先在 DeepSeek 后台充值后再试。')
   }
-  if (/400|Model Not Exist|model.*(not found|invalid)|invalid.*model/i.test(stripped)) {
+  // 上下文超长（错误里带 requested N tokens / maximum context length）：
+  // 学生能自己救——开个新会话。
+  if (/requested\s+\d+\s+tokens|maximum context length|context[_ ]length[_ ]exceeded|context.*(?:window|length).*(?:exceed|too long)/i.test(stripped)) {
+    return new Error('这段对话太长了，模型接不下：开一个新会话再问（旧内容都还在，可以随时翻回去看）。')
+  }
+  // 单次输出长度参数超限：学生改不了，这是程序设置问题，别让他去动模型名。
+  if (/max_tokens.*(?:exceed|limit|maximum|too large)/i.test(stripped)) {
+    return new Error('模型的单次输出上限设得太高，这属于程序设置问题：把这句话截图发给老师，不用自己改设置。')
+  }
+  // 400 必须锚定成「状态码」，否则 max_tokens=4000 这类正常报错会被误判成
+  // 「模型名不对」，学生照着改模型名是白改。
+  if (/\b(?:HTTP|status|code|error)?\s*[:=]?\s*400\b\s*(?:Bad Request)?|invalid_request_error|Model Not Exist|model.*(?:not found|invalid)|invalid.*model/i.test(stripped)) {
     return new Error('模型名不对：在「设置」里把模型改回 deepseek-chat 再试。')
   }
   if (/429|rate.?limit|too many requests/i.test(stripped)) {

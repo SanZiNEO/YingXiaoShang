@@ -108,7 +108,7 @@ emit_question_set({ title?: string, content: object, markdown?: string, sourceRe
 - **`skillId` / `templateId` 是硬编码**：落库时 `skillId: 'agent'`、`templateId: pending.spec.type`（`packages/agent/src/artifacts.ts:115-116`），产物与 skill、模板没有真实关联。
 - **历史 5 个结构化渲染分支仍在**：`research_design`、`bp_outline`、`case_analysis`、`case_study`、`growth_card`（`renderers.tsx:751-760`，实现分别在 `:235`、`:316`、`:391`、`:552`、`:695`），只为库里的历史产物服务；`ArtifactSchema.type` 里对应枚举仍在（`packages/shared/src/index.ts:415`）。
 - **还有三种历史类型没有渲染分支**：`questionnaire`、`bp_section`、`evidence_pack` 落到 `ArtifactRenderer` 的 `default`，走 `MarkdownView`（`renderers.tsx:761-765`）——这几类产物在右栏就是 Markdown 预览，与第 1 节「不出现 `##`」的要求冲突，属待清理项。
-- **模板仍在打包**：`apps/desktop/templates/` 下 4 个模板（`growth_card.md`、`bp_outline.md`、`research_design.md`、`question_set.md`）由 `templatesDir` 注入（`apps/desktop/src/main/index.ts:88`）并随构建发布（`electron-builder.yml:9`）；当前调用方只有旧路径 `packages/skills/src/index.ts:279/344/384/484` 与未接线的 `packages/agent/src/news-lab.ts:423`。
+- **模板仍在打包**：`apps/desktop/templates/` 下 4 个模板（`growth_card.md`、`bp_outline.md`、`research_design.md`、`question_set.md`）由 `templatesDir` 注入（`apps/desktop/src/main/index.ts:88`）并随构建发布（`electron-builder.yml:9`）；当前调用方只有旧路径 `packages/skills/src/index.ts:279/344/384/484`（`news-lab.ts` 已于 2026-11-07 删除）。
 - **旧路径仍能旁路写文件**：`ArtifactService.writeTextFile`（`packages/artifacts/src/index.ts:189`）与 `packages/bp` 的 `export_bp` 都能绕开产物契约写盘（待核对：是否还有调用方）。
 
 ## 8. MVP 范围与后续

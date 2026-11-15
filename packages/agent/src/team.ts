@@ -16,13 +16,22 @@ export interface TeamScope {
 /** One progress step, already attributed to whoever is working. */
 export interface TeamEvent {
   agent: string
-  type: 'round' | 'text' | 'tool' | 'tool-end'
+  type: 'round' | 'text' | 'tool' | 'tool-end' | 'session'
   round?: number
   text?: string
   tool?: string
   chars?: number
   preview?: string
   cached?: boolean
+  /**
+   * 会话已建立时第一时间推给界面。
+   *
+   * 为什么必须早发：sessionId 原来只在整轮**成功**返回时给界面。首轮请求失败时
+   * 主进程已经建好了会话、写入了学生消息，界面却还拿着 undefined——重发就再建
+   * 一条新会话，旧的那条没人认领（F18）。会话建立是运行时事实，不是结果，
+   * 所以它必须在任何可能失败的调用之前发出去。
+   */
+  sessionId?: string
 }
 
 export interface TeamHooks {
@@ -211,34 +220,45 @@ export async function runTeamTurn(input: TeamTurnInput): Promise<TeamTurnResult>
   ].filter((line) => line.length > 0).join('\n')
 
   let rounds = 0
-  const result = await runAgentLoop({
-    ctx: input.ctx,
-    system,
-    messages: initialMessages(input),
-    tools,
-    // 单代理要自己读材料、读手册、写产物，轮次给够；收口靠"程序告诉它走到哪一步了"。
-    maxRounds: 10,
-    maxTokens: 8192,
-    // 不强制写：学生没要产物时，一段正文就是完整答复；逼它写会让「谢谢你」也变成附件。
-    status: ({ calls, written }) => {
-      const readCount = calls.filter((call) => READ_TOOL.has(call.name)).length
-      const made = [...new Set(written)]
-      const stage = made.length > 0
-        ? `产物已写入 ${made.join('、')}——不用再写，直接给结论`
-        : '还没写产物（学生没要就不用写）'
-      return `你在第 ${calls.length + 1} 步；已读材料 ${readCount} 次；${stage}。`
-    },
-    signal: input.hooks?.signal,
-    hooks: {
-      streamText: true,
-      onEvent: (event: AgentLoopEvent) => {
-        if (event.type === 'round') rounds = Math.max(rounds, event.round)
-        forward(input, 'lead', event)
+  const pendingWarnings: string[] = []
+  // 写工具已经对模型承诺过「已收齐，附件会在本轮结束时生成」（artifacts.ts）。
+  // 如果这轮最后抛错（空返回、断网、学生点停止），那些已经收齐的产物不能跟着作废，
+  // 所以落库放进 finally：成功走成功路径，失败也把手上有的交出去。
+  let settled: Awaited<ReturnType<typeof runAgentLoop>> | undefined
+  try {
+    settled = await runAgentLoop({
+      ctx: input.ctx,
+      system,
+      messages: initialMessages(input),
+      tools,
+      // 单代理要自己读材料、读手册、写产物，轮次给够；收口靠"程序告诉它走到哪一步了"。
+      maxRounds: 10,
+      maxTokens: 8192,
+      // 不强制写：学生没要产物时，一段正文就是完整答复；逼它写会让「谢谢你」也变成附件。
+      status: ({ calls, written }) => {
+        const readCount = calls.filter((call) => READ_TOOL.has(call.name)).length
+        const made = [...new Set(written)]
+        const stage = made.length > 0
+          ? `产物已写入 ${made.join('、')}——不用再写，直接给结论`
+          : '还没写产物（学生没要就不用写）'
+        return `你在第 ${calls.length + 1} 步；已读材料 ${readCount} 次；${stage}。`
       },
-    },
-  })
-  const warnings: string[] = []
-  await finalizeArtifacts(emit, warnings)
+      signal: input.hooks?.signal,
+      hooks: {
+        streamText: true,
+        onEvent: (event: AgentLoopEvent) => {
+          if (event.type === 'round') rounds = Math.max(rounds, event.round)
+          forward(input, 'lead', event)
+        },
+      },
+    })
+  } finally {
+    await finalizeArtifacts(emit, pendingWarnings).catch((error) => {
+      pendingWarnings.push(`产物落库失败：${error instanceof Error ? error.message : String(error)}`)
+    })
+  }
+  const result = settled!
+  const warnings: string[] = pendingWarnings
   const trace: TurnTrace = {
     modelCalls: rounds,
     leadRounds: rounds,

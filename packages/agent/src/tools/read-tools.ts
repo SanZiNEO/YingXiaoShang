@@ -62,27 +62,18 @@ export function rankNews<T extends { title: string; summary: string; content: st
     })
 }
 
-const FRESH_INTENT = /最新|今天|今日|昨日|昨天|刚刚|本周|这周|最近|近期|新闻|动态|消息/
-
 /**
- * 该不该联网补抓。
+ * 本地库一条都没命中时要不要联网补抓。
  *
- * 之前默认只查本地库，学生问「黄仁勋辞职」时模型只看到旧的本地新闻，
- * 却回「我查到了最新消息」——等于拿旧数据冒充最新。实测 DeepSeek Search
- * 0.3-0.4 秒就返回真实结果，所以本地没有、或者学生明确要最新时，直接联网。
+ * **只看命中了没有，不看学生怎么说。**
+ * 曾经这里还有一条「学生问最新/最近就联网」的正则分支，那是把意图判断写进代码
+ * （`docs/principles/single-agent.md:35-36` 点名禁止的第四种落位）：同一件事既有
+ * 模型的 `online` 参数、又有代码的正则，两个判定源迟早打架。
+ * 现在：要不要「最新」由模型决定（`online` 参数）；代码只负责一条工具策略——
+ * 本地什么都没有时别硬说「库里有」。
  */
-export function shouldSearchOnline(input: {
-  query: string
-  localHits: number
-  localNewestAt?: string
-  now?: number
-}): boolean {
-  const now = input.now ?? Date.now()
-  if (input.localHits === 0) return true
-  if (!FRESH_INTENT.test(input.query)) return false
-  const newest = input.localNewestAt ? Date.parse(input.localNewestAt) : NaN
-  if (!Number.isFinite(newest)) return true
-  return now - newest > 2 * 86_400_000
+export function shouldSearchOnline(localHits: number): boolean {
+  return localHits === 0
 }
 
 export function withTimeout<T>(task: Promise<T>, ms: number, message: string): Promise<T> {
@@ -414,10 +405,10 @@ export const READ_TOOLS: ToolSpec[] = [
     name: 'search_news',
     kind: 'read',
     description: [
-      '在本地新闻库里检索，返回候选（标题、来源、时间、摘要）。选哪条由你判断。',
-      '默认只查本地库，很快；库里没有就如实说没有，不要自己编。',
-      '只有学生明确要「最新 / 今天 / 最近 / 联网查」时，才把 online 设 true：',
-      '那会实时联网补抓，通常 30 秒以上，还可能失败。',
+      '在新闻库里检索，返回候选（标题、来源、时间、摘要）。选哪条由你判断。',
+      '先查本地库；本地一条都没命中时会自动联网补抓一次（几秒内，最多 15 秒）。',
+      '要主动补抓最新资讯时把 online 设 true。联网抓不到就如实说抓不到，不要自己编。',
+      '结果末尾会写「本地库 N 条，最新 某天｜已联网/未联网」，用这个日期判断新旧。',
     ].join(''),
     parameters: {
       type: 'object',
@@ -427,7 +418,7 @@ export const READ_TOOLS: ToolSpec[] = [
         limit: { type: 'integer', description: '最多返回几条，默认 8' },
         online: {
           type: 'boolean',
-          description: '是否允许联网补抓（默认 false；只有学生明确要求最新/联机时才用）',
+          description: '是否主动联网补抓最新资讯（学生要最新、或本地明显过旧时设 true）',
         },
       },
     },
@@ -446,11 +437,7 @@ export const READ_TOOLS: ToolSpec[] = [
         .map((article) => article.published_at)
         .sort()
         .at(-1) ?? ''
-      const online = explicitOnline || shouldSearchOnline({
-        query,
-        localHits: scored.length,
-        localNewestAt,
-      })
+      const online = explicitOnline || shouldSearchOnline(scored.length)
       let onlineNote = ''
       if (online) {
         // 联网只在显式要求时发生，并且有上限：宁可说「没查到」，也不让学生等两分钟。
@@ -473,11 +460,9 @@ export const READ_TOOLS: ToolSpec[] = [
       }
 
       if (scored.length === 0) {
+        // 走到这里说明本地一条都没有，联网已经试过了：只有「没查到」这一种事实。
         if (query.length === 0) return '新闻库里还没有入库文章。'
-        return online
-          ? `联网也没查到与「${query}」相关的可用文章${onlineNote ? `（${onlineNote}）` : ''}。不要编造新闻。`
-          : `本地新闻库里没有与「${query}」相关的文章。`
-            + `如果学生确实需要最新资讯，可以再调一次 search_news 并把 online 设为 true（会联网补抓，通常几秒内）。`
+        return `没查到与「${query}」相关的可用文章${onlineNote ? `（${onlineNote}）` : ''}。不要编造新闻，直接告诉学生没有查到。`
       }
       if (query.length > 0) turn.reads.queries.add(query)
       // 把「本地库到哪一天」写进结果：否则模型会拿旧新闻说成最新。

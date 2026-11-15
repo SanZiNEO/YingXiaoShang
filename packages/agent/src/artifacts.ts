@@ -84,6 +84,10 @@ export function collect(emit: EmitContext, spec: ArtifactSpec, args: Record<stri
     sourceRefs: incoming.sourceRefs.length > 0 ? incoming.sourceRefs : existing?.sourceRefs ?? [],
   })
   const count = Array.isArray(content.questions) ? content.questions.length : 0
+  if (spec.type === 'question_set' && count === 0) {
+    // 空题目集不能算「收齐」：模型会以为交差了，学生打开却是空白。
+    return '没有收到题目：questions 是空数组，这次不会生成题目集。请重新调用本工具，至少给出 1 道题（题干、答案都要有）。'
+  }
   return count > 0
     ? `已收齐 ${spec.type}：共 ${count} 题，附件会在本轮结束时生成。本工具已关闭，下一步直接写结论，不要再调用。`
     : `已收齐 ${spec.type}，附件会在本轮结束时生成。本工具已关闭，下一步直接写结论，不要再调用。`

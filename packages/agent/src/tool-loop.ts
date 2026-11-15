@@ -385,6 +385,12 @@ export async function runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResu
     const { toolCalls, text } = await request(round, schemas)
     if (text.length > 0) lastText = text
     if (toolCalls.length === 0) {
+      // 空返回不能把已经流出去的字抹掉（R21:11「出了的字不能又消失」）：
+      // 上一轮说了一半就停，学生屏幕上已经有内容，宁可给这段，也不要报「没有返回」。
+      // 注意 lastText 是「最近一次有内容的轮次」，不是拼接——半截话重复一遍也一样糟。
+      if (text.length === 0 && lastText.length > 0) {
+        return { text: lastText, rounds: round, called, calls, context: contextStats() }
+      }
       if (text.length === 0) throw new Error('模型没有返回任何内容')
       return { text, rounds: round, called, calls, context: contextStats() }
     }

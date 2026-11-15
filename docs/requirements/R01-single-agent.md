@@ -85,7 +85,7 @@ runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResult>
 | 3 | `team.ts` 与 `Team*` 类型仍是旧团队命名，实际只有一条循环；`findings` 字段恒为 `[]` | `packages/agent/src/team.ts:8-82` |
 | 4 | 对话入口唯一，调 `runTeamTurn()` | `packages/agent/src/index.ts:400`、`:443` |
 | 5 | 旧评分路径仍在跑：`FeedbackAgent` 被单题与交卷调用 | `packages/agent/src/subagents.ts:248`；`packages/agent/src/index.ts:200`、`:207`、`:558`、`:755` |
-| 6 | 两个零引用文件仍在仓库：`news-lab.ts` 588 行、`case-coach.ts` 841 行；后者还依赖 `subagents.ts` 的 `StepContext` | `packages/agent/src/news-lab.ts`、`packages/agent/src/case-coach.ts:34` |
+| 6 | ~~两个零引用文件仍在仓库~~ **`news-lab.ts` 已于 2026-11-07 删除**（零引用）；`case-coach.ts` 仍在，依赖 `subagents.ts` 的 `StepContext`，随旧管线一起删 | `packages/agent/src/case-coach.ts:34` |
 | 7 | `bundle` 仍按四个 preset 组织，每个带一段 persona 前缀 | `packages/bundle/cordis.patch.yml:61`、`:86`、`:105`、`:124` |
 | 8 | 默认 preset 仍是 `knowledge-news` | `packages/bundle/cordis.patch.yml:4-6` |
 | 9 | 旧 Web 面仍被挂载；其客户端类型是四选一 preset | `packages/bundle/cordis.patch.yml:56-57`、`packages/ui/src/client/client-context.ts:50` |
@@ -100,7 +100,7 @@ runAgentLoop(input: AgentLoopInput): Promise<AgentLoopResult>
 **MVP 做到哪**
 
 - 保留一条主循环、一个说话人；对话与交卷都只产生一条正文。
-- 停用四个 preset 与旧 Web 面挂载；删除 `news-lab.ts`、`case-coach.ts`。
+- 停用四个 preset 与旧 Web 面挂载；删除 `news-lab.ts`（✅ 2026-11-07）、`case-coach.ts`（☐ 待删）。
 - `subagents.ts` 只保留评分与证据 id 逻辑，并迁出为服务/工具，不再以「Agent」形式出现在对话路径。
 - 界面不把章节选择做成必选入口；trace 面板去掉模型/工具调用计数，改为中文的「读过什么」（见 [R16](R16-conversation-ui.md)）。
 - 清理 `index.ts` 里无调用方的意图正则与写死品牌的建议文案。

@@ -69,18 +69,11 @@ console.log('5. 完全不相关就别硬凑')
   check('无命中返回空', ranked.length === 0)
 }
 
-console.log('5b. 什么时候该自动联网（本地没有 / 学生要最新且本地太旧）')
+console.log('5b. 本地库空不空，决定要不要联网（不看学生原话）')
 {
-  // now 固定为 2026-11-07；本地最新 6 天前
-  const base = { query: '黄仁勋辞职', localHits: 3, localNewestAt: '2026-11-01T00:00:00Z', now }
-  check('本地没命中 → 联网', shouldSearchOnline({ ...base, localHits: 0 }))
-  check('本地命中、普通提问 → 不联网', !shouldSearchOnline(base))
-  check('学生说「最新」且本地 6 天前 → 联网', shouldSearchOnline({ ...base, query: '英伟达最新消息' }))
-  check('学生说「最新」且本地今天就有时 → 不联网',
-    !shouldSearchOnline({ ...base, query: '英伟达最新消息', localNewestAt: '2026-11-06T18:00:00Z' }))
-  check('要最新但不知道本地最新到哪天 → 联网',
-    shouldSearchOnline({ ...base, query: '英伟达最新消息', localNewestAt: undefined }))
-  check('普通提问且本地有时间 → 不联网', !shouldSearchOnline(base))
+  check('本地一条都没有 → 联网', shouldSearchOnline(0))
+  check('本地有命中 → 不联网（要最新由模型的 online 参数决定）', !shouldSearchOnline(1))
+  check('本地很多命中 → 不联网', !shouldSearchOnline(50))
 }
 
 console.log('6. 联网必须有超时兜底（否则就是干等）')

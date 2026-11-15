@@ -5,6 +5,7 @@ import type { SetSubmissionStatus } from './model'
 import { COLORS, Empty, HtmlFrame, Tag } from './ui'
 import { MarkdownView } from './markdown'
 import { tagRoleLabel } from './labels'
+import { emptyQuestionSetAction } from './question-set'
 
 function obj(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {}
@@ -33,6 +34,8 @@ export interface ArtifactRendererProps {
   attempts: QuestionAttempt[]
   kpNames: Record<string, string>
   onSubmitSet: (artifactId: string, answers: Array<{ questionId: string; answer: string }>) => Promise<SetSubmissionStatus>
+  /** 空产物时的下一步入口：不能让学生对着一句死话发呆。 */
+  onAsk?: (text: string) => void
   onOpenSource?: (sourceId: string, sourceType: 'kp' | 'news' | 'textbook' | 'resource', quote: string) => void
 }
 
@@ -70,7 +73,7 @@ function DifficultyMeter({ level }: { level: number }) {
   )
 }
 
-function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet }: ArtifactRendererProps) {
+function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet, onAsk }: ArtifactRendererProps) {
   const content = obj(artifact.content_json)
   const questions = arr(content.questions).map(obj)
   const attemptByQuestion = useMemo(() => {
@@ -98,9 +101,29 @@ function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet }: Artif
   }
 
   if (questions.length === 0) {
-    return artifact.content.trim().length > 0
-      ? <MarkdownView text={artifact.content} />
-      : <Empty>这份题目集没有可渲染的题目。</Empty>
+    if (emptyQuestionSetAction(artifact) === 'markdown') return <MarkdownView text={artifact.content} />
+    // 死话会让学生以为「这就是全部」：给两个能立刻点的下一步。
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <Empty>这次没有生成出题目（可能中间断了）。不用重开软件，直接选一个继续：</Empty>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={() => onAsk?.('重新出这一章的 5 道题')}
+            style={{ border: '1px solid transparent', background: COLORS.accent, color: 'var(--on-accent, #fff)', borderRadius: 8, padding: '6px 12px', fontSize: 12, cursor: 'pointer' }}
+          >
+            重新出这一章的 5 道题
+          </button>
+          <button
+            type="button"
+            onClick={() => onAsk?.('先讲这一章的重点，再出 5 道题')}
+            style={{ border: `1px solid ${COLORS.border}`, background: '#fff', color: COLORS.text, borderRadius: 8, padding: '6px 12px', fontSize: 12, cursor: 'pointer' }}
+          >
+            先讲重点再出题
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (

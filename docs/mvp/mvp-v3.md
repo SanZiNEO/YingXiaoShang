@@ -81,7 +81,7 @@
 ## 5. 交付顺序
 
 1. **文档统一**（本目录）：原则、需求、MVP 口径对齐。
-2. **下线旧路径**：`subagents.ts`、`team.ts`、`news-lab.ts`、`packages/skills` 旧管线、`packages/bundle` 的四个 preset、`packages/ui` 旧 Web 面；确认不再被引用后再删（R01、R04、R16）。
+2. **下线旧路径**：`subagents.ts`、`team.ts`（`news-lab.ts` 已于 2026-11-07 删除）、`packages/skills` 旧管线、`packages/bundle` 的四个 preset、`packages/ui` 旧 Web 面；确认不再被引用后再删（R01、R04、R16）。
 3. **工具与上下文对齐**：目录只给名称+一句话；读工具记账；截断预算（R03、R05、R06）。
 4. **产物收敛**：只留 `page` 与 `question_set`；历史 5 个渲染分支与 `apps/desktop/templates/*.md` 清理（R15）。
 5. **界面与打包**：文案、错误提示、安装包（R16、R19、R20）。

@@ -57,6 +57,8 @@ export interface WorkspaceProps {
   onOpenArtifact: (artifact: Artifact) => void
   onOpenCitation: (citation: Citation) => void
   onSubmitSet: (artifactId: string, answers: Array<{ questionId: string; answer: string }>) => Promise<SetSubmissionStatus>
+  /** 空产物的下一步：直接替学生把话发出去。 */
+  onAsk?: (text: string) => void
   onExport: (artifact: Artifact, format: ExportFormat) => void
   onReveal: (path: string) => void
   onRetryLedger: (sourceId: string) => void
@@ -279,7 +281,7 @@ export function Workspace(props: WorkspaceProps) {
     fullscreen, onToggleFullscreen,
     tabs, activeId, artifacts, attemptsByArtifact, citations, citationLabels, kpNames, capabilities, chapters,
     ledger, newsStatus, snapshot, turns,
-    onActivate, onClose, onNew, onOpenLocal, onOpenArtifact, onOpenCitation, onSubmitSet, onExport, onReveal,
+    onActivate, onClose, onNew, onOpenLocal, onOpenArtifact, onOpenCitation, onSubmitSet, onAsk, onExport, onReveal,
     onRetryLedger, onRefreshNews, onQuote,
   } = props
   const [menuOpen, setMenuOpen] = useState(false)
@@ -486,6 +488,7 @@ export function Workspace(props: WorkspaceProps) {
             attempts={attemptsByArtifact[artifact.id] ?? []}
             kpNames={kpNames}
             onSubmitSet={(artifactId, answers) => onSubmitSet(artifactId, answers)}
+            onAsk={onAsk}
             onOpenSource={(sourceId, sourceType, quote) => onOpenCitation({ sourceType, sourceId, quote, locator: {} })}
           />
         ) : active.kind === 'overview' ? (

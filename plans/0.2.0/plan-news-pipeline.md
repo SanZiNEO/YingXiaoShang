@@ -15,7 +15,7 @@
 | 定时任务 | `apps/desktop/src/main/index.ts:94 startNewsAutomation()` | 默认 30 分钟一次，**在每个学生电脑上跑** |
 | 新闻表 + 标签表 | `news_articles`、`news_tags`（`tag_type/tag_key/tag_role/confidence/method/evidence_span`） | 结构是齐的，学长说的「打 tags」有地方放 |
 | 读新闻工具 | `search_news` / `read_news`（`tools/read-tools.ts:316/361`） | **只查本地库**，`limit: 500` 全表拉出来再用关键词过滤 |
-| 实时抓取 | `news-lab.ts:241/291` → `crawlAndIngest` / `searchAndIngest`（DeepSeek Search API + 抓网页正文） | 这条是慢的根源，一次 60–200 秒 |
+| 实时抓取 | `news-lab.ts`（**2026-11-07 已删，零引用**）→ `crawlAndIngest` / `searchAndIngest`（DeepSeek Search API + 抓网页正文） | 这条是慢的根源，一次 60–200 秒 |
 
 **三个真问题**：
 

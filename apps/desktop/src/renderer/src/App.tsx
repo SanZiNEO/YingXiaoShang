@@ -57,6 +57,7 @@ import {
 } from './layout/columns'
 import { CHAPTER_SHORT, chapterText, phaseLabel } from './labels'
 import {
+import { applyStreamEvent, type ChatStreamEvent } from './stream-state'
   ArtifactIcon,
   BrandMark,
   ChevronDownIcon,
@@ -161,28 +162,6 @@ const SUGGESTIONS = [
   '给我出 3 道题',
 ]
 
-/** 一轮对话中主进程推给界面的进度事件。 */
-interface ChatStreamEvent {
-  requestId: string
-  agent: string
-  type: 'round' | 'text' | 'tool'
-  round?: number
-  text?: string
-  tool?: string
-}
-
-/** 工具名 → 用户可读的动作文案；进度提示不暴露内部工具名。 */
-const TOOL_LABEL: Record<string, string> = {
-  'list_chapter_kps': '正在看本章有哪些知识点',
-  'read_material': '正在取教材材料',
-  'read_kp': '正在读知识点定义',
-  'read_textbook': '正在读教材原文',
-  'read_reference': '正在查手册',
-  'search_news': '正在检索新闻',
-  'read_news': '正在读新闻原文',
-  'write_page': '正在写页面',
-  'emit_question_set': '正在出题',
-}
 
 function mapMessages(rows: ChatMessage[]): ChatEvent[] {
   return rows.map((row) => ({
@@ -722,12 +701,12 @@ export function App() {
   }, [contextOpen, scopeMenuOpen])
 
   // 启动自检：安装包不完整时章节/知识点会是 0，界面能开但什么也教不了，必须说出来。
+  // 用独立状态而不是 notice：notice 会在学生发第一条消息时被清空（send 开头 setNotice('')），
+  // 那样「安装包不完整」这件事又变回静默。
+  const [startupWarning, setStartupWarning] = useState('')
   useEffect(() => {
     void window.learning.health?.().then((health) => {
-      const warning = health?.warnings?.[0] ?? ''
-      const notice = health?.notices?.[0] ?? ''
-      if (warning) setNotice(warning)
-      else if (notice) setNotice(notice)
+      setStartupWarning(health?.warnings?.[0] ?? health?.notices?.[0] ?? '')
     }).catch(() => { /* 老版本主进程没有这个接口，忽略 */ })
   }, [])
 
@@ -746,21 +725,13 @@ export function App() {
   useEffect(() => {
     const unsubscribe = window.learning.onChatEvent?.((payload) => {
       const item = payload as ChatStreamEvent
-      setStream((current) => {
-        if (!current || current.requestId !== item.requestId) return current
-        if (item.type === 'tool') {
-          // 负责人已经吐过字又决定继续查资料：收回这段，避免半截话上屏。
-          const reset = item.agent === 'lead' ? '' : current.text
-          return { ...current, text: reset, step: TOOL_LABEL[item.tool ?? ''] ?? '查资料' }
-        }
-        if (item.type === 'text' && item.agent === 'lead') {
-          return { ...current, text: current.text + (item.text ?? ''), step: '' }
-        }
-        if (item.type === 'round' && item.agent === 'lead' && current.step === '') {
-          return { ...current, step: '正在组织回答…' }
-        }
-        return current
-      })
+      // 会话一建立就记下来：首轮失败时界面也得知道真实 sessionId，
+      // 否则重发会另建一条会话，旧会话成孤儿（F18）。
+      if (item.type === 'session' && typeof item.sessionId === 'string' && item.sessionId.length > 0) {
+        setSessionId(item.sessionId)
+      }
+      // 迁移规则全部在 stream-state.ts 里（含「不撤字」），这里只负责接线。
+      setStream((current) => applyStreamEvent(current, item))
     })
     return () => { unsubscribe?.() }
   }, [])
@@ -964,15 +935,14 @@ export function App() {
       setScopeOverride(undefined)
       await refreshAll(result.sessionId)
       const questionSet = result.artifacts.find((artifact) => artifact.type === 'question_set')
-      const caseLesson = result.plan.steps.some((step) => step.agent === 'case')
-        ? result.artifacts.find((artifact) => artifact.type === 'case_study')
-        : undefined
+      // 单代理后没有「按角色分派」：产物一律按类型找，不再看 plan.steps 里是谁做的。
+      const caseLesson = result.artifacts.find((artifact) => artifact.type === 'case_study')
       const pageArtifact = result.artifacts.find((artifact) => artifact.type === 'page')
       if (questionSet) openArtifact(questionSet)
       else if (caseLesson) openArtifact(caseLesson)
       else if (pageArtifact) openArtifact(pageArtifact)
-      if (!questionSet && !caseLesson && !pageArtifact
-        && (result.citations.length > 0 || result.plan.steps.some((step) => step.agent === 'knowledge'))) {
+      // 依据面板只按「这轮有没有引用」判断，不再看是谁做的。
+      if (!questionSet && !caseLesson && !pageArtifact && result.citations.length > 0) {
         openTab('evidence')
       }
       setOverviewUnread(true)
@@ -1236,6 +1206,33 @@ export function App() {
     )
   }
 
+  // 停止按钮和等待秒数必须在**两种状态**下都在：
+  // 之前它只放在「还没出字」的等待视图里，一旦模型开始出字就整个消失——
+  // 而那正是学生最想按停止的时候（R21:12）。这里抽出来，两处共用。
+  const stopControls = busy ? (
+    <>
+      <button
+        type="button"
+        data-action="stop"
+        onClick={() => {
+          const id = activeRequestRef.current
+          if (!id) return
+          void window.learning.cancel?.(id)
+          setNotice('已按你的要求停止这一轮；这次回答没有保存。')
+        }}
+        style={{ marginLeft: 4, border: `1px solid ${COLORS.border}`, background: 'transparent', color: COLORS.muted, borderRadius: 6, padding: '1px 7px', fontSize: 10.5, cursor: 'pointer' }}
+      >
+        停止
+      </button>
+      {elapsed >= 3 ? (
+        <span style={{ color: COLORS.muted, opacity: 0.85 }}>
+          · 已 {elapsed >= 60 ? `${Math.floor(elapsed / 60)} 分 ${elapsed % 60} 秒` : `${elapsed} 秒`}
+          {elapsed >= 90 ? '（查资料会慢一些，不必重复点发送）' : ''}
+        </span>
+      ) : null}
+    </>
+  ) : null
+
   return (
     <div
       ref={layoutRef}
@@ -1497,6 +1494,7 @@ export function App() {
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 7, marginBottom: 4 }}>
                         <span style={{ fontSize: 12, fontWeight: 650 }}>营小商</span>
                         <span style={{ fontSize: 10.5, color: COLORS.muted }}>正在作答</span>
+                        {stopControls}
                       </div>
                       <MarkdownView text={stream.text} />
                     </div>
@@ -1505,28 +1503,17 @@ export function App() {
                   <div style={{ color: COLORS.muted, fontSize: 11.5, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <ClockIcon size={13} />
                     <span>{stream?.step || '正在判断并整理…'}</span>
-                    {busy ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const id = activeRequestRef.current
-                          if (!id) return
-                          void window.learning.cancel?.(id)
-                          setNotice('已按你的要求停止这一轮；这次回答没有保存。')
-                        }}
-                        style={{ marginLeft: 4, border: `1px solid ${COLORS.border}`, background: 'transparent', color: COLORS.muted, borderRadius: 6, padding: '1px 7px', fontSize: 10.5, cursor: 'pointer' }}
-                      >
-                        停止
-                      </button>
-                    ) : null}
-                    {elapsed >= 3 ? (
-                      <span style={{ color: COLORS.muted, opacity: 0.85 }}>
-                        · 已 {elapsed >= 60 ? `${Math.floor(elapsed / 60)} 分 ${elapsed % 60} 秒` : `${elapsed} 秒`}
-                        {elapsed >= 90 ? '（查资料会慢一些，不必重复点发送）' : ''}
-                      </span>
-                    ) : null}
+                    {stopControls}
                   </div>
                 )
+              ) : null}
+              {startupWarning ? (
+                <div
+                  data-notice="startup"
+                  style={{ border: `1px solid ${COLORS.warning}`, background: '#fffaf0', color: COLORS.text, borderRadius: 8, padding: '7px 10px', fontSize: 11.5, lineHeight: 1.7 }}
+                >
+                  {startupWarning}
+                </div>
               ) : null}
               {notice ? <div style={{ color: COLORS.warning, fontSize: 11, lineHeight: 1.6 }}>{notice}</div> : null}
               </div>
@@ -1640,6 +1627,7 @@ export function App() {
           onOpenArtifact={openArtifact}
           onOpenCitation={(citation) => void openCitation(citation)}
           onSubmitSet={handleAnswerSet}
+          onAsk={(text) => void send(text)}
           onExport={(artifact, format) => void exportArtifact(artifact, format)}
           onReveal={(path) => { void window.learning.invoke('files.reveal', { path }) }}
           onRetryLedger={(sourceId) => void retryLedger(sourceId)}

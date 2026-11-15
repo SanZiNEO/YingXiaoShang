@@ -20,6 +20,7 @@ import { startupFailure, startupHealth } from './health.js'
 import { loadDotEnv } from './env.js'
 import { SettingsStore } from './settings.js'
 import { defaultBounds, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, readWindowState, resolveAppHome, trackWindowState } from './window-state.js'
+import { TurnCanceller } from './turn-canceller.js'
 
 /** Local demo identity; every service call receives it explicitly. */
 const DEMO_STUDENT_ID = 'student_demo'
@@ -424,14 +425,10 @@ app.whenReady().then(async () => {
 
   ipcMain.handle('learning:invoke', (_event, method: string, input: unknown) => invoke(method, input))
   // 每一轮对话一个控制器：学生点「停止」就中断在途模型请求。
-  const turnControllers = new Map<string, AbortController>()
+  const turnCanceller = new TurnCanceller()
   ipcMain.handle('learning:cancel', (_event, requestId: unknown) => {
     const id = typeof requestId === 'string' ? requestId : ''
-    const controller = turnControllers.get(id)
-    if (!controller) return { cancelled: false }
-    controller.abort()
-    turnControllers.delete(id)
-    return { cancelled: true }
+    return { cancelled: turnCanceller.cancel(id) }
   })
 
   ipcMain.handle('learning:chat', async (event, input: {
@@ -447,8 +444,7 @@ app.whenReady().then(async () => {
       throw new Error('消息不能为空')
     }
     const requestId = typeof input.requestId === 'string' ? input.requestId : ''
-    const controller = new AbortController()
-    if (requestId) turnControllers.set(requestId, controller)
+    const turn = turnCanceller.begin(requestId)
     try {
       return await agentRuntime.handleConversation(
         {
@@ -465,13 +461,15 @@ app.whenReady().then(async () => {
             event.sender.send('learning:chat-event', { requestId, ...step })
           },
           // 必须真的把 signal 交给执行链，否则停止按钮只是界面上停、模型还在跑。
-          signal: controller.signal,
+          // scripts/verify-cancel-wiring.ts 会断言这一行存在（源码级），
+          // 因为只测 runAgentLoop 测不到这条接线。
+          signal: turn.signal,
         },
       )
     } catch (error) {
       throw friendlyError(error)
     } finally {
-      if (requestId) turnControllers.delete(requestId)
+      turn.done()
     }
   })
   ipcMain.handle('learning:answer', async (_event, input: {

@@ -83,7 +83,7 @@ const reset = item.agent === 'lead' ? '' : current.text
 
 ## 6. 验收
 
-- [ ] 工具调用前后，已显示的文字**不会被清空**（对照 `App.tsx:723-726`）
+- [ ] 工具调用前后，已显示的文字**不会被清空**（对照 `apps/desktop/src/renderer/src/stream-state.ts` 与 `apps/desktop/src/renderer/src/App.tsx:751-754` 附近的接线）
 - [ ] `tool-end` 到达后阶段行会更新，不再一直显示「查资料」
 - [ ] 点停止：不再发起新的模型请求和工具，已显示内容保留，标为「已停止」
 - [ ] `finish_reason` 为 `max-tokens` 时界面如实说明，不当作完整答复

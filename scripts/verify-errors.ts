@@ -58,6 +58,25 @@ console.log('')
   check('未知错误不乱吞内容', /some weird internal thing/.test(unknown.message), unknown.message)
 }
 
+// 400 家族不能被误判成「模型名不对」：学生照着改模型是白改。
+{
+  const cases: Array<[string, string, string]> = [
+    ['max_tokens=4000 exceeds the limit', '输出上限设太高', '程序设置问题'],
+    ['requested 40023 tokens, but the maximum is 65536', '上下文超长', '这段对话太长了'],
+    ["This model's maximum context length is 65536 tokens", '上下文超长', '这段对话太长了'],
+    ['DeepSeek API error: 400 Bad Request', '状态码 400', '模型名不对'],
+    ['invalid_request_error: model is required', '缺模型参数', '模型名不对'],
+  ]
+  for (const [raw, label, expected] of cases) {
+    const text = friendlyError(new Error(raw)).message
+    check(`${label} → 提示「${expected}」`, text.includes(expected), text)
+  }
+  check('max_tokens=4000 不提示改模型名',
+    !friendlyError(new Error('max_tokens=4000 exceeds the limit')).message.includes('模型名不对'))
+  check('40023 tokens 不提示改模型名',
+    !friendlyError(new Error('requested 40023 tokens')).message.includes('模型名不对'))
+}
+
 console.log('')
 if (failed === 0) {
   console.log('全部通过')

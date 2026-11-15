@@ -29,6 +29,7 @@ import { StateProjector } from './state.js'
 import { FeedbackAgent } from './subagents.js'
 import { RecorderAgent, type RecorderStatus } from './recorder.js'
 import { buildHistoryView } from './history.js'
+import { mergeRetryAnswers } from './answer-merge.js'
 import { registerArtifactQuestions } from './question-registry.js'
 import { runTeamTurn, type TeamHooks, type TurnTrace } from './team.js'
 
@@ -407,6 +408,9 @@ export class AgentService extends Service implements AgentRuntime {
       chapterId: input.chapterId ?? '',
       title: input.message.slice(0, 24),
     })
+    // 会话一建立就告诉界面（不是等成功）：下面任何一步失败，界面都能用这个 id
+    // 刷新，而不是拿着 undefined 再开一条新会话。
+    hooks?.onEvent?.({ agent: 'lead', type: 'session', sessionId })
     const turnId = `t_${Date.now().toString(36)}_${randomUUID().slice(0, 6)}`
     const startedAt = nowIso()
     const userMessage = this.db.insertChatMessage({
@@ -786,7 +790,15 @@ export class AgentService extends Service implements AgentRuntime {
       ? storedPayload.feedbackBatch as Array<Record<string, unknown>>
       : []
     const storedStatuses = existing?.record?.subagents?.map((item) => item.status) ?? []
-    const baseAnswers = retrying && existing && existing.answers.length > 0 ? existing.answers : input.answers
+    // 重试时**以这次提交的答案为准**，但顺序必须沿用旧记录：
+    // 下面按 `storedResults[index]` / `storedStatuses[index]` 下标复用已判结果，
+    // 顺序一变，判分就会串到别的题上（这是本段唯一真正的风险点）。
+    //
+    // 以前这里直接取 `existing.answers`，于是学生在界面上改了答案、点「重试未判题目」，
+    // 判的还是库里那份旧的——他做了动作，系统当没看见。
+    const baseAnswers = retrying
+      ? mergeRetryAnswers(existing?.answers ?? [], input.answers)
+      : input.answers
     const reusable = retrying
       && (existing?.answers.length ?? 0) > 0
       && storedResults.length === baseAnswers.length

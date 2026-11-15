@@ -63,16 +63,16 @@
 
 | 工具 | 参数 | 返回 |
 |---|---|---|
-| `search_news` | `query?`（空 = 最新）、`limit?`（1–20，默认 8） | 标题、id、来源、日期、摘要 160 字；只含正文 ≥300 字的文章 |
+| `search_news` | `query?`（空 = 最新）、`limit?`（1–20，默认 8）、`online?`（主动联网补抓） | 标题、id、来源、日期、摘要 160 字；只含正文 ≥300 字的文章；末尾附「本地库 N 条，最新 某天｜已联网/未联网」。**本地一条都没命中时会自动联网一次（上限 15 秒，不爬网页）** |
 | `read_news` | `id?` 或 `title?` | 标题、来源、日期、链接、正文前 4000 字；本轮重复读返回「已读过」 |
 | `ingest_news`（新增） | `url?`、`title?`、`query?` | `{ articleId, title, url, contentStatus }`；复用 `NewsService.crawlAndIngest` / `searchAndIngest` |
 
-检索排序：标题命中 4 分、摘要 2 分、正文 1 分，分数相同按 `published_at` 降序；`listNews` 本身按 `published_at DESC`（`packages/db/src/index.ts:2908-2920`）。
+检索排序（命中后才加新鲜度分）：标题 6 分、摘要 2 分、正文 1 分，分数相同按 `published_at` 降序；`listNews` 本身按 `published_at DESC`（`packages/db/src/index.ts:2908-2920`）。
 
 ### 4.5 刷新与失败
 
-- 定时器间隔 `refreshMinutes`（默认 30，最小 1）；最新 `fetched_at` 距今不足 30 分钟则跳过（`packages/news/src/index.ts:56`、`:251-259`、`:356-360`）。
-- 刷新是单飞：并发调用复用同一个 Promise（`:243-249`）。
+- 定时器间隔 `refreshMinutes`（默认 30，最小 1）；最新 `fetched_at` 距今不足 30 分钟则跳过（`packages/news/src/index.ts:56`、`:268-273`（`ensureFresh` 判定）、`:356-360`（失败告警））。
+- 刷新是单飞：并发调用复用同一个 Promise（`:260-266`）。
 - 单源失败只标记该次 ingest run 为 `partial`，已入库文章不删除；`ensureFresh` 捕获异常并告警，不抛给学生。
 - 正文 <300 字不落库；标题、URL、sourceId 缺失同样拒绝，并给出原因（`normalize.ts:16-26`）。
 
