@@ -2,8 +2,11 @@
 
 > 状态：MVP（本轮）
 > 依赖：[R03 工具层](R03-tools.md)、[R05 上下文按需获取](R05-context-on-demand.md)、[R17 本地数据](R17-local-data.md)
-> 代码：`packages/news/src/index.ts`、`packages/news/src/sources/`、`packages/news/src/normalize.ts`、`packages/agent/src/tools/read-tools.ts`、`pipeline/ingest-news.ts`
+> 代码：`packages/news/src/index.ts`（Python 服务客户端）、`services/news-crawler-py/`（采集与入库）、`packages/agent/src/tools/read-tools.ts`
 > 上位原则：`../principles/single-agent.md`
+>
+> 2026-11 实现切换：TypeScript 源适配器、`normalize.ts` 与 `pipeline/ingest-news.ts` 已删除；
+> 采集、解析、去重和增量入库统一由 Python 服务的 `sources/*.py` + `db.py` 负责。
 
 ## 1. 要什么（学生可见结果）
 
@@ -16,14 +19,14 @@
 
 | 落位 | 内容 |
 |---|---|
-| 数据 | `news_articles` 表（SQLite）；四个抓取源；`data/normalized/news_articles.json` 为离线种子 |
-| 工具 | `search_news`、`read_news`（`packages/agent/src/tools/read-tools.ts:316`、`:361`）；新增工具 `ingest_news`（见 §4.4） |
+| 数据 | `news_articles` 表（SQLite）；Python 注册表 50 个源、46 个启用；同库逐条增量 upsert |
+| 工具 | `search_news`、`read_news`（`packages/agent/src/tools/read-tools.ts:316`、`:361`）；贴链接走 `crawl_url`（Python `/ingest`） |
 | 提示词 | `mentor.md`「取材料」：新闻先 `search_news` 再 `read_news`，引用必须来自正文 |
-| 定时 | `NewsService.ensureFresh()` 每 30 分钟检查一次新鲜度，过期才抓 |
+| 定时 | Python `serve` 每源独立 `interval_s` 循环；桌面 `ensureFresh()` 只做兜底触发 |
 
-插件侧另有 `list_news`、`get_news`、`web_search`、`crawl_url`、`refresh_news`（`packages/news/src/index.ts:365-527`），属旧路径，不在单一智能体九条工具清单内；收敛见 [R03](R03-tools.md)。
+插件侧另有 `list_news`、`get_news`、`web_search`、`crawl_url`、`refresh_news`（`packages/news/src/index.ts`），全部是 Python 控制面的客户端；`web_search` 的语义是「库内 + 3 秒事实增量」，不再在 TS 里抓网页。
 
-`ingest_news` 是白名单内的新闻能力，不是通用抓取：只接收新闻 URL 或标题关键词，复用 `NewsService` 的抽取与正文门槛，不做任意 URL 代理；R03 的「不做任意 URL 抓取」指不提供通用 `fetch` 工具，与本条不冲突。
+`ingest_news` 是白名单内的新闻能力，不是通用抓取：只接收新闻 URL 或标题关键词，由 Python `/ingest` / `/query` 完成单篇抽取与正文门槛；R03 的「不做任意 URL 抓取」指不提供通用 `fetch` 工具，与本条不冲突。
 
 ## 3. 行为（一轮里怎么发生）
 
@@ -40,30 +43,26 @@
 `id`、`source`、`source_id`、`title`、`url`、`author`、`published_at`、`summary`、`content`、`content_status`、`rights`、`fetched_at`。
 
 - `id` 形如 `<source>-<sourceId>`；`url` 唯一（`news_articles_by_url`）。
-- `content_status`：`full`（正文 ≥1000 字）/ `partial`（300–999 字）/ `unavailable`（不落库）。
+- `content_status`：`full`（正文 ≥1000 字）/ `partial`（其余可入库短稿）/ `unavailable`（不落库）。Python 入库最低正文/摘要 20 字。
 - `rights` 固定 `internal-research; source-link`。
 
-### 4.2 四个源（`packages/news/src/sources/index.ts:7`）
+### 4.2 源注册表（`services/news-crawler-py/src/news_crawler/sources/*.py`）
 
-| id | 入口 | 说明 |
-|---|---|---|
-| `socialbeta` | `https://socialbeta.com/` | 首页 `/article/<id>`、`/campaign/<id>` 链接 |
-| `linkshop` | `http://www.linkshop.com/news/` | GB2312 页面按 GBK 解码，`/news/<id>.shtml` |
-| `brandstar` | `https://www.brandstar.com.cn/` | `/in-depth/<id>`、`/news/<id>`，优先 JSON-LD |
-| `wscn` | `api-one-wscn.awtmt.com/apiv1/content/articles` | API 失败时回退本地 seed 文件 |
+一源一文件，`DESCRIPTOR` 自带入口、分页、能力与 policy；`registry.py` 自动派生，当前 50 个注册源、46 个启用，4 个停用并在 `note` 写明原因。原 TS 的 8 个源已迁入同一注册表，不再有两套爬虫。
 
 ### 4.3 抓取与限速
 
-- 每个源独立限速：相邻请求至少 1 秒（`sources/http.ts:6`、`:18-21`）；超时 30 秒（`:7`）。
-- 单源单次最多 30 条，详情并发 2（`packages/news/src/index.ts:55`、`:308`）。
-- 默认 UA 声明用途与联系方式（`sources/http.ts:4`）；遇到 Cloudflare/火山验证页时回退 Playwright，仍失败则计为错误。
-- 按 URL 去重；同一批内重复 URL 跳过。
+- 普通源不设每请求固定间隔；详情按源并发（默认至少 4），列表一次拉一批，解析一条就 upsert 一条。
+- 只有 `capabilities.anti_crawler=True` 的源（NBD、梅花等）按自身 policy 保留低并发/间隔；失败才指数退避。
+- 单源单轮硬超时由 `--max-run-s`（默认 90 秒）控制；超时只影响该源本轮，统计写 `failure` + 失败明细。
+- 全局跨源并发由 `--workers` / `NEWS_CRAWLER_WORKERS` 控制（默认 8），槽位只在跑一轮期间持有，跑完立即让给下一个源。
+- URL 唯一 + `content_hash` 判断正文变化；同 URL 重抓不变计 `skipped`，正文变化才 `updated` 并清旧草稿。
 
 ### 4.4 工具
 
 | 工具 | 参数 | 返回 |
 |---|---|---|
-| `search_news` | `query?`（空 = 最新）、`limit?`（1–20，默认 8）、`online?`（主动联网补抓） | 标题、id、来源、日期、摘要 160 字；只含正文 ≥300 字的文章；末尾附「本地库 N 条，最新 某天｜已联网/未联网」。**本地一条都没命中时会自动联网一次（上限 15 秒，不爬网页）** |
+| `search_news` | `query?`（空 = 最新）、`limit?`（1–20，默认 8）、`online?`（主动联网补抓） | 标题、id、来源、日期、摘要 160 字；只含正文 ≥40 字的文章；末尾附「本地库 N 条，最新 某天｜已联网/未联网」。**本地一条都没命中时会自动联网一次（上限 15 秒，由 Python 后端执行事实增量）** |
 | `read_news` | `id?` 或 `title?` | 标题、来源、日期、链接、正文前 4000 字；本轮重复读返回「已读过」 |
 | `ingest_news`（新增） | `url?`、`title?`、`query?` | `{ articleId, title, url, contentStatus }`；复用 `NewsService.crawlAndIngest` / `searchAndIngest` |
 
@@ -71,17 +70,17 @@
 
 ### 4.5 刷新与失败
 
-- 定时器间隔 `refreshMinutes`（默认 30，最小 1）；最新 `fetched_at` 距今不足 30 分钟则跳过（`packages/news/src/index.ts:56`、`:268-273`（`ensureFresh` 判定）、`:356-360`（失败告警））。
-- 刷新是单飞：并发调用复用同一个 Promise（`:260-266`）。
-- 单源失败只标记该次 ingest run 为 `partial`，已入库文章不删除；`ensureFresh` 捕获异常并告警，不抛给学生。
-- 正文 <300 字不落库；标题、URL、sourceId 缺失同样拒绝，并给出原因（`normalize.ts:16-26`）。
+- Python 长驻服务按每源 `interval_s` 调度；桌面 `ensureFresh()` 在库为空/过期时用 `wait=false` 触发一轮，不阻塞 UI。
+- 手动 `refresh_news` 默认后台触发并返回 `{queued, accepted}`；需要等结果时显式传 `wait=true`。
+- 单源失败只影响该源本轮统计，已入库文章不删除；`failures` 明确写 stage/url/message。
+- 正文和摘要都不足 20 字才拒绝入库；短稿可以 `partial` 入库，`search_news` 本地门槛为 40 字，文案要说清正文不完整。
 
 ## 5. 边界（不做什么、失败怎么表现）
 
 - 不做新闻阅读器，不做每日推送，不做全文搜索引擎。
 - 不绕过登录、付费墙、验证码；抓不到就说抓不到，不伪造正文。
 - 不把新闻全文提交进仓库或产物：仓库只留元数据 + 摘要 + 链接，全文只进本地库；引用 ≤240 字。
-- 正文 <300 字：不入库；`search_news` 也不会返回。
+- 正文 <20 字（且摘要也 <20 字）：不入库；`search_news` 本地检索门槛 40 字。
 - 只拿到 `partial`：分析时必须说明「正文不完整，结论可能缺上下文」。
 - 时间缺失或格式异常：按字符串排序仍返回，但不宣称「最新」；无法确定日期时明确标注。
 - 网络全失败：沿用库里的旧文章，并在回复中说明「刚才是本地缓存，未更新」。
@@ -91,26 +90,21 @@
 | # | 场景 | 期望 |
 |---|---|---|
 | 1 | 「根据最新消息出一道题」 | 先 `search_news` 再 `read_news`；空关键词检索按 `published_at` 降序返回最新一批，不退回旧文；若只能拿到旧文，说明库未更新；`trace.reads.news ≥ 1` |
-| 2 | 学生贴一条新闻链接 | `ingest_news` 成功返回 `articleId` 与 `contentStatus`；随后能 `read_news` 读到正文并引用；正文不足 300 字时明确说抓取失败及原因 |
-| 3 | 断网或源站验证拦截 | 刷新失败不删旧数据；`search_news` 仍能返回旧文章；回复说明「未更新」，不编造新事实 |
-| 4 | 搜「直播电商」 | 结果按相关度、再按发布时间降序；每条带来源与日期；四个源的文章都能被检索到 |
+| 2 | 学生贴一条新闻链接 | `crawl_url` / `ingest_news` 成功返回 `articleId` 与 `contentStatus`；随后能 `read_news` 读到正文并引用；正文和摘要都不足 20 字时明确说抓取失败及原因 |
+| 3 | 断网或源站验证拦截 | Python 刷新失败不删旧数据；`search_news` 仍能返回旧文章；回复说明「未更新」，不编造新事实 |
+| 4 | 搜「直播电商」 | 结果按相关度、再按发布时间降序；每条带来源与日期；46 个启用源的文章都能被检索到 |
 | 5 | 正文只有 500 字 | `content_status=partial`；`read_news` 返回正文，回复明确写「正文不完整」；不把摘要当正文引用 |
 | 6 | 检查仓库与导出 | `data/normalized/news_articles.json` 不再提交全文（当前仍提交，见 §7）；产物/导出只含链接、摘要、≤240 字引文 |
 
 ## 7. 现状与差距（代码事实）
 
-- 四个源已实现：`packages/news/src/sources/socialbeta.ts`、`linkshop.ts`、`brandstar.ts`、`wscn.ts`；`NEWS_SOURCES` 在 `packages/news/src/sources/index.ts:7`。
-- 限速与超时：`sources/http.ts:6-7`（1 秒 / 30 秒），`RateLimiter` 在 `:20-37`，`limiters` 按 source 分桶（`:28`）。
-- 正文分级：`packages/news/src/normalize.ts:16-18` 拒绝 <300 字；`:32` 按 1000 字分 `full` / `partial`。`unavailable` 在 schema 里存在，但当前不会写入。
-- 刷新：`packages/news/src/index.ts:55-56`、`:251-259`、`:356-360`；单源抓取 `:305-345`（30 条、`pLimit(2)`）；失败计 `errors` 并把 ingest run 标为 `partial`（`:333-341`）。
-- 检索工具：`packages/agent/src/tools/read-tools.ts:316-358`；正文读取 `:361-396`，`MAX_BODY = 4_000` 在 `:12`。
-- 排序：`packages/db/src/index.ts:2908-2920` 按 `published_at DESC`；`search_news` 同分时再按该字段降序（`read-tools.ts:344-347`）。
-- 数据现状：`data/normalized/news_articles.json` 108 篇（socialbeta 27、linkshop 30、brandstar 22、wscn 29；full 72、partial 36）；`pipeline/ingest-news.ts:15` 定义输出路径，`:46-48` 把全文写进仓库。
-- 合规差距：该文件含正文全文（抽样一条 8975 字），与「仓库不提交全文」冲突；`rights` 字段已在 `normalize.ts:34` 标记为 `internal-research; source-link`。
-- 工具清单差距：`ingest_news` 尚不存在于 `packages/agent/src/tools/read-tools.ts`；学生贴链接目前只能走旧插件的 `crawl_url`。
-- 完整度暴露差距：`read_news` 返回体没有 `content_status`，模型只能从长度猜正文是否完整。
-- 时间排序风险：`published_at` 字符串混用 `+08:00` 与 `Z`（数据里同时存在），按字符串比较在跨时区同一天可能错序，待核对。
-- seed 回退路径依赖的 `news_articles_all_tagged.json` 只存在于 `data/legacy/marketing_news/wscn/normalized/`，`data/marketing_news/` 下没有；`sources/wscn.ts:37-40` 的回退因此只在 legacy 目录存在时生效。
+- 采集与入库已全部在 `services/news-crawler-py`：50 个注册源、46 个启用；`sources/*.py` 自注册，`db.py` 是唯一 schema/DAL。
+- 原 TS 的 `packages/news/src/sources/`、`normalize.ts`、`pool.ts` 和 `pipeline/ingest-news.ts` 已删除；`packages/news/src/index.ts` 只剩 HTTP 客户端与 Cordis 工具。
+- 控制面：`GET /health`、`GET /stats`、`POST /run`（`wait=false` 后台触发）、`POST /ingest`（单篇 URL）、`GET /query`（3 秒门面）。
+- 入库：`news_articles.url` 唯一 + `content_hash`；逐条即时 upsert，每轮统计写 `source_runs`。
+- 检索工具：`packages/agent/src/tools/read-tools.ts`；本地门槛 40 字，正文读取 `MAX_BODY=4_000`。
+- 桌面：`apps/desktop/src/main/news-backend.ts` 自动拉起本地服务（默认 8788、`<appHome>/data/learning.db`）；外部服务器用 `NEWS_CRAWLER_URL` + `NEWS_CRAWLER_AUTOSTART=0`。
+- 已知限制：`kr36`/`adquan` 详情被阿里云 WAF 拦截，`linkshop` TLS 证书不可验，均已在注册表停用；`iresearch` 详情 GBK 解码仍需单独适配。
 
 ## 8. MVP 范围与后续
 

@@ -213,8 +213,8 @@ M3  多端（手机网页版 / 微信小程序 / 全班共用新闻库）
 
 **结论**：联网搜索一直有，之前藏在默认关闭的开关后面，而且一触发就去爬网页。
 
-**学长写爬虫要不要**：不要另写一套（会和现有 `refresh()` 冲突）。他帮忙最值钱的：
-① 往 `packages/news/src/sources/` 加 2–3 个营销行业媒体源；② 做 M3 的服务端定时任务。
+**学长写爬虫要不要**：不要另写一套。采集已统一到 `services/news-crawler-py`；他帮忙最值钱的：
+① 往 `services/news-crawler-py/src/news_crawler/sources/` 加 2–3 个营销行业媒体源；② 把服务端定时任务接到 systemd/supervisor。
 
 ---
 

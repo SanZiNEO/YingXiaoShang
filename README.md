@@ -56,7 +56,7 @@ LEARNING_AGENT_HOME="$PWD/.learning-agent" pnpm run db:seed:student
 
 ```sh
 pnpm run pipeline:resources   # 13 章、52 份必需文档 -> data/normalized/
-pnpm run pipeline:news        # SocialBeta、联商网、品牌星球、WSCN -> DB + normalized JSON
+cd services/news-crawler-py && uv run news-crawler once --db .data/news.db   # Python 采集服务（46 个启用源）
 pnpm run db:seed              # 非破坏性导入；合并主知识点、初始化自动标签与新闻候选
 pnpm run pipeline:content-tags --chapter ch04
 pnpm run pipeline:tag --limit 20 --no-llm

@@ -109,7 +109,7 @@ LEARNING_AGENT_HOME="$PWD/.learning-agent" pnpm run db:seed:student
 | WAL + busy_timeout + application_id + 7 版迁移 | `packages/db/src/index.ts:831-940` |
 | 产物按学生/月分目录，越界即拒绝 | `packages/artifacts/src/index.ts:112-117` |
 | 导出写 `exports/`（BP、题目集） | `packages/bp/src/index.ts:1130`、`packages/questions/src/index.ts:986-989` |
-| `raw/` 只在调试开关下写 | `pipeline/ingest-news.ts:52-55` |
+| `raw/` 只在调试开关下写 | `services/news-crawler-py` 的采集输出与入库边界 |
 | 工具结果溢出落 `spill/`，30 天清理 | `profiles/learning-agent/cordis.patch.yml:11-14` |
 | 种子脚本默认 home 与桌面端默认 home 不同 | `pipeline/env.ts:10-11` vs `window-state.ts:24-26` |
 | `artifacts.path` 存绝对路径 | `packages/db/src/index.ts:308-315`；`ArtifactService.get()` 直接读该路径 |

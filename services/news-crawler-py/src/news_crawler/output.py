@@ -65,16 +65,22 @@ class SQLiteSink:
         ).fetchone()
         return row is not None
 
+    def _has_column(self, table: str, column: str) -> bool:
+        return any(
+            row["name"] == column
+            for row in self._connection.execute(f"PRAGMA table_info({table})").fetchall()
+        )
+
     def _drop_drafts(self, article_id: str) -> None:
         for table, condition in (
             ("case_matches", "review_status='draft'"),
             ("news_tags", "review_status='draft'"),
         ):
-            if self._has_table(table):
+            if self._has_table(table) and self._has_column(table, "review_status"):
                 self._connection.execute(
                     f"DELETE FROM {table} WHERE article_id=? AND {condition}", (article_id,)
                 )
-        if self._has_table("ideology_tags"):
+        if self._has_table("ideology_tags") and self._has_column("ideology_tags", "review_status"):
             self._connection.execute(
                 "DELETE FROM ideology_tags WHERE target_type='news_article' "
                 "AND target_id=? AND review_status='draft'",

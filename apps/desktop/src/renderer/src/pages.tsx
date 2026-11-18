@@ -280,7 +280,7 @@ export function KnowledgePage({ client }: { client: ClientContext }) {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(260px, 1fr) minmax(320px, 1.2fr)', gap: 16 }}>
           <Card title={`新闻（${news.length}）`}>
-            {news.length === 0 ? <Empty>暂无新闻，运行 pipeline:news 后刷新</Empty> : null}
+            {news.length === 0 ? <Empty>暂无新闻，Python 采集服务会在后台自动入库</Empty> : null}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2, maxHeight: 560, overflow: 'auto' }}>
               {news.map((article) => (
                 <Row key={article.id} active={selectedNews?.id === article.id} onClick={() => openNews(article)}>

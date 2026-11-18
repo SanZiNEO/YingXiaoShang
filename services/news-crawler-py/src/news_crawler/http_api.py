@@ -12,6 +12,8 @@ Routes:
 * ``GET  /stats?source=&limit=`` -- recent ``source_runs`` rows.
 * ``POST /run``     -- body ``{"sources": [...], "wait": true}``; manually fire
   one round.
+* ``POST /ingest``  -- body ``{"url": "..."}``; fetch and store one URL for the
+  explicit "student pasted a link" path.
 * ``GET  /query?q=&limit=`` -- lazy proxy to ``news_crawler.query.query_news``;
   the query module is optional, so a missing implementation returns 503 with an
   explicit reason instead of crashing the service.
@@ -30,11 +32,12 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
 from . import db
+from .adhoc import AdhocError, ingest_url
 from .service import CrawlService
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8787
-COROUTINE_TIMEOUT_S = 60.0
+COROUTINE_TIMEOUT_S = 180.0
 
 
 class HttpControlPlane:
@@ -147,6 +150,9 @@ class _Handler(BaseHTTPRequestHandler):
         started = time.perf_counter()
         parsed = urllib.parse.urlparse(self.path)
         if parsed.path != "/run":
+            if parsed.path == "/ingest":
+                self._ingest_url(started)
+                return
             self._send_json({"error": "not_found", "path": parsed.path}, 404, started)
             return
         try:
@@ -237,6 +243,71 @@ class _Handler(BaseHTTPRequestHandler):
             {"ok": True, "wait": wait, "rounds": summary,
              "accepted": sources or list(self.plane.service.source_ids),
              "elapsed_ms": self._elapsed(started)},
+            200,
+            started,
+        )
+
+    def _ingest_url(self, started: float) -> None:
+        length = int(self.headers.get("Content-Length") or 0)
+        body: dict[str, Any] = {}
+        if length:
+            raw = self.rfile.read(length)
+            try:
+                body = json.loads(raw.decode("utf-8")) if raw.strip() else {}
+            except ValueError:
+                self._send_json(
+                    {"error": "bad_request", "message": "请求体不是合法 JSON"},
+                    400,
+                    started,
+                )
+                return
+        url = str(body.get("url") or "").strip()
+        if not url:
+            self._send_json(
+                {"error": "bad_request", "message": "url 不能为空"}, 400, started
+            )
+            return
+        if self.plane.service.db_path is None:
+            self._send_json(
+                {"ok": False, "error": "no_database", "message": "服务未配置数据库"},
+                503,
+                started,
+            )
+            return
+        try:
+            article = self.plane._run(ingest_url(url, self.plane.service.db_path))
+        except AdhocError as error:
+            self._send_json(
+                {"ok": False, "error": "ingest_failed", "message": str(error)},
+                422,
+                started,
+            )
+            return
+        except Exception as error:  # noqa: BLE001 - one URL must not kill control plane
+            self._send_json(
+                {"ok": False, "error": "ingest_failed", "message": str(error)},
+                502,
+                started,
+            )
+            return
+        self._send_json(
+            {
+                "ok": True,
+                "url": article.url,
+                "article": {
+                    "id": article.id,
+                    "source": article.source,
+                    "sourceName": article.source,
+                    "title": article.title,
+                    "url": article.url,
+                    "publishedAt": article.published_at,
+                    "summary": article.summary,
+                    "content": article.content,
+                    "contentStatus": article.content_status,
+                    "author": article.author,
+                },
+                "elapsed_ms": self._elapsed(started),
+            },
             200,
             started,
         )

@@ -45,11 +45,11 @@ const articles = articleId
     ? [single]
     : []
   : db.listNews({ limit: Math.min(200, Math.max(limit * 4, 40)) })
-      .filter((article) => article.content.length >= 300)
+      .filter((article) => article.content.length >= 40)
       .slice(0, limit)
 
 if (articles.length === 0) {
-  console.error('no real news articles found; run pnpm pipeline:news and db:seed first')
+  console.error('no real news articles found; run the Python news crawler (services/news-crawler-py) and db:seed first')
   process.exit(1)
 }
 

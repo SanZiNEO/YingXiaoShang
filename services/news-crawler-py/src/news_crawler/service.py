@@ -286,6 +286,7 @@ class CrawlService:
     @staticmethod
     def _result_summary(result: SourceRunResult) -> dict[str, Any]:
         return {
+            "source": result.source,
             "status": result.status.value,
             "started_at": result.started_at.isoformat(),
             "finished_at": _now_iso(),
@@ -347,6 +348,7 @@ class CrawlService:
             "workers": self.workers,
             "max_run_s": self.max_run_s,
             "source_count": len(sources),
+            "db_path": str(self.db_path) if self.db_path is not None else None,
             "sources": sources,
         }
 

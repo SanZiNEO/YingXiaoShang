@@ -731,7 +731,7 @@ export function App() {
         setSessionId(item.sessionId)
       }
       // 迁移规则全部在 stream-state.ts 里（含「不撤字」），这里只负责接线。
-      setStream((current) => applyStreamEvent(current, item))
+      setStream((current) => applyStreamEvent(current ?? undefined, item) ?? null)
     })
     return () => { unsubscribe?.() }
   }, [])
@@ -1043,10 +1043,14 @@ export function App() {
   const refreshNews = useCallback(async () => {
     try {
       const result = await window.learning.invoke('news.refresh', {}) as NewsRefreshResult
-      const errors = result.results.reduce((sum, item) => sum + item.errors, 0)
-      setNotice(errors > 0
-        ? `新闻已刷新：${result.count} 条；${errors} 个抓取错误，旧数据已保留`
-        : `新闻已刷新：${result.count} 条`)
+      if (result.queued) {
+        setNotice(`新闻采集已提交，后台刷新中；当前 ${result.count} 条`)
+      } else {
+        const errors = result.results.reduce((sum, item) => sum + item.errors, 0)
+        setNotice(errors > 0
+          ? `新闻已刷新：${result.count} 条；${errors} 个抓取错误，旧数据已保留`
+          : `新闻已刷新：${result.count} 条`)
+      }
       await refreshAll(sessionId)
     } catch (error) {
       setNotice(error instanceof Error ? error.message : String(error))

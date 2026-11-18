@@ -1,22 +1,25 @@
 import { Service, type Context } from '@deepseek-ai/cordis'
 import { defineTool, type ValueSchemaSpec } from '@deepseek-ai/dsh-tools'
-import * as cheerio from 'cheerio'
 import type {} from '@learning-agent/db'
-import type {} from '@learning-agent/matcher'
 import type { CaseMatch, IdeologyMatch, NewsArticle } from '@learning-agent/shared'
-import { stableId } from '@learning-agent/shared'
-import pLimit from 'p-limit'
-import { normalizeArticle } from './normalize.js'
-import { fetchText } from './sources/http.js'
-import { cleanText, htmlToText, normalizeDate } from './sources/html.js'
-import { NEWS_SOURCES, type NewsSource } from './sources/index.js'
-import type { RawArticle } from './sources/types.js'
+
+/**
+ * The TypeScript package is deliberately only a client for the Python
+ * collection service. Source adapters, HTML parsing and the ingest loop live in
+ * `services/news-crawler-py`; this package owns the app-facing contract.
+ */
 
 export interface Config {
-  refreshMinutes?: number
-  autoRefresh?: boolean
-  /** Read lazily so the desktop can use the current settings without recreating the service. */
+  /** Base URL of the Python control plane. Defaults to NEWS_CRAWLER_URL or :8787. */
+  baseUrl?: string
+  /** Query facade budget; the backend itself has a 3 second hard deadline. */
+  queryTimeoutMs?: number
+  /** Manual refresh request budget; refreshes are normally fire-and-forget. */
+  refreshTimeoutMs?: number
+  /** @deprecated The Python service owns scheduling and API credentials. */
   apiKey?: () => string
+  /** @deprecated Scheduling is owned by the Python service. */
+  autoRefresh?: boolean
 }
 
 export interface WebSearchItem {
@@ -38,12 +41,172 @@ export interface SearchIngestResult {
   errors: string[]
 }
 
-export interface RefreshStats {
+export type SourceRunStatus = 'success' | 'empty' | 'partial_failure' | 'failure'
+export type SourceFailureStage = 'list' | 'detail' | 'normalize' | 'db'
+
+export interface SourceFailure {
+  stage: SourceFailureStage
+  url?: string
+  message: string
+}
+
+export interface SourceRunResult {
   source: string
+  status: SourceRunStatus
   fetched: number
   inserted: number
+  updated?: number
   skipped: number
   errors: number
+  failures: SourceFailure[]
+  startedAt: number
+  durationMs: number
+}
+
+/** Backwards-compatible name used by callers and the desktop IPC. */
+export type RefreshStats = SourceRunResult
+
+export interface RefreshOptions {
+  signal?: AbortSignal
+  /**
+   * When false (the default), the backend starts the round and returns
+   * immediately. A manual refresh of every source can take longer than an HTTP
+   * request should block, while the scheduled service keeps collecting.
+   */
+  wait?: boolean
+}
+
+export interface RefreshOutcome {
+  results: RefreshStats[]
+  queued: boolean
+  accepted: string[]
+}
+
+interface QueryItem {
+  id: string
+  source: string
+  sourceName?: string
+  title: string
+  url: string
+  publishedAt?: string
+  summary?: string
+  content?: string
+  contentStatus?: string
+}
+
+interface QueryResponse {
+  ok?: boolean
+  items?: QueryItem[]
+  meta?: {
+    degraded?: boolean
+    reason?: string
+    elapsedMs?: number
+    dbHits?: number
+    crawledHits?: number
+    sourcesUsed?: string[]
+  }
+  error?: string
+  message?: string
+}
+
+interface RunResponse {
+  ok?: boolean
+  wait?: boolean
+  rounds?: Array<{
+    source?: string
+    status?: string
+    started_at?: string
+    finished_at?: string
+    duration_ms?: number
+    fetched?: number
+    inserted?: number
+    updated?: number
+    skipped?: number
+    errors?: number
+    failures?: Array<{ stage?: string; message?: string; url?: string }>
+  }>
+  accepted?: string[]
+  error?: string
+  message?: string
+}
+
+interface IngestResponse {
+  ok?: boolean
+  article?: QueryItem & { author?: string }
+  error?: string
+  message?: string
+}
+
+const DEFAULT_BASE_URL = 'http://127.0.0.1:8787'
+const QUERY_TIMEOUT_MS = 5_000
+const REFRESH_TIMEOUT_MS = 120_000
+const STALE_AFTER_MS = 30 * 60 * 1000
+
+function baseUrl(config: Config): string {
+  const value = config.baseUrl || process.env.NEWS_CRAWLER_URL || DEFAULT_BASE_URL
+  return value.replace(/\/+$/, '')
+}
+
+function failureStage(value: string | undefined): SourceFailureStage {
+  return value === 'detail' || value === 'normalize' || value === 'db' ? value : 'list'
+}
+
+function runStatus(value: string | undefined): SourceRunStatus {
+  return value === 'empty' || value === 'partial_failure' || value === 'failure'
+    ? value
+    : 'success'
+}
+
+function mapRun(round: NonNullable<RunResponse['rounds']>[number]): SourceRunResult {
+  const startedAt = round.started_at ? Date.parse(round.started_at) : Date.now()
+  return {
+    source: round.source ?? 'unknown',
+    status: runStatus(round.status),
+    fetched: round.fetched ?? 0,
+    inserted: round.inserted ?? 0,
+    updated: round.updated ?? 0,
+    skipped: round.skipped ?? 0,
+    errors: round.errors ?? 0,
+    failures: (round.failures ?? []).map((failure) => ({
+      stage: failureStage(failure.stage),
+      url: failure.url,
+      message: failure.message ?? '',
+    })),
+    startedAt: Number.isFinite(startedAt) ? startedAt : Date.now(),
+    durationMs: round.duration_ms ?? 0,
+  }
+}
+
+function mapItem(item: QueryItem): WebSearchItem {
+  const content = item.content ?? ''
+  return {
+    title: item.title,
+    url: item.url,
+    snippet: item.summary ?? '',
+    summary: item.summary ?? '',
+    content,
+    siteName: item.sourceName ?? item.source,
+    date: item.publishedAt ?? '',
+    authority: -1,
+    rerankScore: 0,
+  }
+}
+
+function toNewsArticle(item: QueryItem): NewsArticle {
+  return {
+    id: item.id,
+    source: item.source,
+    source_id: item.id,
+    title: item.title,
+    url: item.url,
+    author: '',
+    published_at: item.publishedAt ?? '',
+    summary: item.summary ?? '',
+    content: item.content ?? '',
+    content_status: item.contentStatus === 'full' ? 'full' : 'partial',
+    rights: 'internal-research; source-link',
+    fetched_at: '',
+  }
 }
 
 declare module '@deepseek-ai/cordis' {
@@ -52,15 +215,22 @@ declare module '@deepseek-ai/cordis' {
   }
 }
 
-const MAX_ITEMS_PER_SOURCE = 30
-const STALE_AFTER_MS = 30 * 60 * 1000
-
 export class NewsService extends Service {
   static inject = ['learningDb']
-  private refreshing: Promise<RefreshStats[]> | undefined
+  private readonly base: string
+  private readonly queryTimeoutMs: number
+  private readonly refreshTimeoutMs: number
 
   constructor(ctx: Context, private readonly config: Config = {}) {
     super(ctx, 'news')
+    this.base = baseUrl(config)
+    this.queryTimeoutMs = config.queryTimeoutMs ?? QUERY_TIMEOUT_MS
+    this.refreshTimeoutMs = config.refreshTimeoutMs ?? REFRESH_TIMEOUT_MS
+  }
+
+  /** The control-plane URL this client is wired to, for diagnostics. */
+  get baseUrl(): string {
+    return this.base
   }
 
   list(opts: { source?: string; since?: string; limit?: number } = {}): NewsArticle[] {
@@ -81,281 +251,132 @@ export class NewsService extends Service {
     }
   }
 
-  private apiKey(): string {
-    return this.config.apiKey?.()?.trim()
-      || process.env.DEEPSEEK_API_KEY?.trim()
-      || ''
-  }
-
   /**
-   * DeepSeek Search API. Results are not persisted here; `searchAndIngest` does that.
+   * Trigger a collection round. The Python service owns the workers and the
+   * per-source schedule; `wait:false` only asks it to enqueue the work.
    */
-  async webSearch(query: string, count = 5): Promise<WebSearchItem[]> {
-    const key = this.apiKey()
-    if (!key) throw new Error('DEEPSEEK_API_KEY is not configured')
-    const response = await fetch('https://api.deepseek.com/v1/tools/search', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${key}`,
+  async refresh(
+    sourceIds?: string[],
+    options: RefreshOptions = {},
+  ): Promise<RefreshOutcome> {
+    const wait = options.wait === true
+    const payload = await this.request<RunResponse>(
+      '/run',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          sources: sourceIds && sourceIds.length > 0 ? sourceIds : undefined,
+          wait,
+        }),
       },
-      body: JSON.stringify({
-        query: query.slice(0, 128),
-        count: Math.min(20, Math.max(1, Math.trunc(count))),
-        ori_question: query.slice(0, 128),
-        need_content: true,
-      }),
-      signal: AbortSignal.timeout(30_000),
-    })
-    if (!response.ok) {
-      throw new Error(`DeepSeek Search ${response.status}: ${(await response.text()).slice(0, 300)}`)
-    }
-    const payload = await response.json() as {
-      results?: Array<{
-        rerank_score?: number
-        title?: string
-        url?: string
-        snippet?: string
-        summary?: string
-        content?: string
-        site_name?: string | null
-        date?: string | null
-        authority?: number
-      }>
-    }
-    return (payload.results ?? []).map((item) => ({
-      title: item.title ?? '',
-      url: item.url ?? '',
-      snippet: item.snippet ?? '',
-      summary: item.summary ?? '',
-      content: item.content ?? '',
-      siteName: item.site_name ?? '',
-      date: item.date ?? '',
-      authority: typeof item.authority === 'number' ? item.authority : -1,
-      rerankScore: typeof item.rerank_score === 'number' ? item.rerank_score : 0,
-    }))
-  }
-
-  private async deepSeekFetch(url: string): Promise<{ title: string; content: string } | undefined> {
-    const key = this.apiKey()
-    if (!key) return undefined
-    const response = await fetch('https://api.deepseek.com/v1/tools/fetch', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${key}`,
-      },
-      body: JSON.stringify({ url }),
-      signal: AbortSignal.timeout(30_000),
-    })
-    if (!response.ok) return undefined
-    const payload = await response.json() as { title?: string; content?: string }
-    return { title: payload.title ?? '', content: payload.content ?? '' }
-  }
-
-  private async crawlHtml(url: string): Promise<RawArticle> {
-    const html = await fetchText(url, { source: 'web' })
-    const $ = cheerio.load(html)
-    const title = cleanText($('meta[property="og:title"]').attr('content') ?? '')
-      || cleanText($('h1').first().text())
-      || cleanText($('title').text())
-    const summary = cleanText($('meta[name="description"]').attr('content') ?? '')
-      || cleanText($('meta[property="og:description"]').attr('content') ?? '')
-    const publishedAt = normalizeDate(
-      $('meta[property="article:published_time"]').attr('content')
-      ?? $('meta[name="publishdate"]').attr('content')
-      ?? $('time').first().attr('datetime'),
+      wait ? this.refreshTimeoutMs : 5_000,
+      options.signal,
     )
-    const author = cleanText($('meta[name="author"]').attr('content') ?? '')
-    const contentHtml = $('article').first().html()
-      ?? $('main').first().html()
-      ?? $('body').html()
-      ?? ''
+    if (payload.ok === false) throw new Error(payload.message || payload.error || 'news refresh failed')
     return {
-      sourceId: stableId('u', url),
-      url,
-      title,
-      author,
-      publishedAt,
-      summary,
-      content: htmlToText(contentHtml),
-      contentHtml,
+      results: (payload.rounds ?? []).map(mapRun),
+      queued: !wait,
+      accepted: payload.accepted ?? [],
     }
   }
 
-  /** Fetch one arbitrary URL and persist it as a `web` news article. */
-  async crawlAndIngest(url: string): Promise<NewsArticle> {
-    const page = await this.deepSeekFetch(url).catch(() => undefined)
-    const raw = page && page.content.trim().length >= 300
-      ? {
-          sourceId: stableId('u', url),
-          url,
-          title: page.title || url,
-          content: page.content,
-        }
-      : await this.crawlHtml(url)
-    const normalized = normalizeArticle('web', raw)
-    if (!normalized.ok) throw new Error(normalized.reason)
-    this.ctx.learningDb.upsertNews([normalized.article])
-    return normalized.article
+  /**
+   * Start a background collection when the local DB is empty or stale. The
+   * desktop still calls this periodically, but the Python service also has its
+   * own per-source schedule for server deployments.
+   */
+  async ensureFresh(): Promise<void> {
+    const newest = this.ctx.learningDb.newestNewsFetchedAt()
+    const age = newest ? Date.now() - Date.parse(newest) : Number.POSITIVE_INFINITY
+    if (Number.isFinite(age) && age < STALE_AFTER_MS) return
+    await this.refresh(undefined, { wait: false })
   }
 
-  /** Search the web, fetch content when needed, and persist usable results. */
   /**
-   * 搜索 + 入库。
-   *
-   * `crawl: false` 用于「问答中途查新闻」：只用搜索 API 自带的正文，
-   * **不去逐个爬网页**。爬网页是 30 秒/次 + 每秒限流，5 篇串行就是几分钟，
-   * 学生看到的就是「查一条新闻卡三分钟」。正文不够的条目直接跳过并记进 errors，
-   * 候选列表照样返回标题/摘要，够模型判断要不要深读。
+   * AI-facing query: local library first, then a bounded factual crawl inside
+   * the Python service. The backend returns within its 3 second budget even
+   * when a source is slow or blocked.
    */
   async searchAndIngest(
     query: string,
     count = 5,
-    opts: { crawl?: boolean } = {},
+    options: { crawl?: boolean; signal?: AbortSignal } = {},
   ): Promise<SearchIngestResult> {
-    const results = await this.webSearch(query, count)
-    const articles: NewsArticle[] = []
-    const errors: string[] = []
-    const crawl = opts.crawl !== false
-    for (const result of results) {
-      try {
-        let content = result.content.trim()
-        if (crawl && content.length < 300) {
-          const page = await this.deepSeekFetch(result.url).catch(() => undefined)
-          content = page?.content?.trim() ?? content
-        }
-        if (crawl && content.length < 300) {
-          const raw = await this.crawlHtml(result.url)
-          content = raw.content
-        }
-        if (content.length < 300 && !crawl) {
-          errors.push(`${result.title || result.url}: 正文太短（${content.length} 字），跳过入库`)
-          continue
-        }
-        const normalized = normalizeArticle('web', {
-          sourceId: stableId('u', result.url),
-          url: result.url,
-          title: result.title,
-          summary: result.summary || result.snippet,
-          publishedAt: result.date,
-          content,
-        })
-        if (!normalized.ok) {
-          errors.push(`${result.url}: ${normalized.reason}`)
-          continue
-        }
-        articles.push(normalized.article)
-      } catch (error) {
-        errors.push(`${result.url}: ${error instanceof Error ? error.message : String(error)}`)
-      }
-    }
-    if (articles.length > 0) {
-      this.ctx.learningDb.upsertNews(articles)
-      await this.tagArticles(articles)
-    }
-    return { query, results, articles, errors }
-  }
-
-  async refresh(sourceIds?: string[]): Promise<RefreshStats[]> {
-    if (this.refreshing) return this.refreshing
-    this.refreshing = this.runRefresh(sourceIds).finally(() => {
-      this.refreshing = undefined
+    const limit = Math.max(1, Math.min(100, count))
+    const fresh = options.crawl !== false
+    const params = new URLSearchParams({
+      q: query,
+      limit: String(limit),
+      fresh: fresh ? 'true' : 'false',
     })
-    return this.refreshing
+    const payload = await this.request<QueryResponse>(
+      `/query?${params.toString()}`,
+      { method: 'GET' },
+      this.queryTimeoutMs,
+      options.signal,
+    )
+    if (payload.ok === false) throw new Error(payload.message || payload.error || 'news query failed')
+    const items = payload.items ?? []
+    const errors = payload.meta?.degraded && payload.meta.reason ? [payload.meta.reason] : []
+    return {
+      query,
+      results: items.map(mapItem),
+      articles: items.map(toNewsArticle),
+      errors,
+    }
   }
 
-  async ensureFresh(): Promise<void> {
-    const newest = this.ctx.learningDb.newestNewsFetchedAt()
-    if (newest) {
-      const age = Date.now() - new Date(newest).getTime()
-      if (Number.isFinite(age) && age < STALE_AFTER_MS) return
+  /** Fetch exactly one URL through the Python backend and store it. */
+  async crawlAndIngest(url: string, options: { signal?: AbortSignal } = {}): Promise<NewsArticle> {
+    const payload = await this.request<IngestResponse>(
+      '/ingest',
+      { method: 'POST', body: JSON.stringify({ url }) },
+      60_000,
+      options.signal,
+    )
+    if (payload.ok === false || !payload.article) {
+      throw new Error(payload.message || payload.error || 'news URL ingest failed')
     }
+    return toNewsArticle(payload.article)
+  }
+
+  private async request<T>(
+    path: string,
+    init: RequestInit,
+    timeoutMs: number,
+    externalSignal?: AbortSignal,
+  ): Promise<T> {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+    const onAbort = (): void => controller.abort()
+    externalSignal?.addEventListener('abort', onAbort, { once: true })
     try {
-      await this.refresh()
-    } catch (error) {
-      this.warn(error, 'news refresh failed')
-    }
-  }
-
-  private warn(error: unknown, message: string): void {
-    const logger = (this.ctx as unknown as {
-      logger?: (name: string) => { warn: (...args: unknown[]) => void }
-    }).logger
-    if (logger) logger('learning-news').warn(error, message)
-    else console.warn(`[learning-news] ${message}`, error)
-  }
-
-  /**
-   * Tag freshly ingested articles so a search result is analysable without waiting
-   * for the periodic backfill. Deterministic only, so it needs no API key; a missing
-   * matcher is not fatal because the backfill covers the article later.
-   */
-  private async tagArticles(articles: NewsArticle[]): Promise<void> {
-    const matcher = this.ctx.get('matcher')
-    if (!matcher) return
-    for (const article of articles) {
+      const response = await fetch(`${this.base}${path}`, {
+        ...init,
+        headers: { 'content-type': 'application/json', ...init.headers },
+        signal: controller.signal,
+      })
+      const text = await response.text()
+      let payload: T
       try {
-        await matcher.candidates(article.id, { topK: 3 })
-      } catch (error) {
-        this.warn(error, `tag failed: ${article.id}`)
+        payload = (text ? JSON.parse(text) : {}) as T
+      } catch {
+        throw new Error(`news backend returned non-JSON (${response.status}): ${text.slice(0, 200)}`)
       }
-    }
-  }
-
-  private async runRefresh(sourceIds?: string[]): Promise<RefreshStats[]> {
-    const selected = sourceIds && sourceIds.length > 0
-      ? NEWS_SOURCES.filter((source) => sourceIds.includes(source.id))
-      : NEWS_SOURCES
-    const seenUrls = new Set<string>()
-    const results: RefreshStats[] = []
-    for (const source of selected) {
-      results.push(await this.ingestSource(source, seenUrls))
-    }
-    return results
-  }
-
-  private async ingestSource(source: NewsSource, seenUrls: Set<string>): Promise<RefreshStats> {
-    const db = this.ctx.learningDb
-    const runId = db.startIngestRun(source.id)
-    const stats: RefreshStats = { source: source.id, fetched: 0, inserted: 0, skipped: 0, errors: 0 }
-    try {
-      const items = (await source.list()).slice(0, MAX_ITEMS_PER_SOURCE)
-      stats.fetched = items.length
-      const limit = pLimit(2)
-      const articles = await Promise.all(
-        items.map((item) =>
-          limit(async () => {
-            try {
-              const raw = await source.fetchDetail(item)
-              const normalized = normalizeArticle(source.id, raw)
-              if (!normalized.ok) {
-                stats.skipped += 1
-                return undefined
-              }
-              if (seenUrls.has(normalized.article.url)) {
-                stats.skipped += 1
-                return undefined
-              }
-              seenUrls.add(normalized.article.url)
-              return normalized.article
-            } catch (error) {
-              stats.errors += 1
-              this.warn(error, `detail failed: ${item.url}`)
-              return undefined
-            }
-          }),
-        ),
-      )
-      const fresh = articles.filter((article): article is NewsArticle => article !== undefined)
-      if (fresh.length > 0) stats.inserted = db.upsertNews(fresh)
-      db.finishIngestRun(runId, stats.errors > 0 ? 'partial' : 'ok', stats)
+      if (!response.ok) {
+        const error = payload as { error?: string; message?: string }
+        throw new Error(error.message || error.error || `news backend HTTP ${response.status}`)
+      }
+      return payload
     } catch (error) {
-      stats.errors += 1
-      db.finishIngestRun(runId, 'partial', stats)
-      this.warn(error, `list failed: ${source.id}`)
+      if (controller.signal.aborted && !externalSignal?.aborted) {
+        throw new Error(`news backend timed out after ${timeoutMs}ms: ${path}`)
+      }
+      throw error
+    } finally {
+      clearTimeout(timer)
+      externalSignal?.removeEventListener('abort', onAbort)
     }
-    return stats
   }
 }
 
@@ -369,15 +390,6 @@ export const inject = ['tools', 'learningDb']
 
 export function apply(ctx: Context, config: Config = {}): void {
   const news = new NewsService(ctx, config)
-
-  const minutes = Math.max(config.refreshMinutes ?? 30, 1)
-  if (config.autoRefresh !== false) {
-    const timer = setInterval(() => {
-      void news.ensureFresh()
-    }, minutes * 60 * 1000)
-    ctx.effect(() => () => clearInterval(timer), 'learning-news.scheduler')
-    void news.ensureFresh()
-  }
 
   ctx.tools.register(
     defineTool({
@@ -456,7 +468,8 @@ export function apply(ctx: Context, config: Config = {}): void {
   ctx.tools.register(
     defineTool({
       name: 'web_search',
-      description: '用 DeepSeek Search 搜索网页，并把可用结果抓取入库。用于学生报新闻、找案例、补充最新事实。',
+      description:
+        '检索 Python 新闻采集后端：先查已入库新闻，不足时在 3 秒预算内对注册源做事实增量采集。用于学生报新闻、找案例、补充最新事实。',
       parameters: {
         query: { type: 'string', required: true },
         count: { type: 'integer' },
@@ -494,7 +507,8 @@ export function apply(ctx: Context, config: Config = {}): void {
   ctx.tools.register(
     defineTool({
       name: 'crawl_url',
-      description: '抓取一个指定 URL 的网页正文，并作为新闻入库。适合学生直接报一条新闻链接。',
+      description:
+        '把学生给出的一条 URL 交给 Python 采集服务抓取正文并入库。仅支持单篇，不做站内扩散。',
       parameters: {
         url: { type: 'string', required: true },
       },
@@ -507,8 +521,9 @@ export function apply(ctx: Context, config: Config = {}): void {
           url: { type: 'string' },
         },
       }),
-      async execute(args) {
-        const article = await news.crawlAndIngest(args.url)
+      async execute(args, exec) {
+        exec.signal.throwIfAborted()
+        const article = await news.crawlAndIngest(args.url, { signal: exec.signal })
         return { articleId: article.id, title: article.title, url: article.url }
       },
     }),
@@ -517,27 +532,40 @@ export function apply(ctx: Context, config: Config = {}): void {
   ctx.tools.register(
     defineTool({
       name: 'refresh_news',
-      description: '立即刷新新闻源。可只刷新指定来源；网络失败时保留旧数据。',
+      description:
+        '请求 Python 采集服务立即跑一轮新闻源。默认后台执行，不阻塞对话；也可只刷新指定来源。',
       parameters: {
         sources: { type: 'array', items: { type: 'string' } },
+        wait: { type: 'boolean' },
       },
       output: jsonOutput({
         type: 'object',
         additionalProperties: false,
         properties: {
           results: { type: 'array', items: { type: 'object', additionalProperties: true } },
+          queued: { type: 'boolean' },
+          accepted: { type: 'array', items: { type: 'string' } },
         },
       }),
       async execute(args, exec) {
         exec.signal.throwIfAborted()
-        const results = (await news.refresh(args.sources)).map((item) => ({
-          source: item.source,
-          fetched: item.fetched,
-          inserted: item.inserted,
-          skipped: item.skipped,
-          errors: item.errors,
-        }))
-        return { results }
+        const outcome = await news.refresh(args.sources, {
+          wait: args.wait === true,
+          signal: exec.signal,
+        })
+        return {
+          results: outcome.results.map((item) => ({
+            source: item.source,
+            status: item.status,
+            fetched: item.fetched,
+            inserted: item.inserted,
+            updated: item.updated ?? 0,
+            skipped: item.skipped,
+            errors: item.errors,
+          })),
+          queued: outcome.queued,
+          accepted: outcome.accepted,
+        }
       },
     }),
   )

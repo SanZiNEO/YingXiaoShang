@@ -433,10 +433,10 @@ export const READ_TOOLS: ToolSpec[] = [
       const terms = query.split(/[\s,，、]+/).filter((term) => term.length >= 2)
 
       const search = () =>
-        rankNews(turn.ctx.learningDb.listNews({ limit: 500 }).filter((article) => article.content.length >= 300), terms)
+        rankNews(turn.ctx.learningDb.listNews({ limit: 500 }).filter((article) => article.content.length >= 40), terms)
 
       let scored = search()
-      const localAll = turn.ctx.learningDb.listNews({ limit: 500 }).filter((article) => article.content.length >= 300)
+      const localAll = turn.ctx.learningDb.listNews({ limit: 500 }).filter((article) => article.content.length >= 40)
       const localNewestAt = localAll
         .map((article) => article.published_at)
         .sort()
@@ -448,8 +448,8 @@ export const READ_TOOLS: ToolSpec[] = [
         const started = Date.now()
         try {
           const result = await withTimeout(
-            // 不爬网页：搜索 API 自带正文，0.3-0.5 秒就回来；爬网页才是三分钟的元凶。
-            turn.ctx.news.searchAndIngest(query, 5, { crawl: false }),
+            // Python 后端先查库，不足时在 3 秒预算内做事实增量；不再由 TS 抓网页。
+            turn.ctx.news.searchAndIngest(query, 5),
             ONLINE_NEWS_TIMEOUT_MS,
             `联网检索超过 ${Math.round(ONLINE_NEWS_TIMEOUT_MS / 1000)} 秒，已放弃（没有把这次等待算成答案）。`,
           )

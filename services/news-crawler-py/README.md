@@ -1,6 +1,6 @@
 # 营小商 Python 新闻采集服务（长驻版）
 
-这是仓库里的 Python 后端爬虫，和 `packages/news` 的 TypeScript 版并存；Electron 前端继续用 TS/JS，这个服务只负责抓取、规范化和入库。本文档面向服务器运维：安装、命令、控制面接口、统计库结构、日志排障与已知限制。
+这是仓库里唯一的新闻采集/入库后端；`packages/news` 只是它的 TypeScript HTTP 客户端，Electron 前端仍用 TS/JS。本文档面向服务器运维：安装、命令、控制面接口、统计库结构、日志排障与已知限制。
 
 ## 1. 安装
 
@@ -35,7 +35,7 @@ uv run news-crawler list-sources
 - **普通源不再有每请求固定间隔**：`http.py` 正常请求直接发出，只有 anti-crawler 源（`capabilities.anti_crawler=True`）才启用各自的 `min_interval_ms` 作为 opt-in 保护；失败（403/429/5xx/连接重置）才做指数退避。
 - **共享并发槽位**：跨源并发数由信号量限制（默认 8）。槽位只在「跑一轮」期间持有，一轮结束立即释放，再睡自己的 interval；不存在固定分组或 `8×2` 硬编码。
 - **单轮硬超时**：单源单轮超过 `--max-run-s`（默认 90s）即取消该源本轮，统计记为 `failure` 并写入失败明细，不影响其它源。
-- **逐条入库**：每条抓到就立刻 upsert（不攒批）；URL 唯一，`content_hash` 变化时清掉旧草稿；短稿用摘要兜底，仍不足 40 字才拒绝。
+- **逐条入库**：每条抓到就立刻 upsert（不攒批）；URL 唯一，`content_hash` 变化时清掉旧草稿；短稿用摘要兜底，正文/摘要仍不足 20 字才拒绝。
 - **统计落库**：每轮结束逐源写一行 `source_runs`，`trigger` 区分 `schedule`（周期）、`manual`（手动 / 控制面 / `crawl`）与 `bench`（压测）。
 - **源数量未知**：服务按 runner 里实际加载的源驱动，新增 `sources/*.py` 适配器不需要改调度代码；新模块在进程重启后生效。
 
@@ -88,6 +88,11 @@ uv run news-crawler serve
 $env:NEWS_CRAWLER_WORKERS = "16"
 uv run news-crawler serve --host 0.0.0.0 --port 8787 --max-run-s 30
 ```
+
+桌面端会在本地自动拉起服务：默认端口 `8788`，数据库直接使用 Electron 的
+`<appHome>/data/learning.db`，因此 `packages/news` 客户端、桌面本地读库和
+Python 采集共用同一张 `news_articles`。如果使用独立服务器，设置
+`NEWS_CRAWLER_URL=http://host:8787` 并设 `NEWS_CRAWLER_AUTOSTART=0`。
 
 停止：`Ctrl+C`（SIGINT）。服务会取消所有调度任务、关闭 sink 与 HTTP 客户端、提交并关闭数据库连接，最后一轮统计已在轮次结束时落库。
 
@@ -227,6 +232,17 @@ curl "http://127.0.0.1:8787/query?q=消费&limit=40"
   "elapsed_ms": 1
 }
 ```
+
+### 4.5 `POST /ingest`
+
+学生贴一条链接时，由 Python 抓取单篇并走同一个 `SQLiteSink` 入库；不做站内扩散。
+
+```json
+{ "url": "https://example.com/article" }
+```
+
+成功返回 `article`（`id/source/title/url/publishedAt/summary/content/contentStatus`），
+URL 非法或正文不足返回 `422`。抓取失败返回 `502`。
 
 ## 5. 数据库与统计表
 
