@@ -30,6 +30,8 @@ class FailureStage(str, Enum):
 class SourcePolicy:
     interval_s: float
     detail_concurrency: int
+    # Legacy per-request gap metadata kept for source descriptors. Normal
+    # requests no longer wait on a fixed interval; retries use adaptive backoff.
     min_interval_ms: int
     timeout_s: float
     retries: int

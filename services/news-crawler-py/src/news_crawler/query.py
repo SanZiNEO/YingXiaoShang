@@ -35,8 +35,9 @@ from .registry import SOURCES
 from .runner import RunnerConfig, SourceRunner
 from .sources import build_sources
 
-#: 收尾余量：关闭连接、映射字段、序列化的预留时间，保证墙钟不超预算。
-TAIL_MARGIN_S = 0.25
+#: 收尾余量：关闭连接、取消详情任务、映射字段、序列化的预留时间，保证墙钟不超预算。
+#: 去掉固定请求间隔后单轮可能在途 8×4 个请求，取消与连接回收比旧版更重，留 0.65s。
+TAIL_MARGIN_S = 0.65
 #: 剩余预算低于该值时不再发起增量爬取（列表/详情启动本身有成本）。
 CRAWL_MIN_BUDGET_S = 0.2
 #: 单次门面调用每源候选上限：只取列表首屏，轻量补缺口。
@@ -68,7 +69,10 @@ def _select_descriptors(
 
 def _build_http(descriptors: dict[str, Any]) -> HttpClient:
     policies = {
-        source_id: HttpPolicy.from_source(descriptor.policy)
+        source_id: HttpPolicy.from_source(
+            descriptor.policy,
+            anti_crawler=descriptor.capabilities.anti_crawler,
+        )
         for source_id, descriptor in descriptors.items()
     }
     return HttpClient(policies)

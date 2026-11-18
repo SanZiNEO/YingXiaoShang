@@ -37,10 +37,14 @@ class SourceRunner:
         result = result or SourceRunResult(source=source_id)
         self.active_results[source_id] = result
         started = time.monotonic()
-        detail_concurrency = (
+        configured_detail = (
             self.config.detail_concurrency or source.descriptor.policy.detail_concurrency
         )
-        semaphore = asyncio.Semaphore(max(1, detail_concurrency))
+        # Batch detail requests by default. Sources explicitly marked as
+        # anti-crawler keep their low concurrency (NBD needs 1).
+        if self.config.detail_concurrency is None and not source.descriptor.capabilities.anti_crawler:
+            configured_detail = max(configured_detail, 4)
+        semaphore = asyncio.Semaphore(max(1, configured_detail))
         tasks: set[asyncio.Task] = set()
         try:
 

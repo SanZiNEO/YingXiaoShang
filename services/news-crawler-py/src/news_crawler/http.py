@@ -1,4 +1,4 @@
-"""Async HTTP client with per-source gates and optional Playwright fallback."""
+"""Async HTTP client with per-source concurrency and adaptive retry backoff."""
 
 from __future__ import annotations
 
@@ -46,30 +46,53 @@ class FetchError(RuntimeError):
 
 @dataclass(slots=True)
 class HttpPolicy:
-    min_interval_ms: int
     timeout_s: float
     retries: int
+    # Only sources that really reject bursty detail requests get a gap. Most
+    # sources use 0 and rely on source-level concurrency instead.
+    min_interval_ms: int = 0
 
     @classmethod
-    def from_source(cls, policy: SourcePolicy) -> HttpPolicy:
+    def from_source(cls, policy: SourcePolicy, *, anti_crawler: bool = False) -> HttpPolicy:
         return cls(
-            min_interval_ms=policy.min_interval_ms,
             timeout_s=policy.timeout_s,
             retries=policy.retries,
+            min_interval_ms=policy.min_interval_ms if anti_crawler else 0,
         )
 
 
-class _RateLimiter:
+class _RequestGap:
+    """Opt-in gate for the few sources that answer 405/403 under a burst."""
+
     def __init__(self) -> None:
         self._lock = asyncio.Lock()
         self._last_start = 0.0
 
-    async def wait(self, interval_ms: int) -> None:
+    async def wait(self, gap_ms: int) -> None:
         async with self._lock:
-            delay = self._last_start + interval_ms / 1000 - time.monotonic()
+            delay = self._last_start + gap_ms / 1000 - time.monotonic()
             if delay > 0:
                 await asyncio.sleep(delay)
             self._last_start = time.monotonic()
+
+
+def _retry_delay(error: Exception, attempt: int) -> float:
+    """Only failures sleep; normal requests never wait on a fixed gate."""
+    if isinstance(error, httpx.HTTPStatusError):
+        status = error.response.status_code
+        if status in {403, 429, 502, 503, 504} or status >= 500:
+            return min(8.0, 0.5 * (2**attempt)) + random.random() * 0.3
+    if isinstance(
+        error,
+        (
+            httpx.ConnectError,
+            httpx.ReadError,
+            httpx.RemoteProtocolError,
+            httpx.TimeoutException,
+        ),
+    ):
+        return min(5.0, 0.2 * (2**attempt)) + random.random() * 0.2
+    return 0.15 + random.random() * 0.15
 
 
 def looks_challenged(text: str) -> bool:
@@ -132,19 +155,19 @@ class HttpClient:
         browser_fallback: bool = False,
     ) -> None:
         self._policies = policies
-        self._limiters = {source: _RateLimiter() for source in policies}
+        self._gaps = {source: _RequestGap() for source in policies}
         self._browser = BrowserFetcher() if browser_fallback else None
         self._client = httpx.AsyncClient(
             headers=DEFAULT_HEADERS,
             follow_redirects=True,
             timeout=httpx.Timeout(60.0, connect=15.0),
-            limits=httpx.Limits(max_connections=32, max_keepalive_connections=16),
+            limits=httpx.Limits(max_connections=128, max_keepalive_connections=32),
         )
 
     def policy(self, source: str) -> HttpPolicy:
         return self._policies.get(
             source,
-            HttpPolicy(min_interval_ms=1_000, timeout_s=30.0, retries=0),
+            HttpPolicy(timeout_s=30.0, retries=0),
         )
 
     async def close(self) -> None:
@@ -163,7 +186,8 @@ class HttpClient:
         json: Any | None,
     ) -> str:
         policy = self.policy(source)
-        await self._limiters[source].wait(policy.min_interval_ms)
+        if policy.min_interval_ms > 0:
+            await self._gaps.setdefault(source, _RequestGap()).wait(policy.min_interval_ms)
         response = await self._client.request(
             method,
             url,
@@ -200,7 +224,7 @@ class HttpClient:
             except (httpx.HTTPError, FetchError) as error:
                 last_error = error
                 if attempt < policy.retries:
-                    await asyncio.sleep(0.25 + random.random() * 0.25)
+                    await asyncio.sleep(_retry_delay(error, attempt))
         if self._browser is not None:
             try:
                 return await self._browser.fetch_text(url, policy.timeout_s)
@@ -231,7 +255,7 @@ class HttpClient:
             except (httpx.HTTPError, FetchError) as error:
                 last_error = error
                 if attempt < policy.retries:
-                    await asyncio.sleep(0.25 + random.random() * 0.25)
+                    await asyncio.sleep(_retry_delay(error, attempt))
         raise FetchError(f"{url} POST 失败: {last_error}") from last_error
 
     async def get_json(

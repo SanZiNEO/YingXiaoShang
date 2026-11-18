@@ -26,12 +26,16 @@ def build_runner(args: argparse.Namespace) -> tuple[SourceRunner, HttpClient, ob
         source_id: descriptor for source_id, descriptor in SOURCES.items() if descriptor.enabled
     }
     policies = {
-        source_id: HttpPolicy.from_source(descriptor.policy)
+        source_id: HttpPolicy.from_source(
+            descriptor.policy,
+            anti_crawler=descriptor.capabilities.anti_crawler,
+        )
         for source_id, descriptor in descriptors.items()
     }
     if args.fast:
+        # Compatibility flag: drop the opt-in anti-crawler gap for stress runs.
         policies = {
-            source_id: HttpPolicy(0, policy.timeout_s, policy.retries)
+            source_id: HttpPolicy(policy.timeout_s, policy.retries)
             for source_id, policy in policies.items()
         }
     http = HttpClient(policies, browser_fallback=args.browser)
@@ -262,12 +266,21 @@ def _add_crawl_flags(
         "--workers", type=int, default=None,
         help="同时运行的源数；默认 8，可用 NEWS_CRAWLER_WORKERS 覆盖",
     )
-    sub.add_argument("--detail-concurrency", type=int, default=None)
+    sub.add_argument(
+        "--detail-concurrency",
+        type=int,
+        default=None,
+        help="覆盖单源详情并发；默认按源 policy，普通源至少 4，anti 源保留自身低值",
+    )
     sub.add_argument("--max-items", type=int, default=None, help="单源单轮候选上限；0 为不限")
     sub.add_argument("--unlimited", action="store_true", help="不限制单源候选数")
     sub.add_argument("--max-pages", type=int, default=None, help="单源单轮分页上限")
     sub.add_argument("--browser", action="store_true", help="启用 Playwright 兜底")
-    sub.add_argument("--fast", action="store_true", help="压测时关闭每源请求间隔，不建议生产")
+    sub.add_argument(
+        "--fast",
+        action="store_true",
+        help="压测兼容参数：仅去掉 anti 源 opt-in 间隔；普通请求本来就不等待",
+    )
     if with_seconds:
         sub.add_argument("--seconds", type=float, default=30.0)
 

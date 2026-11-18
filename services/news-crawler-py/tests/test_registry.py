@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 
+from news_crawler.http import HttpPolicy
 from news_crawler.registry import SOURCES
 from news_crawler.sources import ADAPTERS
 
@@ -24,13 +25,22 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(SOURCES["nbd"].policy.detail_concurrency, 1)
         self.assertTrue(SOURCES["nbd"].capabilities.anti_crawler)
 
-    def test_policy_values_stay_polite(self) -> None:
+    def test_policy_values_are_valid(self) -> None:
         for source in SOURCES.values():
             policy = source.policy
-            self.assertLessEqual(policy.detail_concurrency, 3, source.id)
-            if source.enabled:
-                self.assertGreaterEqual(policy.min_interval_ms, 500, source.id)
-                self.assertGreater(policy.interval_s, 0, source.id)
+            self.assertGreaterEqual(policy.detail_concurrency, 1, source.id)
+            self.assertGreater(policy.interval_s, 0, source.id)
+
+    def test_only_anti_crawler_sources_keep_request_gap(self) -> None:
+        for source in SOURCES.values():
+            http_policy = HttpPolicy.from_source(
+                source.policy,
+                anti_crawler=source.capabilities.anti_crawler,
+            )
+            if source.capabilities.anti_crawler:
+                self.assertEqual(http_policy.min_interval_ms, source.policy.min_interval_ms)
+            else:
+                self.assertEqual(http_policy.min_interval_ms, 0, source.id)
 
     def test_disabled_sources_explain_themselves(self) -> None:
         for source in SOURCES.values():

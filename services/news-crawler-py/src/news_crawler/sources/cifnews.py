@@ -18,11 +18,20 @@ from .base import NewsSource, soup_of
 
 BASE = "https://www.cifnews.com/"
 ARTICLE_RE = re.compile(r"^/article/(\d+)/?$")
+# 2026-11-18: the desktop UA is answered with an Aliyun WAF 405 page while the
+# mobile UA gets the normal SSR article. Keep this source on a mobile identity.
+MOBILE_HEADERS = {
+    "user-agent": (
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) "
+        "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 "
+        "Mobile/15E148 Safari/604.1"
+    ),
+}
 
 
 class CifnewsSource(NewsSource):
     async def list_page(self, cursor: str | None) -> RawPage:
-        html = await self.http.get_text(self.id, BASE)
+        html = await self.http.get_text(self.id, BASE, headers=MOBILE_HEADERS)
         soup = soup_of(html)
         entries: dict[str, RawListItem] = {}
         for node in soup.find_all("a"):
@@ -43,7 +52,7 @@ class CifnewsSource(NewsSource):
         return RawPage(items=list(entries.values()), next_cursor=None)
 
     async def fetch_detail(self, item: RawListItem) -> RawArticle:
-        html = await self.http.get_text(self.id, item.url)
+        html = await self.http.get_text(self.id, item.url, headers=MOBILE_HEADERS)
         soup = soup_of(html)
         content_html = first_html(soup, (".article-content", ".article-detail"))
         return RawArticle(
@@ -75,5 +84,6 @@ DESCRIPTOR = SourceDescriptor(
         max_items=50,
         max_pages=1,
     ),
+    note="桌面 UA 会触发阿里云 WAF 405；适配器统一使用移动端 UA，详情可并发抓取。",
 )
 ADAPTER = CifnewsSource

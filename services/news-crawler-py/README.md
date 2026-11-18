@@ -31,6 +31,8 @@ uv run news-crawler list-sources
 ## 2. 架构与并发模型
 
 - **每源独立节拍**：每个已注册源一个独立 `asyncio.Task`，按自己 `descriptor.policy.interval_s` 循环；先跑完的源立刻释放槽位、睡自己的周期，不等慢源。
+- **列表批量、详情并发**：列表页一次拿到一批候选地址后，详情页按源并发抓取；默认非 anti-crawler 源至少 4 个详情并发，NBD 等明确会被重置的源保留 1。解析一条立刻 `upsert` 一条，不攒批。
+- **普通源不再有每请求固定间隔**：`http.py` 正常请求直接发出，只有 anti-crawler 源（`capabilities.anti_crawler=True`）才启用各自的 `min_interval_ms` 作为 opt-in 保护；失败（403/429/5xx/连接重置）才做指数退避。
 - **共享并发槽位**：跨源并发数由信号量限制（默认 8）。槽位只在「跑一轮」期间持有，一轮结束立即释放，再睡自己的 interval；不存在固定分组或 `8×2` 硬编码。
 - **单轮硬超时**：单源单轮超过 `--max-run-s`（默认 90s）即取消该源本轮，统计记为 `failure` 并写入失败明细，不影响其它源。
 - **逐条入库**：每条抓到就立刻 upsert（不攒批）；URL 唯一，`content_hash` 变化时清掉旧草稿；短稿用摘要兜底，仍不足 40 字才拒绝。
@@ -60,12 +62,12 @@ uv run news-crawler list-sources
 | `--db PATH` | SQLite 路径；`serve / once / status` 默认 `.data/news.db`；`crawl / bench` 不传 `--db` 且无 `--output` 时报错退出 2，传了则文章入库并逐源落统计 |
 | `--append` | JSONL 追加；默认覆盖 |
 | `--workers N` | 同时运行的源数；默认 8，也可用环境变量 `NEWS_CRAWLER_WORKERS` 覆盖 |
-| `--detail-concurrency N` | 覆盖单源详情并发 |
+| `--detail-concurrency N` | 覆盖单源详情并发；默认按源 policy，普通源至少 4，anti 源保留自身低值 |
 | `--max-items N` | 单源单轮候选上限；`0` 为不限 |
 | `--unlimited` | 不限制单源候选数 |
 | `--max-pages N` | 单源单轮分页上限 |
 | `--browser` | 启用 Playwright 兜底 |
-| `--fast` | 关闭每源请求间隔，**仅压测用，生产不要开** |
+| `--fast` | 兼容保留：仅去掉 anti 源 opt-in 的间隔保护，普通请求本来就不等待；压测可用 |
 | `--seconds S` | 仅 `bench`：压测时长 |
 
 `serve` 专属参数：

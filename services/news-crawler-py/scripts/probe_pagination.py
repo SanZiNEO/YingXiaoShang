@@ -13,7 +13,10 @@ from news_crawler.sources import build_sources
 async def main() -> None:
     descriptors = {source_id: descriptor for source_id, descriptor in SOURCES.items()}
     policies = {
-        source_id: HttpPolicy.from_source(descriptor.policy)
+        source_id: HttpPolicy.from_source(
+            descriptor.policy,
+            anti_crawler=descriptor.capabilities.anti_crawler,
+        )
         for source_id, descriptor in descriptors.items()
     }
     http = HttpClient(policies)

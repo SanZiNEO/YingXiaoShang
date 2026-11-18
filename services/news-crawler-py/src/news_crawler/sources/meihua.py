@@ -72,15 +72,20 @@ DESCRIPTOR = SourceDescriptor(
     adapter="html-list",
     entry="https://www.meihua.info/",
     pagination="none",
-    capabilities=SourceCapabilities(content_mode="summary", supports_pagination=False),
+    capabilities=SourceCapabilities(
+        anti_crawler=True,
+        content_mode="summary",
+        supports_pagination=False,
+    ),
     policy=SourcePolicy(
         interval_s=30 * 60,
         detail_concurrency=2,
-        min_interval_ms=1_000,
+        min_interval_ms=0,
         timeout_s=30.0,
         retries=1,
         max_items=60,
         max_pages=1,
     ),
+    note="详情页并发 4 时出现 429；保留 2 并发且不做固定间隔，靠失败退避。",
 )
 ADAPTER = MeihuaSource

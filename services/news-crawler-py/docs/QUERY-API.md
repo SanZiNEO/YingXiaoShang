@@ -80,8 +80,9 @@ def query_news_sync(
 1. **秒开库内查询**：打开 SQLite，按 `query` / `sources` 过滤，按发布时间倒序取前
    `limit` 条；记录 `dbHits`。
 2. **增量爬取（仅当 `fresh=True` 且库内不足 `limit`）**：按剩余预算选源（默认全部启用
-   源），走已有 `SourceRunner` 与注册表；列表首屏 + 详情并发，尊重每源
-   `SourcePolicy`（请求间隔、详情并发、超时、重试、候选上限）。
+   源），走已有 `SourceRunner` 与注册表；列表首屏 + 详情并发，普通源不使用每请求固定
+   间隔（只有 anti-crawler 源启用 opt-in `min_interval_ms`），详情并发、超时、重试、
+   候选上限来自 `SourcePolicy`。
 3. **即时入库**：抓到的每条经规范化后由 `SQLiteSink` 即时 upsert（URL 唯一索引 +
    `content_hash` 增量；正文变化时清草稿），不攒批。
 4. **合并返回**：回库读取新入库条目，与库内结果合并；按 canonical URL 去重，按

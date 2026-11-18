@@ -37,7 +37,12 @@ class ProbeSink:
 
 async def probe(source_id: str, min_items: int, timeout_s: float, browser: bool) -> dict:
     descriptor = SOURCES[source_id]
-    policies = {source_id: HttpPolicy.from_source(descriptor.policy)}
+    policies = {
+        source_id: HttpPolicy.from_source(
+            descriptor.policy,
+            anti_crawler=descriptor.capabilities.anti_crawler,
+        )
+    }
     http = HttpClient(policies, browser_fallback=browser)
     sources = build_sources(http, {source_id: descriptor})
     runner = SourceRunner(sources, RunnerConfig(max_items=min_items, max_pages=1))

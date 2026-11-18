@@ -89,15 +89,16 @@ ADAPTER = FooSource
 | 字段 | 含义 | 常规值 |
 |---|---|---|
 | `interval_s` | 该源自己的循环间隔 | 门户/快讯 300–600；日报 900–1800；研究/咨询机构 6–24h |
-| `detail_concurrency` | 该源详情并发 | 默认 2；有风控/重置的站设 1（如 nbd）；从不大于 3 |
-| `min_interval_ms` | 该源两次请求最小间隔 | 默认 1000；确认站点友好的接口可 500，**不得低于 500** |
+| `detail_concurrency` | 该源详情并发 | 默认 2；runner 对非 anti 源至少抬到 4；有风控/重置的站设 1（如 nbd） |
+| `min_interval_ms` | **仅 anti-crawler 源生效**的请求间隔 | 普通源忽略；anti 源默认 1000，NBD/证券时报可 500，不得低于 500 |
 | `timeout_s` | 单请求超时 | 30；慢站 20–30 |
 | `retries` | 重试次数 | 1；被重置/限流的站 0–1 |
 | `max_items` | 单轮候选上限 | 30–200（首跑回填另开 `--unlimited`） |
 | `max_pages` | 单轮最多翻几页 | 无分页 1；有分页 3–10 |
 
-风控明确的站 → `capabilities.anti_crawler=True` 且 `detail_concurrency=1`、`min_interval_ms>=1000`。
-**不要**在 adapter 里 `asyncio.sleep` 或自己限速：限速、重试、验证页识别都在 `http.py` 里按 policy 做。
+普通源**没有每请求固定间隔**：列表页一次拿一批地址，详情按 `detail_concurrency` 并发，解析一条入库一条。
+只有风控明确的站才设 `capabilities.anti_crawler=True`，此时 `min_interval_ms` 才作为 opt-in gate 生效（例如 NBD 还需 `detail_concurrency=1`）。
+**不要**在 adapter 里 `asyncio.sleep` 或自己限速：失败重试、退避、验证页识别都在 `http.py` 里做。
 
 ## 4. 硬性约束
 
