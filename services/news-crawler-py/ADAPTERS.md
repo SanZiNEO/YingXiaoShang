@@ -124,12 +124,12 @@ ADAPTER = FooSource
 
 ```powershell
 cd E:\Documents\GitHub\YingXiaoShang\services\news-crawler-py
-.\.venv\Scripts\python.exe -m news_crawler list-sources          # 能看到自己的 sourceId
-.\.venv\Scripts\python.exe scripts\live_check.py --source <id> --source <id2> --min-items 5
-.\.venv\Scripts\python.exe -m news_crawler crawl --source <id> --max-items 10 `
+..\..\.venv\Scripts\python.exe -m news_crawler list-sources          # 能看到自己的 sourceId
+..\..\.venv\Scripts\python.exe scripts\live_check.py --source <id> --source <id2> --min-items 5
+..\..\.venv\Scripts\python.exe -m news_crawler crawl --source <id> --max-items 10 `
     --output .scratch\<id>.jsonl --db .scratch\<id>.db
-.\.venv\Scripts\python.exe -m ruff check src\news_crawler\sources\<id>.py --fix
-.\.venv\Scripts\python.exe -m pytest -q
+..\..\.venv\Scripts\python.exe -m ruff check src\news_crawler\sources\<id>.py --fix
+..\..\.venv\Scripts\python.exe -m pytest -q
 ```
 
 通过标准：`live_check` 里该源 `status` 为 `success`，`ok>=5`（至少 5 条真实入库），

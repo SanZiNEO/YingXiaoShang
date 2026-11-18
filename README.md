@@ -56,12 +56,16 @@ LEARNING_AGENT_HOME="$PWD/.learning-agent" pnpm run db:seed:student
 
 ```sh
 pnpm run pipeline:resources   # 13 章、52 份必需文档 -> data/normalized/
-cd services/news-crawler-py && uv run news-crawler once --db .data/news.db   # Python 采集服务（46 个启用源）
+./.venv/Scripts/news-crawler.exe once --db services/news-crawler-py/.data/news.db   # Python 采集服务（46 个启用源）
 pnpm run db:seed              # 非破坏性导入；合并主知识点、初始化自动标签与新闻候选
 pnpm run pipeline:content-tags --chapter ch04
 pnpm run pipeline:tag --limit 20 --no-llm
 pnpm run pipeline:quality --chapter ch04
 ```
+
+Python 爬虫的唯一虚拟环境在仓库根目录 `.venv`，不要在
+`services/news-crawler-py` 下再建第二个；安装方式见
+`services/news-crawler-py/README.md`。
 
 `data/normalized/` 是生成物；`data/legacy/` 只作参考；`resources/` 不跟踪、
 只读。不要提交教材或新闻全文。

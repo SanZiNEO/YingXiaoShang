@@ -6,26 +6,39 @@
 
 要求 Python 3.12–3.13，依赖只有 `httpx / beautifulsoup4 / lxml`；测试与 lint 工具在 `dev` 额外组。
 
+虚拟环境统一放在**仓库根目录** `.venv`，不要在服务目录下再建第二个。请在仓库根目录执行：
+
 ```powershell
-cd services/news-crawler-py
-uv sync --dev
-# 没有 uv 时：
-# & "$env:USERPROFILE\.local\bin\uv.exe" sync --dev
+cd E:\Documents\GitHub\YingXiaoShang
+uv.exe venv .venv --python 3.12
+$env:VIRTUAL_ENV = (Resolve-Path .venv).Path
+uv.exe sync --project services/news-crawler-py --active --extra dev
+```
+
+没有 uv 时，用 `& "$env:USERPROFILE\.local\bin\uv.exe"` 替换上面的 `uv.exe`。
+
+之后在 `services/news-crawler-py` 目录里统一使用 `..\..\.venv\Scripts\...`，例如：
+
+```powershell
+..\..\.venv\Scripts\news-crawler.exe list-sources
 ```
 
 浏览器兜底（Playwright）是可选依赖，默认不启用：
 
 ```powershell
-uv sync --extra browser
-uv run playwright install chromium
+# 在仓库根目录
+cd E:\Documents\GitHub\YingXiaoShang
+$env:VIRTUAL_ENV = (Resolve-Path .venv).Path
+uv.exe sync --project services/news-crawler-py --active --extra browser
+.\.venv\Scripts\python.exe -m playwright install chromium
 ```
 
 验证安装：
 
 ```powershell
-uv run news-crawler list-sources
+..\..\.venv\Scripts\news-crawler.exe list-sources
 # 或不经过入口脚本：
-.\.venv\Scripts\python.exe -m news_crawler list-sources
+..\..\.venv\Scripts\python.exe -m news_crawler list-sources
 ```
 
 ## 2. 架构与并发模型
@@ -82,11 +95,11 @@ uv run news-crawler list-sources
 
 ```powershell
 # 默认：DB=.data/news.db，控制面 127.0.0.1:8787，8 并发，单轮 90s 超时
-uv run news-crawler serve
+..\..\.venv\Scripts\news-crawler.exe serve
 
 # 服务器上调到 16 并发、30s 单轮超时，绑定内网网卡
 $env:NEWS_CRAWLER_WORKERS = "16"
-uv run news-crawler serve --host 0.0.0.0 --port 8787 --max-run-s 30
+..\..\.venv\Scripts\news-crawler.exe serve --host 0.0.0.0 --port 8787 --max-run-s 30
 ```
 
 桌面端会在本地自动拉起服务：默认端口 `8788`，数据库直接使用 Electron 的
@@ -100,17 +113,17 @@ Python 采集共用同一张 `news_articles`。如果使用独立服务器，设
 
 ```powershell
 # 全部启用源跑一轮并落统计
-uv run news-crawler once
+..\..\.venv\Scripts\news-crawler.exe once
 
 # 只跑两个源，小样本
-uv run news-crawler once --source yicai --source stcn --max-items 20 --max-pages 1
+..\..\.venv\Scripts\news-crawler.exe once --source yicai --source stcn --max-items 20 --max-pages 1
 ```
 
 ### 3.3 查看每源状态表
 
 ```powershell
-uv run news-crawler status
-uv run news-crawler status --source yicai
+..\..\.venv\Scripts\news-crawler.exe status
+..\..\.venv\Scripts\news-crawler.exe status --source yicai
 ```
 
 输出列：最近状态、最近开始时间、耗时（ms）、fetched/inserted/updated/skipped/errors、累计轮数、累计入库、最近一条失败明细。
@@ -300,8 +313,8 @@ FROM source_runs GROUP BY source ORDER BY inserted DESC;
 ## 7. 测试与 lint
 
 ```powershell
-uv run pytest -q
-uv run ruff check .
+..\..\.venv\Scripts\python.exe -m pytest -q
+..\..\.venv\Scripts\python.exe -m ruff check .
 ```
 
 `tests/test_service.py` 用一个快源和一个故意卡住的假源验证：慢源不阻塞快源、硬超时生效、统计确实落库、`run_round` 只跑指定源、`state()` 与 `/health` 结构正确。

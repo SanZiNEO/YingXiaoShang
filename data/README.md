@@ -12,7 +12,7 @@ Regenerate:
 
 ```sh
 pnpm run pipeline:resources
-cd services/news-crawler-py && uv run news-crawler once --db .data/news.db
+./.venv/Scripts/news-crawler.exe once --db services/news-crawler-py/.data/news.db
 RESET_DB=1 pnpm run db:seed
 ```
 

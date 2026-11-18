@@ -57,16 +57,18 @@ function findExecutable(serviceDir: string): { command: string; args: string[]; 
     }
   }
 
+  // The crawler's single virtualenv lives at the repository root. Keeping it
+  // out of the service directory avoids a second env when the desktop and the
+  // server share the same checkout.
+  const venvDir = process.env.NEWS_CRAWLER_VENV || resolve(serviceDir, '..', '..', '.venv')
   const consoleScript = join(
-    serviceDir,
-    '.venv',
+    venvDir,
     process.platform === 'win32' ? 'Scripts/news-crawler.exe' : 'bin/news-crawler',
   )
   if (existsSync(consoleScript)) return { command: consoleScript, args: [], env: {} }
 
   const python = join(
-    serviceDir,
-    '.venv',
+    venvDir,
     process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python',
   )
   if (existsSync(python)) {
@@ -113,7 +115,7 @@ export async function startNewsBackend(options: {
   }
   const executable = findExecutable(serviceDir)
   if (!executable) {
-    console.warn('[news] no Python executable found in services/news-crawler-py/.venv')
+    console.warn('[news] no Python executable found in the repo-root .venv')
     return url
   }
   const port = new URL(url).port || String(DEFAULT_PORT)
