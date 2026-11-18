@@ -1,4 +1,5 @@
 """Manual probe: can Python httpx fetch NBD list/detail without a browser?"""
+
 from __future__ import annotations
 
 import re
@@ -24,7 +25,9 @@ def main() -> None:
         started = time.perf_counter()
         response = client.get(LIST)
         elapsed = time.perf_counter() - started
-        print(f"list status={response.status_code} elapsed={elapsed:.2f}s bytes={len(response.content)}")
+        print(
+            f"list status={response.status_code} elapsed={elapsed:.2f}s bytes={len(response.content)}"
+        )
         links = sorted(set(re.findall(r"/articles/\d{4}-\d{2}-\d{2}/\d+\.html", response.text)))
         print(f"list article links={len(links)} first={links[:3]}")
 
@@ -35,9 +38,11 @@ def main() -> None:
         started = time.perf_counter()
         detail = client.get(url)
         elapsed = time.perf_counter() - started
-        print(f"detail status={detail.status_code} elapsed={elapsed:.2f}s bytes={len(detail.content)} url={url}")
+        print(
+            f"detail status={detail.status_code} elapsed={elapsed:.2f}s bytes={len(detail.content)} url={url}"
+        )
         html = detail.text
-        print("detail marker .g-articl-text=", 'g-articl-text' in html)
+        print("detail marker .g-articl-text=", "g-articl-text" in html)
 
 
 if __name__ == "__main__":

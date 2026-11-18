@@ -1,4 +1,5 @@
 """Async HTTP client with per-source gates and optional Playwright fallback."""
+
 from __future__ import annotations
 
 import asyncio
@@ -30,6 +31,12 @@ CHALLENGE_MARKERS = (
     "安全验证",
     "人机验证",
     "请完成验证",
+    # Aliyun WAF (adquan, 36kr, ...): a JS-solved challenge shell that carries
+    # `renderData` with `arg1=...`. Without this marker the page came back as an
+    # article with zero characters, which looks like "no update" instead of
+    # "blocked".
+    "aliyun_waf",
+    "aliyun-captcha",
 )
 
 
@@ -96,7 +103,9 @@ class BrowserFetcher:
         browser = await self._ensure_browser()
         page = await browser.new_page()
         try:
-            response = await page.goto(url, wait_until="domcontentloaded", timeout=int(timeout_s * 1000))
+            response = await page.goto(
+                url, wait_until="domcontentloaded", timeout=int(timeout_s * 1000)
+            )
             if response is None:
                 raise FetchError("Playwright 没有收到响应")
             if not response.ok:

@@ -4,7 +4,14 @@ import re
 from urllib.parse import urljoin, urlparse
 
 from ..html import clean_text, first_html, html_to_text, page_date, page_summary, page_title
-from ..models import RawArticle, RawListItem, RawPage
+from ..models import (
+    RawArticle,
+    RawListItem,
+    RawPage,
+    SourceCapabilities,
+    SourceDescriptor,
+    SourcePolicy,
+)
 from .base import NewsSource, soup_of
 
 BASE = "https://www.yicai.com/"
@@ -26,7 +33,11 @@ class YicaiSource(NewsSource):
             href = str(node.get("href") or "")
             path = urlparse(urljoin(BASE, href)).path
             parts = path.strip("/").split("/")
-            if len(parts) != 2 or parts[0] != "news" or not parts[1].removesuffix(".html").isdigit():
+            if (
+                len(parts) != 2
+                or parts[0] != "news"
+                or not parts[1].removesuffix(".html").isdigit()
+            ):
                 continue
             if not parts[1].endswith(".html"):
                 continue
@@ -46,7 +57,9 @@ class YicaiSource(NewsSource):
         soup = soup_of(html)
         content_html = first_html(soup, ("#multi-text", ".m-txt"))
         author = clean_text(
-            soup.select_one(".m-author, .author").get_text(" ") if soup.select_one(".m-author, .author") else ""
+            soup.select_one(".m-author, .author").get_text(" ")
+            if soup.select_one(".m-author, .author")
+            else ""
         )
         return RawArticle(
             source_id=item.source_id,
@@ -58,3 +71,25 @@ class YicaiSource(NewsSource):
             content=html_to_text(content_html),
             content_html=content_html,
         )
+
+
+DESCRIPTOR = SourceDescriptor(
+    id="yicai",
+    name="第一财经",
+    group="finance",
+    homepage="https://www.yicai.com/",
+    adapter="html-list",
+    entry="https://www.yicai.com/news/",
+    pagination="page",
+    capabilities=SourceCapabilities(content_mode="full", supports_pagination=True),
+    policy=SourcePolicy(
+        interval_s=10 * 60,
+        detail_concurrency=2,
+        min_interval_ms=1_000,
+        timeout_s=30.0,
+        retries=1,
+        max_items=200,
+        max_pages=10,
+    ),
+)
+ADAPTER = YicaiSource

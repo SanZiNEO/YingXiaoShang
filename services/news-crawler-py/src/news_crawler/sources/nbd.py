@@ -4,7 +4,14 @@ import re
 from urllib.parse import urljoin, urlparse
 
 from ..html import clean_text, first_html, html_to_text, page_date, page_summary, page_title
-from ..models import RawArticle, RawListItem, RawPage
+from ..models import (
+    RawArticle,
+    RawListItem,
+    RawPage,
+    SourceCapabilities,
+    SourceDescriptor,
+    SourcePolicy,
+)
 from .base import NewsSource, soup_of
 
 BASE = "https://www.nbd.com.cn/"
@@ -61,3 +68,30 @@ class NbdSource(NewsSource):
             content=html_to_text(content_html),
             content_html=content_html,
         )
+
+
+DESCRIPTOR = SourceDescriptor(
+    id="nbd",
+    name="每日经济新闻",
+    group="finance",
+    homepage="https://www.nbd.com.cn/",
+    adapter="html-list",
+    entry="https://www.nbd.com.cn/columns/3/",
+    pagination="page",
+    capabilities=SourceCapabilities(
+        requires_browser=False,
+        anti_crawler=True,
+        content_mode="full",
+        supports_pagination=True,
+    ),
+    policy=SourcePolicy(
+        interval_s=10 * 60,
+        detail_concurrency=1,
+        min_interval_ms=500,
+        timeout_s=30.0,
+        retries=0,
+        max_items=100,
+        max_pages=5,
+    ),
+)
+ADAPTER = NbdSource

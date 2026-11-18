@@ -1,4 +1,5 @@
 """Probe the list-page layer without fetching article details."""
+
 from __future__ import annotations
 
 import asyncio

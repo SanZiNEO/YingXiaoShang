@@ -4,7 +4,14 @@ import re
 import xml.etree.ElementTree as ET
 
 from ..html import canonical_url, clean_text, html_to_text, normalize_date
-from ..models import RawArticle, RawListItem, RawPage
+from ..models import (
+    RawArticle,
+    RawListItem,
+    RawPage,
+    SourceCapabilities,
+    SourceDescriptor,
+    SourcePolicy,
+)
 from .base import NewsSource
 
 FEED = "https://www.brandstar.com.cn/feed/"
@@ -71,3 +78,25 @@ class BrandstarSource(NewsSource):
             content=html_to_text(html),
             content_html=html,
         )
+
+
+DESCRIPTOR = SourceDescriptor(
+    id="brandstar",
+    name="品牌星球",
+    group="case",
+    homepage="https://www.brandstar.com.cn/",
+    adapter="rss",
+    entry="https://www.brandstar.com.cn/feed/",
+    pagination="page",
+    capabilities=SourceCapabilities(content_mode="full", supports_pagination=True),
+    policy=SourcePolicy(
+        interval_s=30 * 60,
+        detail_concurrency=1,
+        min_interval_ms=1_000,
+        timeout_s=30.0,
+        retries=1,
+        max_items=500,
+        max_pages=10,
+    ),
+)
+ADAPTER = BrandstarSource

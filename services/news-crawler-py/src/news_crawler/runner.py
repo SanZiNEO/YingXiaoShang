@@ -1,4 +1,5 @@
 """Async source runner and scheduler."""
+
 from __future__ import annotations
 
 import asyncio
@@ -36,7 +37,9 @@ class SourceRunner:
         result = result or SourceRunResult(source=source_id)
         self.active_results[source_id] = result
         started = time.monotonic()
-        detail_concurrency = self.config.detail_concurrency or source.descriptor.policy.detail_concurrency
+        detail_concurrency = (
+            self.config.detail_concurrency or source.descriptor.policy.detail_concurrency
+        )
         semaphore = asyncio.Semaphore(max(1, detail_concurrency))
         tasks: set[asyncio.Task] = set()
         try:
@@ -130,7 +133,9 @@ class SourceRunner:
         if self.config.unlimited_items:
             max_items = None
         else:
-            max_items = self.config.max_items if self.config.max_items is not None else policy.max_items
+            max_items = (
+                self.config.max_items if self.config.max_items is not None else policy.max_items
+            )
         max_pages = self.config.max_pages if self.config.max_pages is not None else policy.max_pages
         return max_items, max_pages or 1
 
@@ -138,9 +143,7 @@ class SourceRunner:
     def _fail(result: SourceRunResult, stage: FailureStage, message: str, url: str = "") -> None:
         result.errors += 1
         if len(result.failures) < 50:
-            result.failures.append(
-                SourceFailure(stage=stage, message=message[:500], url=url[:300])
-            )
+            result.failures.append(SourceFailure(stage=stage, message=message[:500], url=url[:300]))
 
     async def run_all(self, source_ids: list[str], sink: Sink) -> list[SourceRunResult]:
         semaphore = asyncio.Semaphore(max(1, self.config.workers))
@@ -151,7 +154,9 @@ class SourceRunner:
 
         return list(await asyncio.gather(*(one(source_id) for source_id in source_ids)))
 
-    async def benchmark(self, source_ids: list[str], seconds: float, sink: Sink) -> list[SourceRunResult]:
+    async def benchmark(
+        self, source_ids: list[str], seconds: float, sink: Sink
+    ) -> list[SourceRunResult]:
         """Run every source independently for `seconds`, without waiting for stragglers."""
         semaphore = asyncio.Semaphore(max(1, self.config.workers))
 
@@ -206,7 +211,9 @@ class SourceScheduler:
                         return
                     await self.runner.run_source(source_id, sink)
                 try:
-                    await asyncio.wait_for(self._stop.wait(), timeout=source.descriptor.policy.interval_s)
+                    await asyncio.wait_for(
+                        self._stop.wait(), timeout=source.descriptor.policy.interval_s
+                    )
                 except TimeoutError:
                     continue
 

@@ -21,7 +21,9 @@ class HtmlTests(unittest.TestCase):
 
     def test_normalize_date(self) -> None:
         self.assertEqual(normalize_date("2026-11-18"), "2026-11-18T00:00:00+08:00")
-        self.assertEqual(normalize_date("Wed, 18 Nov 2026 03:00:00 GMT"), "2026-11-18T11:00:00+08:00")
+        self.assertEqual(
+            normalize_date("Wed, 18 Nov 2026 03:00:00 GMT"), "2026-11-18T11:00:00+08:00"
+        )
 
 
 if __name__ == "__main__":

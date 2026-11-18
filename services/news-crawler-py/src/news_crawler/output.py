@@ -3,38 +3,31 @@
 JSONL is the protocol boundary; SQLite is a local convenience so the existing
 Electron app can read the rows before the Node ingest CLI exists.
 """
+
 from __future__ import annotations
 
 import asyncio
 import hashlib
 import json
-import sqlite3
 from pathlib import Path
 from typing import Protocol
 
+from . import db
 from .normalize import NormalizedArticle
-
-NEWS_SCHEMA = """
-CREATE TABLE IF NOT EXISTS news_articles (
-  id TEXT PRIMARY KEY, source TEXT NOT NULL, source_id TEXT NOT NULL,
-  title TEXT NOT NULL, url TEXT NOT NULL, author TEXT NOT NULL DEFAULT '',
-  published_at TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', content TEXT NOT NULL,
-  content_status TEXT NOT NULL, rights TEXT NOT NULL, fetched_at TEXT NOT NULL,
-  content_hash TEXT NOT NULL DEFAULT '', tag_content_hash TEXT NOT NULL DEFAULT ''
-) STRICT;
-CREATE UNIQUE INDEX IF NOT EXISTS news_articles_by_url ON news_articles(url);
-CREATE INDEX IF NOT EXISTS news_articles_by_published ON news_articles(published_at);
-CREATE INDEX IF NOT EXISTS news_articles_by_tag_hash ON news_articles(tag_content_hash);
-"""
 
 
 class Sink(Protocol):
+    #: True only for sinks that can tell a re-crawl from a first insert.
+    reports_dedup: bool
+
     async def emit(self, article: NormalizedArticle) -> str: ...
 
     async def close(self) -> None: ...
 
 
 class JsonlSink:
+    reports_dedup = False
+
     def __init__(self, path: Path, *, truncate: bool = False) -> None:
         self.path = path
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -52,27 +45,19 @@ class JsonlSink:
 
 
 class SQLiteSink:
-    def __init__(self, path: Path) -> None:
-        self.path = path
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._connection = sqlite3.connect(path)
-        self._connection.row_factory = sqlite3.Row
-        self._connection.execute("PRAGMA journal_mode=WAL")
-        self._connection.execute("PRAGMA busy_timeout=5000")
-        self._connection.executescript(NEWS_SCHEMA)
-        self._ensure_columns()
-        self._lock = asyncio.Lock()
+    """Writes articles through the shared schema owned by :mod:`news_crawler.db`.
 
-    def _ensure_columns(self) -> None:
-        columns = {
-            row["name"]
-            for row in self._connection.execute("PRAGMA table_info(news_articles)").fetchall()
-        }
-        for column in ("content_hash", "tag_content_hash"):
-            if column not in columns:
-                self._connection.execute(
-                    f"ALTER TABLE news_articles ADD COLUMN {column} TEXT NOT NULL DEFAULT ''"
-                )
+    The schema, indexes and any column migrations live in ``db.py``; this sink
+    only owns the per-row upsert semantics: unique URL, ``content_hash`` change
+    drops stale drafts, and the returned status is inserted / updated / skipped.
+    """
+
+    reports_dedup = True
+
+    def __init__(self, path: Path) -> None:
+        self.path = Path(path)
+        self._connection = db.connect(self.path)
+        self._lock = asyncio.Lock()
 
     def _has_table(self, name: str) -> bool:
         row = self._connection.execute(
@@ -147,16 +132,27 @@ class SQLiteSink:
 
 
 class CompositeSink:
+    """Fan-out sink.
+
+    Only sinks that actually deduplicate may report the row status: the JSONL
+    sink always says "inserted", so letting it win would report a re-crawl of an
+    already-stored article as a fresh insert and make the run statistics lie.
+    """
+
     def __init__(self, sinks: list[Sink]) -> None:
         self.sinks = sinks
+        self.reports_dedup = any(getattr(sink, "reports_dedup", False) for sink in sinks)
 
     async def emit(self, article: NormalizedArticle) -> str:
-        statuses = [await sink.emit(article) for sink in self.sinks]
-        if "inserted" in statuses:
-            return "inserted"
-        if "updated" in statuses:
-            return "updated"
-        return statuses[0] if statuses else "skipped"
+        statuses = [(sink, await sink.emit(article)) for sink in self.sinks]
+        dedup = [status for sink, status in statuses if getattr(sink, "reports_dedup", False)]
+        if dedup:
+            if "inserted" in dedup:
+                return "inserted"
+            if "updated" in dedup:
+                return "updated"
+            return "skipped"
+        return statuses[0][1] if statuses else "skipped"
 
     async def close(self) -> None:
         for sink in self.sinks:

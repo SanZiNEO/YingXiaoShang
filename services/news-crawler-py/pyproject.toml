@@ -31,3 +31,8 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+
+# One-off probe scripts written before the crawler existed; they are kept as
+# evidence of the per-site probing, not maintained as production code.
+[tool.ruff.lint.per-file-ignores]
+"scripts/probe_*.py" = ["B023"]

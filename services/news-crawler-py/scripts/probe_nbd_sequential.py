@@ -1,4 +1,5 @@
 """Manual probe: NBD detail sequential direct fetch."""
+
 from __future__ import annotations
 
 import asyncio
@@ -23,7 +24,9 @@ HEADERS = {
 async def main() -> None:
     async with httpx.AsyncClient(headers=HEADERS, follow_redirects=True, timeout=30.0) as client:
         response = await client.get(LIST)
-        links = sorted(set(re.findall(r"/articles/\d{4}-\d{2}-\d{2}/\d+\.html", response.text)))[-20:]
+        links = sorted(set(re.findall(r"/articles/\d{4}-\d{2}-\d{2}/\d+\.html", response.text)))[
+            -20:
+        ]
         ok = 0
         errors = 0
         started = time.perf_counter()

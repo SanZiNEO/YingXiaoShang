@@ -1,4 +1,5 @@
 """Manual probe: NBD detail direct fetch under concurrency."""
+
 from __future__ import annotations
 
 import asyncio

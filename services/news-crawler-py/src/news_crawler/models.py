@@ -3,6 +3,7 @@
 The field names stay in snake_case inside Python; the JSON boundary maps them
 to the existing `news-ingest/v1` camelCase protocol.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -58,6 +59,10 @@ class SourceDescriptor:
     policy: SourcePolicy
     enabled: bool = True
     maintainer: str = "news"
+    language: str = "zh"
+    # Reason an enabled=False source stays in the registry (paid wall, login
+    # wall, dead site, browser-only ...). Empty for sources that are live.
+    note: str = ""
 
 
 @dataclass(slots=True)

@@ -4,7 +4,14 @@ import re
 from urllib.parse import urljoin, urlparse
 
 from ..html import clean_text, first_html, html_to_text, page_date, page_summary, page_title
-from ..models import RawArticle, RawListItem, RawPage
+from ..models import (
+    RawArticle,
+    RawListItem,
+    RawPage,
+    SourceCapabilities,
+    SourceDescriptor,
+    SourcePolicy,
+)
 from .base import NewsSource, soup_of
 
 BASE = "https://www.stcn.com/"
@@ -64,3 +71,29 @@ class StcnSource(NewsSource):
             content=html_to_text(content_html),
             content_html=content_html,
         )
+
+
+DESCRIPTOR = SourceDescriptor(
+    id="stcn",
+    name="证券时报",
+    group="finance",
+    homepage="https://www.stcn.com/",
+    adapter="json-list",
+    entry="https://www.stcn.com/article/list.html?type=xw&page_time=1",
+    pagination="cursor",
+    capabilities=SourceCapabilities(
+        anti_crawler=True,
+        content_mode="full",
+        supports_pagination=True,
+    ),
+    policy=SourcePolicy(
+        interval_s=10 * 60,
+        detail_concurrency=2,
+        min_interval_ms=500,
+        timeout_s=30.0,
+        retries=2,
+        max_items=100,
+        max_pages=5,
+    ),
+)
+ADAPTER = StcnSource

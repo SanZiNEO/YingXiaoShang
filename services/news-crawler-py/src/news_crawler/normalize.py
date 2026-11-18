@@ -1,4 +1,5 @@
 """Normalize a raw article into the shared news contract."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -7,7 +8,7 @@ from datetime import UTC, datetime
 from .html import canonical_url, clean_text
 from .models import NewsIngestItem, RawArticle, SourceDescriptor
 
-MIN_CONTENT_CHARS = 40
+MIN_CONTENT_CHARS = 20
 FULL_TEXT_CHARS = 300
 
 
@@ -28,10 +29,14 @@ class NormalizedArticle:
     ingest: NewsIngestItem
 
 
-def normalize(descriptor: SourceDescriptor, raw: RawArticle) -> tuple[NormalizedArticle | None, str]:
+def normalize(
+    descriptor: SourceDescriptor, raw: RawArticle
+) -> tuple[NormalizedArticle | None, str]:
     body = clean_text(raw.content)
     summary = clean_text(raw.summary)
-    content = body if len(body) >= MIN_CONTENT_CHARS else (summary if len(summary) > len(body) else body)
+    content = (
+        body if len(body) >= MIN_CONTENT_CHARS else (summary if len(summary) > len(body) else body)
+    )
     if len(content) < MIN_CONTENT_CHARS:
         return None, f"content too short ({len(content)} chars)"
     title = clean_text(raw.title)
@@ -58,7 +63,7 @@ def normalize(descriptor: SourceDescriptor, raw: RawArticle) -> tuple[Normalized
         published_at=published_at,
         author=author,
         media_name=descriptor.name,
-        language="zh",
+        language=descriptor.language,
         kind="article",
         section=descriptor.group,
         fetched_at=fetched_at,

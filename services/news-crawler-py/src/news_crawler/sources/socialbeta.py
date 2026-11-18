@@ -3,7 +3,14 @@ from __future__ import annotations
 from urllib.parse import urljoin, urlparse
 
 from ..html import clean_text, first_html, html_to_text, normalize_date, page_summary
-from ..models import RawArticle, RawListItem, RawPage
+from ..models import (
+    RawArticle,
+    RawListItem,
+    RawPage,
+    SourceCapabilities,
+    SourceDescriptor,
+    SourcePolicy,
+)
 from .base import NewsSource, soup_of
 
 BASE = "https://socialbeta.com/"
@@ -51,7 +58,9 @@ class SocialBetaSource(NewsSource):
             title = clean_text(soup.title.get_text(" ")).removesuffix("｜SocialBeta")
         title = title or item.title
         info = clean_text(
-            soup.select_one(".info_art, .info_cam").get_text(" ") if soup.select_one(".info_art, .info_cam") else ""
+            soup.select_one(".info_art, .info_cam").get_text(" ")
+            if soup.select_one(".info_art, .info_cam")
+            else ""
         )
         published_at = normalize_date(info[:10] if len(info) >= 10 else "")
         author = ""
@@ -72,3 +81,25 @@ class SocialBetaSource(NewsSource):
             content=html_to_text(content_html),
             content_html=content_html,
         )
+
+
+DESCRIPTOR = SourceDescriptor(
+    id="socialbeta",
+    name="SocialBeta",
+    group="case",
+    homepage="https://socialbeta.com/",
+    adapter="html-list",
+    entry="https://socialbeta.com/campaign",
+    pagination="none",
+    capabilities=SourceCapabilities(content_mode="full", supports_pagination=False),
+    policy=SourcePolicy(
+        interval_s=30 * 60,
+        detail_concurrency=2,
+        min_interval_ms=1_000,
+        timeout_s=30.0,
+        retries=1,
+        max_items=60,
+        max_pages=1,
+    ),
+)
+ADAPTER = SocialBetaSource

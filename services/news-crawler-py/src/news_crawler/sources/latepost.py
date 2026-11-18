@@ -4,7 +4,14 @@ import json
 from urllib.parse import urljoin
 
 from ..html import first_html, html_to_text, page_date, page_summary, page_title
-from ..models import RawArticle, RawListItem, RawPage
+from ..models import (
+    RawArticle,
+    RawListItem,
+    RawPage,
+    SourceCapabilities,
+    SourceDescriptor,
+    SourcePolicy,
+)
 from .base import NewsSource, soup_of
 
 BASE = "https://www.latepost.com/"
@@ -52,3 +59,25 @@ class LatepostSource(NewsSource):
             content=html_to_text(content_html),
             content_html=content_html,
         )
+
+
+DESCRIPTOR = SourceDescriptor(
+    id="latepost",
+    name="晚点 LatePost",
+    group="industry",
+    homepage="https://www.latepost.com/",
+    adapter="json-list",
+    entry="https://www.latepost.com/site/index",
+    pagination="none",
+    capabilities=SourceCapabilities(content_mode="full", supports_pagination=False),
+    policy=SourcePolicy(
+        interval_s=30 * 60,
+        detail_concurrency=2,
+        min_interval_ms=1_000,
+        timeout_s=30.0,
+        retries=1,
+        max_items=200,
+        max_pages=1,
+    ),
+)
+ADAPTER = LatepostSource

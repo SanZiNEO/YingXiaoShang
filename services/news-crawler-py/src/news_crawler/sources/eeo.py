@@ -12,7 +12,14 @@ from ..html import (
     page_summary,
     page_title,
 )
-from ..models import RawArticle, RawListItem, RawPage
+from ..models import (
+    RawArticle,
+    RawListItem,
+    RawPage,
+    SourceCapabilities,
+    SourceDescriptor,
+    SourcePolicy,
+)
 from .base import NewsSource, soup_of
 
 BASE = "https://www.eeo.com.cn/"
@@ -89,3 +96,28 @@ class EeoSource(NewsSource):
             content=html_to_text(content_html),
             content_html=content_html,
         )
+
+
+DESCRIPTOR = SourceDescriptor(
+    id="eeo",
+    name="经济观察报",
+    group="finance",
+    homepage="https://www.eeo.com.cn/",
+    adapter="json-list",
+    entry=(
+        "https://app.eeo.com.cn/?app=article&controller=index"
+        "&action=getMoreArticle&catid=3690&pageSize=20"
+    ),
+    pagination="page",
+    capabilities=SourceCapabilities(content_mode="full", supports_pagination=True),
+    policy=SourcePolicy(
+        interval_s=15 * 60,
+        detail_concurrency=2,
+        min_interval_ms=1_000,
+        timeout_s=30.0,
+        retries=1,
+        max_items=300,
+        max_pages=10,
+    ),
+)
+ADAPTER = EeoSource
