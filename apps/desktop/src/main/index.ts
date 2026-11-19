@@ -14,6 +14,7 @@ import { ProfileService } from '@learning-agent/profile'
 import { ArtifactService } from '@learning-agent/artifacts'
 import { AgentService } from '@learning-agent/agent'
 import { NewsService } from '@learning-agent/news'
+import { dispatchMethod } from '@learning-agent/dispatch'
 import { DeepSeekLlm } from './llm.js'
 import { friendlyError } from './errors.js'
 import { startupFailure, startupHealth } from './health.js'
@@ -196,200 +197,52 @@ async function previewFile(filePath: string): Promise<FilePreview> {
 }
 
 /** 导出格式只认这三种；其余按 Word 处理。 */
-function exportFormat(value: unknown): 'md' | 'docx' | 'html' {
-  return value === 'md' || value === 'html' ? value : 'docx'
+/** 桌面端专属：选一个本地文件并预览。Web 端用上传代替。 */
+async function openFileDialog(): Promise<unknown> {
+  const options: OpenDialogOptions = {
+    title: '打开学习资料',
+    properties: ['openFile'],
+    filters: [
+      { name: '学习资料', extensions: ['md', 'docx', 'pdf', 'png', 'jpg', 'jpeg', 'webp', 'txt', 'csv'] },
+      { name: '全部文件', extensions: ['*'] },
+    ],
+  }
+  const result = window
+    ? await dialog.showOpenDialog(window, options)
+    : await dialog.showOpenDialog(options)
+  if (result.canceled || result.filePaths.length === 0) return undefined
+  return previewFile(result.filePaths[0]!)
 }
 
+/**
+ * 业务分发：真正的实现在 `@learning-agent/dispatch`，这里只做「Electron 侧适配」。
+ *
+ * 这样服务端化时不需要照抄一份业务逻辑（`packages/dispatch` 是唯一来源）。
+ * `studentId` 桌面端仍允许入参覆盖（用于演示切换学生）；服务端必须改为从会话派生。
+ */
 async function invoke(method: string, input: unknown): Promise<unknown> {
   const args = (input ?? {}) as Record<string, unknown>
   const studentId = typeof args.studentId === 'string' && args.studentId.length > 0
     ? args.studentId
     : DEMO_STUDENT_ID
-  switch (method) {
-    case 'student.current': {
-      const profile = db.getStudentProfile(studentId)
-      return { studentId, name: profile?.name ?? '学生', cohort: profile?.cohort ?? '' }
-    }
-    case 'chapters.list':
-      return db.listChapters()
-    case 'kps.list': {
-      const chapter = typeof args.chapter === 'string' ? args.chapter : undefined
-      const query = typeof args.query === 'string' ? args.query : ''
-      const limit = typeof args.limit === 'number' ? args.limit : 80
-      return query
-        ? db.searchKps(query, chapter, limit)
-        : chapter
-          ? db.listKpsByChapter(chapter).slice(0, limit)
-          : db.searchKps('', undefined, limit)
-    }
-    case 'getKp':
-      return db.getKp(String(args.kpId ?? ''))
-    case 'getBlock': {
-      const block = db.getBlock(String(args.blockId ?? ''))
-      if (!block) return undefined
-      return {
-        block,
-        chapter: db.listChapters().find((item) => item.id === block.chapter_id),
-        section: db.listSections(block.chapter_id).find((item) => item.id === block.section_id),
-      }
-    }
-    case 'getResource': {
-      const resourceId = String(args.resourceId ?? args.sourceId ?? '')
-      if (resourceId.length === 0) return undefined
-      const guide = db.getState<unknown>('resource', `guide/${resourceId}`)
-      if (!guide || typeof guide !== 'object' || Array.isArray(guide)) return undefined
-      const chapterId = 'chapter_id' in guide && typeof guide.chapter_id === 'string'
-        ? guide.chapter_id
-        : resourceId
-      return {
-        guide,
-        chapter: db.listChapters().find((item) => item.id === chapterId),
-      }
-    }
-    case 'listIdeology':
-      return db.listIdeology()
-    case 'news.list':
-      return db.listNews({
-        source: typeof args.source === 'string' ? args.source : undefined,
-        since: typeof args.since === 'string' ? args.since : undefined,
-        limit: typeof args.limit === 'number' ? args.limit : 20,
-      })
-    case 'news.status':
-      return {
-        count: db.countNews(),
-        newestFetchedAt: db.newestNewsFetchedAt() ?? '',
-      }
-    case 'news.refresh': {
-      const sources = Array.isArray(args.sources) ? args.sources.map(String) : undefined
-      const outcome = await newsService.refresh(sources, { wait: false })
-      await matcher.backfill(20)
-      return {
-        results: outcome.results,
-        queued: outcome.queued,
-        accepted: outcome.accepted,
-        count: db.countNews(),
-        newestFetchedAt: db.newestNewsFetchedAt() ?? '',
-      }
-    }
-    case 'news.get': {
-      const article = db.getNews(String(args.articleId ?? ''))
-      if (!article) return undefined
-      return {
-        article,
-        matches: db.getMatches(article.id),
-        ideology: db.getIdeologyMatches(article.id),
-      }
-    }
-    case 'news.match': {
-      const result = await matcher.match({
-        articleId: String(args.articleId ?? ''),
-        topK: typeof args.topK === 'number' ? args.topK : 3,
-      })
-      return { matches: result.matches }
-    }
-    case 'questions.attempts':
-      return db.listAttempts({
-        studentId,
-        questionIds: Array.isArray(args.questionIds) ? args.questionIds.map(String) : undefined,
-        limit: typeof args.limit === 'number' ? args.limit : 200,
-      })
-    case 'profile.get':
-      return profileService.getProfile(studentId)
-    case 'profile.growth':
-      return profileService.growthSummary(studentId, typeof args.chapterId === 'string' ? args.chapterId : undefined)
-    case 'profile.evidence':
-      return profileService.listEvidence(studentId, {
-        competencyId: typeof args.competencyId === 'string' ? args.competencyId : undefined,
-        chapterId: typeof args.chapterId === 'string' ? args.chapterId : undefined,
-        limit: typeof args.limit === 'number' ? args.limit : 100,
-      })
-    case 'profile.snapshot':
-      return profileService.recordSnapshot(
-        studentId,
-        String(args.chapterId ?? ''),
-        args.checkpoint === 'pre' ? 'pre' : 'post',
-      )
-    case 'profile.review':
-      db.updateEvidenceReview(
-        String(args.evidenceId ?? ''),
-        args.status === 'reviewed' || args.status === 'rejected' ? args.status : 'draft',
-        String(args.note ?? ''),
-      )
-      return { ok: true }
-    case 'artifacts.list':
-      return artifacts.list(studentId, typeof args.limit === 'number' ? args.limit : 50)
-    case 'artifacts.get':
-      return artifacts.get(String(args.artifactId ?? ''))
-    case 'artifacts.export':
-      return artifacts.export(String(args.artifactId ?? ''), exportFormat(args.format))
-    case 'memory.facts':
-      return db.listMemoryFacts(studentId)
-    case 'memory.episodes':
-      return db.listMemoryEpisodes(studentId, typeof args.limit === 'number' ? args.limit : 50)
-    case 'memory.summary':
-      return profileService.memorySummary(studentId)
-    case 'memory.upsert':
-      return profileService.upsertMemoryFact({
-        studentId,
-        kind: (args.kind === 'goal' || args.kind === 'preference' || args.kind === 'constraint'
-          || args.kind === 'background' || args.kind === 'self_assessment' || args.kind === 'open_question')
-          ? args.kind
-          : 'goal',
-        key: String(args.key ?? ''),
-        value: args.value,
-      })
-    case 'memory.delete':
-      profileService.deleteMemoryFact(String(args.factId ?? ''))
-      return { ok: true }
-    case 'chat.sessions':
-      return db.listChatSessions(studentId)
-    case 'chat.messages':
-      return db.listChatMessages(String(args.sessionId ?? ''))
-    case 'agent.snapshot':
-      return agentRuntime.getSnapshot(
-        studentId,
-        typeof args.sessionId === 'string' ? args.sessionId : undefined,
-        typeof args.chapterId === 'string' ? args.chapterId : undefined,
-      )
-    case 'agent.suggestions':
-      return agentRuntime.suggestions(
-        studentId,
-        typeof args.sessionId === 'string' ? args.sessionId : undefined,
-      )
-    case 'agent.turns':
-      return agentRuntime.listTurns(String(args.sessionId ?? ''), typeof args.limit === 'number' ? args.limit : 50)
-    case 'agent.ledger':
-      return agentRuntime.listLedger(studentId)
-    case 'agent.retry':
-      await agentRuntime.retryLedger(studentId, String(args.sourceId ?? ''))
-      return agentRuntime.listLedger(studentId)
-    case 'agent.sessions': {
-      const runtime = agentRuntime as unknown as { sessionSummaries?: (studentId: string) => unknown }
-      return runtime.sessionSummaries ? runtime.sessionSummaries(studentId) : []
-    }
-    case 'files.reveal':
-      shell.showItemInFolder(String(args.path ?? ''))
-      return { ok: true }
-    case 'files.preview':
-      return previewFile(String(args.path ?? ''))
-    case 'files.openDialog': {
-      const options: OpenDialogOptions = {
-        title: '打开学习资料',
-        properties: ['openFile'],
-        filters: [
-          { name: '学习资料', extensions: ['md', 'docx', 'pdf', 'png', 'jpg', 'jpeg', 'webp', 'txt', 'csv'] },
-          { name: '全部文件', extensions: ['*'] },
-        ],
-      }
-      const result = window
-        ? await dialog.showOpenDialog(window, options)
-        : await dialog.showOpenDialog(options)
-      if (result.canceled || result.filePaths.length === 0) return undefined
-      return previewFile(result.filePaths[0]!)
-    }
-    default:
-      throw new Error(`unknown learning method: ${method}`)
-  }
+  return dispatchMethod(
+    {
+      db,
+      news: newsService,
+      matcher,
+      profile: profileService,
+      artifacts,
+      agent: agentRuntime,
+      host: {
+        revealFile: (path) => { shell.showItemInFolder(path) },
+        previewFile: (path) => previewFile(path),
+        openFileDialog: openFileDialog,
+      },
+    },
+    method,
+    input,
+    { studentId },
+  )
 }
 
 /**

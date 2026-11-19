@@ -18,6 +18,7 @@
     "@learning-agent/artifacts": "workspace:*",
     "@learning-agent/bp": "workspace:*",
     "@learning-agent/db": "workspace:*",
+    "@learning-agent/dispatch": "workspace:*",
     "@learning-agent/export": "workspace:*",
     "@learning-agent/matcher": "workspace:*",
     "@learning-agent/news": "workspace:*",

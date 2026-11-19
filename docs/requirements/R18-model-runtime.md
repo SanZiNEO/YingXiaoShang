@@ -47,7 +47,7 @@
 - 路径：`app.getPath('userData')/settings.json`。
 - 字段：`{ apiKey: string, model: string }`；写盘时保留未提供的字段，`clearApiKey` 只清本机 Key（`settings.ts:43-58`）。
 - 对外只暴露 `PublicSettings { hasApiKey, model, apiKeySource: 'env' | 'stored' | 'none' }`，不回传 Key 本身（`settings.ts:5-10`）。
-- IPC：`learning:settings:get` / `learning:settings:set`（`apps/desktop/src/main/index.ts:461-462`）。
+- IPC：`learning:settings:get` / `learning:settings:set`（`apps/desktop/src/main/index.ts:390-391`）。
 
 **适配器接口**
 

@@ -1,0 +1,35 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib",
+    "declarationDir": "lib/types",
+    "tsBuildInfoFile": "lib/.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../db"
+    },
+    {
+      "path": "../matcher"
+    },
+    {
+      "path": "../profile"
+    },
+    {
+      "path": "../artifacts"
+    },
+    {
+      "path": "../agent"
+    },
+    {
+      "path": "../news"
+    },
+    {
+      "path": "../shared"
+    }
+  ]
+}

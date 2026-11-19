@@ -1,0 +1,28 @@
+{
+  "name": "@learning-agent/dispatch",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@learning-agent/db": "workspace:*",
+    "@learning-agent/matcher": "workspace:*",
+    "@learning-agent/profile": "workspace:*",
+    "@learning-agent/artifacts": "workspace:*",
+    "@learning-agent/agent": "workspace:*",
+    "@learning-agent/news": "workspace:*"
+  }
+}

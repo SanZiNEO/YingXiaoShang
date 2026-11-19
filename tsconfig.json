@@ -42,7 +42,8 @@
       "path": "packages/bp"
     },
     {
-      "path": "packages/api"
+      "path": "packages/api",
+      "path": "packages/dispatch"
     },
     {
       "path": "packages/ui"

@@ -131,7 +131,7 @@
 - 写入工具：`emit_question_set` 在 `packages/agent/src/tools/write-tools.ts:121-159`；产物规格 `QUESTION_SET` 在 `:47-94`（`docx`、`QuestionSet@1`）；中文名转 id 在 `:9-21`。
 - 内容 schema：`QuestionSetContentSchema` 在 `packages/shared/src/index.ts:763-779`。
 - 做题壳：`QuestionSetRenderer` 在 `apps/desktop/src/renderer/src/renderers.tsx:97-260`；交卷按钮在全部作答前禁用（`:201-229`）；交卷结果处理在 `apps/desktop/src/renderer/src/App.tsx:975-987`。
-- 交卷入口：`answerQuestionSet` 在 `packages/agent/src/index.ts:656-690`；`submitAnswerSet` 在 `:701-900`；IPC 在 `apps/desktop/src/main/index.ts:453-460`。
+- 交卷入口：`answerQuestionSet` 在 `packages/agent/src/index.ts:656-690`；`submitAnswerSet` 在 `:701-900`；IPC 在 `apps/desktop/src/main/index.ts:362-380`。
 - 判分：`FeedbackAgent.run` 在 `packages/agent/src/subagents.ts:248-385`；`scoreAnswer` 在 `packages/agent/src/text.ts:127-181`；写 attempt 在 `subagents.ts:279-285`，表在 `packages/db/src/index.ts:187-191`。
 - 题库侧：`generate_questions` / `validate_question` / `export_questions` 在 `packages/questions/src/index.ts:1308`、`:1346`、`:1367`；`generate()` 在 `:887-966`，离线兜底 `offlineQuestions` 在 `:840-885`；题目校验规则在 `:298-424`。
 - 关键差距（阻塞验收 1–2）：`emit_question_set` 只写 `artifacts.content_json`，不写 `questions` 表；而 `answerQuestionSet` 要求 `db.getQuestion(questionId)` 存在（`packages/agent/src/index.ts:684-686`），`FeedbackAgent` 也按 id 查题（`subagents.ts:276`）。因此模型直接出的题目前无法交卷判分。修复方向：产物落库时把题目写入 `questions`（`source_type='kp'/'news'`，`id` 用稳定 hash），或判分时从 `content_json` 取题并补写题库。
