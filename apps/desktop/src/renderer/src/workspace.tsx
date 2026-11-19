@@ -318,6 +318,8 @@ export function Workspace(props: WorkspaceProps) {
                 {isPage(artifact) ? (
                   <button
                     type="button"
+                    data-testid="export-format"
+                    data-format="html"
                     onClick={() => { onExport(artifact, 'html'); setExportMenuOpen(false) }}
                     style={menuStyle}
                   >
@@ -327,6 +329,8 @@ export function Workspace(props: WorkspaceProps) {
                   <>
                     <button
                       type="button"
+                      data-testid="export-format"
+                      data-format="md"
                       onClick={() => { onExport(artifact, 'md'); setExportMenuOpen(false) }}
                       style={menuStyle}
                     >
@@ -334,6 +338,8 @@ export function Workspace(props: WorkspaceProps) {
                     </button>
                     <button
                       type="button"
+                      data-testid="export-format"
+                      data-format="docx"
                       onClick={() => { onExport(artifact, 'docx'); setExportMenuOpen(false) }}
                       style={menuStyle}
                     >
@@ -426,7 +432,7 @@ export function Workspace(props: WorkspaceProps) {
           </button>
         ))}
         <div style={{ position: 'relative', marginLeft: 'auto' }}>
-          <button type="button" aria-label="+" onClick={() => setMenuOpen((value) => !value)} style={{ ...iconActionStyle, border: 'none' }}><PlusIcon size={14} /></button>
+          <button type="button" data-testid="tab-new" aria-label="+" onClick={() => setMenuOpen((value) => !value)} style={{ ...iconActionStyle, border: 'none' }}><PlusIcon size={14} /></button>
           {menuOpen ? (
             <div style={{ position: 'absolute', right: 0, top: 30, width: 170, background: '#fff', border: `1px solid ${COLORS.border}`, borderRadius: 9, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', padding: 5, zIndex: 50 }}>
               {([
@@ -439,6 +445,8 @@ export function Workspace(props: WorkspaceProps) {
                 <button
                   key={kind}
                   type="button"
+                  data-testid="tab-menu-item"
+                  data-kind={kind}
                   onClick={() => { onNew(kind); setMenuOpen(false) }}
                   style={{ display: 'block', width: '100%', textAlign: 'left', border: 'none', background: 'transparent', padding: '7px 8px', fontSize: 12, cursor: 'pointer', borderRadius: 6 }}
                 >
@@ -448,6 +456,7 @@ export function Workspace(props: WorkspaceProps) {
               {capabilities.localFiles ? (
                 <button
                   type="button"
+                  data-testid="tab-menu-open-local"
                   onClick={() => { onOpenLocal(); setMenuOpen(false) }}
                   style={{ display: 'block', width: '100%', textAlign: 'left', border: 'none', background: 'transparent', padding: '7px 8px', fontSize: 12, cursor: 'pointer', borderRadius: 6 }}
                 >
@@ -528,7 +537,7 @@ export function Workspace(props: WorkspaceProps) {
             <section style={{ border: `1px solid ${COLORS.border}`, borderRadius: 10, padding: 12, background: '#fff' }}>
               <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 7 }}>本次产物</div>
               {artifacts.length === 0 ? <Empty>暂无产物</Empty> : artifacts.slice(0, 8).map((item) => (
-                <button key={item.id} type="button" onClick={() => onOpenArtifact(item)} style={listButtonStyle}>
+                <button key={item.id} type="button" data-testid="artifact-item" data-artifact-id={item.id} onClick={() => onOpenArtifact(item)} style={listButtonStyle}>
                   <span style={{ fontSize: 12, fontWeight: 600 }}>{item.title}</span>
                   <span style={{ fontSize: 10, color: COLORS.muted }}>{TYPE_LABEL[item.type] ?? '附件'}</span>
                 </button>
@@ -538,7 +547,7 @@ export function Workspace(props: WorkspaceProps) {
         ) : active.kind === 'artifacts' ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {artifacts.length === 0 ? <Empty>还没有产物。让营小商出题、做调研或写 BP。</Empty> : artifacts.map((item) => (
-              <button key={item.id} type="button" onClick={() => onOpenArtifact(item)} style={listButtonStyle}>
+              <button key={item.id} type="button" data-testid="artifact-item" data-artifact-id={item.id} onClick={() => onOpenArtifact(item)} style={listButtonStyle}>
                 <span style={{ fontSize: 12, fontWeight: 600 }}>{item.title}</span>
                 <span style={{ fontSize: 10, color: COLORS.muted }}>{TYPE_LABEL[item.type] ?? '附件'} · {item.created_at.slice(0, 16)}</span>
               </button>
@@ -563,6 +572,9 @@ export function Workspace(props: WorkspaceProps) {
                   <button
                     key={`${citation.sourceType}:${citation.sourceId}:${index}`}
                     type="button"
+                    data-testid="citation-item"
+                    data-citation-index={index}
+                    data-citation-type={citation.sourceType}
                     onClick={() => onOpenCitation(citation)}
                     style={citationRowStyle}
                   >

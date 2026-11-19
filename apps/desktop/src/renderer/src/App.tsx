@@ -384,7 +384,7 @@ function ProfileView({
       <section style={{ ...panelStyle, marginTop: 12 }}>
         <div style={sectionTitleStyle}>证据账本（{evidence.length}）</div>
         {evidence.length === 0 ? <Empty>还没有学生能力证据。</Empty> : evidence.slice(0, 40).map((item) => (
-          <div key={item.id} style={{ borderTop: `1px solid ${COLORS.border}`, padding: '7px 0', fontSize: 11, lineHeight: 1.7 }}>
+          <div key={item.id} data-testid="evidence-item" data-evidence-id={item.id} style={{ borderTop: `1px solid ${COLORS.border}`, padding: '7px 0', fontSize: 11, lineHeight: 1.7 }}>
             <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 3 }}>
               <Tag tone="accent">{profileData?.competencies.find((competency) => competency.id === item.competency_id)?.name ?? '能力维度'}</Tag>
               <Tag>{LEVEL_WORD[item.level] ?? '证据不足'}</Tag>
@@ -397,8 +397,8 @@ function ProfileView({
             <div>{item.excerpt}</div>
             {item.rationale ? <div style={{ color: COLORS.muted, marginTop: 2 }}>{item.rationale}</div> : null}
             <div style={{ display: 'flex', gap: 8, marginTop: 3 }}>
-              <button type="button" onClick={() => onReview(item.id, 'reviewed')} style={linkStyle}>认可</button>
-              <button type="button" onClick={() => onReview(item.id, 'rejected')} style={{ ...linkStyle, color: COLORS.muted }}>驳回</button>
+              <button type="button" data-testid="evidence-accept" onClick={() => onReview(item.id, 'reviewed')} style={linkStyle}>认可</button>
+              <button type="button" data-testid="evidence-reject" onClick={() => onReview(item.id, 'rejected')} style={{ ...linkStyle, color: COLORS.muted }}>驳回</button>
             </div>
           </div>
         ))}
@@ -1258,6 +1258,7 @@ export function App() {
         </div>
         <button
           type="button"
+          data-testid="nav-new-chat"
           onClick={newChat}
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, width: '100%', border: 'none', background: COLORS.accent, color: 'var(--on-accent, #fff)', borderRadius: 9, padding: '8px 10px', fontSize: 12, cursor: 'pointer' }}
         >
@@ -1281,6 +1282,8 @@ export function App() {
               <button
                 key={session.id}
                 type="button"
+                data-testid="session-item"
+                data-session-id={session.id}
                 onClick={() => void loadSession(session)}
                 style={{
                   textAlign: 'left',
@@ -1308,6 +1311,7 @@ export function App() {
         <div style={{ marginTop: 12 }}>
           <button
             type="button"
+            data-testid="nav-profile"
             onClick={() => setView('profile')}
             style={{ display: 'flex', alignItems: 'center', gap: 7, width: '100%', textAlign: 'left', border: 'none', background: 'transparent', padding: '7px 8px', borderRadius: 7, cursor: 'pointer', color: COLORS.text, fontSize: 11.5 }}
           >
@@ -1318,6 +1322,7 @@ export function App() {
         <div style={{ flex: 1 }} />
         <button
           type="button"
+          data-testid="nav-settings"
           onClick={() => setSettingsOpen(true)}
           style={{ border: 'none', background: 'transparent', color: COLORS.muted, borderRadius: 7, padding: '7px 8px', cursor: 'pointer', fontSize: 11.5, textAlign: 'left' }}
         >
@@ -1547,6 +1552,7 @@ export function App() {
               ) : null}
               <div style={{ border: `1px solid ${COLORS.border}`, background: 'var(--surface)', borderRadius: 12, padding: '8px 10px 6px' }}>
                 <textarea
+                  data-testid="composer-input"
                   value={draft}
                   rows={2}
                   onChange={(event) => setDraft(event.target.value)}
@@ -1565,6 +1571,7 @@ export function App() {
                     <span style={{ color: COLORS.muted, fontSize: 10 }}>{scopeText(displayScope)}</span>
                     <button
                       type="button"
+                      data-testid="composer-send"
                       disabled={draft.trim().length === 0}
                       onClick={() => void send()}
                       aria-label={busy ? '排队' : '发送'}
@@ -1661,6 +1668,7 @@ export function App() {
               DEEPSEEK_API_KEY
               <input
                 type="password"
+                data-testid="settings-api-key"
                 value={apiKey}
                 onChange={(event) => setApiKey(event.target.value)}
                 placeholder={apiKeySource === 'env'
@@ -1683,7 +1691,7 @@ export function App() {
             ) : null}
             <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, color: COLORS.muted, marginTop: 12 }}>
               模型
-              <input value={model} onChange={(event) => setModel(event.target.value)} style={{ border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: '8px 10px' }} />
+              <input value={model} data-testid="settings-model" onChange={(event) => setModel(event.target.value)} style={{ border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: '8px 10px' }} />
             </label>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 18 }}>
               <span style={{ color: COLORS.success, fontSize: 12 }}>{settingsSaved}</span>

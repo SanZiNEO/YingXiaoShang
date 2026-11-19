@@ -127,7 +127,7 @@ function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet, onAsk }
   }
 
   return (
-    <div data-submitted={submitted ? 'true' : 'false'} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div data-testid="question-set" data-submitted={submitted ? 'true' : 'false'} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ fontSize: 12, color: COLORS.muted, lineHeight: 1.7 }}>{str(content.intro)}</div>
       {questions.map((question, index) => {
         const id = str(question.id)
@@ -145,6 +145,7 @@ function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet, onAsk }
         return (
           <section
             key={id || index}
+            data-question-id={id}
             style={{
               borderLeft: `1px solid ${palette.soft}`,
               borderRight: `1px solid ${palette.soft}`,
@@ -173,6 +174,8 @@ function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet, onAsk }
                     <button
                       key={`${id}-${optionIndex}`}
                       type="button"
+                      data-testid="answer-option"
+                      data-option={letter}
                       disabled={locked}
                       onClick={() => choose(id, option, multiple)}
                       style={{
@@ -193,6 +196,7 @@ function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet, onAsk }
               </div>
             ) : (
               <textarea
+                data-testid="answer-input"
                 value={chosen}
                 disabled={locked}
                 onChange={(event) => setSelected((current) => ({ ...current, [id]: event.target.value }))}
@@ -226,6 +230,7 @@ function QuestionSetRenderer({ artifact, attempts, kpNames, onSubmitSet, onAsk }
         </span>
         <button
           type="button"
+          data-testid="question-submit"
           disabled={submitted || submitting || pendingQuestions.length === 0 || answeredCount < pendingQuestions.length}
           onClick={() => {
             setSubmitting(true)
