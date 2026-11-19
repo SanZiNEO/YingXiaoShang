@@ -210,6 +210,8 @@ export interface NewsStatus {
 }
 
 export interface NewsRefreshResult extends NewsStatus {
+  queued?: boolean
+  accepted?: string[]
   results: Array<{
     source: string
     fetched: number

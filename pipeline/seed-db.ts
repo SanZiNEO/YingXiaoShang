@@ -155,7 +155,7 @@ const insertedNews = news.length > 0 ? db.upsertNews(news) : 0
 // Fresh installs also need real news candidates; deterministic only, no network.
 // Whole-library (no chapter scope) so any chapter surface can filter afterwards.
 let newsCandidates = 0
-for (const article of db.listNews({ limit: 500 }).filter((item) => item.content.length >= 300)) {
+for (const article of db.listNews({ limit: 500 }).filter((item) => item.content.length >= 40)) {
   const matched = generateDeterministicMatches(db, article, 3)
   db.upsertMatches(article.id, matched.matches, matched.ideology)
   newsCandidates += matched.matches.length

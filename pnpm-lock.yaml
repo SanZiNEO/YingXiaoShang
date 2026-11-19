@@ -383,21 +383,9 @@ importers:
       '@learning-agent/db':
         specifier: workspace:*
         version: link:../db
-      '@learning-agent/matcher':
-        specifier: workspace:*
-        version: link:../matcher
       '@learning-agent/shared':
         specifier: workspace:*
         version: link:../shared
-      cheerio:
-        specifier: ^1.1.0
-        version: 1.2.0
-      p-limit:
-        specifier: ^7.1.0
-        version: 7.3.3
-      playwright:
-        specifier: ^1.55.0
-        version: 1.64.1
     devDependencies:
       '@types/node':
         specifier: ^24.0.0

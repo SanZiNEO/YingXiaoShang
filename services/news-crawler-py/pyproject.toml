@@ -1,0 +1,38 @@
+[project]
+name = "news-crawler"
+version = "0.1.0"
+description = "YingXiaoShang multi-source news crawler (Python backend)"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "httpx>=0.28.1",
+  "beautifulsoup4>=4.12.0",
+  "lxml>=5.3.0",
+]
+
+[project.optional-dependencies]
+browser = ["playwright>=1.55.0"]
+dev = ["pytest>=8.3.0", "pytest-asyncio>=0.25.0", "ruff>=0.9.0"]
+
+[project.scripts]
+news-crawler = "news_crawler.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/news_crawler"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+# One-off probe scripts written before the crawler existed; they are kept as
+# evidence of the per-site probing, not maintained as production code.
+[tool.ruff.lint.per-file-ignores]
+"scripts/probe_*.py" = ["B023"]

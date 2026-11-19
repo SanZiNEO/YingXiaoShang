@@ -20,6 +20,7 @@ import { startupFailure, startupHealth } from './health.js'
 import { loadDotEnv } from './env.js'
 import { SettingsStore } from './settings.js'
 import { defaultBounds, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, readWindowState, resolveAppHome, trackWindowState } from './window-state.js'
+import { startNewsBackend, stopNewsBackend } from './news-backend.js'
 import { TurnCanceller } from './turn-canceller.js'
 
 /** Local demo identity; every service call receives it explicitly. */
@@ -36,6 +37,7 @@ let artifacts: ArtifactService
 let agentRuntime: AgentService
 let newsService: NewsService
 let newsTimer: NodeJS.Timeout | undefined
+let newsStartupTimer: NodeJS.Timeout | undefined
 let settings: SettingsStore
 let llm: DeepSeekLlm
 
@@ -81,6 +83,7 @@ async function initServices(): Promise<void> {
   ctx.provide('llm', llm)
   await ctx.plugin(LearningDb, { appHome })
   db = ctx.learningDb
+  const newsBaseUrl = await startNewsBackend({ appPath: app.getAppPath(), appHome })
   matcher = new Matcher(ctx)
   questionSmith = new QuestionSmith(ctx)
   research = new ResearchService(ctx)
@@ -90,14 +93,23 @@ async function initServices(): Promise<void> {
     appHome,
     templatesDir: join(app.getAppPath(), 'templates'),
   })
-  newsService = new NewsService(ctx, { apiKey: () => settings.read().apiKey })
+  newsService = new NewsService(ctx, {
+    baseUrl: newsBaseUrl,
+    apiKey: () => settings.read().apiKey,
+  })
   agentRuntime = new AgentService(ctx)
 }
 
 function startNewsAutomation(): void {
   const minutes = Math.max(1, Number(process.env.LEARNING_AGENT_NEWS_REFRESH_MINUTES ?? 30) || 30)
   const tick = async (): Promise<void> => {
-    await newsService.ensureFresh()
+    try {
+      // Python owns the real workers; this only asks it to collect when the
+      // local library is empty/stale. It must never block the UI startup.
+      await newsService.ensureFresh()
+    } catch (error) {
+      console.warn('[news] refresh request failed', error)
+    }
     // Refresh only stores articles; tagging is separate so a slow tag pass
     // cannot block the fetch. Backfill also covers articles ingested earlier.
     await matcher.backfill(20)
@@ -106,7 +118,12 @@ function startNewsAutomation(): void {
     void tick()
   }, minutes * 60_000)
   newsTimer.unref?.()
-  void tick()
+  // The Python service already starts every source immediately on boot; give it
+  // one minute before the desktop's stale-check can enqueue a duplicate round.
+  newsStartupTimer = setTimeout(() => {
+    void tick()
+  }, 60_000)
+  newsStartupTimer.unref?.()
 }
 
 function createWindow(): void {
@@ -244,10 +261,12 @@ async function invoke(method: string, input: unknown): Promise<unknown> {
       }
     case 'news.refresh': {
       const sources = Array.isArray(args.sources) ? args.sources.map(String) : undefined
-      const results = await newsService.refresh(sources)
+      const outcome = await newsService.refresh(sources, { wait: false })
       await matcher.backfill(20)
       return {
-        results,
+        results: outcome.results,
+        queued: outcome.queued,
+        accepted: outcome.accepted,
         count: db.countNews(),
         newestFetchedAt: db.newestNewsFetchedAt() ?? '',
       }
@@ -527,6 +546,8 @@ app.whenReady().then(async () => {
 
 app.on('before-quit', () => {
   clearInterval(newsTimer)
+  if (newsStartupTimer) clearTimeout(newsStartupTimer)
+  stopNewsBackend()
 })
 
 app.on('window-all-closed', () => {

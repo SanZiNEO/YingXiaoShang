@@ -10,7 +10,6 @@
     "build": "pnpm -r build",
     "typecheck": "tsc -b && tsc -p pipeline/tsconfig.json --noEmit && pnpm --dir apps/desktop exec tsc --noEmit",
     "pipeline:resources": "tsx pipeline/ingest-resources.ts",
-    "pipeline:news": "tsx pipeline/ingest-news.ts",
     "pipeline:tag": "tsx pipeline/tag-ch4.ts",
     "db:seed": "tsx pipeline/seed-db.ts",
     "pipeline:content-tags": "tsx pipeline/tag-content.ts",

@@ -1,0 +1,26 @@
+{
+  "name": "@yingxiaoshang/automated-testing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "营小商 Electron 自动化测试：driver / client / pages / fixtures / scenarios / evidence",
+  "scripts": {
+    "test": "playwright test",
+    "test:p0": "playwright test --project=p0",
+    "test:p1": "playwright test --project=p1",
+    "test:isolation": "tsx src/selftest/isolation.ts",
+    "verify": "tsx verify.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

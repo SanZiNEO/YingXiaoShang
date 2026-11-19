@@ -18,7 +18,7 @@ const TERM_WEIGHTS: Array<{ field: (kp: KnowledgePoint) => string[]; weight: num
   { field: (kp) => kp.examples, weight: 1 },
 ]
 
-const MIN_CONTENT_LENGTH = 300
+const MIN_CONTENT_LENGTH = 40
 const MAX_ARTICLES = 3
 
 /**

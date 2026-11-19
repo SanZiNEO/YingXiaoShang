@@ -2898,7 +2898,7 @@ export default class LearningDb extends Service {
     return this.db
       .prepare(
         `SELECT * FROM news_articles
-         WHERE (tag_content_hash = '' OR content_hash <> tag_content_hash) AND length(content) >= 300
+         WHERE (tag_content_hash = '' OR content_hash <> tag_content_hash) AND length(content) >= 40
          ORDER BY published_at DESC LIMIT ?`,
       )
       .all(bounded)
