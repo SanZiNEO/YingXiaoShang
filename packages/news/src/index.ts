@@ -2,6 +2,11 @@ import { Service, type Context } from '@deepseek-ai/cordis'
 import { defineTool, type ValueSchemaSpec } from '@deepseek-ai/dsh-tools'
 import type {} from '@learning-agent/db'
 import type { CaseMatch, IdeologyMatch, NewsArticle } from '@learning-agent/shared'
+import {
+  fallbackApiKey,
+  isBackendUnavailable,
+  searchFallback,
+} from './fallback.js'
 
 /**
  * The TypeScript package is deliberately only a client for the Python
@@ -309,12 +314,20 @@ export class NewsService extends Service {
       limit: String(limit),
       fresh: fresh ? 'true' : 'false',
     })
-    const payload = await this.request<QueryResponse>(
-      `/query?${params.toString()}`,
-      { method: 'GET' },
-      this.queryTimeoutMs,
-      options.signal,
-    )
+    let payload: QueryResponse
+    try {
+      payload = await this.request<QueryResponse>(
+        `/query?${params.toString()}`,
+        { method: 'GET' },
+        this.queryTimeoutMs,
+        options.signal,
+      )
+    } catch (error) {
+      // 桌面交付包不带 Python 服务（见 fallback.ts 顶部说明）：连不上就退回
+      // DeepSeek 搜索 API，而不是让学生看到「联网补抓失败」。
+      if (!isBackendUnavailable(error)) throw error
+      return this.searchAndIngestFallback(query, limit, options)
+    }
     if (payload.ok === false) throw new Error(payload.message || payload.error || 'news query failed')
     const items = payload.items ?? []
     const errors = payload.meta?.degraded && payload.meta.reason ? [payload.meta.reason] : []
@@ -324,6 +337,29 @@ export class NewsService extends Service {
       articles: items.map(toNewsArticle),
       errors,
     }
+  }
+
+  /**
+   * 后备路径：直接用 DeepSeek 搜索 API，不经 Python 采集服务。
+   * 只在 `isBackendUnavailable` 成立时调用，不替换正常的服务端链路。
+   */
+  private async searchAndIngestFallback(
+    query: string,
+    limit: number,
+    options: { crawl?: boolean; signal?: AbortSignal } = {},
+  ): Promise<SearchIngestResult> {
+    const apiKey = fallbackApiKey(this.config.apiKey)
+    if (apiKey.length === 0) {
+      throw new Error('本地新闻服务未启动，且没有配置模型密钥：请先在「设置」里填 Key 再查新闻。')
+    }
+    const { results, articles, errors } = await searchFallback({
+      apiKey,
+      query,
+      count: limit,
+      signal: options.signal,
+    })
+    if (articles.length > 0) this.ctx.learningDb.upsertNews(articles)
+    return { query, results, articles, errors }
   }
 
   /** Fetch exactly one URL through the Python backend and store it. */
