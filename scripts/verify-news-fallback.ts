@@ -10,6 +10,8 @@
  *  ② 正文太短的条目不入库，只作线索
  *  ③ 入库的条目字段完整（外键/去重依赖 url 与 id）
  */
+import { Context } from '@deepseek-ai/cordis'
+import { NewsService } from '../packages/news/src/index.js'
 import { isBackendUnavailable, toFallbackArticle, searchFallback, FALLBACK_MIN_CONTENT } from '../packages/news/src/fallback.js'
 
 let pass = 0
@@ -104,6 +106,131 @@ console.log('5. 没有 key 时不乱发请求')
   } finally {
     globalThis.fetch = original
   }
+}
+
+console.log('6. 接线：后端拒绝时，NewsService 真的走兜底并入库（不是只测纯函数）')
+{
+  // 复核抓到的坑：上一版只 import fallback.ts 的纯函数，把 searchAndIngest 里的
+  // catch 整条删掉，脚本照样全绿。这里构造真实的 NewsService，按 URL 分流：
+  // 8788 拒绝、api.deepseek.com 正常，才能证明「包里联网查新闻真的能退回去」。
+  const upserts: Array<{ url?: string; id?: string }> = []
+  const ctx = new Context()
+  ctx.provide('learningDb', {
+    upsertNews: (articles: Array<{ url?: string; id?: string }>) => { upserts.push(...articles); return articles.length },
+    // 兜底入库后会按 url 回查真实 id（撞 url 时 upsertNews 不更新 id）。
+    listNews: () => upserts,
+  })
+  const service = new NewsService(ctx as never, {
+    baseUrl: 'http://127.0.0.1:8788',
+    apiKey: () => 'test-key',
+    queryTimeoutMs: 300,
+  })
+
+  const original = globalThis.fetch
+  globalThis.fetch = (async (input: unknown) => {
+    const url = String(input)
+    if (url.includes('127.0.0.1:8788')) {
+      throw Object.assign(new TypeError('fetch failed'), { cause: new Error('connect ECONNREFUSED 127.0.0.1:8788') })
+    }
+    return new Response(JSON.stringify({
+      results: [
+        { title: '兜底长文', url: 'https://example.com/f1', content: '正'.repeat(600), date: '2026-11-11', site_name: '媒体' },
+        { title: '兜底短文', url: 'https://example.com/f2', content: '短'.repeat(20) },
+      ],
+    }), { status: 200, headers: { 'content-type': 'application/json' } })
+  }) as never
+
+  try {
+    let thrown = ''
+    let result: { articles: unknown[]; errors: string[] } | undefined
+    try {
+      result = await service.searchAndIngest('黄仁勋辞职', 5)
+    } catch (error) {
+      thrown = error instanceof Error ? error.message : String(error)
+    }
+    check('后端拒绝时不抛错（真的退回去了）', thrown.length === 0, thrown)
+    check('兜底拿到了条目', (result?.articles.length ?? 0) === 1, `实际 ${result?.articles.length}`)
+    check('兜底结果写进了库（upsertNews 被调用）', upserts.length === 1, `实际 ${upserts.length}`)
+    check('入库的是长文那条', upserts[0]?.url === 'https://example.com/f1', String(upserts[0]?.url))
+
+    // 反例：后端 500 说明服务在，不该绕过它去花 API 的钱。
+    upserts.length = 0
+    globalThis.fetch = (async (input: unknown) => {
+      if (String(input).includes('127.0.0.1:8788')) {
+        return new Response(JSON.stringify({ ok: false, message: 'boom' }), { status: 500 })
+      }
+      return new Response(JSON.stringify({ results: [] }), { status: 200 })
+    }) as never
+    let message = ''
+    try {
+      await service.searchAndIngest('x', 1)
+    } catch (error) {
+      message = error instanceof Error ? error.message : String(error)
+    }
+    check('后端 500 时抛错、不偷偷走兜底', /boom|500/.test(message), message)
+    check('后端 500 时没有入库', upserts.length === 0, `实际 ${upserts.length}`)
+  } finally {
+    globalThis.fetch = original
+  }
+}
+
+console.log('7. 开关：服务端部署（显式配了外部 URL）不许偷偷改道')
+{
+  const ctx = new Context()
+  const upserts: unknown[] = []
+  ctx.provide('learningDb', { upsertNews: (a: unknown[]) => { upserts.push(...a); return a.length } })
+  const service = new NewsService(ctx as never, {
+    baseUrl: 'http://127.0.0.1:8788',
+    apiKey: () => 'test-key',
+    queryTimeoutMs: 300,
+    allowFallback: false,
+  })
+  const original = globalThis.fetch
+  let searched = 0
+  globalThis.fetch = (async (input: unknown) => {
+    if (String(input).includes('127.0.0.1:8788')) {
+      throw Object.assign(new TypeError('fetch failed'), { cause: new Error('connect ECONNREFUSED') })
+    }
+    searched += 1
+    return new Response(JSON.stringify({ results: [] }), { status: 200 })
+  }) as never
+  try {
+    let message = ''
+    try { await service.searchAndIngest('x', 1) } catch (error) { message = error instanceof Error ? error.message : String(error) }
+    check('allowFallback=false 时直接抛错', message.length > 0, message)
+    check('没有偷偷去调搜索 API', searched === 0, `实际调用 ${searched} 次`)
+    check('没有入库', upserts.length === 0)
+  } finally { globalThis.fetch = original }
+}
+
+console.log('8. 撞 url：返回的 id 必须是库里真实 id（否则 get_news 查不到）')
+{
+  const ctx = new Context()
+  const rows: Array<{ url: string; id: string }> = [{ url: 'https://example.com/dup', id: 'socialbeta-article-999' }]
+  ctx.provide('learningDb', {
+    upsertNews: (articles: Array<{ url: string }>) => {
+      for (const a of articles) {
+        // 模拟 ON CONFLICT(url) DO UPDATE：url 已存在时 id 不变
+        if (!rows.some((r) => r.url === a.url)) rows.push({ url: a.url, id: 'web_new' })
+      }
+      return articles.length
+    },
+    listNews: () => rows.map((r) => ({ ...r })),
+  })
+  const service = new NewsService(ctx as never, { baseUrl: 'http://127.0.0.1:8788', apiKey: () => 'k', queryTimeoutMs: 300 })
+  const original = globalThis.fetch
+  globalThis.fetch = (async (input: unknown) => {
+    if (String(input).includes('127.0.0.1:8788')) {
+      throw Object.assign(new TypeError('fetch failed'), { cause: new Error('connect ECONNREFUSED') })
+    }
+    return new Response(JSON.stringify({
+      results: [{ title: '重复', url: 'https://example.com/dup', content: '正'.repeat(600) }],
+    }), { status: 200 })
+  }) as never
+  try {
+    const result = await service.searchAndIngest('x', 1)
+    check('返回的是库里已有的 id', result.articles[0]?.id === 'socialbeta-article-999', `实际 ${result.articles[0]?.id}`)
+  } finally { globalThis.fetch = original }
 }
 
 console.log('')

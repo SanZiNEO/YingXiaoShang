@@ -25,6 +25,13 @@ export interface Config {
   apiKey?: () => string
   /** @deprecated Scheduling is owned by the Python service. */
   autoRefresh?: boolean
+  /**
+   * Python 服务连不上时，是否允许退回 DeepSeek 搜索 API。
+   * - 桌面交付包：必须 true（包里没有 Python 与 .venv，不兜底就彻底没有联网新闻）
+   * - 服务端部署：应设 false（服务就在本机/内网，连不上是故障，静默改道会掩盖问题）
+   * 省略时按「有没有显式配置外部 NEWS_CRAWLER_URL」推断：配了外部地址 → false。
+   */
+  allowFallback?: boolean
 }
 
 export interface WebSearchItem {
@@ -225,12 +232,17 @@ export class NewsService extends Service {
   private readonly base: string
   private readonly queryTimeoutMs: number
   private readonly refreshTimeoutMs: number
+  private readonly allowFallback: boolean
 
   constructor(ctx: Context, private readonly config: Config = {}) {
     super(ctx, 'news')
     this.base = baseUrl(config)
     this.queryTimeoutMs = config.queryTimeoutMs ?? QUERY_TIMEOUT_MS
     this.refreshTimeoutMs = config.refreshTimeoutMs ?? REFRESH_TIMEOUT_MS
+    // 没显式指定时：配了外部 NEWS_CRAWLER_URL 说明是「连一台独立服务」的部署形态，
+    // 连不上属于故障，不该悄悄改道去花 API 的钱；否则（桌面端内嵌启动）允许兜底。
+    this.allowFallback = config.allowFallback
+      ?? !(process.env.NEWS_CRAWLER_URL && process.env.NEWS_CRAWLER_URL.length > 0)
   }
 
   /** The control-plane URL this client is wired to, for diagnostics. */
@@ -325,8 +337,8 @@ export class NewsService extends Service {
     } catch (error) {
       // 桌面交付包不带 Python 服务（见 fallback.ts 顶部说明）：连不上就退回
       // DeepSeek 搜索 API，而不是让学生看到「联网补抓失败」。
-      if (!isBackendUnavailable(error)) throw error
-      return this.searchAndIngestFallback(query, limit, options)
+      if (!isBackendUnavailable(error) || !this.allowFallback) throw error
+      return this.searchAndIngestFallback(query, limit, options, error)
     }
     if (payload.ok === false) throw new Error(payload.message || payload.error || 'news query failed')
     const items = payload.items ?? []
@@ -347,10 +359,15 @@ export class NewsService extends Service {
     query: string,
     limit: number,
     options: { crawl?: boolean; signal?: AbortSignal } = {},
+    cause?: unknown,
   ): Promise<SearchIngestResult> {
     const apiKey = fallbackApiKey(this.config.apiKey)
+    // 原因要分开说：「没启动」和「太慢」是两种完全不同的事，学生/运维看到的提示应不同。
+    const reason = /timed out/i.test(cause instanceof Error ? cause.message : '')
+      ? '本地新闻服务响应太慢'
+      : '本地新闻服务未启动'
     if (apiKey.length === 0) {
-      throw new Error('本地新闻服务未启动，且没有配置模型密钥：请先在「设置」里填 Key 再查新闻。')
+      throw new Error(`${reason}，且没有配置模型密钥：请先在「设置」里填 Key 再查新闻。`)
     }
     const { results, articles, errors } = await searchFallback({
       apiKey,
@@ -358,7 +375,21 @@ export class NewsService extends Service {
       count: limit,
       signal: options.signal,
     })
-    if (articles.length > 0) this.ctx.learningDb.upsertNews(articles)
+    if (articles.length > 0) {
+      this.ctx.learningDb.upsertNews(articles)
+      // 撞 url 时 `upsertNews` 走 DO UPDATE 且不更新 id：库里保留的是旧 id，
+      // 而上面算出来的 id 是 `web_<hash>`。这里按 url 回查，把真实 id 还给上层，
+      // 否则 `get_news` / `articleIds` 会指向查不到的行。
+      const stored = new Map(
+        this.ctx.learningDb.listNews({ limit: 500 }).map((article) => [article.url, article.id]),
+      )
+      for (let index = 0; index < articles.length; index++) {
+        const realId = stored.get(articles[index]!.url)
+        if (realId && realId !== articles[index]!.id) {
+          articles[index] = { ...articles[index]!, id: realId }
+        }
+      }
+    }
     return { query, results, articles, errors }
   }
 

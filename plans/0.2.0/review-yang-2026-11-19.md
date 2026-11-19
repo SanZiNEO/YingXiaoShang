@@ -22,9 +22,18 @@
 但有一个 P0：**桌面交付包会退化成「新闻联网不可用」**（见 P0-1）。在修掉之前，
 不能基于现在 main 出新的学生包。
 
-另外一处表述需要纠正：聊天里说「自动化测试部分做完了」，实际是
-**1 条用例有断言、30 条是 0 字节占位文件**。他 README 里自己写了「不下已验证通过的结论」，
-说明不是造假，是口头表述乐观。验收标准要写清楚。
+**更正（2026-11-19 复核后）**：本文件初版曾写「30 条 spec 是 0 字节空文件」，**这是错的**。
+
+实测：`find tools/automated-testing/src/scenarios -name "*.spec.ts" -size 0 | wc -l` → `0`；
+31 个 spec 全部有内容（最小 1414 字节），每个含 15–29 条 `expect(`。
+
+**我为什么会判错**：当时 `raw.githubusercontent.com` 连接失败，`curl` 输出 0 字节，
+我把「网络失败」当成了「文件为空」；GitHub compare API 对 252 个文件的 diff 也省略了 patch
+（`additions: 0`），我据此二次误判。这是把工具失败当成事实的典型错误，已写进 review-kit。
+
+**真实结论**：31 条用例都写了断言、引用了依赖台账，**但没有任何证据表明它们跑过**
+（本地没有 Electron 测试环境）。所以对他的评价应是「框架与用例都写了，未经运行验证」，
+而不是「只有 1 条有内容」。
 
 ---
 
@@ -32,7 +41,7 @@
 
 ### P0-1 桌面端新闻联网依赖仓库根 `.venv`，而打包不含它
 
-- **位置**：`apps/desktop/src/main/news-backend.ts:60-90`、`packages/news/src/index.ts:343-378`
+- **位置**：`apps/desktop/src/main/news-backend.ts:60-90`、`packages/news/src/index.ts` 的 `request()`（现 :379）
 - **事实**：
   - `findExecutable()` 只认三处：`NEWS_CRAWLER_PYTHON` 环境变量、
     仓库根 `.venv/Scripts/news-crawler.exe`、`.venv/Scripts/python.exe`。
@@ -66,13 +75,17 @@
 - **建议**：门槛保留 40，但工具结果里必须带 `content_status`（full/partial），
   并在结果头写清「以下 N 条中 M 条只有摘要」。模型才知道哪些只能当线索。
 
-### P1-2 30 条 spec 是 0 字节空文件，不能算「测试做完」
+### P1-2（已降级为 P2）31 条用例均未验证「能跑通 / 能变红」
 
-- **位置**：`tools/automated-testing/src/scenarios/p0-02 … p1-xx`（共 30 个，0 字节）
-- **唯一有内容的**：`p0-01-boot-health.spec.ts`（46 行，断言质量好：home 隔离、
-  DB pragma、种子库计数、窗口标题、真实目录未被写入）
-- **验收标准要写死**：一条用例算「完成」= 有断言 + 能在代码改坏时变红 + 跑出来的
-  `.artifacts/report.md` 里有它的结果。空文件、只有 `test.skip`、只 `console.log` 都不算。
+- **位置**：`tools/automated-testing/src/scenarios/`（31 个文件）
+- **事实**：每个文件都有 15–29 条 `expect(`，都引用了 `dependencies.ts` 的实现侧 ID，
+  质量看上去是一致的（`p0-01` 的 home 隔离、DB pragma、种子库计数写得尤其清楚）。
+- **不知道的事**：**本机没有 Electron 测试环境，31 条一条都没跑过**。
+  所以「能跑通」与「能变红」都未验证——这两件事才是「测试做完」的定义。
+- **验收标准要写死**：一条用例算「完成」= 跑得起来 + 在实现被改坏时能变红 +
+  `.artifacts/report.md` 里有它的结果。只有断言、没跑过，算「已编写未验证」。
+
+> 这条从 P1 降为 P2：错误在我（见上方更正），不在他的交付。
 
 ### P1-3 SQLite 双写：桌面端与 Python 服务同写一个 `learning.db`
 
@@ -122,7 +135,7 @@
 |---|---|
 | 修 P0-1（桌面端保留 DeepSeek Search 兜底路径） | 我方 |
 | 把 300→40 的改动补上 `content_status` 标注 | 我方（小改） |
-| 填 30 条空 spec，按「必须能变红」验收 | 杨泽易 |
+| 跑通 31 条用例，并按「必须能变红」验收（先 5 条） | 杨泽易 |
 | 采集服务只用于服务端部署（M2），不塞进 Electron 包 | 杨泽易 + 我方约定 |
 | 后续改成分支 + PR，至少一次独立复核再合 | 杨泽易 |
 | 人工打标 + 分类器方案写进 `decisions.md` | 我方 |
