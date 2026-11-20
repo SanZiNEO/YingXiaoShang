@@ -1,0 +1,41 @@
+{
+  "name": "@yxs/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "start": "node lib/index.js",
+    "test": "node --import tsx --test test/*.test.ts",
+    "smoke": "node scripts/smoke.mjs",
+    "gen:openapi": "node scripts/gen-openapi.mjs",
+    "check:openapi": "node scripts/openapi-check.mjs"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@deepseek-ai/dsh-llm": "0.2.1-rc.2",
+    "@learning-agent/agent": "workspace:*",
+    "@learning-agent/artifacts": "workspace:*",
+    "@learning-agent/bp": "workspace:*",
+    "@learning-agent/db": "workspace:*",
+    "@learning-agent/matcher": "workspace:*",
+    "@learning-agent/news": "workspace:*",
+    "@learning-agent/profile": "workspace:*",
+    "@learning-agent/questions": "workspace:*",
+    "@learning-agent/research": "workspace:*",
+    "@learning-agent/shared": "workspace:*",
+    "prom-client": "^15.1.3",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}
