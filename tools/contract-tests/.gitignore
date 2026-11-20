@@ -1,0 +1,5 @@
+# 运行产物：报告、证据、SSE 原始帧、mutation diff，全部按时间戳分目录，不入库。
+report/
+
+# 包内独立安装（不进根 workspace，各工具包各自 lockfile）
+node_modules/

@@ -1,0 +1,15 @@
+{
+  "name": "@yingxiaoshang/contract-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "营小商 E 轮契约测试：一套断言打 HTTP 服务端与本地 Electron，外加 OpenAPI 覆盖核对与 mutation 回放",
+  "scripts": {
+    "test": "node run.mjs --target stub",
+    "test:http": "node run.mjs --target http",
+    "test:electron": "node run.mjs --target electron",
+    "test:both": "node run.mjs --target both",
+    "coverage": "node coverage.mjs",
+    "mutations": "node src/patch.mjs --run"
+  }
+}
