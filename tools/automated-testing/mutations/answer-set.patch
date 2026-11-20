@@ -1,0 +1,21 @@
+# mutant: M2
+# 目标文件: packages/agent/src/index.ts
+# 锚点行号: 856   （patch 应用前的现状行号）
+# 对应 TC: TC-P0-06
+# 红例断言: tools/automated-testing/src/scenarios/p0-06-answer-set.spec.ts:46-85
+# 冻结参考版本: v1（plans/server-client-split/00-master/01-frozen-contracts.md §11；plans/server-client-split/H-electron-mutation/02-contract.md §2.2）
+# 改坏语义: 交卷返回的 results 丢掉 questionId / score 等判分字段（DB 落库链路不动）。
+# 期望失败关键词: toHaveLength(20) / score / questionId
+diff --git a/packages/agent/src/index.ts b/packages/agent/src/index.ts
+index ddd9396..a761d6c 100644
+--- a/packages/agent/src/index.ts
++++ b/packages/agent/src/index.ts
+@@ -853,7 +853,7 @@ export class AgentService extends Service implements AgentRuntime {
+       })
+       newFeedback.push(result)
+       statuses[index] = result.status
+-      results[index] = contentOf(result)
++      results[index] = {}
+       if (result.status !== 'ok') errors.push(...result.warnings)
+     }
+ 

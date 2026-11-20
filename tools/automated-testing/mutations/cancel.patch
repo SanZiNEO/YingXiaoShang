@@ -1,0 +1,21 @@
+# mutant: M1
+# 目标文件: apps/desktop/src/main/index.ts
+# 锚点行号: 485   （patch 应用前的现状行号）
+# 对应 TC: TC-P1-03
+# 红例断言: tools/automated-testing/src/scenarios/p1-03-cancel.spec.ts:25-37
+# 冻结参考版本: v1（plans/server-client-split/00-master/01-frozen-contracts.md §11；plans/server-client-split/H-electron-mutation/02-contract.md §2.2）
+# 改坏语义: 取消控制器不再把 AbortSignal 交进执行链——点「停止」只断界面回调，在途模型请求继续跑（历史假停缺陷）。
+# 期望失败关键词: 没有静默 / toBeInstanceOf(Error)
+diff --git a/apps/desktop/src/main/index.ts b/apps/desktop/src/main/index.ts
+index c39c8fe..8f460df 100644
+--- a/apps/desktop/src/main/index.ts
++++ b/apps/desktop/src/main/index.ts
+@@ -482,7 +482,7 @@ app.whenReady().then(async () => {
+           // 必须真的把 signal 交给执行链，否则停止按钮只是界面上停、模型还在跑。
+           // scripts/verify-cancel-wiring.ts 会断言这一行存在（源码级），
+           // 因为只测 runAgentLoop 测不到这条接线。
+-          signal: turn.signal,
++          signal: undefined,
+         },
+       )
+     } catch (error) {

@@ -1,0 +1,23 @@
+# mutant: M4
+# 目标文件: apps/desktop/src/main/index.ts
+# 锚点行号: 157   （patch 应用前的现状行号；备选 :143 preload 路径）
+# 对应 TC: TC-P0-08
+# 红例断言: tools/automated-testing/src/scenarios/p0-08-packaged-boot.spec.ts:30-56（:38 标题含「营小商」）
+# 冻结参考版本: v1（plans/server-client-split/00-master/01-frozen-contracts.md §11；plans/server-client-split/H-electron-mutation/02-contract.md §2.2）
+# 改坏语义: packaged 首窗 loadFile 指向不存在的 out/renderer/missing.html，界面起不来。
+# 期望失败关键词: 营小商 / app.asar / user_version / learning.db
+# 预期状态: skipped。driver 的 waitForFunction(learning.health) 会超时，失败分类是 timeout，
+#   按契约 §4.2 环境/超时类不计 killed；脚本记 skipped 并写明缺失环节，不把 skipped 记成 killed。
+diff --git a/apps/desktop/src/main/index.ts b/apps/desktop/src/main/index.ts
+index c39c8fe..c7c742d 100644
+--- a/apps/desktop/src/main/index.ts
++++ b/apps/desktop/src/main/index.ts
+@@ -154,7 +154,7 @@ function createWindow(): void {
+   if (process.env.ELECTRON_RENDERER_URL) {
+     void window.loadURL(process.env.ELECTRON_RENDERER_URL)
+   } else {
+-    void window.loadFile(join(app.getAppPath(), 'out', 'renderer', 'index.html'))
++    void window.loadFile(join(app.getAppPath(), 'out', 'renderer', 'missing.html'))
+   }
+ }
+ 

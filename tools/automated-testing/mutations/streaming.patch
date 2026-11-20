@@ -1,0 +1,25 @@
+# mutant: M3
+# 目标文件: packages/agent/src/team.ts
+# 锚点行号: 157-160   （patch 应用前的现状行号）
+# 对应 TC: TC-P0-03
+# 红例断言: tools/automated-testing/src/scenarios/p0-03-chat-stream.spec.ts:22-31（:24 `必须收到 session 事件`）、:73-75
+# 冻结参考版本: v1（plans/server-client-split/00-master/01-frozen-contracts.md §11；plans/server-client-split/H-electron-mutation/02-contract.md §2.2）
+# 改坏语义: 删除 tool-start -> type:'tool' 的转发分支，工具开始帧不再上抛（tool-end 仍发出）。
+# 期望失败关键词: 必须收到 session 事件 / toBeGreaterThan
+# 预期状态: survived。p0-03 全文没有 tool / tool-end 帧断言，删掉 tool-start 转发后用例仍绿；
+#   这是真实覆盖缺口，按 01-scope §2「不为 mutant 补写新断言」如实记录，不用别的锚点凑 killed。
+diff --git a/packages/agent/src/team.ts b/packages/agent/src/team.ts
+index 876db38..0d6ffe0 100644
+--- a/packages/agent/src/team.ts
++++ b/packages/agent/src/team.ts
+@@ -154,10 +154,6 @@ function forward(input: TeamTurnInput, agent: string, event: AgentLoopEvent): vo
+       input.hooks.onEvent({ agent, type: 'text', text: event.text })
+       return
+     }
+-    if (event.type === 'tool-start') {
+-      input.hooks.onEvent({ agent, type: 'tool', tool: event.name })
+-      return
+-    }
+     if (event.type === 'tool-end') {
+       input.hooks.onEvent({
+         agent,
