@@ -83,26 +83,28 @@
 tools/migrate-pg/
   package.json        @yxs/migrate-pg，type=module；独立 pnpm install --ignore-workspace，
                        不进根 workspace、不改根 lockfile；PG 驱动为本目录唯一第三方依赖
-  migrate.js          入口一：读取 SQLite 副本 → 生成 PG schema → 批量 COPY 导入；可重复跑、幂等
-  verify.js           入口二：逐表行数比对 + 每表抽样 20 行字段比对 + news_articles 哈希复算
-  rollback.js         入口三：默认 --dry-run 只打印；--apply 才 DROP 本轮登记创建的表
   README.md           三条命令（migrate / verify / rollback）、环境变量表、退出码表、典型报错说明
-  src/schema.js       （内部）解析 db 包源码中的表/列/约束清单，生成 38 张表的目标 DDL
-  src/map.js          （内部）类型映射规则：text/jsonb/bigint/double precision/timestamptz/boolean
-  src/copy.js         （内部）COPY 装载通道与逐表行数汇报；JSON、时间戳、boolean 转换在此完成
-  src/hash.js         （内部）sha256 hex 口径，与 db 包 `index.ts:2855` 的正文哈希保持一致
+  .gitignore          包内运行产物（node_modules/、*.dump、*.log），不依赖根规则兜底
+  src/migrate.js      入口一：读取 SQLite 副本 → 生成 PG schema → 批量 COPY 导入；可重复跑、幂等
+  src/verify.js       入口二：逐表行数比对 + 每表抽样 20 行字段比对 + news_articles 哈希复算
+  src/rollback.js     入口三：默认 --dry-run 只打印；--apply 才 DROP 本轮登记创建的表
+  src/schema-map.js   （内部）38 张表注册表：列定义、类型映射、主键/外键/索引、拓扑序；
+                       同时提供源码漂移核对（表/列/类型/可空/默认/主键/外键/唯一/索引）
+  src/values.js       （内部）取值归一唯一实现：jsonb 原文直传、空串→默认 JSON、时间戳空串→NULL、
+                       boolean 0/1；migrate 与 verify 共用，避免两侧口径分叉
+  src/cli.js          （内部）参数解析与退出码工具；未知参数一律退出 1
+  src/target.js       （内部）连接参数读取与目标库身份守卫（库 yxs / 端口 55432）
+  src/pg-driver.js    （内部）按需加载 pg 驱动；未装依赖时给中文安装提示
 ```
-
-**同时新增（不改动）**：无。除上述目录外不写任何文件；不新增根 `package.json` 依赖，不改 `pnpm-workspace.yaml`。
 
 `src/` 下模块是入口脚本的内部拆分，不对外暴露命令行；入口命令与写权边界以上述三个 `.js` 入口为准。模块拆分与伪代码写在后续 `03-implementation.md`，本文件只钉范围。批量导入采用 `COPY … FROM STDIN` 的 CSV 文本通道，便于在日志里逐表报告装载行数 [R2]。
 
 **三条 README 命令**（`README.md` 必须可直接粘贴执行，工作目录为仓库根）：
 
 ```powershell
-node tools/migrate-pg/migrate.js --source .scratch/run/D/learning.db
-node tools/migrate-pg/verify.js --source .scratch/run/D/learning.db
-node tools/migrate-pg/rollback.js --dry-run
+node tools/migrate-pg/src/migrate.js --source .scratch/run/D/learning.db
+node tools/migrate-pg/src/verify.js --source .scratch/run/D/learning.db
+node tools/migrate-pg/src/rollback.js --dry-run
 ```
 
 ## 6 并行边界

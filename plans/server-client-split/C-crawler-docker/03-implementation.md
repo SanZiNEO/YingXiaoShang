@@ -180,7 +180,6 @@ volumes:
 
 services:
   crawler:
-    container_name: yxs-crawler
     profiles: [crawler, full]
     image: yxs-crawler:local
     build:
@@ -188,17 +187,14 @@ services:
       dockerfile: Dockerfile
     environment:
       LEARNING_AGENT_HOME: /data
-      NEWS_CRAWLER_HOST: 0.0.0.0
+      NEWS_CRAWLER_HOST: "0.0.0.0"
       NEWS_CRAWLER_PORT: "8787"
       NEWS_CRAWLER_DB: /data/data/learning.db
-      NEWS_CRAWLER_WORKERS: "8"
+      NEWS_CRAWLER_WORKERS: "${NEWS_CRAWLER_WORKERS:-8}"
     command:
-      - news-crawler
-      - serve
-      - --host
-      - 0.0.0.0
-      - --db
-      - /data/data/learning.db
+      - "sh"
+      - "-c"
+      - 'exec news-crawler serve --host 0.0.0.0 --db "$$NEWS_CRAWLER_DB"'
     volumes:
       - yxs-data:/data
       - ./scripts/healthcheck.sh:/app/scripts/healthcheck.sh:ro
@@ -214,14 +210,17 @@ services:
       retries: 3
 
   server:
-    container_name: yxs-server
     profiles: [full]
     image: yxs-server:local
     build:
       context: ../..
       dockerfile: apps/server/Dockerfile
     environment:
-      NEWS_CRAWLER_BASE_URL: http://crawler:8787
+      LEARNING_AGENT_HOME: /data
+      YXS_SERVER_HOST: "0.0.0.0"
+      YXS_SERVER_PORT: "8080"
+      YXS_DB_PATH: /data/data/learning.db
+      NEWS_CRAWLER_BASE_URL: "http://crawler:8787"
     depends_on:
       crawler:
         condition: service_healthy
@@ -233,11 +232,14 @@ services:
 要点：
 
 - **profiles 分两档**：`crawler` 只起采集，可独立验收；`full` 同时起采集与服务端。profile 机制的官方约定见 [R27]。
+- **不写 `container_name`**：容器名由 compose 按 project 派生——生产 project `yxs` 下是 `yxs-crawler-1`，验收 project `yxs-c` 下是 `yxs-c-crawler-1`。`container_name` 是宿主全局命名空间，写死会让同一台机器上的第二套栈起不来；隔离交给 `-p`，不需要额外后缀变量。
+- **容器内固定值一律写字面量**：`LEARNING_AGENT_HOME` / `NEWS_CRAWLER_DB` / `YXS_DB_PATH` / 两个监听端口 / `NEWS_CRAWLER_BASE_URL` 都不做 `${VAR:-default}` 兜底。宿主导出的同名变量（桌面端常驻的 `LEARNING_AGENT_HOME` 就是典型）会被 compose 注入容器，把数据根指到容器内不存在的路径。唯一保留插值的是 `NEWS_CRAWLER_WORKERS`——它只改并发度，不改任何路径或端口。
 - **`server` 服务只做声明性引用**：`yxs-server:local` 的镜像构建与 Dockerfile 内容归 A（`02-ownership-and-parallel.md` §1）；compose 里的 `build.context` / `dockerfile` 仅按冻结 §10.4 声明路径，C 不创建、不改写 A 的 Dockerfile；`depends_on: condition: service_healthy` 保证服务端等采集健康后再启动 [R26]。
+- **`YXS_SERVER_HOST` 必须显式给**：代码默认 `127.0.0.1`（`apps/server/src/env.ts:60`），容器内只绑回环时宿主 `8080:8080` 映射拿不到连接。
 - **网络别名**：服务端经 `http://crawler:8787` 访问采集（冻结 §10.1），不走宿主端口回环。
 - **同一命名卷挂两个服务**：`yxs-data:/data`，采集与服务端共用 `/data/data/learning.db`；卷只声明一次，服务间不复制库文件。
-- 入口命令对齐契约：`news-crawler serve --host 0.0.0.0 --db "${NEWS_CRAWLER_DB}"`；端口由 `NEWS_CRAWLER_PORT` env 传入，命令行不重复写 `--port`。
-- 验收隔离：project `yxs-c`、容器 `yxs-crawler-c`、卷 `yxs-data-c`（命名对照见 `02-contract.md` §3.1）；compose 文件内生产名为 `yxs` / `yxs-crawler` / `yxs-data`。
+- 入口命令用 `sh -c` 把 env 映射到 `--db`：代码只认 `--db` 参数（`cli.py:261-263`），`$$NEWS_CRAWLER_DB` 由 shell 在容器内展开，不在宿主侧插值。端口由 `NEWS_CRAWLER_PORT` env 传入，命令行不重复写 `--port`。
+- 验收隔离：project `yxs-c`，容器 `yxs-c-crawler-1`、卷 `yxs-c_yxs-data`（命名对照见 `02-contract.md` §3.1）。
 - healthcheck 引用挂载进来的脚本（§3.4），脚本以只读卷方式挂到 `/app/scripts/healthcheck.sh`，镜像内不另存一份副本。
 
 ### 3.4 `healthcheck.sh`
@@ -278,27 +280,39 @@ except Exception:
 
 ```cron
 # 备选触发器：宿主每 30 分钟调一次单轮脚本；方案 A 启用时不要同时启用本条目
-*/30 * * * * cd /opt/yxs/services/deploy && ./scripts/run-round.sh >> /var/log/yxs-crawler-round.log 2>&1
+# /opt/yxs 是示例部署目录，按实际位置替换；脚本相对路径保持不变
+*/30 * * * * cd /opt/yxs/services/deploy && bash ./scripts/run-round.sh
 ```
 
-`run-round.sh` 的两种触发路径；脚本用 `exec` 替换进程，把 CLI 退出码原样透出：
+`run-round.sh` 的两种触发路径；脚本用 `exec` 替换进程，把 CLI 退出码原样透出（完整实现见 `services/deploy/scripts/run-round.sh`，此处只摘骨架）：
 
 ```sh
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 BASE_URL="${NEWS_CRAWLER_BASE_URL:-http://127.0.0.1:8787}"
-DB="${NEWS_CRAWLER_DB:-/data/data/learning.db}"
-COMPOSE_FILE="services/deploy/compose.yml"
+# 容器内固定 /data/data/learning.db；宿主兜底从 LEARNING_AGENT_HOME 派生，不写死绝对路径
+CONTAINER_DB="/data/data/learning.db"
+HOST_DB="${LEARNING_AGENT_HOME:-${HOME:-.}/.learning-agent}/data/learning.db"
 
 # 路径一：控制面已起，POST /run 同步跑一轮（wait=true）
 if python -c "import urllib.request; urllib.request.urlopen('$BASE_URL/health', timeout=5)" 2>/dev/null; then
-  exec curl -fsS -X POST "$BASE_URL/run" -H 'Content-Type: application/json' -d '{"wait":true}'
+  exec python - "$BASE_URL" <<'PY'
+# … POST /run，解析 rounds 判成败
+PY
 fi
 
 # 路径二：控制面不可达时，exec 进容器跑 once（trigger=manual）
-exec docker compose -f "$COMPOSE_FILE" exec -T crawler \
-  news-crawler once --db "$DB" "$@"
+# crawler 服务只在 crawler/full profile 下存在，必须带 --profile crawler
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMPOSE_FILE="$SCRIPT_DIR/../compose.yml"
+COMPOSE_CMD=(docker compose -f "$COMPOSE_FILE" --profile crawler)
+if "${COMPOSE_CMD[@]}" ps --status running --format '{{.Service}}' 2>/dev/null | grep -qx crawler; then
+  exec "${COMPOSE_CMD[@]}" exec -T crawler news-crawler once --db "$CONTAINER_DB" "$@"
+fi
+# 再退到本机 CLI / python -m，用 $HOST_DB
 ```
+
+`COMPOSE_FILE` 由脚本自身位置推导（`$SCRIPT_DIR/../compose.yml`），不依赖 cwd——cron 里 `cd` 到部署目录只是为了让相对路径参数可读，脚本本身在任何 cwd 下都能定位 compose 文件。
 
 退出码对齐现有 CLI（`02-contract.md` §4.3）：`0` 本轮至少一个源非 failure；`1` 全部源失败；`2` 缺入库目标；`130` 被 SIGINT 中断。脚本不自造新码；宿主 cron 与 compose `restart` 策略按这四档判断本轮成败。`"$@"` 透传可选的 `--source ID ...` 过滤参数。
 
@@ -339,8 +353,8 @@ exec docker compose -f "$COMPOSE_FILE" exec -T crawler \
 
 ### 4.4 配置与数据路径的差距（未知与风险 + 验证方法）
 
-- 现状代码只从 CLI 参数读 `--db`、`--max-run-s`（`cli.py:260-263`、`cli.py:316`），未直读 `NEWS_CRAWLER_DB`、`NEWS_CRAWLER_MAX_RUN_S` 环境变量；`NEWS_CRAWLER_HOST/PORT/WORKERS` 有环境变量读取（`cli.py:309-315`、`service.py:91`）。compose 当前用 `${ENV}` 展开进 `command` 参数兜底。
-- 验证方法：容器起后 `docker exec <crawler> printenv` 核对变量；`docker exec <crawler> news-crawler serve --help` 核对参数；启动日志里的 `DB=` 路径（`cli.py:195-199`）必须是 `/data/data/learning.db`。若后续代码改为直读 env，再去掉命令行展开层。
+- 现状代码只从 CLI 参数读 `--db`、`--max-run-s`（`cli.py:260-263`、`cli.py:316`），未直读 `NEWS_CRAWLER_DB` 环境变量；`NEWS_CRAWLER_HOST/PORT/WORKERS` 有环境变量读取（`cli.py:309-315`、`service.py:91`）。compose 的 `command` 用 `sh -c 'exec news-crawler serve --host 0.0.0.0 --db "$$NEWS_CRAWLER_DB"'` 把 env 映射成参数：`$$` 让 compose 不做宿主侧插值，由容器内 shell 展开。
+- 验证方法：容器起后 `docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler exec crawler printenv` 核对变量；`... exec crawler news-crawler serve --help` 核对参数；启动日志里的 `DB=` 路径（`cli.py:195-199`）必须是 `/data/data/learning.db`。若后续代码改为直读 env，再去掉 `sh -c` 这层映射。
 
 ## 5 配置
 
@@ -348,39 +362,33 @@ exec docker compose -f "$COMPOSE_FILE" exec -T crawler \
 
 ### 5.1 环境变量表
 
-| 变量 | 默认值 | 作用 | 谁设 | 代码现状 |
-|---|---|---|---|---|
-| `LEARNING_AGENT_HOME` | `/data`（容器内） | 数据根目录 | compose `environment` | 经 `--db` 路径间接使用 |
-| `NEWS_CRAWLER_HOST` | `127.0.0.1` | 控制面监听地址；容器内必须 `0.0.0.0` | compose 覆盖 | `cli.py:309-310` 读 env |
-| `NEWS_CRAWLER_PORT` | `8787` | 控制面端口 | compose | `cli.py:312-315` 读 env；`http_api.py:38-39` 同值 |
-| `NEWS_CRAWLER_DB` | `/data/data/learning.db` | SQLite 库路径 | compose 展开进 `--db` | 代码认 `--db` 参数，env 经 compose 兜底（§4.4） |
-| `NEWS_CRAWLER_WORKERS` | `8` | 共享并发槽位数 | compose | `service.py:91` 读 env（`ENV_WORKERS`，`service.py:39`） |
-| `NEWS_CRAWLER_MAX_RUN_S` | `90` | 单源单轮硬超时（秒） | compose 展开进 `--max-run-s` | 代码认 `--max-run-s` 参数（`cli.py:316`） |
-| `NEWS_CRAWLER_BASE_URL` | `http://crawler:8787` | compose 网络内服务端访问采集的别名 | `server` 服务环境 | 采集侧自身不读，供 A 的服务端用 |
+| 变量 | 默认值 | 作用 | 谁设 | 取值方式 | 代码现状 |
+|---|---|---|---|---|---|
+| `LEARNING_AGENT_HOME` | `/data`（容器内） | 数据根目录 | compose `environment` | 字面量 | 经 `--db` 路径间接使用 |
+| `NEWS_CRAWLER_HOST` | `127.0.0.1` | 控制面监听地址；容器内必须 `0.0.0.0` | compose 覆盖 | 字面量 | `cli.py:309-310` 读 env |
+| `NEWS_CRAWLER_PORT` | `8787` | 控制面端口 | compose | 字面量 | `cli.py:312-315` 读 env；`http_api.py:38-39` 同值 |
+| `NEWS_CRAWLER_DB` | `/data/data/learning.db` | SQLite 库路径 | compose `command` 内 `$$NEWS_CRAWLER_DB` | 字面量 | 代码认 `--db` 参数，env 经 `sh -c` 展开（§4.4） |
+| `NEWS_CRAWLER_WORKERS` | `8` | 共享并发槽位数 | 宿主 `.env` 可选 | `${NEWS_CRAWLER_WORKERS:-8}` | `service.py:91` 读 env（`ENV_WORKERS`，`service.py:39`） |
+| `NEWS_CRAWLER_BASE_URL` | `http://crawler:8787` | compose 网络内服务端访问采集的别名 | `server` 服务环境 | 字面量 | 采集侧自身不读，供 A 的服务端用 |
+| `YXS_SERVER_HOST` | `0.0.0.0` | 服务端监听地址；代码默认 `127.0.0.1` | `server` 服务环境 | 字面量 | `apps/server/src/env.ts:60` |
+| `YXS_SERVER_PORT` | `8080` | 服务端监听端口 | `server` 服务环境 | 字面量 | 冻结 §10.1 |
+| `YXS_DB_PATH` | `/data/data/learning.db` | 服务端主库路径 | `server` 服务环境 | 字面量 | 冻结 §10.2 |
+
+「取值方式」的判据：改了这个值会不会让容器内路径/端口契约失效。会失效的一律写字面量——宿主导出的同名变量（桌面端常驻 `LEARNING_AGENT_HOME` 是最常见的一例）会被 compose 注入，导致数据写到容器内不存在的位置。
 
 ### 5.2 `.env.example` 逐项
 
-`services/deploy/.env.example` 是样例文件，验收时复制为 `.env` 再改；`.env` 本身不进版本库。逐项：
+`services/deploy/.env.example` 只列**宿主可调**项；验收时复制为 `.env` 再改，`.env` 本身不进版本库。当前全文只有一项：
 
 ```dotenv
-# 采集控制面监听地址；容器内必须 0.0.0.0，默认 127.0.0.1 只回环
-NEWS_CRAWLER_HOST=0.0.0.0
-# 采集控制面宿主映射端口（容器内固定 8787）
-NEWS_CRAWLER_PORT=8787
-# 容器内 SQLite 路径；命名卷 yxs-data 挂载到 /data，不要写宿主绝对路径
-NEWS_CRAWLER_DB=/data/data/learning.db
 # 跨源共享并发槽位数；默认 8，按宿主 CPU/网络可调
 NEWS_CRAWLER_WORKERS=8
-# 单源单轮硬超时（秒）；超时记 failure 并取消该源本轮
-NEWS_CRAWLER_MAX_RUN_S=90
-# 服务端访问采集侧车的 compose 内别名（服务名即别名）
-NEWS_CRAWLER_BASE_URL=http://crawler:8787
-# 容器内数据根，固定 /data，一般不需要改
-LEARNING_AGENT_HOME=/data
 ```
 
+固定项（路径、端口、监听地址、卷位置）不写进样例：compose 不对这些键做插值，写进去也不会生效，只会让人误以为能改。要改端口/路径必须改 `compose.yml`。
+
 - 不设 `DEEPSEEK_API_KEY` 等 LLM 密钥：采集侧车不调模型，密钥归 A 的服务端。
-- 端口占用退避按冻结 §3：宿主映射端口冲突时 `+100` 递增（8787 → 8887），并在验收报告写明实际端口；容器内端口不变。
+- 端口占用退避按冻结 §3：宿主映射端口冲突时 `+100` 递增（8787 → 8887），并在验收报告写明实际端口；容器内端口不变，改宿主侧映射时同步改 `compose.yml` 的 `ports`。
 
 ## 6 失败处理
 
@@ -428,7 +436,7 @@ docker image inspect yxs-crawler:local --format "{{.Size}}"
 | 单源单轮硬超时 | 90 秒（默认 `--max-run-s`，`service.py:38`、`cli.py:316`）；超时记 failure | `/stats` 读该源 `duration_ms` 与 `failures` |
 | 跨源并发槽位 | 默认 8（`service.py:37`、`service.py:91`） | 启动日志 `workers=`（`cli.py:195-199`） |
 | 整轮墙钟 | 取决于启用源数与详情并发，**待实测**；首轮含网络抓取，单源数十秒量级，不写死总秒数 | `GET /stats?limit=20` 逐源 `duration_ms` 求和对照 |
-| 容器内存 | 待实测；预算目标不超过运行时基线 + 依赖常驻占用 | `docker stats yxs-crawler-c` |
+| 容器内存 | 待实测；预算目标不超过运行时基线 + 依赖常驻占用 | `docker stats $(docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler ps -q crawler)` |
 | 启动到可服务 | 待实测；以 `/health` 从容器启动到 200 的时间为准 | `docker start` 后轮询 `/health` |
 
 单轮耗时不替源适配承诺数字：源集合仍在增加（README §2「源数量未知」），实测值落 `.scratch/run/C/` 证据目录。

@@ -23,7 +23,7 @@
 ## 2 前置条件
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 工作目录：仓库根（下文所有路径均相对仓库根）
 
 # 1) 隔离目录：源库只放 .scratch/run/D/，禁止指向真实数据目录
 New-Item -ItemType Directory -Force .scratch\run\D\evidence | Out-Null
@@ -67,18 +67,24 @@ pnpm --dir tools\migrate-pg install --ignore-workspace
 
 | 编号 | 操作 | 期望 | 失败判据 | 证据 |
 |---|---|---|---|---|
-| AC-D-01 | 副本就位后跑 `node tools/migrate-pg/migrate.js --source .scratch/run/D/learning.db --dry-run`；另备一个 `user_version < 7` 的副本试跑 | 正常副本打印 schema 计划与预计行数后退出 0；低版本副本退出 2，消息含「预期 7」 | 低版本副本退出 0；消息不含版本号；dry-run 实际建表 | `dry-run.txt`、`version-fail.txt` |
-| AC-D-02 | 首跑 `node tools/migrate-pg/migrate.js --source .scratch/run/D/learning.db` | 退出 0；阶段行逐表输出 copy 行数；汇总行含 38 张表；PG 侧 38 张表存在 | 退出非 0；缺表；汇总表数 ≠ 38 | `migrate-1.log` |
+| AC-D-01 | 副本就位后跑 `node tools/migrate-pg/src/migrate.js --source .scratch/run/D/learning.db --dry-run`；另备一个 `user_version < 7` 的副本试跑 | 正常副本打印 schema 计划与预计行数后退出 0；低版本副本退出 2，消息含「预期 7」 | 低版本副本退出 0；消息不含版本号；dry-run 实际建表 | `dry-run.txt`、`version-fail.txt` |
+| AC-D-02 | 首跑 `node tools/migrate-pg/src/migrate.js --source .scratch/run/D/learning.db` | 退出 0；阶段行逐表输出 copy 行数；汇总行含 38 张表；PG 侧 38 张表存在 | 退出非 0；缺表；汇总表数 ≠ 38 | `migrate-1.log` |
 | AC-D-03 | 同一源库再跑一遍 `migrate.js`（缺省幂等路径），逐表比对两遍 count(*) 与主键去重数 | 两遍后每表行数不变；`count(*) = count(DISTINCT <pk>)`，无重复行 | 第二遍后行数增加；存在重复主键 | `migrate-2.log`、`idempotent-counts.txt` |
-| AC-D-04 | `node tools/migrate-pg/verify.js --source .scratch/run/D/learning.db` | 退出 0；输出 `[verify] ok: 38 tables, rows match, sample and hash check passed` | 退出非 0；抽样行被跳过；哈希未复算 | `verify-ok.log` |
+| AC-D-04 | `node tools/migrate-pg/src/verify.js --source .scratch/run/D/learning.db` | 退出 0；输出 `[verify] ok: 38 tables, rows match, sample and hash check passed` | 退出非 0；抽样行被跳过；哈希未复算 | `verify-ok.log` |
 | AC-D-05 | 用本地 `pg` 客户端改坏 PG 侧一条 `news_articles.content`（不动 `content_hash`），再跑 `verify.js` | 退出 3；打印第一处 `[verify] DIFF` 行，含表名 `news_articles`、文章主键、列名 `content`、两侧取值 | 退出 0；DIFF 行缺表名/主键/列名；一次报多行第一处之后的内容 | `verify-diff-content.log` |
-| AC-D-06 | 还原 AC-D-05 的正文，只把该条 `content_hash` 改成另一串 sha256 hex，再跑 `verify.js` | 退出 3；打印 `[verify] HASH article=<id> source=<源哈希> recomputed=<复算哈希>` | 退出 0；HASH 行缺失；复算口径混入标题或摘要 | `verify-diff-hash.log` |
-| AC-D-07 | `node tools/migrate-pg/rollback.js`（缺省 dry-run）；之后查表仍在 | 退出 0；输出 `[rollback] dry-run（未删除任何数据）` 与 38 张表的依赖逆序清单；PG 侧表全部仍在 | 表被删除；清单少于 38 张；无 dry-run 提示行 | `rollback-dry-run.log` |
+| AC-D-06 | 还原 AC-D-05 的正文，只把该条 `content_hash` 改成另一串 sha256 hex，再跑 `verify.js` | 退出 3；打印 `[verify] HASH article=<id> source=<源哈希> target=<PG 存储哈希> recomputed=<复算哈希>`；`source ≠ target` 指明 PG 侧被改 | 退出 0；HASH 行缺失；行内缺 `target=`；复算口径混入标题或摘要 | `verify-diff-hash.log` |
+| AC-D-07 | `node tools/migrate-pg/src/rollback.js`（缺省 dry-run）；之后查表仍在 | 退出 0；输出 `[rollback] dry-run（未删除任何数据）` 与 38 张表的依赖逆序清单；PG 侧表全部仍在 | 表被删除；清单少于 38 张；无 dry-run 提示行 | `rollback-dry-run.log` |
 | AC-D-08 | 查 `information_schema.columns` 抽查：`chapters.title` 为 `text NOT NULL`；`knowledge_points.keywords_json`、`artifacts.content_json` 为 `jsonb`；`skills.enabled` 为 `boolean` | 抽查列类型与可空性全部符合契约 §3.1；非空约束保留 | 任一抽查列类型不符；`NOT NULL` 丢失；jsonb 被建成 text | `ddl-check.txt` |
 | AC-D-09 | 分别跑：不带 `--source`；`--sample 0`；`--sample abc` | 三种均退出 1；消息逐字匹配 §6：`缺少必填参数 --source：SQLite 源库路径。`、`--sample 必须是 1 到 1000 的整数。` | 退出 0 或 2；消息与合同不一致 | `param-fail.log` |
 | AC-D-10 | 在副本某 `*_json` 列注入非 JSON 串（如 `{not-json`），跑 `migrate.js` | 退出 2；消息含表名、列名、主键与解析原因；不打印整行数据 | 退出 0；非法值进了 jsonb 列；消息无定位信息 | `json-bad.log` |
 | AC-D-11 | 通读 `tools/migrate-pg/` 全部文件与 README：端口/容器/卷名只能出现 `55432`、`yxs-pg-d`、`yxs-pg`；不得引用 `55433`、`yxs-pg-g` | 隔离命名全部命中 D 轮；无 G 轮资源引用 | 出现 G 轮端口/容器名；连接默认指向 55433 | `isolation-grep.txt` |
 | AC-D-12 | 照 README 三条命令原样粘贴执行：migrate、verify、rollback（dry-run） | 三条命令均按 README 描述退出；参数名与文档一致 | README 参数与脚本实际解析不一致；命令缺工作目录前提 | `README-commands.txt` |
+| AC-D-13 | 源库某 `*_json` 列写入 `{"id":123456789012345678901234567890,"n":1e400,"f":1.0}`，跑 `migrate.js` 后用 `SELECT col::text` 取回 | 取回文本的数字字面量与源库逐字节相同（无 `e+29`、无 `null`、无 `1`） | 出现科学计数法、`null` 或整数化；verify 未能检出 | `json-precision.log` |
+| AC-D-14 | 某 `*_json` 列存空串 `''`，跑 `migrate.js` 后跑 `verify.js` | migrate 成功（写入该列默认 JSON）；verify 退出 0，不以退出码 2 报「不是合法 JSON」 | migrate 与 verify 对同一份数据结论相反 | `json-empty-string.log` |
+| AC-D-15 | `PGPORT=5432 PGDATABASE=prod node tools/migrate-pg/src/migrate.js --source .scratch/run/D/learning.db --rebuild`；对 `rollback.js --apply` 重复一次 | 两条均退出 1，中文消息含库名/端口差异与 `--force-target` 提示；未建立连接、未执行任何 SQL | 退出 0 或 2；发生 DROP；消息未指出差异项 | `target-guard.log` |
+| AC-D-16 | 临时改 `packages/db/src/index.ts` 的列类型（`INTEGER`→`REAL`）、默认值、删一个唯一索引，各跑一次 `node tools/migrate-pg/src/schema-map.js --check` 与 `migrate.js` | `--check` 退出 1 并逐项打印差异；`migrate.js` 退出 2 且不进入装载。改动须手工还原 | 差异未报出；migrate 仍继续装载 | `drift-check.log` |
+| AC-D-17 | 构造含换行/制表符的字段差异（改坏 PG 侧 `news_articles.title`），跑 `verify.js` | DIFF 行仍为单行：`\n` 显示为 `\\n`，`target=` 与 `source=` 同行 | DIFF 被拆成多行 | `verify-diff-oneline.log` |
+| AC-D-18 | `node tools/migrate-pg/src/migrate.js --dryrun`（拼错）；对 verify / rollback 各重复一次 | 三个入口均退出 1，消息含 `未知参数 --dryrun` | 退出 0/2；参数被静默忽略后继续连库 | `param-unknown.log` |
 
 用例写法遵循「一条 AC 一个可观察结果 + 明确失败判据」，避免「看起来正常」这类不可判定描述 [R7]。哈希口径只对正文 `content` 取 sha256 hex，依据 `packages/db/src/index.ts:2855` 写入哈希与 `:2889` 复算哈希 [R6]。
 
@@ -103,7 +109,7 @@ migrate 首跑的 stdout 应按顺序出现下列阶段行（行数以源库实�
 在工具目录下用本地 `pg` 客户端直连演练库；先取一条有正文的文章 id，再分别做两类篡改：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang\tools\migrate-pg
+# 工作目录：tools/migrate-pg（本地 pg 客户端装在包内 node_modules）
 
 # 取首条文章 id（双侧对照基线）
 node --input-type=module -e "
@@ -150,6 +156,9 @@ await c.end()
 | `rollback-dry-run.log` | dry-run 清单与「未删除」提示 | rollback 缺省执行 |
 | `ddl-check.txt` | `information_schema` 抽查查询与结果 | 本地 `pg` 查询 |
 | `param-fail.log` / `json-bad.log` / `version-fail.txt` | 退出码与中文消息原文 | 失败路径重跑 |
+| `json-precision.log` / `json-empty-string.log` | 精度保持与空串归一两侧一致的实测输出 | 迁移后 `SELECT col::text` 对照 |
+| `target-guard.log` / `param-unknown.log` | 目标库守卫与未知参数拒绝的中文消息 | 故意指错库、拼错参数重跑 |
+| `drift-check.log` / `verify-diff-oneline.log` | 漂移核对逐项差异；DIFF 单行证据 | 临时改注册表/源码后重跑（改完手工还原） |
 | `isolation-grep.txt` | 隔离命名 grep 结果 | `Select-String` 输出存档 |
 | `perf.txt` | 两遍装载耗时与行数、RSS | `Measure-Command` + `process.memoryUsage()` |
 
@@ -169,20 +178,25 @@ await c.end()
     ddl-check.txt                 # information_schema 抽查结果
     param-fail.log                # 参数错误退出码与消息
     json-bad.log                  # 非法 JSON 拦截记录
+    json-precision.log            # 19 位 id / 1e400 / 1.0 逐字节保持
+    json-empty-string.log         # 空串 jsonb：migrate 与 verify 结论一致
     version-fail.txt              # 版本不符拦截记录
+    target-guard.log              # 非演练目标被拒（退出 1，未连库）
+    param-unknown.log             # 未知参数被拒（退出 1）
+    drift-check.log               # 注册表/源码漂移逐项差异
+    verify-diff-oneline.log       # DIFF 行单行（换行已转义）
     isolation-grep.txt             # D/G 命名隔离 grep 存档
     perf.txt                      # 两遍耗时、行数、RSS
 ```
 
 复跑要求：所有 AC 在同一副本上可重复跑；第二遍 migrate 之前不手工清库。证据存成「命令原文 + 输出原文」而不是截图，便于在 CI 里复盘 [R2]。
 
-命令模板（PowerShell，仓库根为工作目录）：
+命令模板（PowerShell，仓库根为工作目录；路径均为相对路径，不含机器相关前缀）：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
-node tools/migrate-pg/migrate.js   --source .scratch\run\D\learning.db 2>&1 | Tee-Object .scratch\run\D\evidence\migrate-1.log
-node tools/migrate-pg/verify.js     --source .scratch\run\D\learning.db 2>&1 | Tee-Object .scratch\run\D\evidence\verify-ok.log
-node tools/migrate-pg/rollback.js 2>&1 | Tee-Object .scratch\run\D\evidence\rollback-dry-run.log
+node tools/migrate-pg/src/migrate.js   --source .scratch\run\D\learning.db 2>&1 | Tee-Object .scratch\run\D\evidence\migrate-1.log
+node tools/migrate-pg/src/verify.js     --source .scratch\run\D\learning.db 2>&1 | Tee-Object .scratch\run\D\evidence\verify-ok.log
+node tools/migrate-pg/src/rollback.js 2>&1 | Tee-Object .scratch\run\D\evidence\rollback-dry-run.log
 ```
 
 ## 5 反向验证（mutation）
@@ -199,7 +213,7 @@ node tools/migrate-pg/rollback.js 2>&1 | Tee-Object .scratch\run\D\evidence\roll
 执行约定：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 工作目录：仓库根
 git diff --stat                       # 确认只改动 tools/migrate-pg/ 内预期文件
 # 手工改坏 → 跑对应 AC → 记录失败输出 → 还原文件 → 再跑 → 记录通过输出
 git status --porcelain packages apps  # 必须为空：共享包与服务端零改动
@@ -233,17 +247,17 @@ mutation 判据：用例变红 = killed，仍绿 = survived（说明用例没覆
 文档自检是「交活前的最后一道机器闸」：它只查得到结构与引用是否对得上，查不到内容对不对——内容由 §3 的 12 条 AC 负责。这种「机器查形式、人查语义」的分工，是测试实践里反复强调的底线 [R7]。
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 工作目录：仓库根
 python plans\server-client-split\00-master\check-docs.py --round D
 ```
 
-实跑输出（2026-11-19，退出码 0；行数统计随文档微调变化，以最后一次为准）：
+实跑输出（2026-11-20，退出码 0；行数统计随文档微调变化，以最后一次为准）：
 
 ```text
-仓库根：E:\Documents\GitHub\YingXiaoShang
+仓库根：<仓库绝对路径>
 检查轮次：D
 行数统计：
-  D-*: 1563 行 / 4 份
+  D-*: 1609 行 / 4 份
 
 全部通过：轮次齐全、节数达标、每节有引用、参考清单与本地行号引用都对得上。
 退出码：0

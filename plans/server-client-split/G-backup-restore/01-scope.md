@@ -85,7 +85,7 @@ tools/backup/
   restore-pg.sh         【必交】pg_restore 到隔离时间戳新库；硬编码禁用 --clean；行数 + 抽样核对
   restore-drill.md      【必交】演练报告骨架（字段模板）+ 最近一次演练实例的落点说明
   drill.sh              内部编排：备份 → 记录基线 → 删除演练数据 → 恢复 → 核对 → 生成报告
-  lib/common.sh         共享函数：中文日志、退出码、manifest 读写、抽样 SQL、sha256 复算、受保护路径判断
+  src/common.sh         共享函数：中文日志、退出码、manifest 读写、抽样 SQL、sha256 复算、受保护路径判断
   README.md             用法、前置工具版本、环境变量表、复跑命令
 ```
 
@@ -99,7 +99,7 @@ tools/backup/
 | `restore-pg.sh` | PG 隔离新库恢复 | dump 文件、目标库名、抽样数 | 新库、行数/抽样核对记录 | 请求 `--clean` / 库名违规归 1；建库/恢复失败归 2；核对不符归 3 |
 | `restore-drill.md` | 演练规程与报告骨架 | 四段脚本的中间产物 | 七段字段的演练报告实例 | 不直接退出；编排失败由 `drill.sh` 归类 |
 | `drill.sh` | 演练编排器（内部） | `--kind`、`--source`、抽样数、报告路径 | 完整闭环记录与 `drill-report.md` | 沿用上表归类；删除阶段前置不满足则中止 |
-| `lib/common.sh` | 共享函数库 | — | 参数解析、中文日志、退出码常量、manifest 读写、指纹与 sha256 复算、受保护路径判断 | 不独立退出 |
+| `src/common.sh` | 共享函数库 | — | 参数解析、中文日志、退出码常量、manifest 读写、指纹与 sha256 复算、受保护路径判断 | 不独立退出 |
 | `README.md` | 使用说明 | — | 前置工具版本、环境变量表、复跑命令、已知限制 | — |
 
 **同时新增（不改动）**：无。除上述 `tools/backup/**` 与 `.scratch/run/G/` 下的演练产物外，不碰任何既有文件。备份实例产物（dump、快照、manifest、抽样 JSON、报告实例）统一落 `.scratch/run/G/g_backups/<host>/<path-slug>/<timestamp>/`，不进仓库版本库。

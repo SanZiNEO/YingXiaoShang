@@ -18,7 +18,7 @@ tools/backup/
   restore-pg.sh           # PostgreSQL 恢复到隔离新库；拒绝 --clean、拒绝打源库
   drill.sh                # 内部编排：备份 → 基线 → 删除演练数据 → 恢复 → 核对 → 写报告
   restore-drill.md        # 演练规程与报告骨架（02-contract §3.7 七段字段）
-  lib/common.sh           # 可选公共 lib：参数解析、退出码、中文消息、路径安全、manifest/指纹共用函数
+  src/common.sh           # 可选公共函数库：参数解析、退出码、中文消息、路径安全、manifest/指纹共用函数
 ```
 
 职责边界（与 `02-contract.md` §2.2–§2.6 对齐）：
@@ -31,7 +31,7 @@ tools/backup/
 | `restore-pg.sh` | 新建隔离目标库并 `pg_restore` 进去；校验行数与样本 | 不传 `--clean`/`--if-exists`；不恢复到源库名 |
 | `drill.sh` | 按 §3.10 时序编排五个阶段，失败即中断并写报告 | 不跳过备份校验直接删数据；不把删除动作作用到源库 |
 | `restore-drill.md` | 规定演练步骤、不可逆保护、报告骨架字段 | 不是可执行脚本本身；编排由 `drill.sh` 按本规程串联 |
-| `lib/common.sh` | 退出码常量（0/1/2/3）、`fail()` 中文消息、`sha256_file()`、指纹函数、路径白名单校验 | 不直接调业务库；不含环境相关的硬编码路径 |
+| `src/common.sh` | 退出码常量（0/1/2/3）、`fail()` 中文消息、`sha256_file()`、指纹函数、路径白名单校验 | 不直接调业务库；不含环境相关的硬编码路径 |
 
 产物命名借鉴快照式备份仓库的 `host/path/timestamp` 惯例：`<db-name>-<YYYYMMDDTHHMMSS>.<ext>`，同一目录内按时间戳天然排序，便于后续保留策略裁剪 [R51]。README 原始清单里的 `backup.sh`/`restore.sh`/`drill.sh`/`lib/*.sh` 分组方式与上表一一对应：`backup-sqlite.sh` + `backup-pg.sh` 对应 `backup.sh` 按库型拆分，`restore-drill.md` 对应 `drill.sh` 的规程与 `drill-report.md` 的报告落点；分组以本文件为准，README 保持原样不改写。
 
@@ -317,7 +317,7 @@ PG 连接口径来自冻结契约 §10.5：`postgres:16-alpine`、库 `yxs`、�
 | `--kind <sqlite\|pg>` | `drill.sh` | 是 | — | 选择演练链路 |
 | `--report <file>` | `drill.sh` | 否 | 本次备份目录下 `drill-report.md` | 报告落点 |
 
-参数解析集中在 `lib/common.sh`；缺必填参数、参数越界、未知开关 → 退出码 1 + 中文一行，不产生半成品。
+参数解析集中在 `src/common.sh`；缺必填参数、参数越界、未知开关 → 退出码 1 + 中文一行，不产生半成品。
 
 ## 6 失败处理
 
@@ -377,7 +377,7 @@ PG 连接口径来自冻结契约 §10.5：`postgres:16-alpine`、库 `yxs`、�
 
 ## 8 实施顺序（每步都能验证）
 
-1. **脚手架与公共 lib**：`lib/common.sh` 落地参数解析、退出码常量、`fail()` 中文消息、路径白名单、`sha256_file()`。验证：`bash tools/backup/lib/common.sh --help`（或 `source` 后调 `fail` 看退出码 1）。
+1. **脚手架与公共函数库**：`src/common.sh` 落地参数解析、退出码常量、`fail()` 中文消息、路径白名单、`sha256_file()`。验证：`bash tools/backup/src/common.sh --help`（或 `source` 后调 `fail` 看退出码 1）。
 2. **SQLite 在线备份主分支**：`.backup` + quick_check + manifest 封盘。验证：对 `.scratch/run/G/` 副本备份，重算 sha256 与 manifest 相等，`quick_check=ok`。
 3. **SQLite 兜底分支**：Python `backup()` 与 `VACUUM INTO` 回退；在去掉 PATH 里 `sqlite3` 的模拟环境下跑通。验证：manifest `tool` 段与报告记录对应方法分支。
 4. **SQLite 恢复与复校**：`--target` 路径恢复 → 双档校验 → 行数比对。验证：恢复库校验全过，源库路径未被写。

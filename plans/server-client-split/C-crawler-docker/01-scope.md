@@ -123,10 +123,10 @@ services/deploy/scripts/healthcheck.sh
 
 | 项 | 生产名 | 本轮验收隔离名（`-c` 后缀） | 说明 |
 |---|---|---|---|
-| 采集容器 | `yxs-crawler` | `yxs-crawler-c` | 验收期避免与历史同名容器冲突；生产名只有一份 |
-| 服务端容器（引用） | `yxs-server` | `yxs-server-c` | 仅 `full` profile 起；A 未就绪时 `crawler` profile 不创建该容器 |
-| 数据卷 | `yxs-data` | `yxs-data-c` | 验收用独立卷，绝不覆盖本机 `.learning-agent` 与真实数据目录 |
-| 网络 | `yxs-net` | `yxs-net-c`（验收 project 隔离时随 project 名派生） | bridge 网络；跨容器只走服务名别名 |
+| 采集容器 | `yxs-crawler-1`（compose 派生） | `yxs-c-crawler-1` | 不写 `container_name`；隔离靠 `-p yxs-c`，不靠容器名后缀 |
+| 服务端容器（引用） | `yxs-server-1`（compose 派生） | `yxs-c-server-1` | 仅 `full` profile 起；A 未就绪时 `crawler` profile 不创建该容器 |
+| 数据卷 | `yxs-data` | `yxs-c_yxs-data`（随 project 派生） | 验收用独立卷，绝不覆盖本机 `.learning-agent` 与真实数据目录 |
+| 网络 | `yxs-net` | `yxs-c_yxs-net`（随 project 派生） | bridge 网络；跨容器只走服务名别名 |
 | 端口 | `8787`（采集）、`8080`（服务端，引用） | 被占则按 +100 退避（8887 / 8180） | 采集 8787 为冻结端口（冻结 §10.1）；PG 端口 55432/55433 归 D/G，不重叠 |
 | 临时数据 | 命名卷内 | `.scratch/run/C/` 仅放本机验收脚本输出 | 禁止写 `%APPDATA%`、`~/.learning-agent`、`<repo>/.learning-agent` |
 

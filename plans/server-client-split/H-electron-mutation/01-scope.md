@@ -28,7 +28,7 @@
 本轮开工可直接粘贴的基线命令（仓库根执行）：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 
 # 既有基线静态自检（不启动应用）
 pnpm --dir tools/automated-testing verify
@@ -36,8 +36,11 @@ pnpm --dir tools/automated-testing verify
 # 既有基线全量（p0 + p1，31 条）；H 闭环不依赖本次全量结果
 pnpm --dir tools/automated-testing test
 
-# H 闭环（本轮交付脚本，后续轮次落地）
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
+# H 闭环（干跑；实跑把 -DryRun 去掉）
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
+
+# 验收项演练：锁跳过 / DryRun / 还原失败 / 隔离核对
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -Drill all
 ```
 
 > 本轮文档阶段不执行上述测试命令；任何「已跑通 / 已变红」的结论都必须等脚本与 patch 落地后实测回填，文档里只写口径与验证方法。
@@ -201,7 +204,7 @@ tools/automated-testing/
 ### 6.3 边界自检命令
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 
 # 工作区干净闸门：闭环前预检、闭环后校验都跑这条；输出必须为空
 git status --porcelain apps/desktop packages
@@ -227,7 +230,7 @@ git status --porcelain tools/automated-testing/mutations tools/automated-testing
 | 3 | 用例本身不稳定导致假红：模型网关抖动、首窗超时、事件等待超时、偶发 flaky，使 patch 没打坏也变红 | 红例必须同时满足「退出码非 0」与「命中登记关键词」；失败输出分类为断言失败 / 环境错误 / 超时；环境类与超时类不计 killed，记 `ambiguous` 或 `skipped`；绿阶段复跑仍红才判基线回归 |
 | 4 | 打包用例依赖 release 产物：源码 patch 改的是 `apps/desktop` 与 `packages` 源文件，packaged asar 是既有构建产物，临时源码改动不进已打包目录 | 跑 M4 前先核对 `release/win-unpacked` 与种子库存在；若需要观察 packaged 行为必须先重新构建拷贝，构建不在本轮交付内；前置缺失时 M4 记 `skipped` 并写明缺失项与验证命令 |
 | 5 | patch 锚点漂移：源码被别轮改动后 hunk 上下文不匹配，`git apply` 失败 | apply 前预检工作区干净；apply 失败记 `apply-failed`（退出码 3），报告记录目标文件、锚点行号与 patch 文件名，不强行打补丁、不手工改上下文 |
-| 6 | M3 覆盖缺口：`p0-03-chat-stream.spec.ts` 未直接断言 tool / tool-end 配对与顺序，tool 帧转发缺陷可能不被捕获（mutant survived） | 执行后如实登记 `survived`，在报告备注里写明缺口：缺一条「同一工具 tool 先于 tool-end、两帧成对」的事件序列断言；不把 survived 凑成 killed |
+| 6 | M3 覆盖缺口：`p0-03-chat-stream.spec.ts` 未直接断言 tool / tool-end 配对与顺序，tool 帧转发缺陷不会被捕获（mutant survived）——**已实测确认**：契约锚点 `team.ts:157-160` 下红阶段退出码 0，脚本记 `survived`（退出码 1） | 如实登记 `survived`，报告备注写明缺口：缺一条「同一工具 tool 先于 tool-end、两帧成对」的事件序列断言；不把 survived 凑成 killed，也不把锚点挪到现有断言够得着的位置 |
 | 7 | 真实数据目录被误写：隔离 home 装配失败，进程落到 `%APPDATA%` 或仓库内 `.learning-agent` | fixture `createHome` 强制设置 `LEARNING_AGENT_HOME` 指向 tmpdir 目录并预写空 settings.json；脚本不设置指向真实目录的环境变量；收尾时按 home 路径复查无指向真实目录的进程 |
 | 8 | 绿阶段假象：revert 后用例仍然失败，但被误判为基线本身退化 | 绿阶段退出码必须为 0 才算闭环；非 0 记 `green-failed`（退出码 5），报告同时贴红阶段与绿阶段输出摘要，交人区分「还原不彻底」与「基线回归」 |
 | 9 | 模型网关未配置或不可达：对话类用例（M1、M3）在红/绿两阶段都跑不到断言 | 闭环前走 `probeGateway` 同等检查；缺失时该条记 `skipped` 并写明缺哪个环境变量，不把网关错误记成 mutant 存活；其余非对话类闭环不受影响 |

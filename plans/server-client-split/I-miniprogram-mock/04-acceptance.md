@@ -21,7 +21,8 @@
 ## 2 前置条件
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行；不要写死本机绝对路径，clone 到任何目录都应能跑
+cd <仓库根>
 
 # 1) 确认产物目录已生成（实现阶段产出；验收前不得在目录外补数据）
 Test-Path tools\miniprogram-mock\index.html
@@ -57,11 +58,11 @@ fixture 是手工编写的自包含样例，验收不依赖服务端或数据库
 | AC-I-06 | 逐页访问 `pages/<page>.html?state=error` | 整页错误面板：标题「暂时没拿到这条数据。」；说明「原型演示错误态：当前没有连接真实服务端，以下内容是占位。」；主按钮「重试」回到去掉 `state` 的当前页；次按钮「返回首页」到 `../index.html`；面板无堆栈、无英文方法名、无 `error.code` | 文案与契约不一致（含标点）；按钮落空；出现堆栈或英文码；错误只挂在角落提示位 | 02 §4.1 错误态 | `screenshots\*-error.png` |
 | AC-I-07 | 逐页访问 `pages/<page>.html?state=empty`；逐字比对 02 §4.2 空态文案 | 首页「暂无学生信息。」；新闻「暂无新闻，Python 采集服务会在后台自动入库」；详情未选中「选择一条新闻查看原文与匹配证据」；详情匹配区「尚未匹配」；问答「还没有作答记录，去完成一道题后再来看。」；我的目标约束「还没有记录目标与约束。」；能力维度「还没有形成能力快照。」；证据账本「还没有学生能力证据。」 | 任一文案被改写、漏字、换成英文；空态只留干巴巴单句无返回动作 | 02 §4.2 空态；现状依据 `pages.tsx:283`、`:299`、`:313`、`App.tsx:363`、`:386` | `screenshots\*-empty.png` |
 | AC-I-08 | DevTools Network 切 `Offline`（或关闭 Wi-Fi），刷新五页正常态（不带 `state` 参数） | 五页正常态数据均可渲染；身份、列表、详情、记录、证据各区块不空屏 | 断网后任一空白、报错、骨架常驻 | 01 §1 目标 2；02 §5.1 规则 4 | `checks\offline-render.txt` |
-| AC-I-09 | 静态检索产物目录；并在联网与断网两种状态下观察 Network 面板 | 代码与页面中无 `fetch(`、`XMLHttpRequest`、`WebSocket`、`EventSource`、外网 `http://` / `https://` 资源引用；Network 面板无任何 `http(s)` 请求条目 | 检索命中任一联网形态；面板出现请求条目（含静态资源外链） | 02 §5.1 规则 4；02 §6.3 | `checks\network-audit.txt` |
+| AC-I-09 | 静态检索产物目录；并在联网与断网两种状态下观察 Network 面板 | **只允许一处读本地 fixtures 的 `fetch`**：`scripts/app.js` 的 `loadFixture`/`fixtureUrl` 内 `new URL('../fixtures/' + name, SCRIPT_URL)` + `fetch(fixtureUrl(name))`。除此之外零命中：无外部地址（`http://`、`https://`、`//cdn`）、无 `XMLHttpRequest`、`WebSocket`、`EventSource`、无 `type="module"`。Network 面板只有本地 `fixtures/*.json` 的同源请求，无任何外部 `http(s)` 条目 | 除 `loadFixture` 那一处外命中任一联网形态；出现外部地址；面板出现外部请求条目 | 02 §5.1 规则 4；02 §5.3；02 §6.3 | `checks\network-audit.txt` |
 | AC-I-10 | 对 `index.html`、`pages/`、`scripts/` 做关键词检索：`reveal`、`preview`、`openDialog`、`settings`、`apiKey`、`openFile`、`showItemInFolder` | 除 `index.html` 排除说明区（`data-excluded="true"`）与标注属性外，无可点击入口、按钮、菜单项或处理器；不出现「打开所在文件夹」「预览本地文件」「选择/上传文件」「设置页填 Key」 | 出现上述任一可触发元素；出现对应调用代码；说明区之外残留入口 | 冻结 §6 排除项；02 §6.2；现状 `index.ts:370-389`、`:537-538` | `checks\excluded-audit.txt` |
-| AC-I-11 | 打开五份 fixture 对照页面文本；把 `news-list.json` 第一条标题改成一个标记串，刷新新闻列表，再改回 | 页面展示文本与 fixture 字段一致；改值后列表首行跟随标记串；改回后恢复；页面 HTML/JS 中不写死业务标题、题干、证据摘录等展示数据 | 改 fixture 页面无变化（数据被硬编码）；页面出现 fixture 之外的业务文案 | 02 §3 数据结构；02 §6.1 字段兼容 | `checks\fixture-trace.txt` |
+| AC-I-11 | **静态服务器路径（真判据）**：`cd tools/miniprogram-mock` 后起静态服务器（`python -m http.server 8123` 或等价），打开 `http://127.0.0.1:8123/pages/news.html`；把 `fixtures/news-list.json` 第一条 `title` 改成标记串 `AC-I-11-标记串`，刷新，再改回。**`file://` 路径（只验渲染）**：双击 `pages/news.html`，确认正常态可渲染并打印 `fixture-source: inline-fallback` | 静态服务器：列表首行跟随标记串，改回后恢复，Console 打印 `fixture-source: json`；五份 fixture 展示文本与字段一致；页面 HTML/JS 不写死业务标题、题干、证据摘录。`file://`：页面正常渲染，按设计回落内联副本，**此处不验跟随** | 静态服务器下改 JSON 后页面不跟随（说明读的是内联副本或被硬编码）；页面出现 fixture 之外的业务文案；`fixture-source` 标记与实际来源不符 | 02 §5.3 数据加载通道；02 §3 数据结构；02 §6.1 字段兼容 | `checks\fixture-trace.txt` |
 | AC-I-12 | Console 逐页执行 `document.querySelectorAll('[data-mock-source]')` 清点；核对属性值与页面-方法对应表 | 五页均有标注；取值依次为 `student.current`、`news.list`、`news.get`、`questions.attempts`、`profile.get`；页面根节点带 `data-fixture`；接缝元素带 `data-replace` | 缺标注；方法名拼写与冻结表不符；标注只写在易被丢弃的 HTML 注释里 | 02 §2.6 接缝标注；冻结 §5 方法表 | `checks\annotations.txt` |
-| AC-I-13 | 以 `file://` 方式（双击文件，不经任何静态服务器）打开 `index.html`，走完 AC-I-01 的五页往返；查看 Console 的 `fixture-source` 标记 | 五页渲染正常；`file://` 下命中内联兜底时标记为 `inline-fallback`；无 CORS 报错导致的空白 | `file://` 下正常态空白；依赖 fetch 读本地 JSON 被拦后无兜底；出现模块加载报错 | 02 §5.3 数据加载通道；02 §6.3 浏览器兼容 | `checks\fixture-source.txt` |
+| AC-I-13 | 以 `file://` 方式（双击文件，不经任何静态服务器）打开 `index.html`，走完 AC-I-01 的五页往返；查看 Console 的 `fixture-source` 标记 | 五页渲染正常；`file://` 下如实打印 `fixture-source: inline-fallback (file: protocol)`；控制台无 `console.error`、无 CORS 报错、无 `pageerror` | `file://` 下正常态空白；依赖 fetch 读本地 JSON 被拦后无兜底；出现模块加载报错；标记谎报为 `json`；控制台出现 `Fetch API cannot load file://…` 之类噪声 | 02 §5.3 数据加载通道；02 §6.3 浏览器兼容 | `checks\fixture-source.txt`、`checks\console-health.txt` |
 | AC-I-14 | 对照 02 §2 各组件兜底规则，检查字段缺失样例（可用临时把 fixture 字段置空的方式，验完还原） | 界面不出现 `undefined` / `null` 字面量；缺 `name` 显示「学生」；缺 `score` 不打对错标签；缺 `answer` 显示「未作答」；证据回查不到能力名显示「能力维度」；非法 `state` 参数回正常态 | 界面渲染出 `undefined` / `null`；缺字段时报错或空白；非法 `state` 进错误分支 | 02 §2 各组件兜底；02 §6.1；现状 `index.ts:211`、`renderers.tsx:142`、`App.tsx:389` | `checks\fallback-check.txt` |
 
 页面结构与触控尺寸对齐小程序设计指南的 375 宽度惯例 [R1]；无横向滚动与换行规则参照响应式布局基线 [R2]；三态骨架不做复杂动画，动效降级口径参照减动效媒体查询 [R3]。
@@ -73,20 +74,25 @@ fixture 是手工编写的自包含样例，验收不依赖服务端或数据库
 - **命令输出原文：** 下列 PowerShell 命令在仓库根执行，输出重定向到 `checks/` 对应文件：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+cd <仓库根>
 
-# AC-I-03 逐页 scrollWidth（浏览器 Console 粘贴，结果手抄或复制进文件）
-#   console.log(location.pathname, document.documentElement.scrollWidth, document.documentElement.clientWidth)
-
-# AC-I-09 联网形态静态检索
+# AC-I-09 联网形态静态检索（只允许 loadFixture 内一处读本地 fixtures 的 fetch）
+# 期望：仅命中 scripts\app.js 中 fixtureUrl/fetch 那两行；外部地址、XHR、模块加载零命中。
 Select-String -Path "tools\miniprogram-mock\index.html","tools\miniprogram-mock\pages\*.html","tools\miniprogram-mock\scripts\*.js" `
-  -Pattern "fetch\(|XMLHttpRequest|WebSocket|EventSource|http://|https://" |
+  -Pattern 'XMLHttpRequest|WebSocket|EventSource|http://|https://|//cdn|type="module"' |
   Out-File -Encoding utf8 .scratch\run\I\checks\network-audit.txt
+
+# 期望输出：只有 scripts\app.js 中 fetch(fixtureUrl(name)) 与 new URL('../fixtures/'+name, SCRIPT_URL) 两行
+Select-String -Path "tools\miniprogram-mock\scripts\*.js" -Pattern "fetch\(" |
+  Out-File -Encoding utf8 -Append .scratch\run\I\checks\network-audit.txt
 
 # AC-I-10 排除能力关键词检索
 Select-String -Path "tools\miniprogram-mock\index.html","tools\miniprogram-mock\pages\*.html","tools\miniprogram-mock\scripts\*.js" `
   -Pattern "reveal|preview|openDialog|settings|apiKey|openFile|showItemInFolder" |
   Out-File -Encoding utf8 .scratch\run\I\checks\excluded-audit.txt
+
+# AC-I-03 逐页 scrollWidth（浏览器 Console 粘贴，结果手抄或复制进文件）
+#   console.log(location.pathname, document.documentElement.scrollWidth, document.documentElement.clientWidth)
 
 # AC-I-12 标注清点（浏览器 Console 粘贴，结果写入文件）
 #   Array.from(document.querySelectorAll('[data-mock-source]')).map(e => e.dataset.mockSource)
@@ -106,10 +112,11 @@ Select-String -Path "tools\miniprogram-mock\index.html","tools\miniprogram-mock\
 | # | 改坏哪里 | 预期变红的 AC | 还原后 |
 |---|---|---|---|
 | M1 | 删掉 `styles/app.css` 中长串规则 `overflow-wrap: anywhere`（或对应容器的 `min-width: 0`） | AC-I-04 红：长英文词 / 长 URL 溢出卡片，`scrollWidth` 增大；AC-I-03 可能同时变红 | 变绿 |
-| M2 | 把 `news.html` 列表第一条标题改成页面内硬编码字符串，不再从 `news-list.json` 读取 | AC-I-11 红：改 fixture 标题后页面不跟随；AC-I-12 标注与实际数据源脱节 | 变绿 |
-| M3 | 在 `scripts/app.js` 引入一次联网调用（`fetch` 指向任一外部地址，或 `new XMLHttpRequest()`） | AC-I-09 红：静态检索命中联网形态，Network 面板出现请求；断网时 AC-I-08 同时受影响 | 变绿 |
+| M2 | 在 `scripts/app.js` 的 `renderNews()` 里把首行标题改成硬编码字符串，不再读 `article.title` | AC-I-11 红：改 `fixtures/news-list.json` 后首行不跟随；AC-I-12 标注与实际数据源脱节 | 变绿 |
+| M3 | 在 `scripts/app.js` 引入一次联网调用（`fetch` 指向任一外部地址，或 `new XMLHttpRequest()`） | AC-I-09 红：静态检索命中外部地址 / XHR，Network 面板出现外部请求；断网时 AC-I-08 同时受影响 | 变绿 |
 | M4 | 在 `profile.html`（或 `index.html`）补一个「打开所在文件夹」按钮入口 | AC-I-10 红：排除能力关键词检索命中可点击元素 | 变绿 |
 | M5 | 删掉 `news.html` 根节点或列表块上的 `data-mock-source="news.list"` 属性 | AC-I-12 红：清点结果缺标注或方法名不符 | 变绿 |
+| M6 | 把 `makeTag()` 里的 `'tag ' + tone` 改回只写 tone 类（或删掉 `.tag` 及 4 个 tone 类的 `overflow-wrap`） | AC-I-03 / AC-I-04 红：注入 90 字符 token 后标签不换行，`scrollWidth` 从 375 涨到 588+；标签同时退化成彩色纯文字 | 变绿 |
 
 mutation 判据沿用 killed / survived 口径：AC 变红 = killed，仍绿 = survived（说明该 AC 没覆盖到这条契约）[R6]；本轮只做手写改坏样例，不引入 mutation 运行时框架 [R7]。
 
@@ -118,14 +125,14 @@ mutation 判据沿用 killed / survived 口径：AC 变红 = killed，仍绿 = s
 | 症状 | 最可能原因 | 一条命令 / 操作确认 |
 |---|---|---|
 | 双击 `index.html` 页面空白 | 内联 JSON 副本缺失；`app.js` 有语法错误；脚本被浏览器拦截 | 打开 DevTools Console 看报错；检查页面内 `<script type="application/json" data-fixture="…">` 是否存在且可 `JSON.parse` |
-| 375px 下出现横向滚动 | 长串未断行；某元素写死固定像素宽度；残留 `white-space: nowrap` | Console 跑 `document.documentElement.scrollWidth`；`Select-String -Path "tools\miniprogram-mock\styles\*.css" -Pattern "nowrap|width:\s*\d{3}px"` |
-| 断网后页面空白 | 代码里存在 `fetch` / XHR / 外网 `<img>` 或 `<link>` | 跑 §4 的 `network-audit.txt` 检索命令；Network 面板按类型筛静态资源 |
+| 375px 下出现横向滚动 | 长串未断行；某元素写死固定像素宽度；残留 `white-space: nowrap` | Console 跑 `document.documentElement.scrollWidth`；`Select-String -Path "tools\miniprogram-mock\styles\*.css" -Pattern "nowrap\|width:\s*\d{3}px"` |
+| 断网后页面空白 | 代码里存在外部地址 `fetch` / XHR / 外网 `<img>` 或 `<link>` | 跑 §4 的 `network-audit.txt` 检索命令；Network 面板按类型筛静态资源 |
 | 三态面板叠加显示 | 分支容器互斥显隐逻辑未生效；`hidden` 属性被样式覆盖 | 检查根节点 `data-state` 与各 `[data-state]` 容器的显隐；Console 核对 `document.querySelectorAll('[data-state]')` |
-| 空态文案与契约不符 | 文案被硬编码改写；引用了桌面端旧句子 | 逐字比对 02 §4.2 表格；`Select-String -Path "tools\miniprogram-mock\pages\*.html" -Pattern "暂无|还没有|尚未匹配"` |
+| 空态文案与契约不符 | 文案被硬编码改写；引用了桌面端旧句子 | 逐字比对 02 §4.2 表格；`Select-String -Path "tools\miniprogram-mock\pages\*.html" -Pattern "暂无\|还没有\|尚未匹配"` |
 | 详情页点列表行不跳转 | `articleId` 未写入 `href`；卡片 `id` 缺失被置灰 | 检查行元素 `data-article-id` 与 `news-detail.html?articleId=…`；Console 打印 `location.search` |
 | 证据标签显示英文能力键 | `competencies` 字典回查未命中，兜底文案未生效 | 对照 `App.tsx:389` 兜底口径；检查 `profile.json` 中 `competencies[].id` 与 `evidence[].competency_id` 是否一致 |
 | `file://` 下控制台报模块加载错 | 脚本误用 `type="module"` | `Select-String -Path "tools\miniprogram-mock\pages\*.html" -Pattern 'type="module"'`，应无命中 |
-| 改了 JSON 页面没变化 | 页面读的是内联副本，JSON 与内联块未同步 | 核对内联 `<script type="application/json">` 内容与 `fixtures/*.json` 是否逐字一致 |
+| 改了 JSON 页面没变化 | ① 用的是 `file://`（浏览器拦本地 fetch，走内联兜底，本就不跟随）；② 内联副本与 JSON 未同步；③ 经静态服务器但看到缓存 | 看 Console 标记：`json` 说明走的是 JSON，不跟随才是 bug；`inline-fallback` 说明是 `file://` 路径，按设计不跟随。再核对内联 `<script type="application/json">` 与 `fixtures/*.json` 是否逐字一致 |
 
 排查表按「症状 → 最可能原因 → 一条确认命令」组织；布局类症状先落 `scrollWidth` 数值，不凭目估判断 [R2]。
 
@@ -134,23 +141,23 @@ mutation 判据沿用 killed / survived 口径：AC 变红 = killed，仍绿 = s
 文档自检是交活前的最后一道机器闸：脚本只查结构与引用是否对得上，查不到内容对不对——内容由 §3 的 14 条 AC 负责。机器查形式、人查语义的分工参照测试实践口径 [R5]。
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
-python plans\server-client-split\00-master\check-docs.py --round I
+# 在仓库根执行
+uv run python plans\server-client-split\00-master\check-docs.py --round I
 ```
 
 > 说明：`01-scope.md` 与 `02-contract.md` 由并行子代理同时撰写；若本节自检输出仅报告缺这两份文档，属并行期中间状态，保留原样，由主代理在四份齐备后重跑本命令。
 
 ```text
-仓库根：E:\Documents\GitHub\YingXiaoShang
+仓库根：<仓库根>
 检查轮次：I
 行数统计：
-  I-*: 1168 行 / 4 份
+  I-*: 1206 行 / 4 份
 
 全部通过：轮次齐全、节数达标、每节有引用、参考清单与本地行号引用都对得上。
 退出码：0
 ```
 
-（实跑时间 2026-11-19，退出码 0；行数统计会随文档微调变化，以最后一次为准。）
+（实跑时间 2026-11-20，退出码 0；行数统计会随文档微调变化，以最后一次为准。）
 
 ## 参考
 

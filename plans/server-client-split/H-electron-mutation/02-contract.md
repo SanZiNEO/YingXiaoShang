@@ -24,7 +24,7 @@
 
 ### 2.1 `run-mutation.ps1` 参数
 
-脚本路径：`tools/automated-testing/scripts/run-mutation.ps1`。所有命令在仓库根 `E:\Documents\GitHub\YingXiaoShang` 下执行。
+脚本路径：`tools/automated-testing/scripts/run-mutation.ps1`。所有命令在**仓库根**执行；脚本自己向上定位 `.git`，不假设调用者的 cwd。
 
 | 参数 | 类型 | 必填 | 默认值 | 作用 |
 |---|---|---|---|---|
@@ -33,32 +33,41 @@
 | `-Revert <string>` | string | 否 | — | 只还原指定 patch；取值同 `-Apply`；不跑用例 |
 | `-All` | switch | 否 | `$false` | 按 M1→M2→M3→M4→M5 顺序逐条执行完整闭环 |
 | `-DryRun` | switch | 否 | `$false` | 解析参数并打印将执行的命令、锚点与目标用例；不应用 patch、不启动 Electron、不写报告 |
+| `-Drill <name>` | enum | 否 | — | 演练验收项：`dryrun`（AC-H-11）、`lock`（AC-H-09）、`revert`（AC-H-13）、`isolation`（AC-H-14）、`all`。结果写 `.scratch/run/H/drills/<name>/result.json`，不写正式报告 |
+| `-RefreshReport` | switch | 否 | `$false` | 只按既有 `.artifacts/` 证据重算 31 行基线索引，复用报告里已记录的 5 条闭环，不跑测 |
 | `-PatchDir <path>` | path | 否 | `tools/automated-testing/mutations` | patch 文件查找目录 |
-| `-RepoRoot <path>` | path | 否 | 脚本位置上四级 | 仓库根；`git` 命令与测试入口均相对此路径解析 |
+| `-ReportPath <path>` | path | 否 | `tools/automated-testing/mutation-report.md` | 报告落点；演练与探测用独立路径，避免覆盖正式报告 |
+| `-RepoRoot <path>` | path | 否 | 脚本向上最多四级定位 `.git` | 仓库根；`git` 命令与测试入口均相对此路径解析 |
 
 参数组合约束：
 
 - `-Apply` 与 `-Revert` 互斥；同时出现按退出码 3 报参数错误。
-- `-Case` 用于闭环；`-Apply` / `-Revert` 用于单边操作。三者都不给且非 `-All` 时，打印用法并退出码 3。
+- `-Case` 用于闭环；`-Apply` / `-Revert` 用于单边操作。三者都不给且非 `-All`、非 `-Drill`、非 `-RefreshReport` 时，打印用法并退出码 3。
 - `-DryRun` 与任意执行参数组合时，只输出计划，不产生副作用。
+- `-Drill` 与 `-RefreshReport` 互斥，且都不能与 `-All` / `-Case` / `-Apply` / `-Revert` / `-DryRun` 同时使用。
+
+运行环境：Windows 自带的 `powershell.exe` 5.1 即可，不要求 `pwsh`；PowerShell 7 下同样可用。脚本自身以 UTF-8 **带 BOM** 保存——5.1 读无 BOM 的 `.ps1` 会按 ANSI 解码，脚本里的中文关键词会变乱码；脚本启动时还会把 `[Console]::OutputEncoding` 设成 UTF-8，否则原生命令输出的中文按 GBK 解码，关键词匹配会全部落空（两者缺一不可）。
 
 调用示例：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 
 # 五条闭环全跑
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -All
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -All
 
 # 单条闭环：按 TC 编号反查
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -Case TC-P1-03
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -Case TC-P1-03
 
 # 单边应用 / 单边还原（排查时用）
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -Apply M1
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -Revert M1
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -Apply M1
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -Revert M1
 
 # 干跑：只看计划
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
+
+# 验收项演练：锁跳过 / DryRun / 还原失败 / 隔离核对
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -Drill all
 ```
 
 测试入口复用既有 `pnpm test` 链路：单条用例按 spec 文件路径跑（`playwright test src/scenarios/<file>.spec.ts`），不绕过 `src/driver` 自起进程 [R34]。
@@ -77,12 +86,21 @@ pwsh tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
 
 patch 文件头注释必须包含：mutant 编号、目标文件、锚点行号、对应 TC、冻结参考版本；hunk 上下文只引用现状代码，不带修复、不带格式化改动。
 
+**M3 / M4 的预期结果（锚点不挪，如实记录）**：
+
+| mutant | 锚点 | 预期状态 | 依据 |
+|---|---|---|---|
+| M3 | `packages/agent/src/team.ts:157-160` | `survived` | `p0-03` 全文没有 `tool` / `tool-end` 帧断言，删掉 `tool-start` 转发后用例仍绿。按 `01-scope.md` §2「不为 mutant 补写新断言」如实记为覆盖缺口，缺口写进报告 `notes`。**不允许**为凑 killed 把锚点挪到现有断言够得着的位置（例如删 `session` 帧），那是等价替换而不是契约点。 |
+| M4 | `apps/desktop/src/main/index.ts:157` | `skipped`（环境原因） | `loadFile` 指向不存在的 `missing.html` 后 driver 的 `waitForFunction(learning.health)` 超时，分类 `timeout`，按 §4.2 超时类不计 killed。**不允许**改页面标题（`renderer/index.html`）换 killed：`p0-01`、`p0-02` 也断言 title 含「营小商」，缺陷不属 packaged 专属。 |
+
+已实测：M3 采用契约锚点后红阶段退出码 0 → `survived`（见 `.scratch/run/H/M3/red/exit-code.txt`）。M4 的 skipped 属环境原因，需在具备完整打包链的机器上复验。
+
 ### 2.3 单条闭环命令序列
 
 以 M1 为例（其余编号替换即可）：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 
 # 1. 预检工作区干净
 git status --porcelain apps/desktop packages
@@ -121,7 +139,7 @@ git status --porcelain apps/desktop packages
 示例输出：
 
 ```text
-[H] repo-root: E:\Documents\GitHub\YingXiaoShang
+[H] repo-root: <仓库根的绝对路径，脚本自动解析>
 [H] lock: acquired
 [M1] PRECHECK git status --porcelain apps/desktop packages -> clean
 [M1] APPLY git apply tools/automated-testing/mutations/cancel.patch exit=0
@@ -227,7 +245,11 @@ stdout 不打印 token、口令、消息正文；失败输出摘要只取首条�
 | 4 | 还原失败或工作区脏 | `git apply -R` 非 0；`STATUS-CHECK` porcelain 非空 | 该条 `status=revert-failed`，贴残留文件清单，人工介入 |
 | 5 | 绿阶段仍红 | 还原后同一用例退出码非 0 | 该条 `status=green-failed`，红/绿两段输出都贴 |
 
+**「全 skipped」不算失败**：单条 mutant 因产物缺失、环境错误、超时按约定记 `skipped` 时，整体退出码仍为 0（契约口径：0 = 全部闭环符合预期，含按约定 skipped）。只有锁未取得、基线红、全局环境不可用才返回 2。把「一条都没跑成」和「全部按约定跳过」混成同一个 2，会让 CI 无法区分「环境没准备好」与「本轮结论就是不判」。
+
 退出码不与桌面端产品错误码混用：脚本自身错误只用上述 0–5 编码，产品中文消息仍走 `friendlyError` 既有目录（`apps/desktop/src/main/errors.ts:13-67`）。
+
+`-Drill <dryrun|lock|revert|isolation|all>` 的退出码单独定义：0 全部演练项符合预期；5 有演练项未满足；3 参数错。演练不写正式报告，结果落 `.scratch/run/H/drills/<name>/result.json` 并汇总进报告「AC 演练记录」节。
 
 ### 4.2 红 / 绿判定口径
 

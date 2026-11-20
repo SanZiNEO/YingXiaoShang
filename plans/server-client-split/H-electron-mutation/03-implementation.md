@@ -48,7 +48,7 @@ H 复用 `tools/automated-testing` 现有 `node_modules`：`@playwright/test` 1.
 ### 2.2 开工前的构建前置
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 
 # 1) out/ 构建产物是否完整（dev/out 目标用例依赖）
 Test-Path apps\desktop\out\main\index.js
@@ -137,12 +137,16 @@ Remove-Item -LiteralPath ".scratch\run\electron.lock" -Force
 
 ### 3.4 打包用例（p0-08）的前置准备
 
-M4 与其余四条最大的不同：packaged 目标跑的是 `release/win-unpacked` 里已打进 `app.asar` 的编译产物（`apps/desktop/electron-builder.yml:7-21`：`files: out/**` + `asar: true`），对 `apps/desktop/src/**` 的临时源码改动不会自动进已打包目录。按 `02-contract.md` §6 的口径，观察 packaged 行为所需的重新构建属于前置准备，不在 H 本轮交付物内；脚本侧只做存在性校验与跳过分支：
+M4 与其余四条最大的不同：packaged 目标跑的是 `release/win-unpacked` 里已打进 `app.asar` 的编译产物（`apps/desktop/electron-builder.yml:7-21`：`files: out/**` + `asar: true`），对 `apps/desktop/src/**` 的临时源码改动不会自动进已打包目录。因此 M4 闭环必须自己完成「备份基线 → 重打包 → 红跑 → 还原 → 恢复基线」，否则跑的是旧 asar，绿跑会假绿。脚本按下列四步执行：
 
 1. **基线核对**：确认 `release/win-unpacked/营小商.exe` 与 `resources/seed/learning.db` 存在；任一缺失 → M4 记 `skipped`，消息指明缺失项与既有打包命令（`scripts/package-desktop.mjs:78-86`），不阻塞 M1/M2/M3/M5。
-2. **重建前置（环境侧准备，非脚本交付）**：若执行环境需要让 M4 源码改动进入 packaged 产物，先按既有流程重建 `out/` 并重打包 unpacked 目录；基线 unpacked 在重建前备份到 `.scratch/run/H/baseline-unpacked/`，还原后用备份恢复。脚本只读取该目录，不自行调用打包器。
-3. **还原后恢复**：revert patch 后，重建产物由环境侧恢复到基线状态；脚本复跑 p0-08 确认绿，并校验 `release/` 基线未被脚本改动。
-4. **重建链不可用的兜底**：若本机无法完成重建 / 重打包（工具链缺失、超时或产物被占用），M4 记 `skipped` 并写明缺失环节；该状态在报告中与 killed 分列，不计入 killed 总数。
+2. **基线备份**：robocopy `/MIR` 把 `release/win-unpacked` 备份到 `.scratch/run/H/baseline-unpacked/`（退出码 0-7 视为成功）；备份前先删上一轮残留，避免把旧基线当本轮基线。
+3. **重打包**：把 `release/win-unpacked/resources/seed/learning.db` 复制到 `apps/desktop/seed/learning.db`（`electron-builder.yml` 的 `extraResources` 需要它，而 `scripts/package-desktop.mjs:84` 打包后会删掉该目录），再跑 `pnpm --dir apps/desktop exec electron-builder --dir --publish never`；`apps/desktop/node_modules/electron/dist/electron.exe` 存在时追加 `-c.electronDist=<绝对路径>` 走离线，不联网等下载。
+4. **asar 探针 + 还原恢复**：重打包后用「asar 哈希变化 + mutant marker 出现在 asar 字节里」双条件确认改动真的进包，未进包记 `skipped(asar-stale)` 且不跑红例；闭环结束后 robocopy 反向 `/MIR` 恢复基线，恢复成功后删除备份目录与临时 `apps/desktop/seed`。
+
+**重建链不可用的兜底**：重打包失败（工具链缺失、超时、产物被占用）时 M4 记 `skipped` 并写明缺失环节；该状态在报告中与 killed 分列，不计入 killed 总数。恢复失败时保留备份并在报告「残留与清理」节标注路径、大小与人工处理方式。
+
+`baseline-unpacked` 约 365 MB，只在闭环期间存在；脚本不再让它在磁盘上静默堆积。
 
 打包产物的真实存在性与种子库 `user_version` 由 p0-08 自己断言（`tools/automated-testing/src/scenarios/p0-08-packaged-boot.spec.ts:34-56`），脚本只负责准备目录与环境，不重复实现这些断言。
 

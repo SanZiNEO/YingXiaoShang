@@ -23,7 +23,7 @@
 ## 2 前置条件
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 
 # 1) 基线工作区必须干净（H 开工前）
 git status --porcelain apps/desktop packages
@@ -62,8 +62,8 @@ Test-Path tools\automated-testing\node_modules\@playwright\test
 | AC-H-01 | 不应用任何 patch，先跑 5 条目标用例（TC-P1-03、TC-P0-06、TC-P0-03、TC-P0-08、TC-P1-02）做基线 | 5 条全部退出码 0；基线输出落盘 | 任一用例退出码非 0 即中止本轮，后续 AC 不执行 | `.scratch/run/H/baseline/` | §4.2 基线对照；§3.3 基线索引 |
 | AC-H-02 | M1 `cancel.patch` 闭环：apply → 跑 TC-P1-03 → 断言 → revert → 复跑 TC-P1-03 | 红阶段退出码非 0 且命中 `没有静默` 或 `toBeInstanceOf(Error)` 之一；分类 `assertion`；绿阶段退出码 0 | 红阶段退出码 0（survived 不算过）；红阶段非 0 但无关键词；绿阶段非 0 | `…/M1/red/`、`…/M1/green/` | §2.2 M1 锚点 `index.ts:485`；§4.2 红判据 |
 | AC-H-03 | M2 `answer-set.patch` 闭环：apply → 跑 TC-P0-06 → 断言 → revert → 复跑 TC-P0-06 | 红阶段退出码非 0 且命中 `toHaveLength(20)` / `score` / `questionId` 之一；绿阶段退出码 0 | 20 条 attempts 与 results 结构仍全绿；绿阶段非 0 | `…/M2/red/`、`…/M2/green/` | §2.2 M2 锚点 `packages/agent/src/index.ts:856`；§7 测试映射 |
-| AC-H-04 | M3 `streaming.patch` 闭环：apply → 跑 TC-P0-03 → 断言 → revert → 复跑 TC-P0-03 | 红阶段退出码非 0 且命中 `必须收到 session 事件` 或 `toBeGreaterThan(0)` 之一；绿阶段退出码 0 | 事件序列仍完整（若 tool 帧缺陷未被捕获，如实记 survived，不判过）；绿阶段非 0 | `…/M3/red/`、`…/M3/green/` | §2.2 M3 锚点 `team.ts:157-160`；§5.3 事件帧口径 |
-| AC-H-05 | M4 `packaged-boot.patch` 闭环：核对打包产物 → 备份基线 → apply → 环境侧重建临时打包目录 → 跑 TC-P0-08 → revert → 恢复基线 → 复跑 TC-P0-08 | 红阶段命中 `营小商` / `app.asar` / `user_version` / `learning.db` 之一；绿阶段退出码 0；产物缺失或重建链不可用时记 `skipped` 并写明缺失项 | 把 skipped 记成 killed；绿阶段非 0；基线 unpacked 被覆盖未恢复 | `…/M4/red/`、`…/M4/green/`、`…/baseline-unpacked/` | §2.2 M4 锚点 `index.ts:157` / `:143`；§6 重建前置口径 |
+| AC-H-04 | M3 `streaming.patch` 闭环：apply → 跑 TC-P0-03 → 断言 → revert → 复跑 TC-P0-03 | 按契约锚点 `team.ts:157-160` 执行时**预期 survived**：红阶段退出码 0（`tool` 帧缺陷在 p0-03 无断言），脚本记 `survived` 并写入覆盖缺口 `notes`；绿阶段退出码 0 | 把 survived 改成 killed（例如把锚点挪到 `session` 帧删除处）；红阶段因环境/超时非 0；绿阶段非 0 | `…/M3/red/`、`…/M3/green/` | §2.2 M3 锚点 `team.ts:157-160` 与「M3/M4 预期结果」表；§5.3 事件帧口径 |
+| AC-H-05 | M4 `packaged-boot.patch` 闭环：核对打包产物 → 备份基线 → apply → 环境侧重建临时打包目录 → 跑 TC-P0-08 → revert → 恢复基线 → 复跑 TC-P0-08 | 按契约锚点 `index.ts:157` 执行时预期 `skipped`：driver 等 `learning.health` 超时，分类 `timeout`（§4.2 不计 killed），`notes` 写明环境原因；产物缺失或重建链不可用时同样记 `skipped`；基线 unpacked 必须恢复且备份目录清理 | 把 skipped 记成 killed（含改成页面标题换 killed）；绿阶段非 0；基线 unpacked 被覆盖未恢复；备份目录遗留未标注 | `…/M4/red/`、`…/M4/green/` | §2.2 M4 锚点 `index.ts:157` / `:143` 与「M3/M4 预期结果」表；§6 重建前置口径 |
 | AC-H-06 | M5 `empty-question-set.patch` 闭环：apply → 跑 TC-P1-02 → 断言 → revert → 复跑 TC-P1-02 | 红阶段退出码非 0 且命中 `retry` / `question-set` 之一；绿阶段退出码 0 | 纯函数两种形态仍分别返回 `markdown` / `retry`；绿阶段非 0 | `…/M5/red/`、`…/M5/green/` | §2.2 M5 锚点 `question-set.ts:12` |
 | AC-H-07 | 全部闭环结束后执行 `git status --porcelain apps/desktop packages` | 输出为空（无临时 patch 残留、无文件改动） | 任一文件出现在清单中；残留 `.orig` / `.rej` 补丁副产物 | 报告 `cleanupCheck.output` 贴命令原文输出 | 冻结契约 §11；§3.2 `cleanupCheck.clean` |
 | AC-H-08 | 检查 `mutation-report.md` 的 5 条 mutant 记录 | 状态分类齐全；有效红例记 `killed`；`survived` / `skipped` / `apply-failed` / `revert-failed` / `green-failed` 单列，不混入 killed 计数；每条含退出码、关键词、证据目录 | 环境类失败被记成 killed；缺少红/绿任一阶段输出；状态字段缺失 | `tools/automated-testing/mutation-report.md` | §3.2 `MutantRecord` 字段；§4.2 假红不计 killed |
@@ -76,6 +76,21 @@ Test-Path tools\automated-testing\node_modules\@playwright\test
 
 用例写法遵循「一条 AC 一个可观察结果 + 明确失败判据」，不使用「看起来正常」这类不可判定描述 [R4]。
 
+### 3.1 演练项的执行方式（AC-H-09 / H-11 / H-13 / H-14）
+
+这四条不靠人工摆现场，脚本内置 `-Drill` 子命令自行构造前置并核对结果，每条把 `result.json`（含逐项期望值与实际值）与 `stdout.txt` 写进 `.scratch/run/H/drills/<name>/`：
+
+| 演练 | 命令 | 脚本怎么构造现场 | 核对什么 |
+|---|---|---|---|
+| `dryrun` | `-Drill dryrun` | 直接调子进程跑 `-All -DryRun` | 退出码 0、打印 M3/M4 契约锚点、未建锁目录、未新建证据目录、工作区干净 |
+| `lock` | `-Drill lock` | 先手动创建 `.scratch/run/electron.lock` 并写 `holder.txt`，再跑 `-Case M5`，结束后删锁 | 退出码 2、stdout 含「未取得 electron 锁」、报告 `lockAcquired=False`、M5 记 `skipped`、工作区干净 |
+| `revert` | `-Drill revert` | 起一个看门狗子进程，等 patch 落地后把 mutant 那一行改成别的文本，使 `git apply -R` 的 hunk 上下文失配 | 退出码 4、stdout 含「反向还原失败」、报告 M5 记 `revert-failed`、看门狗确实注入过改动、目标文件被快照恢复、工作区干净 |
+| `isolation` | `-Drill isolation` | 扫描本轮 `.scratch/run/H/**/meta.json` 与 `playwright.config.ts` | `YXS_WORKERS=1`、`YXS_RETRIES=0`、起止时间戳齐全、无真实数据目录引用、超时 180000、无残留临时 home 进程 |
+
+一次跑全部：`-Drill all`。演练退出码：0 全部符合预期；5 有演练项未满足（不静默放过）；3 参数错。演练结果同时进 `mutation-report.md` 的「AC 演练记录」节。
+
+`isolation` 只校验本轮格式的 `meta.json`（带 `env` 字段）。旧版脚本（1.0.x）写的证据缺这些字段，属历史产物，脚本跳过并单独计数，不拿旧格式冒充本轮结论。
+
 ## 4 证据落点
 
 - **根目录**：`.scratch/run/H/`，本轮所有运行证据只落在这里；不回写 `tools/automated-testing/.artifacts/` 既有历史证据。
@@ -86,10 +101,13 @@ Test-Path tools\automated-testing\node_modules\@playwright\test
   M1/  red/  green/  pre/       # 每个 mutant：红跑、绿跑、应用前快照
   M2/  red/  green/  pre/
   M3/  red/  green/  pre/
-  M4/  red/  green/  pre/  baseline-unpacked/
+  M4/  red/  green/  pre/  baseline-unpacked/   # baseline-unpacked 仅闭环期间存在，恢复成功后删除
   M5/  red/  green/  pre/
-  lock-skip/                    # AC-H-09 取不到锁时的记录
+  drills/                       # AC-H-09 / H-11 / H-13 / H-14 演练结果（result.json + stdout.txt）
+    dryrun/  lock/  revert/  isolation/
 ```
+
+`baseline-unpacked` 是 M4 的临时基线备份（约 365 MB）。脚本在恢复成功后立即删除；恢复失败时保留并在报告「残留与清理」节标注大小与人工处理方式，不会静默堆积。
 
 - **每个阶段目录内文件**：
   - `stdout.txt`：Playwright 原始 stdout / stderr 合并输出；
@@ -99,17 +117,22 @@ Test-Path tools\automated-testing\node_modules\@playwright\test
 - **复跑命令**（仓库根）：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 
 # 单条闭环：按 TC 编号反查
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -Case TC-P1-03
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -Case TC-P1-03
 
 # 全量串行
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -All
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -All
 
 # 干跑：只看计划不动文件
-pwsh tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
+
+# AC 演练：锁跳过 / DryRun / 还原失败 / 隔离核对（结果落 .scratch/run/H/drills/）
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\automated-testing\scripts\run-mutation.ps1 -Drill all
 ```
+
+脚本只需 Windows 自带的 `powershell.exe`（5.1）即可运行，不要求 `pwsh`；在 PowerShell 7 下同样可用。脚本文件本身是 UTF-8 带 BOM，因为 5.1 读取无 BOM 的 `.ps1` 会按 ANSI 解码，中文关键词会变乱码。
 
 - **报告索引**：`mutation-report.md` 的 31 行基线索引只引用既有 `.artifacts/` 证据目录路径；本轮新产生的截图 / trace 不在本轮交付范围内（既有配置 `trace: 'off'`、`screenshot: 'off'`，见 `tools/automated-testing/playwright.config.ts:16-20`）。
 
@@ -148,12 +171,12 @@ pwsh tools\automated-testing\scripts\run-mutation.ps1 -All -DryRun
 文档自检是交活前的机器闸：只查结构、引用与占位词，查不到语义对错；语义由 §3 的 14 条 AC 负责。形式机器校验、语义人工验收的分工，与测试实践的底线要求一致 [R7]。
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang
+# 在仓库根执行（clone 到哪台机器都适用，不写死本机路径）
 python plans\server-client-split\00-master\check-docs.py --round H
 ```
 
 ```text
-仓库根：E:\Documents\GitHub\YingXiaoShang
+仓库根：<clone 后的仓库根绝对路径>
 检查轮次：H
 行数统计：
   H-*: 1035 行 / 4 份

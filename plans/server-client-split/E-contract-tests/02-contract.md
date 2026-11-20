@@ -78,7 +78,7 @@ OpenAPI 覆盖（enum 30 + 通道 path 5 + legacy 4 + Result schema 30）=  4
 | `--only`（别名 `--case`） | string | 空（全量 80 条） | 只跑匹配的方法名或用例编号（如 `--only news.list`、`--only E-070`） | 不匹配任何用例 → 退出码 3，`参数 --only 非法：没有匹配到任何用例。` |
 | `--home` | string | `.scratch/run/E/home-<短id>/` | 隔离数据目录；http/electron 实例的库副本与产物位置 | 指向真实数据目录（`%APPDATA%`、`~/.learning-agent`、`<repo>/.learning-agent`）→ 拒绝并退出码 3 |
 | `--report` | string | `report/<时间戳>/` | 报告落盘目录；相对路径基于 `tools/contract-tests/` | 路径不可写或越出工具包目录 → 退出码 3 |
-| `--student-id` | string | 本地测试学生 fixture 学号（`lib/fixtures.mjs`） | http 目标登录前置凭证之一 | 缺省在报告里提示；登录失败按 §4 鉴权路径记用例失败（退出码 1），不算 CLI 非法 |
+| `--student-id` | string | 本地测试学生 fixture 学号（`src/fixtures.mjs`） | http 目标登录前置凭证之一 | 缺省在报告里提示；登录失败按 §4 鉴权路径记用例失败（退出码 1），不算 CLI 非法 |
 | `--password` | string | fixture 测试口令 | http 目标登录前置凭证之一 | 同上；口令不出现在报告正文与日志 |
 
 退出码表（权威口径，§9 运行命令引用本表）：

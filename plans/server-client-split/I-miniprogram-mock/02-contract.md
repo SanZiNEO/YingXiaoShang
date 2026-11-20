@@ -34,6 +34,22 @@
 > 每个组件块必须带接缝标注（格式见 §2.6），标注它将来替换成哪个方法的真实调用。
 > 本版组件只表达信息结构与跳转关系，不追求高保真视觉，线框原型的取舍取向参照 [R8]。
 
+### 2.0 与原始 README 五标签的映射
+
+`I-miniprogram-mock/README.md` 是原始需求基线（保持原样不改写），它列的是「提问、回答带引用、出题、答题、学情」5 个标签。本轮按冻结 §5 的**只读方法面**把 5 页收敛为「首页 / 新闻 / 新闻详情 / 问答 / 我的」，逐项对应关系如下：
+
+| README 标签 | 本轮实现 | 落点 | 理由 |
+|---|---|---|---|
+| 提问 | **不实现** | 无独立页 | 提交提问走 `POST /api/v1/chat/stream`（冻结 §7.1），是写通道；本轮零网络、只读，§2 非目标已写明不接 chat。`pages/ask.html` 承载「问答」但只展示历史作答，不放输入框与发送按钮 |
+| 回答带引用 | **不实现**（部分形态由新闻详情承载） | `pages/news-detail.html` 的「知识点匹配 / 思政匹配」区 | 带引用的回答正文来自 chat 流，且引用溯源依赖 `getKp`/`getBlock`/`getResource` 三个 legacy 方法（冻结 §6），本轮均不接。`news.get` 的 `matches[]`/`ideology[]` 已含 `evidence_span` + `confidence` + `rationale`，是只读面内唯一可复现的「结论 + 证据摘录」形态，故用它表达引用结构 |
+| 出题 | **不实现** | 无独立页 | 出题是写操作（`question-gen` 预设 + agent 落库），冻结 §5 的 30 个方法里没有出题只读方法；`listQuestions` 不在冻结清单内。原型不提供出题按钮，避免假按钮被当成已实现功能 |
+| 答题 | **不实现写回**；只读展示历史作答 | `pages/ask.html`（`questions.attempts`） | 交卷/单题作答走 `/api/v1/answer-set`、`/api/v1/answer`（冻结 §7.3/§7.4），本轮不接。`questions.attempts` 是冻结 §5 第 9 项只读方法，正好给出「对错 + 答案 + 反馈」的历史视图 |
+| 学情 | **实现** | `pages/profile.html`（`profile.get`） | `profile.get` 返回 `profile` / `competencies` / `growth` / `evidence`，正好覆盖 README 要的「进度、能力等级、成长快照、证据」；空证据走 §4.2 空态 |
+
+README 未列、本轮按冻结 §5 只读方法面新增的两页：`pages/home.html`（`student.current`，身份概览与 5 页入口）、`pages/news.html`（`news.list`，新闻列表）。它们不替代上述任何标签，只是原型需要的导航与数据入口。
+
+> 结论：5 个标签里 **1 个完整实现（学情）**、**1 个以只读形态部分实现（答题 → 历史记录）**、**3 个不实现（提问 / 回答带引用 / 出题）**，不实现的都有明确的写通道或缺失方法依据，不是遗漏。
+
 ### 2.1 首页 `pages/home.html`（`student.current`）
 
 | 组件 | 绑定字段 | 展示规则 | 空值兜底 |
@@ -275,7 +291,7 @@
 | 视口宽度 | 原型容器 `max-width: 375px`，居中；页面背景铺满，内容不超出 375 | 375px 设备宽度下 `document.documentElement.scrollWidth <= 375`；宽度规则只写在 `styles/app.css`，页面不内联固定像素宽度 |
 | 点击区 | 按钮、可点行、标签链接的最小可点区域 `min-height: 44px`、`min-width: 44px`；行内文字不压到边界 | 对齐小程序触控建议 [R1]；不足 44px 的纯文字链接补 `padding` 撑出点击区 |
 | 图片/媒体 | 原型本版无位图；预留 `img { max-width: 100%; height: auto; }` | 防止后续补图撑破卡片 |
-| 文本换行 | 所有文本容器 `max-width: 100%`；长英文串 / 长 URL 用 `overflow-wrap: anywhere`；flex/grid 子项 `min-width: 0` | 换行规则参照响应式布局基线 [R2]；禁止对正文用 `white-space: nowrap` |
+| 文本换行 | 所有文本容器 `max-width: 100%`；长英文串 / 长 URL 用 `overflow-wrap: anywhere`；flex/grid 子项 `min-width: 0`。标签（`.tag` 及 4 个 tone 类）同样必须带 `overflow-wrap: anywhere` | 换行规则参照响应式布局基线 [R2]；禁止对正文用 `white-space: nowrap`；注入 90 字符无空格 token 到标签后 `scrollWidth` 不得增长 |
 | 横向滚动 | 页面根节点不允许横向滚动；卡片内部不设横向 `overflow-x: auto` | 无横向滚动判据：逐页 375px 下 `scrollWidth === clientWidth`；纵向允许 `overflow-y: auto` |
 | 动效 | 过渡动画时长不超过 200ms；`@media (prefers-reduced-motion: reduce)` 下关闭过渡与骨架动画 [R3] | 原型不做轮播、不做弹层动画 |
 | 字体 | 系统字体栈；字号层级：页头 17px、卡片标题 14px、正文 13px、辅助说明 11px | 具体像素值以真机视觉稿为准；本版只定层级，不写死字重对比之外的装饰 |
@@ -336,15 +352,15 @@ t3  按 state 选渲染分支：
       empty   → 以空集合渲染空态分支
       缺省 normal → 渲染正常态数据
 t4  绑定导航：<a> 链接原样保留；「重试」按钮拼出去掉 state 的 URL
-t5  控制台输出 fixture 来源标记：fixture-source: fetch | inline-fallback
+t5  控制台输出 fixture 来源标记：fixture-source: json | inline-fallback
 ```
 
 序列硬规则：
 
 1. `state` 取值仅认 `loading` / `error` / `empty`；其他值（含缺省、乱码、大小写不一致）一律按 `normal` 处理，不报错。
 2. 一次渲染只出现一个分支容器；三态容器互斥显隐，不叠加。
-3. 加载失败（`fetch` 抛错且内联兜底也缺失）走 error 分支，文案用 §4.1，不抛未捕获异常到控制台。
-4. 不发任何 `http(s)` 请求：脚本里不出现 `fetch('http…')`、`XMLHttpRequest`、`WebSocket`、`EventSource`；`<img>`/`<link>` 不引外网资源。
+3. 加载失败（JSON 通道与内联兜底都拿不到数据）走 error 分支，文案用 §4.1，不抛未捕获异常到控制台。
+4. 不发任何 `http(s)` 请求：脚本里除 §5.3 那一处读本地 `../fixtures/<name>.json` 的 `fetch` 外，不出现 `fetch('http…')`、`XMLHttpRequest`、`WebSocket`、`EventSource`；`<img>`/`<link>` 不引外网资源。
 
 ### 5.2 导航契约
 
@@ -365,21 +381,27 @@ t5  控制台输出 fixture 来源标记：fixture-source: fetch | inline-fallba
 - 原型不做前端路由、不做历史栈管理；浏览器后退键按原生行为工作。
 - 全部导航由相对路径 `<a>` 链接承担，不依赖脚本路由库；这种单文件可跳转的静态结构参照纯 HTML 原型的组织方式 [R5]。
 
-### 5.3 数据加载通道（`file://` 兜底）
+### 5.3 数据加载通道（JSON 主通道 + `file://` 内联兜底）
 
 ```text
 loadFixture(name):
-  1. 尝试 fetch('../fixtures/<name>.json')
-     - 200 且 JSON 可解析 → 使用返回对象，标记 fixture-source: fetch
-  2. fetch 抛错（file:// 同源限制 / 网络不可达）→ 读取页面内
+  0. location.protocol === 'file:' → 直接走第 2 步（内联副本）
+     - 理由：Chromium 对 file:// 的 fetch 必然失败，且会自己打一条 console.error，JS catch 不到；
+       预判协议与「试了再回落」结果等价，但双击打开时控制台保持干净
+  1. fetch(SCRIPT_URL 相对解析出的 '../fixtures/<name>.json')
+     - response.ok 且 JSON 可解析 → 使用返回对象，标记 fixture-source: json
+  2. fetch 失败（不透明同源拦截 / 404 / JSON 解析失败）或第 0 步命中 → 读取页面内
      <script type="application/json" data-fixture="<name>"> 的内联副本
-     → 标记 fixture-source: inline-fallback
-  3. 内联副本缺失 → 进入 error 分支（§5.1 规则 3）
+     → 标记 fixture-source: inline-fallback（括号内带失败原因，file:// 下为 `file: protocol`）
+  3. 两条通道都拿不到 → 返回 null，进入 error 分支（§5.1 规则 3）
 ```
 
+- `fixture-source` 标记必须如实反映本次真实来源：静态服务器下是 `json`，`file://` 下是 `inline-fallback`；不得无条件打印其中一种。
+- JSON 地址由脚本自身 URL 解析（`new URL('../fixtures/' + name, SCRIPT_URL)`），不写死页面层级，也不依赖当前工作目录。
 - 内联副本与 JSON 文件内容必须逐字一致；JSON 是唯一编辑源，改数据先改 JSON 再同步内联块。
 - 脚本为经典 `script`（非 `type="module"`）：`file://` 下 ES Module 会被 CORS 拦截，原型不得依赖模块加载。
-- 双通道设计是对 `file://` 限制的兜底，不是两套数据源；验收时两种通道各验一次（§7 MT-I-08）。
+- 双通道设计是对 `file://` 限制的兜底，不是两套数据源。**改 JSON 后页面跟随**这一条只在静态服务器路径成立；`file://` 路径下浏览器拦本地 fetch，只保证「双击能看」，不保证跟随。验收时两种通道各验一次（§7 MT-I-08、MT-I-11）。
+- 全部请求目标都落在同目录 `fixtures/` 的本地相对路径上，不出现任何外部地址。
 
 ## 6 兼容与排除
 
@@ -424,9 +446,10 @@ loadFixture(name):
 | MT-I-05 | §3 schema 键位 | 逐份 fixture 对照 §3 表格核对字段名、类型、可空性 | 已列字段齐全；枚举值在允许集合内；无 `undefined` 字面量 | 缺字段、类型错、枚举越界 |
 | MT-I-06 | §6.2 排除项 | 对 `pages/`、`scripts/`、`index.html` 做关键词检索 | 除排除说明外无可点击入口；无对应调用代码 | 出现设置 / 文件预览 / 打开文件夹按钮或处理器 |
 | MT-I-07 | §3.6 长串换行 | 打开含超长标题、长英文词、长摘录的样例卡片 | 文本在卡片内换行，卡片边界不被顶破 | 出现溢出、横向滚动或文字裁切 |
-| MT-I-08 | §5.3 加载通道 | 分别经静态服务器与 `file://` 打开页面，查看 `fixture-source` 标记 | 两种通道均可渲染；`file://` 下命中内联兜底时标记为 `inline-fallback` | `file://` 下正常态空白且无兜底 |
+| MT-I-08 | §5.3 加载通道 | 分别经静态服务器与 `file://` 打开页面，查看 Console 的 `fixture-source` 标记 | 两种通道均可渲染；静态服务器下标记为 `json`，`file://` 下标记为 `inline-fallback`（带失败原因） | 标记与实际来源不符（如 `file://` 下仍打印 `json`）；`file://` 下正常态空白且无兜底 |
 | MT-I-09 | §2.6 接缝标注 | `querySelectorAll('[data-mock-source]')` 逐页清点 | 5 页均有标注；属性值与 §1 方法对应表一致 | 缺标注、方法名拼写与冻结表不符 |
 | MT-I-10 | §4.2 空态文案 | 空态下逐字比对 §4.2 表格 | 页面文案与表格逐字一致（含标点） | 文案被改写、漏字或换成英文 |
+| MT-I-11 | §5.3 JSON 唯一编辑源 | 静态服务器下把 `fixtures/news-list.json` 首条标题改成标记串，刷新 `pages/news.html`，再改回 | 列表首行跟随标记串；改回后恢复；Console 标记为 `json` | 改 JSON 后页面不跟随（说明读的是内联副本或被硬编码）；`file://` 下按设计回落内联副本，此处不判失败 |
 
 静态原型的组织与「数据文件独立于视图」的划分参照 mock 数据实践 [R4]；纯 HTML 原型的单文件可打开性参照静态原型结构 [R5]；fixture 字段成图方式参照测试数据对象图组织 [R6]；方法命名与冻结 RPC 口径保持一致 [R7]；原型阶段以结构表达为先、不追求高保真视觉 [R8]。
 

@@ -29,9 +29,12 @@ docker version
 # 2) 准备本轮证据目录（不碰真实数据目录）
 New-Item -ItemType Directory -Force .scratch\run\C | Out-Null
 
-# 3) 验收用独立 project 名 yxs-c，避免与共享 yxs project 撞容器/卷
-#    命令统一形式：
-#    docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler ...
+# 3) 验收用独立 project 名 yxs-c，避免与共享 yxs project 撞容器/卷。
+#    容器名由 compose 按 project 派生（yxs-c-crawler-1），不在 compose 里写死
+#    container_name —— 所以下文一律用「project + 服务名」寻址，不敲容器名。
+#    在 PowerShell 里先定义这条等价命令，后文简写为 dc：
+function dc { docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler @args }
+dc config --quiet     # 渲染校验：无输出即通过
 
 # 4) 端口预检：8787 被占时按 +100 退避（8787 → 8887），并在报告写明实际端口
 netstat -ano | findstr :8787
@@ -47,24 +50,24 @@ netstat -ano | findstr :8787
 
 ## 3 用例清单
 
-验收容器名固定 `yxs-crawler-c`（project `yxs-c`，命名对照见 `02-contract.md` §3.1）；下文 `<c>` 指代该容器，等价于 `yxs-crawler-c`。
+验收不写死容器名：compose 按 `-p yxs-c` 派生容器名 `yxs-c-crawler-1`，任何 AC 都通过 `docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler exec crawler ...` 寻址（下文简写 `dc exec crawler`，`dc` 定义见 §2）。这样换 project 名、换机器、换 compose 版本都不会让命令失效。
 
 | 编号 | 操作 | 期望输出 | 失败判据 | 证据文件 |
 |---|---|---|---|---|
 | AC-01 | `docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler up -d`，随后 `ps` | crawler 状态 `healthy`；网络 `yxs-net`、卷 `yxs-data`（project 内为 `yxs-c_yxs-data`）已创建 | `unhealthy`、`exited`；超过 `start_period` + 3 次重试仍 `starting` | `C/compose-ps.txt`、`C/compose-up.log` |
-| AC-02 | 宿主：`curl.exe -s http://127.0.0.1:8787/health`；容器内：`docker exec <c> python -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8787/health', timeout=5).status)"` | 宿主与容器内均 200；JSON `ok:true`，含 `host/port/sources`（处理器见 `http_api.py:174-183`，路由见 `http_api.py:127-128`） | 连接拒绝；非 200；`ok:false`；缺 `sources` 字段 | `C/health.json`、`C/health-in-container.txt` |
-| AC-03 | `docker exec <c> id -u`；`docker exec <c> id -un` | `id -u` 输出 `10001`；用户名非 `root` | 输出 `0`；用户名为 `root` | `C/id.txt` |
+| AC-02 | 宿主：`curl.exe -s http://127.0.0.1:8787/health`；容器内：`dc exec crawler python -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8787/health', timeout=5).status)"` | 宿主与容器内均 200；JSON `ok:true`，含 `host/port/sources`（处理器见 `http_api.py:174-183`，路由见 `http_api.py:127-128`） | 连接拒绝；非 200；`ok:false`；缺 `sources` 字段 | `C/health.json`、`C/health-in-container.txt` |
+| AC-03 | `dc exec crawler id -u`；`dc exec crawler id -un` | `id -u` 输出 `10001`；用户名非 `root` | 输出 `0`；用户名为 `root` | `C/id.txt` |
 | AC-04 | `docker images --format "{{.Repository}}:{{.Tag}} {{.Size}}" \| findstr yxs-crawler`；`docker image inspect yxs-crawler:local --format "{{.Size}}"` | 镜像名 `yxs-crawler:local`；体积 `< 400 MB`（inspect 字节数换算后 < 419430400） | 体积 ≥ 400 MB；镜像不存在；`Size` 字段为空 | `C/images.txt`、`C/size-inspect.txt` |
-| AC-05 | 记基线：`docker exec <c> python -c "import sqlite3;c=sqlite3.connect('/data/data/learning.db');print(c.execute('SELECT COUNT(*) FROM news_articles').fetchone()[0])"`；`docker restart <c>`；再查计数 | 重启前后 `news_articles` 计数一致（重启后 ≥ 基线） | 计数归零；库文件丢失；重启后库打不开 | `C/restart-before.txt`、`C/restart-after.txt` |
+| AC-05 | 记基线：`dc exec crawler python -c "import sqlite3;c=sqlite3.connect('/data/data/learning.db');print(c.execute('SELECT COUNT(*) FROM news_articles').fetchone()[0])"`；`dc restart crawler`；再查计数 | 重启前后 `news_articles` 计数一致（重启后 ≥ 基线） | 计数归零；库文件丢失；重启后库打不开 | `C/restart-before.txt`、`C/restart-after.txt` |
 | AC-06 | `docker compose -p yxs-c -f services/deploy/compose.yml down`（**禁止 `-v`**）；再 `--profile crawler up -d`；查 `news_articles` 计数与探针文件 | 计数仍在；`/data/.c-probe` 内容可读 | 计数归零；探针文件丢失；命令里出现 `-v` | `C/down-up-count.txt`、`C/probe.txt` |
 | AC-07 | `bash -n services/deploy/scripts/run-round.sh`；静态核对 `cron/news-crawler.cron` 条目五段（分 时 日 月 周）与脚本路径；Linux 宿主再 `crontab -l` 核对已安装条目 | 脚本语法通过；cron 条目为 `*/30 * * * *` 五段；路径指向存在的 `run-round.sh`；宿主 crontab 可见该条目（Linux 环境） | `bash -n` 报错；条目段数 ≠ 5；脚本路径不存在；crontab 无条目 | `C/cron-check.txt` |
 | AC-08 | `bash services/deploy/scripts/run-round.sh`（必要时先 `NEWS_CRAWLER_BASE_URL=http://127.0.0.1:8787`） | 退出码 0；`source_runs` 出现新一行（`trigger` 为 `manual` 或 `schedule`）；`/stats` 能读到本轮 `duration_ms/inserted/errors` | 退出码非 0；无新统计行；脚本路径/`docker compose` 调用失败 | `C/round-stats.jsonl`、`C/round-run.log` |
-| AC-09 | 容器内列清单：`docker exec <c> python -c "import sqlite3;c=sqlite3.connect('/data/data/learning.db');print(sorted(r[0] for r in c.execute(\"SELECT name FROM sqlite_master WHERE type='table'\")))"`；源码侧：`Select-String -Path services\news-crawler-py\src\news_crawler\*.py -Pattern "news_articles|source_runs|news_tags|case_matches|ideology_tags"` | 采集 DDL 只建 `news_articles`、`source_runs`（schema 见 `db.py:24-57`）；DML 表集合 ⊆ 写入三表 + 两张草稿清理表；`chapters/knowledge_points/questions/student_profiles/artifacts/chat_sessions` 等业务表在采集源码中零引用（共享库业务表基线见 `packages/db/src/index.ts:92-436`） | 采集代码出现对业务表的 INSERT/UPDATE/DELETE；采集自建业务表；`news_tags` 被采集侧新建 | `C/table-list.txt`、`C/table-refs.txt` |
-| AC-10 | `docker exec <c> printenv`；对照启动日志 `DB=` 行 | 含 `LEARNING_AGENT_HOME=/data`、`NEWS_CRAWLER_PORT=8787`、`NEWS_CRAWLER_DB=/data/data/learning.db`、`NEWS_CRAWLER_WORKERS=8`；日志 DB 路径与 env 一致（启动横幅见 `cli.py:195-199`） | 变量缺失；DB 路径落到容器临时层；端口 env 与控制面实际监听端口不一致 | `C/env.txt` |
+| AC-09 | 容器内列清单：`dc exec crawler python -c "import sqlite3;c=sqlite3.connect('/data/data/learning.db');print(sorted(r[0] for r in c.execute(\"SELECT name FROM sqlite_master WHERE type='table'\")))"`；源码侧：`Select-String -Path services\news-crawler-py\src\news_crawler\*.py -Pattern "news_articles|source_runs|news_tags|case_matches|ideology_tags"` | 采集 DDL 只建 `news_articles`、`source_runs`（schema 见 `db.py:24-57`）；DML 表集合 ⊆ 写入三表 + 两张草稿清理表；`chapters/knowledge_points/questions/student_profiles/artifacts/chat_sessions` 等业务表在采集源码中零引用（共享库业务表基线见 `packages/db/src/index.ts:92-436`） | 采集代码出现对业务表的 INSERT/UPDATE/DELETE；采集自建业务表；`news_tags` 被采集侧新建 | `C/table-list.txt`、`C/table-refs.txt` |
+| AC-10 | `dc exec crawler printenv`；对照启动日志 `DB=` 行 | 含 `LEARNING_AGENT_HOME=/data`、`NEWS_CRAWLER_PORT=8787`、`NEWS_CRAWLER_DB=/data/data/learning.db`、`NEWS_CRAWLER_WORKERS=8`；日志 DB 路径与 env 一致（启动横幅见 `cli.py:195-199`） | 变量缺失；DB 路径落到容器临时层；端口 env 与控制面实际监听端口不一致 | `C/env.txt` |
 | AC-11 | `docker run --rm yxs-crawler:local sh -c "ls /app; ls /app/scripts 2>/dev/null; ls /app/.venv 2>/dev/null; find /app -name '__pycache__' -o -name '*.pyc' -o -name '*.db' -o -name '*.jsonl'"` | 无 `.venv`、无 `scripts/`（不含 `quality_report.py`）、无 `__pycache__/*.pyc`、无 `*.db/*.jsonl` | 镜像内出现宿主 venv；出现 `scripts/quality_report.py`；混入本地库或 JSONL | `C/ignore-check.txt` |
-| AC-12 | 写探针：`docker exec <c> sh -c "echo probe-ok > /data/.c-probe"`；`down` 再 `up -d`；`docker exec <c> cat /data/.c-probe` | 重建后探针文件内容仍为 `probe-ok` | 文件丢失；卷被重建为空 | `C/probe-rebuild.txt` |
+| AC-12 | 写探针：`dc exec crawler sh -c "echo probe-ok > /data/.c-probe"`；`down` 再 `up -d`；`dc exec crawler cat /data/.c-probe` | 重建后探针文件内容仍为 `probe-ok` | 文件丢失；卷被重建为空 | `C/probe-rebuild.txt` |
 | AC-13 | 受控实验：临时把 healthcheck 测试指向未监听端口（或容器内停止主进程），观察 compose 状态；实验后还原 | 探针退出非 0；容器状态转 `unhealthy`；`depends_on: service_healthy` 的服务端在 unhealthy 时不会被拉起 | healthcheck 失败仍报 `healthy`；无 `unhealthy` 状态流转 | `C/unhealthy.txt`、`C/healthcheck-restored.txt` |
-| AC-14 | `docker compose -p yxs-c logs crawler`；容器内列日志文件：`docker exec <c> sh -c "find /app /data -name '*.log' 2>/dev/null"` | 启动横幅与轮次结果在容器 stdout（`docker logs` 可见）；容器内无自写 `.log` 文件 | 日志只写文件、stdout 为空；容器内出现持久化日志文件 | `C/logs-stdout.txt` |
+| AC-14 | `docker compose -p yxs-c logs crawler`；容器内列日志文件：`dc exec crawler sh -c "find /app /data -name '*.log' 2>/dev/null"` | 启动横幅与轮次结果在容器 stdout（`docker logs` 可见）；容器内无自写 `.log` 文件 | 日志只写文件、stdout 为空；容器内出现持久化日志文件 | `C/logs-stdout.txt` |
 
 用例写法遵循「一条 AC 一个可观察结果 + 明确失败判据」；状态流转与依赖等待的 compose 口径参照健康检查样例 [R60]。
 
@@ -79,22 +82,22 @@ cd E:\Documents\GitHub\YingXiaoShang
 $out = ".scratch\run\C"
 
 # AC-01 / AC-14
-docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler up -d *> "$out\compose-up.log"
-docker compose -p yxs-c -f services/deploy/compose.yml ps | Tee-Object "$out\compose-ps.txt"
-docker compose -p yxs-c logs crawler | Tee-Object "$out\logs-stdout.txt"
+dc up -d *> "$out\compose-up.log"
+dc ps | Tee-Object "$out\compose-ps.txt"
+docker compose -p yxs-c -f services/deploy/compose.yml logs crawler | Tee-Object "$out\logs-stdout.txt"
 
 # AC-02
 curl.exe -s http://127.0.0.1:8787/health -o "$out\health.json"
 
 # AC-03
-docker exec yxs-crawler-c id -u | Tee-Object "$out\id.txt"
+dc exec crawler id -u | Tee-Object "$out\id.txt"
 
 # AC-04
 docker images --format "{{.Repository}}:{{.Tag}} {{.Size}}" | findstr yxs-crawler | Tee-Object "$out\images.txt"
 docker image inspect yxs-crawler:local --format "{{.Size}}" | Tee-Object "$out\size-inspect.txt"
 
 # AC-09 表清单与源码引用
-docker exec yxs-crawler-c python -c "import sqlite3;c=sqlite3.connect('/data/data/learning.db');print(sorted(r[0] for r in c.execute(\"SELECT name FROM sqlite_master WHERE type='table'\")))" | Tee-Object "$out\table-list.txt"
+dc exec crawler python -c "import sqlite3;c=sqlite3.connect('/data/data/learning.db');print(sorted(r[0] for r in c.execute(\"SELECT name FROM sqlite_master WHERE type='table'\")))" | Tee-Object "$out\table-list.txt"
 Select-String -Path services\news-crawler-py\src\news_crawler\*.py -Pattern "news_articles|source_runs|news_tags|case_matches|ideology_tags" | Tee-Object "$out\table-refs.txt"
 ```
 
@@ -127,16 +130,16 @@ mutation 判据用「killed / survived」：用例变红 = killed，仍绿 = sur
 
 | 症状 | 最可能原因 | 一条命令确认 |
 |---|---|---|
-| 容器一直 `starting` 后 `unhealthy` | 主进程没起 / `/health` 不通 / 库打不开 | `docker compose -p yxs-c logs crawler`；`docker exec <c> python /app/scripts/healthcheck.sh; echo $?` |
-| `ps` 是 `healthy` 但宿主 `curl /health` 拒绝 | 端口映射或监听地址错（容器内仍绑 127.0.0.1） | `docker exec <c> python -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8787/health').status)"`；看 compose `command` 的 `--host` |
+| 容器一直 `starting` 后 `unhealthy` | 主进程没起 / `/health` 不通 / 库打不开 | `docker compose -p yxs-c logs crawler`；`dc exec crawler python /app/scripts/healthcheck.sh; echo $?` |
+| `ps` 是 `healthy` 但宿主 `curl /health` 拒绝 | 端口映射或监听地址错（容器内仍绑 127.0.0.1） | `dc exec crawler python -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8787/health').status)"`；看 compose `command` 的 `--host` |
 | 镜像体积 ≥ 400 MB | `.dockerignore` 漏排 venv / scratch / 本地库 | `docker history yxs-crawler:local --format "{{.Size}} {{.Comment}}"`；AC-11 列镜像内大目录 |
-| 容器内写 `/data` 报权限拒绝 | 卷属主不是 10001（bind mount 场景常见） | `docker exec <c> id -u`；`docker exec <c> ls -ld /data` |
+| 容器内写 `/data` 报权限拒绝 | 卷属主不是 10001（bind mount 场景常见） | `dc exec crawler id -u`；`dc exec crawler ls -ld /data` |
 | `down` 再 `up` 后数据没了 | 用了匿名卷，或执行了 `down -v` | 看 compose `volumes` 是否命名卷；`docker volume ls \| findstr yxs-data` |
 | cron 到点没跑 | 脚本路径错 / 无可执行位 / crontab 未安装 | `bash -n services/deploy/scripts/run-round.sh`；Linux 宿主 `crontab -l`；手工执行一次看退出码 |
 | 宿主 8787 起不来 | 端口被占（本机可能已有桌面端侧车） | `netstat -ano \| findstr :8787`；按 +100 退避改宿主映射端口 |
 | builder 阶段 lxml 装不上 | slim 缺编译工具且无对应 wheel | 看 builder 日志 `pip install` 报错；确认 lxml 走 manylinux wheel 而非源码编译 |
 | `/stats` 本轮 `errors` 偏高 | 上游源反爬 / 改版 / 详情超时 | `curl "http://127.0.0.1:8787/stats?limit=10"` 看 `failures` 明细 |
-| 环境变量没进容器 | compose `environment` 漏写或 `.env` 未加载 | `docker exec <c> printenv`；`docker compose -p yxs-c config` 渲染核对 |
+| 环境变量没进容器 | compose `environment` 漏写或 `.env` 未加载 | `dc exec crawler printenv`；`docker compose -p yxs-c config` 渲染核对 |
 
 排查表按「症状 → 最可能原因 → 一条确认命令」组织；健康类症状必须落到 `/health` 原文与容器状态上，不看平均值 [R60]。
 

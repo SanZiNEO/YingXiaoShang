@@ -84,7 +84,7 @@ tools/contract-tests/
     illegal-class.mjs             5 类非法专属用例（缺字段/类型错/404/403/未知方法）
     channels.mjs                  SSE 顺序、取消停止、cancel 未知 requestId、answer/answer-set 回读、health
     openapi.mjs                   4 项覆盖断言枚举（enum 30、通道 path 5、legacy 4、Result schema 30）
-  lib/
+  src/
     http-target.mjs               http 调用层：登录取 token、RPC 信封、SSE 帧解析、5 通道请求
     electron-target.mjs           electron 调用层：复用 driver 的 launchElectron 与 LearningClient 同构接口
     stub-target.mjs               内置确定性桩：不联网、不起进程，供并行期自洽跑通断言器与报告

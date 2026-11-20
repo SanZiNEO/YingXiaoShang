@@ -128,7 +128,7 @@ mutation 判据用 killed / survived 术语：用例变红 = killed；仍绿 = s
 | SSE 用例超时，日志「未收到 done」 | 中间层缓冲 / 服务端未发终态帧 / 等待超时阈值过短 | 看 `sse/<case-id>.txt` 最后一帧；`$env:YXS_SSE_TIMEOUT_MS` 现值 |
 | 登录 401 但口令确定对 | 测试学生未建 / `auth.db` 指向隔离副本之外 | 检查 `.scratch\run\E\home-1\data\` 下是否有 `auth.db` |
 | electron 整组 `skipped` | 未取得 `.scratch/run/electron.lock` 锁（H 轮在用） | `Test-Path .scratch\run\electron.lock`；报告 `report.md` 锁条目 |
-| 静态检查报「直接 import _electron」 | E 包 target 代码绕过 driver 自启 Electron | `Select-String -Path tools\contract-tests\lib\*.mjs -Pattern "_electron|@playwright/test"` |
+| 静态检查报「直接 import _electron」 | E 包 target 代码绕过 driver 自启 Electron | `Select-String -Path tools\contract-tests\src\*.mjs -Pattern "_electron|@playwright/test"` |
 | 越权用例返回空数组而非 403 | 被测侧归属校验未按 token 解析身份 | 复核响应 `error.code`；对照冻结 §3.3 归属校验表 |
 | 中文消息断言失败但状态码对 | 服务端消息文案与冻结 §4.2/§5 模板逐字不符 | 比对 `cases/<case-id>.json` 的 `expected.message` 与 `actual.error.message` |
 | 端口冲突 | 上次 electron 实例残留占用 | 复用 `tools/automated-testing/src/driver/ports.ts:3` 同款 `allocatePort`；`waitPortFree` 复查 |

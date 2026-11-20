@@ -16,18 +16,26 @@
 tools/migrate-pg/
   package.json        # @yxs/migrate-pg，type=module；独立安装，不进根 workspace
   README.md           # 三条命令、环境变量表、退出码表、典型报错说明
-  schema-map.js      # 共享映射配置模块：38 张表注册表、列定义、类型映射、拓扑序、登记表名集合
-  migrate.js         # 入口一：只读 SQLite 副本 → 生成 PG schema → 批量 COPY 导入；幂等可重复跑
-  verify.js          # 入口二：逐表行数比对 + 每表抽样字段比对 + news_articles 哈希复算
-  rollback.js        # 入口三：默认 --dry-run 只打印；--apply 才逆序 DROP 本轮登记表
+  .gitignore          # 包内运行产物：node_modules/、*.dump、*.log
+  src/schema-map.js   # 共享映射配置模块：38 张表注册表、列定义、类型映射、拓扑序、登记表名集合、
+                      # 源码漂移核对（表/列/类型/可空/默认/主键/外键/唯一/索引）
+  src/values.js       # 取值归一唯一实现：jsonb 原文直传、空串→默认 JSON、时间戳空串→NULL、boolean
+  src/cli.js          # 参数解析与退出码工具；未知参数退出 1
+  src/target.js       # 连接参数读取 + 目标库身份守卫（库 yxs / 端口 55432）
+  src/pg-driver.js    # 按需加载 pg；未装依赖时给中文安装提示
+  src/migrate.js      # 入口一：只读 SQLite 副本 → 生成 PG schema → 批量 COPY 导入；幂等可重复跑
+  src/verify.js       # 入口二：逐表行数比对 + 每表抽样字段比对 + news_articles 哈希复算
+  src/rollback.js     # 入口三：默认 --dry-run 只打印；--apply 才逆序 DROP 本轮登记表
 ```
 
 | 模块 | 职责边界（谁不许干别人的活） |
 |---|---|
-| `schema-map.js` | 唯一保存「表名 → 列定义 → 源类型/目标类型/可空/默认/主键/外键/索引」的真相源；导出表清单、依赖边、主键列、JSON 列集合、时间戳列集合、布尔列集合。三个入口都从这里取表与列，禁止各自硬编码第二份清单 [R1] |
-| `migrate.js` | 参数与源路径校验 → 打开 SQLite 副本 → 版本与缺表核对 → 连接 PG → 生成 DDL → 按拓扑序装载 → 输出逐表行数。不负责校验已迁入数据的一致性（归 `verify.js`） |
-| `verify.js` | 只做双侧只读查询与比对：行数 100% → 抽样字段 → 正文哈希复算。不写 PG、不写 SQLite；差异只输出第一处 |
-| `rollback.js` | 只面向 `schema-map.js` 登记的 38 张表；dry-run 打印逆序清单，`--apply` 在单事务内 DROP。不触碰登记集合之外的表，不 `DROP DATABASE`，不 `TRUNCATE` 任何共享库 [R5] |
+| `src/schema-map.js` | 唯一保存「表名 → 列定义 → 源类型/目标类型/可空/默认/主键/外键/索引」的真相源；导出表清单、依赖边、主键列、JSON 列集合、时间戳列集合、布尔列集合，以及源码漂移核对。三个入口都从这里取表与列，禁止各自硬编码第二份清单 [R1] |
+| `src/values.js` | 唯一保存「源库取值 → 送 COPY 的文本」与「两侧取值是否相等」的判据。migrate 与 verify 必须调用同一组函数：两侧口径一旦分叉，同一份合法数据会出现「migrate 成功、verify 以环境错误退出」的矛盾结论 |
+| `src/migrate.js` | 参数与源路径校验 → 目标库身份守卫 → 打开 SQLite 副本 → 版本与缺表核对 → 连接 PG → 生成 DDL → 按拓扑序装载 → 输出逐表行数。不负责校验已迁入数据的一致性（归 `verify.js`） |
+| `src/verify.js` | 只做双侧只读查询与比对：行数 100% → 抽样字段 → 正文哈希复算。不写 PG、不写 SQLite；差异只输出第一处 |
+| `src/rollback.js` | 只面向 `schema-map.js` 登记的 38 张表；dry-run 打印逆序清单，`--apply` 在单事务内 DROP。不触碰登记集合之外的表，不 `DROP DATABASE`，不 `TRUNCATE` 任何共享库 [R5] |
+| `src/target.js` | 连接参数读取顺序与目标库身份判据（库 `yxs` / 端口 `55432`）。写操作（缺省 upsert、`migrate --rebuild`、`rollback --apply`）在目标不匹配时默认拒绝，须显式 `--force-target` |
 | `package.json` | 只声明本工具自己的依赖与脚本；不引用 `workspace:*`，不改根 `pnpm-workspace.yaml` |
 
 **为什么映射表集中在 `schema-map.js`**：三个入口都要同一份列定义（migrate 生成 DDL、verify 按列配对、rollback 按表名逆序）。清单散落在三个脚本里，改一张表就要改三处，校验口径会漂移；集中到一处后，表结构真相只有一个出口 [R7]。
@@ -47,9 +55,9 @@ tools/migrate-pg/
     "pg": "^8"
   },
   "scripts": {
-    "migrate": "node migrate.js",
-    "verify": "node verify.js",
-    "rollback": "node rollback.js"
+    "migrate": "node src/migrate.js",
+    "verify": "node src/verify.js",
+    "rollback": "node src/rollback.js"
   }
 }
 ```
@@ -59,7 +67,7 @@ tools/migrate-pg/
 - 安装命令在工具目录内独立执行：
 
 ```powershell
-cd E:\Documents\GitHub\YingXiaoShang\tools\migrate-pg
+# 工作目录：tools/migrate-pg
 pnpm install --ignore-workspace
 ```
 
@@ -67,7 +75,7 @@ pnpm install --ignore-workspace
 
 ### 2.2 构建与产物形态
 
-- 纯 JavaScript（ESM），无编译步骤：`node migrate.js` 直接跑，不经过 tsc/打包。
+- 纯 JavaScript（ESM），无编译步骤：在包内执行 `node src/migrate.js` 直接跑，不经过 tsc/打包；在仓库根执行 `node tools/migrate-pg/src/migrate.js`。
 - 不生成 Docker 镜像，不写 Dockerfile；PG 实例由他人负责拉起，工具只通过连接串对接已经存在的实例（容器名 `yxs-pg-d`、卷 `yxs-pg`、宿主端口 `55432` 是对接事实，不是本工具拉起的资源）。
 - 依赖版本：`pg` 的精确次版本以独立 `pnpm install` 落地后的本地 lockfile 为准；不在文档里手写未经安装核实的版本号。
 
@@ -88,38 +96,43 @@ pnpm install --ignore-workspace
 
 **决策：方案 B 为主，方案 A 只做漂移核对。** 依据：本轮要求 schema 映射可审计、可 verify、可 rollback（`01-scope.md` §1），显式表比自写 SQL 解析器更符合这个目标；解析器在公开同类项目里也多作为结构校验辅助，而不是唯一真相源 [R1]。
 
-伪代码（`schema-map.js` 导出 + 核对函数）：
+伪代码（`src/schema-map.js` 导出 + 核对函数）：
 
 ```js
-// 每张表登记：表名、主键列、列数组、外键数组、唯一约束/索引、源 DDL 行号区间
+// 每张表登记：表名、主键列、列数组、外键数组、唯一约束/索引
 export const TABLES = [
   {
     name: 'chapters',
     pk: ['id'],
-    sourceRef: 'packages/db/src/index.ts:92-94',
     columns: [
-      { name: 'id',        src: 'TEXT',    pg: 'text',             nullable: false, pk: true },
-      { name: 'number',    src: 'INTEGER', pg: 'bigint',           nullable: false },
-      { name: 'title',      src: 'TEXT',    pg: 'text',             nullable: false },
-      { name: 'source_path',src: 'TEXT',    pg: 'text',             nullable: false },
+      { name: 'id',          src: 'TEXT',    pg: 'text',   nullable: false, default: null },
+      { name: 'number',      src: 'INTEGER', pg: 'bigint', nullable: false, default: null },
+      { name: 'title',       src: 'TEXT',    pg: 'text',   nullable: false, default: null },
+      { name: 'source_path', src: 'TEXT',    pg: 'text',   nullable: false, default: null },
     ],
     fks: [],
     uniques: [],
+    indexes: [],
   },
   // …其余 37 张表，清单与 02-contract.md §3.2 逐表对齐
 ]
 
-// 漂移核对：从 index.ts 抽取 CREATE TABLE 表名与每表列名，与注册表比对
+// 漂移核对：从 index.ts 抽取表、列（类型/可空/默认/主键/外键）、表级 UNIQUE、
+// CREATE [UNIQUE] INDEX，与注册表逐属性比对。只比名字会让「INTEGER 改 REAL」
+// 「默认值被改」「唯一索引被删」全部漏过，因此必须落到列属性级。
 export function diffAgainstSource(srcText) {
-  const parsedTables = parseCreateTables(srcText)   // 仅抽表名/列名，不做方言翻译
-  const missing = parsedTables.filter(t => !TABLES.find(x => x.name === t.name))
-  const extra    = TABLES.filter(t => !parsedTables.find(x => x.name === t.name))
-  const columnDrift = compareColumns(parsedTables, TABLES)
-  return { missing, extra, columnDrift }
+  const { tables: parsed, indexes: parsedIndexes } = parseSourceIndex(srcText)
+  return {
+    missingTables, extraTables,          // 表名集合
+    missingColumns, extraColumns,        // 列名集合
+    typeDrift, nullableDrift, defaultDrift,   // 列属性
+    pkDrift, foreignKeyDrift, uniqueDrift,    // 键与约束
+    indexDrift,                          // 索引名/列/唯一性
+  }
 }
 ```
 
-核对结果任一非空：`migrate.js` 退出码 2，中文消息列出缺失/多余的表名与列名，不进入装载。表总数基线：`Select-String -LiteralPath packages\db\src\index.ts -Pattern "CREATE TABLE"` 实测 38 条（2026-11-19，文件 3746 行，按含空行的整文件行数计；PowerShell `Measure-Object -Line` 不计空行会给出 3514，两种口径不要混用）。
+核对结果任一非空（`isDriftFree()` 为假）：`migrate.js` 退出码 2，中文消息逐项列出差异，不进入装载；`node tools/migrate-pg/src/schema-map.js --check` 以退出码 1 打印同一份清单。表总数基线：`Select-String -LiteralPath packages\db\src\index.ts -Pattern "CREATE TABLE"` 实测 38 条（2026-11-19，文件 3746 行，按含空行的整文件行数计；PowerShell `Measure-Object -Line` 不计空行会给出 3514，两种口径不要混用）。
 
 ### 3.2 DDL 生成
 

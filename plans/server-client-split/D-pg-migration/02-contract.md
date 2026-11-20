@@ -33,14 +33,18 @@
 
 `--pg-url` 形如 `postgres://yxs:<password>@127.0.0.1:55432/yxs`；出现在日志里的连接串必须把密码替换为 `***`。源库路径只接受 `.scratch/run/D/` 下的副本；指向真实数据目录时退出码 1（§4）。
 
+**目标库身份守卫**：写操作（缺省 upsert、`migrate --rebuild`、`rollback --apply`）在执行前核对目标身份——库名必须是 `yxs`、宿主端口必须是 `55432`（即上表默认值）。不匹配时退出码 1，不建立连接、不执行任何 SQL；`--force-target` 显式放行。只读操作（`migrate --dry-run`、verify、rollback dry-run）只打印 `[guard]` 警告行，不阻断。判据可用 `YXS_PG_EXPECT_DATABASE` / `YXS_PG_EXPECT_PORT` 覆盖，以便在别的机器上钉住自己的专用实例而不改代码。连库后再用 `current_database()` 复核一次真实库名；端口只在客户端侧比对（docker 端口映射会让服务端报出容器内端口）。
+
+**未知参数**：三个入口对无法识别的参数一律退出 1 并给出中文消息，不静默忽略（§2.5）。
+
 ### 2.2 `migrate.js`（迁移，幂等可重复跑）
 
 命令：
 
 ```powershell
-node tools/migrate-pg/migrate.js --source .scratch/run/D/learning.db
-node tools/migrate-pg/migrate.js --source .scratch/run/D/learning.db --dry-run
-node tools/migrate-pg/migrate.js --source .scratch/run/D/learning.db --rebuild
+node tools/migrate-pg/src/migrate.js --source .scratch/run/D/learning.db
+node tools/migrate-pg/src/migrate.js --source .scratch/run/D/learning.db --dry-run
+node tools/migrate-pg/src/migrate.js --source .scratch/run/D/learning.db --rebuild
 ```
 
 | 参数 | 必填 | 类型 / 边界 | 默认 | 说明 |
@@ -48,7 +52,9 @@ node tools/migrate-pg/migrate.js --source .scratch/run/D/learning.db --rebuild
 | `--source <path>` | 是 | 存在的 SQLite 文件路径 | — | 只读打开；不写回源库 |
 | `--pg-url <url>` | 否 | 合法 PG 连接串 | 走 §2.1 环境变量 | 覆盖环境变量 |
 | `--dry-run` | 否 | 开关 | 关 | 只打印 DDL 计划与预计行数，不建表、不装载 |
-| `--rebuild` | 否 | 开关 | 关 | 导入前 DROP 本轮登记的表后重建；缺省按主键冲突更新，不清空全表 |
+| `--rebuild` | 否 | 开关 | 关 | 导入前 DROP 本轮登记的表后重建；缺省按主键冲突更新，不清空全表。写操作，受 §2.1 目标库守卫约束 |
+| `--force-target` | 否 | 开关 | 关 | 目标库不是演练实例时仍执行写操作；不带此参数一律拒绝 |
+| `-h, --help` | 否 | 开关 | — | 打印用法 |
 
 stdout 阶段行（顺序即契约）：
 
@@ -69,8 +75,8 @@ stdout 阶段行（顺序即契约）：
 命令：
 
 ```powershell
-node tools/migrate-pg/verify.js --source .scratch/run/D/learning.db
-node tools/migrate-pg/verify.js --source .scratch/run/D/learning.db --sample 20
+node tools/migrate-pg/src/verify.js --source .scratch/run/D/learning.db
+node tools/migrate-pg/src/verify.js --source .scratch/run/D/learning.db --sample 20
 ```
 
 | 参数 | 必填 | 类型 / 边界 | 默认 | 说明 |
@@ -78,10 +84,12 @@ node tools/migrate-pg/verify.js --source .scratch/run/D/learning.db --sample 20
 | `--source <path>` | 是 | 存在的 SQLite 文件路径 | — | 比对一侧 |
 | `--pg-url <url>` | 否 | 合法 PG 连接串 | 走 §2.1 环境变量 | 比对另一侧 |
 | `--sample <n>` | 否 | 整数 1..1000 | `20` | 每表抽样行数；表内行数 ≤ n 时全表比对 |
+| `-h, --help` | 否 | 开关 | — | 打印用法 |
 
 stdout：
 
 ```text
+[verify] target: postgres://yxs@127.0.0.1:55432/yxs
 [verify] rows chapters src=13 pg=13
 [verify] sample chapters 13 rows
 [verify] rows news_articles src=208 pg=208
@@ -96,20 +104,23 @@ stdout：
 命令：
 
 ```powershell
-node tools/migrate-pg/rollback.js              # 默认 dry-run
-node tools/migrate-pg/rollback.js --dry-run    # 显式 dry-run
-node tools/migrate-pg/rollback.js --apply      # 显式确认后才删除
+node tools/migrate-pg/src/rollback.js              # 默认 dry-run
+node tools/migrate-pg/src/rollback.js --dry-run    # 显式 dry-run
+node tools/migrate-pg/src/rollback.js --apply      # 显式确认后才删除
 ```
 
 | 参数 | 必填 | 类型 | 默认 | 说明 |
 |---|---|---|---|---|
 | `--pg-url <url>` | 否 | 合法 PG 连接串 | 走 §2.1 环境变量 | — |
 | `--dry-run` | 否 | 开关 | **开** | 只打印将删除的表与逆序，不执行 DROP |
-| `--apply` | 否 | 开关 | 关 | 必须显式给出才执行删除；与 `--dry-run` 同时出现时报退出码 1 |
+| `--apply` | 否 | 开关 | 关 | 必须显式给出才执行删除；与 `--dry-run` 同时出现时报退出码 1。写操作，受 §2.1 目标库守卫约束 |
+| `--force-target` | 否 | 开关 | 关 | 目标库不是演练实例时仍执行 `--apply`；不带此参数一律拒绝 |
+| `-h, --help` | 否 | 开关 | — | 打印用法 |
 
 dry-run 输出格式：
 
 ```text
+[rollback] target: postgres://yxs@127.0.0.1:55432/yxs
 [rollback] dry-run（未删除任何数据）
 [rollback] 将按依赖逆序删除以下 38 张本轮登记的表：
   1. turns
@@ -126,8 +137,8 @@ dry-run 输出格式：
 | 退出码 | 含义 | 典型场景 |
 |---|---|---|
 | `0` | 成功 / 一致 / dry-run 完成 | migrate 装载完成；verify 全绿；rollback dry-run 打印完成 |
-| `1` | 用法或参数错误 | 缺 `--source`；参数越界；源路径在受保护目录；`--apply` 与 `--dry-run` 同给 |
-| `2` | 环境、连接、SQL 或数据合法性错误 | 连不上 PG；源库版本非 7；缺表；非法 JSON；非 ISO 时间戳；装载 SQL 失败；回滚事务失败 |
+| `1` | 用法或参数错误 | 缺 `--source`；未知参数；参数越界；源路径在受保护目录；`--apply` 与 `--dry-run` 同给；写操作命中非演练目标且未给 `--force-target` |
+| `2` | 环境、连接、SQL 或数据合法性错误 | 连不上 PG；源库版本非 7；缺表；非法 JSON；非 ISO 时间戳；注册表与源码结构漂移；装载 SQL 失败；回滚事务失败 |
 | `3` | 校验不一致（仅 `verify.js`） | 行数不等；抽样字段不等；`content_hash` 复算不符 |
 
 退出码 3 只属于 verify；migrate 与 rollback 不使用 3。
@@ -139,7 +150,7 @@ dry-run 输出格式：
 | SQLite 源（列声明） | PostgreSQL 目标 | 转换与保留规则 |
 |---|---|---|
 | `TEXT`（普通文本） | `text` | `NOT NULL` 保留；`DEFAULT '<串>'` 保留为 text 字面量；空串 `''` 保持空串，不转 NULL |
-| `TEXT`（列名后缀 `_json`，或 `value_json` / `state_json` / `plan_json` / `record_json` / `payload_json` / `content_json` / `profile_json` / `metadata_json` / `input_schema_json`） | `jsonb` | 装载前逐值 `JSON.parse`；解析失败退出码 2（§4）。默认 `'[]'` / `'{}'` 在 PG 写成 `DEFAULT '[]'::jsonb` / `'{}'::jsonb`；空串 `''` 按该列默认 JSON 归一 [R2] |
+| `TEXT`（列名后缀 `_json`，或 `value_json` / `state_json` / `plan_json` / `record_json` / `payload_json` / `content_json` / `profile_json` / `metadata_json` / `input_schema_json`） | `jsonb` | 装载前逐值 `JSON.parse` **仅用于校验**；送 `COPY` 的始终是源库原始文本，**不做** `JSON.parse` → `JSON.stringify` 往返（该往返会把 19 位雪花 id 改写成科学计数法、把 `1e400` 变成 `null`、把 `1.0` 压成 `1`，且不可逆；数值精度由 PG 的 jsonb 解析器保留）。解析失败退出码 2（§4）。默认 `'[]'` / `'{}'` 在 PG 写成 `DEFAULT '[]'::jsonb` / `'{}'::jsonb`；空串 `''` 按该列默认 JSON 归一为 `[]` / `{}` 的文本 [R2] |
 | `INTEGER` | 默认 `bigint` | 判定收窄为 `integer` 的条件：迁移前源库实测 `min()`/`max()` 均在 ±2³¹-1 内，且列为小秩、计数或序号列；未实测的列一律 `bigint` [R3] |
 | `INTEGER` 0/1 标志列（`skills.enabled`） | `boolean` | 装载时 `1→true`、`0→false`；其他值退出码 2。本规则是唯一的布尔例外，不推广到其他 INTEGER 列 |
 | `REAL` | `double precision` | 原样装载；抽样比对时两侧差值 ≤ `1e-9`（相对误差）视为相等 |
@@ -674,21 +685,23 @@ STRICT 对应的 `NOT NULL` 与 `DEFAULT` 必须逐列保留 [R4]；PG 侧不新
 一条记录被判为一致，必须同时满足以下三条；任一不满足即记为差异：
 
 1. **行数 100% 相等**：§3.2 的 38 张表逐表 `SELECT count(*)`，源库与 PG 库行数完全相等。表名集合也必须一致：源库缺表或目标库多表均为退出码 2（结构问题），不计入 3。
-2. **抽样字段比对**：每表按主键升序取前 `--sample`（默认 20）行；表内行数 ≤ 抽样数时全表比对。双侧按同一主键集合配对，逐列比较：
+2. **抽样字段比对**：每表按主键升序取前 `--sample`（默认 20）行；表内行数 ≤ 抽样数时全表比对。排序两侧显式钉到字节序（SQLite `COLLATE BINARY`、PG `COLLATE "C"`），保证两侧取到同一批行。双侧按同一主键集合配对，逐列比较：
    - `text` / 主键 / 哈希列：严格字符串相等；
    - `bigint` / `integer`：数值严格相等；
    - `double precision`：两侧相对误差 ≤ `1e-9`；
-   - `jsonb`：两侧分别解析后做归一化比较（对象键序不敏感、数组顺序敏感）；
-   - `timestamptz`：按 UTC 时刻相等，不比较显示字符串；
+   - `jsonb`：PG 侧以 `col::text` 取回，与源库文本按「保留数字字面量的十进制精确比较」判等——对象键序不敏感、数组顺序敏感；`1` / `1.0` / `1e0` 视为同值，19 位整数与它的双精度近似值判为不同。空串按该列默认 JSON 归一后再比（与 migrate 共用同一归一函数）；
+   - `timestamptz`：按 UTC 时刻相等，不比较显示字符串；源库空串与 PG `NULL` 等价；
    - `boolean`：真值严格相等。
 3. **`news_articles` 哈希复算**：抽样行额外做两项校验——源库 `content_hash` 与 PG 库 `content_hash` 相等；用 PG 库 `content` 复算 `sha256(content).digest('hex')`，与该行 `content_hash` 相等。哈希口径来自 `packages/db/src/index.ts:2855` 与 `:2889`，只对正文 `content` 取哈希，不含标题、摘要或来源 [R7]。
 
-第一处差异输出格式（单行，取值截断到 200 字符，超出加 `…`）：
+第一处差异输出格式（单行，取值截断到 200 字符，超出加 `…`；取值内的 `\`、`\r`、`\n`、`\t` 分别转义为 `\\`、`\r`、`\n`、`\t`，保证证据行恒为单行）：
 
 ```text
 [verify] DIFF table=<表名> pk=<主键列>=<主键值> column=<列名> source=<源值> target=<目标值>
-[verify] HASH article=<文章 id> source=<源 content_hash> recomputed=<复算哈希>
+[verify] HASH article=<文章 id> source=<源 content_hash> target=<PG 存储 content_hash> recomputed=<复算哈希>
 ```
+
+`HASH` 行同时给出 `source` 与 `target`：两者相等而复算不符，说明正文被改；两者不等，说明 PG 侧哈希被改。只报 `source` 与 `recomputed` 时，这两个值相同却判不一致的情形无法定位篡改位置。
 
 ## 4 错误与消息
 
@@ -701,17 +714,20 @@ STRICT 对应的 `NOT NULL` 与 `DEFAULT` 必须逐列保留 [R4]；PG 侧不新
 | 1 | `--sample` 非 1..1000 整数 | `--sample 必须是 1 到 1000 的整数。` |
 | 1 | 源路径命中受保护真实目录 | `源路径位于受保护的真实数据目录，请改用 .scratch/run/D/ 下的副本：<path>。` |
 | 1 | `--apply` 与 `--dry-run` 同给 | `--apply 与 --dry-run 不能同时使用。` |
+| 1 | 未知参数 | `未知参数 <token>（<入口>）。运行 node tools/migrate-pg/src/<入口> --help 查看支持的参数。` |
+| 1 | 写操作命中非演练目标 | `拒绝在非演练目标上执行写操作：<差异项>。确认目标无误后加 --force-target 显式放行。` |
 | 2 | PG 连接失败 | `无法连接 PostgreSQL：<原因>。请检查 PGHOST、PGPORT、PGUSER、PGPASSWORD。` |
 | 2 | 源库 schema 版本非 7 | `源库 schema 版本为 <v>，预期 7；请先在桌面端或 seed 流程跑齐本地迁移。` |
 | 2 | 源库缺表 | `源数据库缺少表 <table>。` |
+| 2 | 注册表与源码结构漂移 | `注册表与源码结构漂移（<逐项差异>）。` |
 | 2 | jsonb 列非法值 | `表 <table> 的列 <column> 不是合法 JSON（主键 <pk>）：<解析原因>。` |
 | 2 | 时间戳列非 ISO 取值 | `时间戳列 <table>.<column> 存在非 ISO 取值（主键 <pk>）：<value>。` |
 | 2 | `enabled` 非 0/1 | `表 skills 的列 enabled 只接受 0 或 1（主键 <pk>）：<value>。` |
 | 2 | 装载 SQL 失败 | `装载表 <table> 失败：<SQL 原因>。` |
 | 2 | 回滚事务失败 | `回滚事务失败，未删除任何表：<SQL 原因>。` |
 | 3 | 行数不等 | `行数不一致：表 <table> 源 <n> 行，目标 <m> 行。` |
-| 3 | 抽样字段不等 | `抽样不一致：表 <table> 主键 <pk> 列 <column> 源=<…> 目标=<…>。` |
-| 3 | 哈希不符 | `正文哈希不一致：文章 <id> 源哈希=<…> 复算哈希=<…>。` |
+| 3 | 抽样字段不等 | `[verify] DIFF table=<表名> pk=<主键> column=<列名> source=<源值> target=<目标值>` |
+| 3 | 哈希不符 | `[verify] HASH article=<id> source=<源哈希> target=<PG 哈希> recomputed=<复算哈希>` |
 | 0（提示） | rollback 未确认 | `未执行删除：rollback 默认 dry-run；确认后加 --apply。` |
 
 消息中的表名、列名、主键列名取自 §3.2 清单，不使用内部索引名；JSON 解析原因只给 `JSON.parse` 的异常文本，不打印整行数据 [R8]。

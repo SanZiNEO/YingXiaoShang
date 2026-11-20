@@ -179,11 +179,11 @@ tools/miniprogram-mock/
 </body>
 ```
 
-### 3.2 数据注入方案（`file://` 避开 `fetch`）
+### 3.2 数据注入方案（JSON 主通道 + `file://` 内联兜底）
 
 **问题口径：** `file://` 页面下，浏览器把本地文件来源按不透明同源处理，`fetch('../fixtures/x.json')` 在 Chromium 内核会直接抛 `TypeError: Failed to fetch`，部分浏览器还会拦 `XMLHttpRequest` 读本地文件；因此原型不能把「页面能渲染」建立在 `fetch` 读本地 JSON 之上 [R5]。
 
-**选定方案：内联 `<script type="application/json">` 为必选通道。** 每份 fixture 在对应页面里放一段同内容的内联副本：
+**选定方案：JSON 文件为主通道，内联 `<script type="application/json">` 为 `file://` 兜底。** 每份 fixture 在对应页面里放一段同内容的内联副本：
 
 ```html
 <script type="application/json" data-fixture="student.json">
@@ -195,20 +195,25 @@ tools/miniprogram-mock/
 
 ```text
 loadFixture(name):
-  1. 先尝试 fetch('../fixtures/<name>.json')
-     - 成功且 JSON 可解析 → 使用返回对象，控制台标记 fixture-source: fetch
-  2. fetch 抛错（file:// 同源拦截 / 网络不可达）→ 读取页面内
+  0. location.protocol === 'file:' → 直接走第 2 步
+     // Chromium 对 file:// 的 fetch 必然失败并自打一条 console.error，JS catch 不到；
+     // 预判协议与「试了再回落」等价，但双击打开时控制台干净
+  1. fetch(new URL('../fixtures/<name>.json', SCRIPT_URL))   // SCRIPT_URL 来自 document.currentScript.src
+     - response.ok 且 JSON 可解析 → 使用返回对象，控制台标记 fixture-source: json
+  2. fetch 失败（不透明同源拦截 / 404 / JSON 解析失败）或第 0 步命中 → 读取页面内
      <script type="application/json" data-fixture="<name>"> 内联副本，JSON.parse
-     → 标记 fixture-source: inline-fallback
-  3. 内联副本也缺失或解析失败 → 进入 §6 错误分支，不抛未捕获异常
+     → 标记 fixture-source: inline-fallback（括号内带原因）
+  3. 两条通道都拿不到 → 进入 §6 错误分支，不抛未捕获异常
 ```
 
 落地硬规则：
 
-- **内联副本是 `file://` 验收的实际通道**：即使第 1 步在 `file://` 下必然被拦，页面也必须靠第 2 步渲染；不允许出现「只写了 JSON 文件、页面里没有内联副本」的情况。
+- **标记必须如实**：静态服务器下打印 `json`，`file://` 下打印 `inline-fallback`；不允许无条件打印同一种标记（那等于谎报数据来源，会让 AC-I-11 的「改 JSON 是否跟随」失去判据）。
+- **内联副本是 `file://` 的必选通道**：不允许出现「只写了 JSON 文件、页面里没有内联副本」的情况，否则双击打开会空白。
 - **JSON 文件是唯一编辑源**：改数据先改 `fixtures/*.json`，再把同份内容同步进页面内联块；两处必须逐字一致。真机阶段把 loader 换成 HTTP 调用后，内联块即可移除。
+- **地址从脚本自身位置解析**：`SCRIPT_URL` 取 `document.currentScript.src`，`fixtureUrl()` 用 `new URL('../fixtures/' + name, SCRIPT_URL)`。这样页面在 `pages/` 还是根目录、仓库被 clone 到哪台机器，路径都成立；不依赖 cwd，也不写死绝对路径。
 - **不选 `.js` 全局变量方案**：备选是 `fixtures/student.js` 挂 `window.__FIXTURES__`，但那样会多出一套脚本命名空间与加载顺序依赖，且与「JSON 是唯一编辑源」冲突；内联 JSON 直接由 `JSON.parse` 得到纯数据对象，不进入全局作用域。
-- **不发任何联网请求**：脚本里不出现 `fetch('http…')`、`XMLHttpRequest`、`WebSocket`、`EventSource`；`<img>`、`<link>`、`<script src>` 不引外网资源。
+- **不发任何联网请求**：脚本里只有 `fixtureUrl()` 产出的本地相对地址这一处 `fetch`；不出现 `fetch('http…')`、`XMLHttpRequest`、`WebSocket`、`EventSource`；`<img>`、`<link>`、`<script src>` 不引外网资源。
 
 ### 3.3 三态切换实现
 
@@ -229,12 +234,13 @@ function boot() {
   var cfg = matchPage(location.pathname, PAGES);
   var state = parseState(new URLSearchParams(location.search).get('state'));
   if (state === 'loading') { showBranch('loading'); return; }
-  var data = loadFixture(cfg.fixture);            // §3.2
-  if (data == null) { showBranch('error'); return; }
-  if (state === 'error') { showBranch('error'); return; }
-  if (state === 'empty' || isEmpty(cfg, data)) { showBranch('empty'); return; }
-  cfg.render(data);
-  showBranch('normal');
+  loadFixture(cfg.fixture).then(function (data) {   // §3.2，返回 Promise
+    if (data == null) { showBranch('error'); return; }
+    if (state === 'error') { showBranch('error'); return; }
+    if (state === 'empty' || isEmpty(cfg, data)) { showBranch('empty'); return; }
+    cfg.render(data);
+    showBranch('normal');
+  });
 }
 ```
 
@@ -325,7 +331,8 @@ fixture 与 schema 同构：新闻字段对齐 `packages/shared/src/index.ts:124
 |---|---|---|
 | fixture 文件与内联副本都缺失 | 标题「暂时没拿到这条数据。」；说明「原型演示错误态：当前没有连接真实服务端，以下内容是占位。」 | 整页 error 面板；主按钮「重试」链接到去掉 `state` 的当前地址；次按钮「返回首页」链接到 `../index.html` |
 | 内联 JSON 解析失败 | 同上 error 面板 | 控制台记录解析失败的 fixture 名；不抛未捕获异常到窗口 |
-| `fetch` 抛错且内联副本存在 | 正常态（命中兜底通道） | 控制台标记 `fixture-source: inline-fallback` |
+| `fetch` 失败（file:// 拦截 / 404 / 解析失败）且内联副本存在 | 正常态（命中兜底通道） | 控制台标记 `fixture-source: inline-fallback (原因)` |
+| `fetch` 成功（静态服务器路径） | 正常态（命中主通道） | 控制台标记 `fixture-source: json`；改 `fixtures/*.json` 刷新即跟随 |
 | 脚本文件自身加载失败 | 页面 `<body>` 首行的静态兜底节点保留可见：「页面脚本未能加载，请对照 fixtures 查看数据结构。」 | 该节点是纯 HTML 静态文案，不依赖 JS；脚本成功启动后移除 |
 
 错误面板不展示堆栈、不展示英文方法名、不展示 `error.code`；方法名只出现在 `data-mock-source` 属性里。error 态是前端演示分支，文案不出现「服务端异常」「接口返回」这类指向后端的措辞。
@@ -369,7 +376,7 @@ fixture 与 schema 同构：新闻字段对齐 `packages/shared/src/index.ts:124
 1. **建目录与 fixture。** 建 `tools/miniprogram-mock/` 下 `pages/`、`styles/`、`scripts/`、`fixtures/` 四个子目录；按 §1 表与 [`02-contract.md`](02-contract.md) §3 写五份 JSON。验证：五份 JSON 均能被 `JSON.parse` 解析；字段名与 schema 表逐项对得上。
 2. **写全局样式表。** 先落 `styles/app.css` 的 reset、375 容器、换行与点击区约束、三态样式骨架、减动效媒体查询。验证：临时 HTML 探针里放一条长英文词与一段长中文，375px 下不出现横向滚动。
 3. **写导航枢纽 `index.html`。** 五页入口链接、三态演示链接、排除能力说明区（`data-excluded="true"`）。验证：链接路径与 §3.6 表一致；说明区不含可点击的功能入口。
-4. **写首页与 loader。** 落 `pages/home.html` 骨架与 `app.js` 的配置表、`loadFixture` 双通道、`boot()` 分发。验证：`file://` 打开首页渲染身份卡片；控制台出现 `fixture-source: inline-fallback` 或 `fetch` 标记。
+4. **写首页与 loader。** 落 `pages/home.html` 骨架与 `app.js` 的配置表、`loadFixture` 双通道、`boot()` 分发。验证：静态服务器下首页渲染身份卡片并打印 `fixture-source: json`；`file://` 下同样渲染并打印 `fixture-source: inline-fallback`。
 5. **写新闻两页。** `news.html` 卡片列表与跳转参数；`news-detail.html` 三区块渲染与未选中占位。验证：列表行带 `articleId` 跳转；详情返回链接回到列表；匹配与思政空数组走空态。
 6. **写问答与我的两页。** `ask.html` 记录行与展开区；`profile.html` 目标约束、能力网格、证据账本与回查兜底。验证：答对/答错标签判据与 `renderers.tsx:142` 一致；证据能力名回查不到时显示「能力维度」。
 7. **接三态分支与接缝标注。** 补 `loading`/`error`/`empty` 三个分支容器、静态兜底节点、全部 `data-mock-source` / `data-fixture` / `data-replace` 属性。验证：每页四个态互斥显隐；非法 `state` 回正常态；`querySelectorAll('[data-mock-source]')` 逐页清点非空。

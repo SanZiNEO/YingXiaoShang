@@ -28,7 +28,7 @@
 |---|---|---|
 | `name`（project） | `yxs` | 验收实验 project 用 `yxs-c`，避免与历史容器/卷混在同一 project（`02-ownership-and-parallel.md` §3） |
 | `networks.yxs-net` | `driver: bridge` | 不接外部网络；跨容器通信只走服务名别名 |
-| `volumes.yxs-data` | `external: false`，挂载到 `/data` | 验收卷名 `yxs-data-c`；禁止声明 `external: true` 后由人手建卷 |
+| `volumes.yxs-data` | `external: false`，挂载到 `/data` | 验收卷名 `yxs-c_yxs-data`（随 project 派生）；禁止声明 `external: true` 后由人手建卷 |
 
 ### 2.2 `crawler` 服务（C 轮自有镜像）
 
@@ -37,10 +37,10 @@
 | `image` | `yxs-crawler:local` | 标签固定 `:local`，不推远端仓库（冻结 §10.4） |
 | `build.context` | `services/news-crawler-py` | Python 服务自包含，不依赖 pnpm workspace；context 不给仓库根 |
 | `build.dockerfile` | `Dockerfile` | 相对于 context；文件归 C 写权 |
-| `container_name` | 生产 `yxs-crawler`；验收 `yxs-crawler-c` | 容器名带 `-c` 后缀做验收隔离，与生产名区分 |
+| `container_name` | **不设** | 交给 compose 按 project 派生 `<project>-crawler-1`；`container_name` 是宿主全局命名空间，写死会让同一宿主上的两套栈互撞，且验收隔离只能靠额外后缀变量 |
 | `profiles` | `["crawler", "full"]` | `crawler` 档只起采集，可独立验收；`full` 档与服务端同起 [R2] |
-| `ports` | `["8787:8787"]` | 宿主映射仅供手工排查；容器间访问走 `yxs-net` 别名，不经宿主端口 |
-| `volumes` | `["yxs-data:/data"]`（验收 `yxs-data-c:/data`） | 唯一挂载点；不挂宿主真实数据目录 |
+| `ports` | `["8787:8787"]` | 字面量，不对宿主 env 插值（冻结 §10.1）；宿主映射仅供手工排查，容器间访问走 `yxs-net` 别名 |
+| `volumes` | `["yxs-data:/data"]`（验收 project 下为 `yxs-c_yxs-data:/data`） | 唯一挂载点；不挂宿主真实数据目录 |
 | `environment` | 见 §3.2 表 | 变量名与默认值不得超出冻结 §10.2 与本节清单 |
 | `healthcheck.test` | `["CMD", "python", "/app/scripts/healthcheck.sh"]` | 脚本判据见 §4.1；镜像内不假设存在 `curl` |
 | `healthcheck.interval` | `30s` | 周期性探活间隔 |
@@ -59,11 +59,11 @@
 | `image` | `yxs-server:local` | 只按冻结镜像名引用；C 不保证该镜像在并行期已存在 |
 | `build.context` | `.`（仓库根） | 声明性写出，供 A 轮镜像构建；理由见冻结 §10.4（workspace 包必须随 context 拷入） |
 | `build.dockerfile` | `apps/server/Dockerfile` | 文件归 A 所有；C 不创建、不改写 |
-| `container_name` | 生产 `yxs-server`；验收 `yxs-server-c` | 与采集容器同样的 `-c` 隔离规则 |
+| `container_name` | **不设** | 同采集服务：容器名随 project 派生，隔离靠 `-p`，不靠后缀变量 |
 | `profiles` | `["full"]` | 只在全量档起；`crawler` 档不得创建该容器 |
-| `ports` | `["8080:8080"]` | 冻结 §10.1 服务端端口 |
-| `volumes` | `["yxs-data:/data"]`（验收 `yxs-data-c:/data`） | 与采集共用同一份卷、同一份主库 |
-| `environment` | `YXS_SERVER_PORT=8080`、`YXS_DB_PATH=/data/data/learning.db`、`NEWS_CRAWLER_BASE_URL=http://crawler:8787` | 变量名归冻结 §10.2；取值默认由 A 契约细化，C 不新增服务端变量 |
+| `ports` | `["8080:8080"]` | 字面量（冻结 §10.1） |
+| `volumes` | `["yxs-data:/data"]`（验收 project 下为 `yxs-c_yxs-data:/data`） | 与采集共用同一份卷、同一份主库 |
+| `environment` | `LEARNING_AGENT_HOME=/data`、`YXS_SERVER_HOST=0.0.0.0`、`YXS_SERVER_PORT=8080`、`YXS_DB_PATH=/data/data/learning.db`、`NEWS_CRAWLER_BASE_URL=http://crawler:8787` | 变量名归冻结 §10.2；`YXS_SERVER_HOST` 必须显式给，代码默认 `127.0.0.1` 会让端口映射失效；C 不新增服务端变量 |
 | `depends_on` | `crawler: { condition: service_healthy }` | 等采集健康后再起服务端；不用 `condition: service_started` [R1] |
 | `restart` | `unless-stopped` | 与采集一致 |
 | `networks` | `["yxs-net"]` | 与采集同一网络，别名互通 |
@@ -80,30 +80,35 @@
 
 卷、网络、容器名的命名与挂载方式遵循 Compose 服务定义的资源模型 [R1]；验收隔离后缀只改变实验资源名，不改变生产命名口径。
 
-| 类型 | 生产名 | 验收名（`-c` 后缀） | 冻结依据 |
+| 类型 | 生产名 | 验收名（project `yxs-c`） | 冻结依据 |
 |---|---|---|---|
 | project | `yxs` | `yxs-c` | 冻结 §10.4；`02-ownership-and-parallel.md` §3 |
-| 网络 | `yxs-net` | `yxs-net-c`（随验收 project 派生） | 冻结 §10.4 |
-| 数据卷 | `yxs-data` | `yxs-data-c` | 冻结 §10.4；验收不得覆盖生产卷 |
-| 采集容器 | `yxs-crawler` | `yxs-crawler-c` | 本节 §2.2 |
-| 服务端容器 | `yxs-server` | `yxs-server-c` | 本节 §2.3 |
+| 网络 | `yxs-net` | `yxs-c_yxs-net`（随 project 派生） | 冻结 §10.4 |
+| 数据卷 | `yxs-data` | `yxs-c_yxs-data` | 冻结 §10.4；验收不得覆盖生产卷 |
+| 采集容器 | `yxs-crawler-1`（compose 派生） | `yxs-c-crawler-1` | 本节 §2.2；不写 `container_name` |
+| 服务端容器 | `yxs-server-1`（compose 派生） | `yxs-c-server-1` | 本节 §2.3；同上 |
 | 采集镜像 | `yxs-crawler:local` | 同 tag（镜像不按验收改名，避免重复构建） | 冻结 §10.4 |
 | 服务端镜像 | `yxs-server:local` | 同 tag | 冻结 §10.4 |
 
+容器名一律不写死：`docker compose exec <service>` / `docker compose logs <service>` 就够了，脚本与文档都不该出现具体容器名。
+
 ### 3.2 环境变量表（与冻结 §10.2 一致）
 
-| 变量 | 默认值 | 谁设 | 用途 | 代码读取点 / 备注 |
-|---|---|---|---|---|
-| `LEARNING_AGENT_HOME` | `/data` | compose `crawler` / `server` 服务 environment | 数据根目录；容器内布局按此派生 | 冻结 §10.2；桌面端口径见 `docs/requirements/R17-local-data.md:40` |
-| `NEWS_CRAWLER_DB` | `/data/data/learning.db` | compose environment；`.env.example` 给样例 | 采集 SQLite 主库路径 | 现状代码经 `--db` 参数解析（`cli.py:261-263`），入口命令把该 env 映射为 `--db`；不假设代码已直读此 env |
-| `NEWS_CRAWLER_HOST` | `0.0.0.0` | compose environment | 控制面监听地址；代码默认 `127.0.0.1`，容器内必须覆盖 | `cli.py:309-310` |
-| `NEWS_CRAWLER_PORT` | `8787` | compose environment | 控制面端口 | `cli.py:313-315`；冻结 §10.1 |
-| `NEWS_CRAWLER_WORKERS` | `8` | env 可选，不配则用代码默认 | 跨源并发槽位数 | `service.py:37`、`:91` |
-| `NEWS_CRAWLER_BASE_URL` | 网络内 `http://crawler:8787`；宿主直连兜底 `http://127.0.0.1:8787` | `server` 服务 environment | 服务端调用采集侧车的基址 | 冻结 §10.1 网络别名；§10.2 宿主默认值 |
-| `YXS_SERVER_PORT` | `8080` | `server` 服务 environment（A 所有） | 服务端监听端口 | 冻结 §10.1；C 只引用不实现 |
-| `YXS_DB_PATH` | `/data/data/learning.db` | `server` 服务 environment（A 所有） | 服务端主库路径 | 冻结 §10.2；与采集同库 |
+「取值方式」一列区分两类：**字面量**（compose 里写死，不对宿主 env 插值）与**宿主可调**（`${VAR:-default}`）。判据是「这个值变了，容器内路径/端口是否还成立」——会破坏契约的一律写死。
 
-约束：`.env.example` 只列上表变量并给默认样例；不在 compose 中写死 API Key、口令等敏感值；`DEEPSEEK_API_KEY` 等 A 侧变量不在本轮样例中出现。
+| 变量 | 默认值 | 谁设 | 取值方式 | 用途 / 代码读取点 |
+|---|---|---|---|---|
+| `LEARNING_AGENT_HOME` | `/data` | compose `crawler` / `server` | 字面量 | 数据根目录；宿主导出同名变量（桌面端常驻）会污染容器内路径。冻结 §10.2 |
+| `NEWS_CRAWLER_DB` | `/data/data/learning.db` | compose `crawler` | 字面量 | 采集 SQLite 主库路径；入口命令把它映射成 `--db`（`cli.py:261-263`） |
+| `NEWS_CRAWLER_HOST` | `0.0.0.0` | compose `crawler` | 字面量 | 控制面监听地址；代码默认 `127.0.0.1`，容器内不覆盖则端口映射与健康检查都不通（`cli.py:309-310`） |
+| `NEWS_CRAWLER_PORT` | `8787` | compose `crawler` | 字面量 | 控制面端口；改它必须同步改 `ports` 映射，所以不接受单方面覆盖（`cli.py:313-315`，冻结 §10.1） |
+| `NEWS_CRAWLER_WORKERS` | `8` | 宿主可选 | `${NEWS_CRAWLER_WORKERS:-8}` | 跨源并发槽位数；**唯一**随机器调优的项，只影响并发度，不改路径与端口（`service.py:37`、`:91`） |
+| `NEWS_CRAWLER_BASE_URL` | `http://crawler:8787` | compose `server` | 字面量 | 服务端调用采集侧车的基址；走 compose 网络别名，宿主导出值不得泄漏（冻结 §10.1） |
+| `YXS_SERVER_HOST` | `0.0.0.0` | compose `server` | 字面量 | 服务端监听地址；代码默认 `127.0.0.1`（`apps/server/src/env.ts:60`），不覆盖则 `8080:8080` 映射形同虚设 |
+| `YXS_SERVER_PORT` | `8080` | compose `server` | 字面量 | 服务端监听端口；冻结 §10.1；C 只引用不实现 |
+| `YXS_DB_PATH` | `/data/data/learning.db` | compose `server` | 字面量 | 服务端主库路径；与采集同库（冻结 §10.2） |
+
+约束：`.env.example` **只列宿主可调项**（当前只有 `NEWS_CRAWLER_WORKERS`）；写进 `.env` 的固定项不会生效，反而会让人误以为能改。不在 compose 中写死 API Key、口令等敏感值；`DEEPSEEK_API_KEY` 等 A 侧变量不在本轮样例中出现。
 
 ### 3.3 容器内数据目录布局
 
@@ -249,7 +254,7 @@ docker compose -f services/deploy/compose.yml --profile full up -d
 
 | 编号 | 契约点 | 断言 | 对应 § |
 |---|---|---|---|
-| `CT-C-01` | 非 root 运行 | `docker inspect yxs-crawler-c` 的 `Config.User` 非空且不是 `root` / `0` | §2.2、§3.3 |
+| `CT-C-01` | 非 root 运行 | `docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler exec crawler id -u` 输出 `10001` | §2.2、§3.3 |
 | `CT-C-02` | 镜像不含 Playwright | 镜像内 `pip list` 不出现 `playwright`；`pyproject.toml:13` 的 `browser` 额外组未安装 | §2.2、§1 |
 | `CT-C-03` | 端口与探活 | 宿主 `curl http://127.0.0.1:8787/health` 返回 200 且 `ok:true` | §2.2、§4.1 |
 | `CT-C-04` | 健康检查失败路径 | 停掉进程后连续 3 次重试内容器状态变 `unhealthy`；`healthcheck.sh` 退出 1 | §4.1 |

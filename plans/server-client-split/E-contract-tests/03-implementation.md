@@ -20,7 +20,7 @@ tools/contract-tests/
     illegal-class.mjs          # 5 类非法输入的构造器与逐字中文消息表
     channels.mjs               # 5 个专用通道用例：chat/stream、chat/cancel、answer、answer-set、health
     openapi.mjs                # 4 项覆盖断言枚举（enum 30、通道 path 5、legacy 4、Result schema 30）
-  lib/
+  src/
     target-interface.mjs       # Target 抽象接口（connect / rpc / stream / cancel / answer / health / close）
     http-target.mjs            # HTTP 实现：fetch + Bearer token + 登录前置
     sse-client.mjs             # SSE 逐帧解析器：按 event/data/id 切帧，产出有序事件数组（http-target 内部模块）
@@ -41,17 +41,17 @@ tools/contract-tests/
   README.md                    # 本工具包使用说明（E 自建，不改轮次目录下的原始 README）
 ```
 
-分层原则：`cases/` 只描述「打什么、断言什么」，不感知传输方式；传输差异全部收进 `lib/*-target.mjs`。这样同一套断言既能打 `--target http`，也能打 `--target electron`，与 consumer-driven contract 测试里「用例与传输解耦」的做法一致 [R8]。Playwright 的 fixture 与取证模式沿用现有测试模块的成熟结构，不在本包另造一套 [R1]。
+分层原则：`cases/` 只描述「打什么、断言什么」，不感知传输方式；传输差异全部收进 `src/*-target.mjs`。这样同一套断言既能打 `--target http`，也能打 `--target electron`，与 consumer-driven contract 测试里「用例与传输解耦」的做法一致 [R8]。Playwright 的 fixture 与取证模式沿用现有测试模块的成熟结构，不在本包另造一套 [R1]。
 
 | 层 | 文件 | 一句话职责 | 不许干的事 |
 |---|---|---|---|
 | 入口 | `run.mjs` | 参数解析、target 选择、用例编排、退出码汇总 | 不写断言细节，不直接发 HTTP |
 | 覆盖 | `coverage.mjs` | 独立命令，核对 OpenAPI 与冻结表 | 不改 `docs/contracts/openapi.yaml`（A 是唯一 owner） |
 | 用例 | `cases/*.mjs` | 用例清单、入参 fixture、期望错误码与中文消息 | 不出现 `fetch`/`_electron` 等传输符号 |
-| 传输 | `lib/*-target.mjs` | 把用例调用翻译成对应通道的请求/事件流 | 不做业务断言 |
-| 断言 | `lib/assert.mjs` | 信封、字段类型、中文消息逐字比对 | 不吞断言失败（失败必须抛出并落盘） |
-| 报告 | `lib/report.mjs` | 汇总通过/失败/跳过/pending，写 JSON 与 Markdown | 不修改被测代码 |
-| 工具 | `lib/ports.mjs`、`lib/openapi.mjs` | 端口分配、yaml 解析 | 不访问真实数据目录 |
+| 传输 | `src/*-target.mjs` | 把用例调用翻译成对应通道的请求/事件流 | 不做业务断言 |
+| 断言 | `src/assert.mjs` | 信封、字段类型、中文消息逐字比对 | 不吞断言失败（失败必须抛出并落盘） |
+| 报告 | `src/report.mjs` | 汇总通过/失败/跳过/pending，写 JSON 与 Markdown | 不修改被测代码 |
+| 工具 | `src/ports.mjs`、`src/openapi.mjs` | 端口分配、yaml 解析 | 不访问真实数据目录 |
 
 ## 2 依赖与构建
 
@@ -86,7 +86,7 @@ pnpm install --ignore-workspace
 - **HTTP 与 SSE 只用 Node 内置**：`fetch`（Node 22 全局）、`node:net`、`node:fs`、`node:path`、`node:module`，不引 axios/got/eventsource 第三方包，减少独立包的安装面。
 - **Playwright 复用现有安装**：Electron 目标需要的 `@playwright/test` 与 `playwright` 已在 `tools/automated-testing/package.json:16`（`@playwright/test` 1.64.1）及其 `node_modules` 内；E 包**不在自己的 dependencies 里重复声明**，运行 electron 目标时经 `createRequire` 把 `tools/automated-testing/node_modules` 加入解析路径。这条与归属矩阵 §3「H 复用 `tools/automated-testing` 现有 `node_modules`」同一口径。
 - **不新增根依赖**：不在仓库根 `package.json` 加任何条目，不跑根 `pnpm install`；E 包的 lockfile 只落在 `tools/contract-tests/` 内。
-- **YAML 解析**：`openapi.yaml` 是 3.0.3 纯文本，`lib/openapi.mjs` 用轻量手写解析（取 `paths`、`components.schemas`、`x-legacy-methods`、method enum 四处）；不引 `yaml` 包。若后续 OpenAPI 结构复杂化，再评估 Redocly CLI 作为外部核对手段 [R7]。
+- **YAML 解析**：`openapi.yaml` 是 3.0.3 纯文本，`src/openapi.mjs` 用轻量手写解析（取 `paths`、`components.schemas`、`x-legacy-methods`、method enum 四处）；不引 `yaml` 包。若后续 OpenAPI 结构复杂化，再评估 Redocly CLI 作为外部核对手段 [R7]。
 
 测试结构上遵循「禁止固定等待、用轮询/事件收集器断言」的既有实践，不在用例里写 `sleep`/`waitForTimeout` [R3]。
 
@@ -98,7 +98,7 @@ E 包是纯 `.mjs`，不做编译步骤；`node run.mjs` 直接执行。Electron
 
 ### 3.1 Target 抽象接口
 
-`lib/target-interface.mjs` 定义所有目标必须实现的同一组方法；用例只依赖这个接口，不依赖具体传输。
+`src/target-interface.mjs` 定义所有目标必须实现的同一组方法；用例只依赖这个接口，不依赖具体传输。
 
 ```ts
 interface ContractTarget {
@@ -128,7 +128,7 @@ interface RpcEnvelope {
 
 ### 3.2 HTTP 目标：fetch + Bearer + 登录前置
 
-`lib/http-target.mjs`：
+`src/http-target.mjs`：
 
 1. **登录前置**：`connect()` 先 `POST /api/v1/auth/login`（学号/口令来自配置，见 §5），从响应 `result.token` 取 43 字符 base64url token；失败按 §6 的 token 路径处理。
 2. **携带凭证**：后续每个 `/api/v1/rpc`、`/chat/stream`、`/chat/cancel`、`/answer`、`/answer-set` 请求带 `Authorization: Bearer <token>`；`/health` 与 `/api/v1/openapi.yaml` 不带。
@@ -140,7 +140,7 @@ interface RpcEnvelope {
 
 ### 3.3 SSE 目标：逐帧解析与顺序断言
 
-`lib/sse-client.mjs` 按 WHATWG 帧格式切分响应体：以空行分隔帧，每帧解析 `id:`、`event:`、`data:`（多行 `data:` 按换行拼接）、`: ` 注释行（心跳，跳过）[R4]。解析器参考通用 SSE 客户端的帧状态机做法，但不实现自动重连与 Last-Event-ID 重放 [R10][R5]。
+`src/sse-client.mjs` 按 WHATWG 帧格式切分响应体：以空行分隔帧，每帧解析 `id:`、`event:`、`data:`（多行 `data:` 按换行拼接）、`: ` 注释行（心跳，跳过）[R4]。解析器参考通用 SSE 客户端的帧状态机做法，但不实现自动重连与 Last-Event-ID 重放 [R10][R5]。
 
 ```text
 输入：fetch ReadableStream 逐块累积 → 按 \n\n 切帧 → 每帧 {id, event, data, raw}
@@ -159,11 +159,11 @@ Electron 目标下事件来自现有 `ChatEventCollector`（`tools/automated-tes
 
 ### 3.4 Electron 目标：复用现有 driver 封装
 
-`lib/electron-target.mjs` **不自己启动 Electron**：
+`src/electron-target.mjs` **不自己启动 Electron**：
 
 - 启动一律走 `tools/automated-testing/src/driver/electron-driver.ts:82` 导出的 `launchElectron`，传入隔离 home、`userDataDir`、分配的端口与环境变量；关闭走返回句柄的 `close()`，复用其进程树清理与端口释放逻辑。
 - **禁止**在 E 的用例或 target 代码里 `import { _electron } from 'playwright'`，也不得直接 `import '@playwright/test'`；这条是现有模块的硬约束，证据见 `tools/automated-testing/README.md:54`。E 只经 driver 句柄拿 `page`，再经 `LearningClient` 同款桥接调用。
-- 端口分配复用 `tools/automated-testing/src/driver/ports.ts:3` 的 `allocatePort` 思路（`net.createServer().listen(0)` 让操作系统给空闲端口）；E 包 `lib/ports.mjs` 内置同实现，避免跨包反向依赖 driver 的内部函数。
+- 端口分配复用 `tools/automated-testing/src/driver/ports.ts:3` 的 `allocatePort` 思路（`net.createServer().listen(0)` 让操作系统给空闲端口）；E 包 `src/ports.mjs` 内置同实现，避免跨包反向依赖 driver 的内部函数。
 - **互斥锁**：electron 目标运行前按归属 §5.3 抢 `.scratch/run/electron.lock` 目录锁；拿不到则退避重试 30s（每 2s 一次），仍失败则跳过 electron 目标全部用例，报告标 `skipped` 并写明「未取得 electron 锁」。
 - Electron 桥接方法名与现有 `LearningClient` 对齐（`invoke(method, input)`、`chat`、`cancel`、`answer`、`answerSet`、`health`，见 `tools/automated-testing/src/client/learning-client.ts:100-124`）；RPC 信封在桥接层做一次适配，使下游断言与 http 目标同构。
 
@@ -171,7 +171,7 @@ Playwright Electron 的启动与主进程求值能力由 driver 内部使用，E
 
 ### 3.5 stub 目标：断网自洽可跑
 
-`lib/stub-target.mjs` 在内存里按冻结表构造 fixture：
+`src/stub-target.mjs` 在内存里按冻结表构造 fixture：
 
 - 30 方法各返回一份最小合法结构（数组/对象/空数组按冻结 §5 返回顶层形态）；4 个 legacy 返回只读样例。
 - SSE 产出固定帧序列：`session` → 2 个 `text` → `done`；`cancel` 用例返回 `cancelled:true`。
@@ -252,7 +252,7 @@ report/20261119-153000/
 | `YXS_SSE_TIMEOUT_MS` | `60000` | SSE 等待终态超时，对齐冻结 §2 的 60s 空闲断开 |
 | `YXS_WORKERS` | `1` | 用例并发度，沿用现有模块默认串行口径（`tools/automated-testing/README.md:41`） |
 
-随机空闲端口：electron 目标的本地实例端口由 `lib/ports.mjs` 用 `listen(0)` 分配；分配后立即关闭监听再交给被测进程，避免端口在分配与启动之间被抢。配置从环境读取、不在代码里写第二份默认值表，符合 12-Factor 配置观 [R3]。
+随机空闲端口：electron 目标的本地实例端口由 `src/ports.mjs` 用 `listen(0)` 分配；分配后立即关闭监听再交给被测进程，避免端口在分配与启动之间被抢。配置从环境读取、不在代码里写第二份默认值表，符合 12-Factor 配置观 [R3]。
 
 ## 6 失败处理
 
@@ -289,14 +289,14 @@ E 轮是契约测试，不承担压测指标；资源口径以「串行可重复
 
 每一步都有可独立验证的产出，顺序按「先自洽、再接真目标、最后补覆盖与 mutation」排；小步可回退、每步带验证点的拆分方式遵循测试代码分层实践 [R3]：
 
-1. **包骨架与 stub 跑通**：`package.json`、`run.mjs`、`lib/target-interface.mjs`、`lib/stub-target.mjs`、`lib/report.mjs`。验证：`node run.mjs --target stub` 退出码 0，产出空报告骨架。
-2. **断言库与信封模型**：`lib/assert.mjs` 实现信封、字段类型、中文消息逐字比对。验证：stub 上跑通 1 条合法 + 1 条非法用例，失败时断言差异落盘。
-3. **http 目标与登录前置**：`lib/http-target.mjs` 接登录、Bearer、RPC 解包。验证：`--target http` 对已起的 mock 实例跑通 `student.current` 与 `health`；不可达时按 §6 标记 `skipped`（显式 http 目标退出码 2）。
+1. **包骨架与 stub 跑通**：`package.json`、`run.mjs`、`src/target-interface.mjs`、`src/stub-target.mjs`、`src/report.mjs`。验证：`node run.mjs --target stub` 退出码 0，产出空报告骨架。
+2. **断言库与信封模型**：`src/assert.mjs` 实现信封、字段类型、中文消息逐字比对。验证：stub 上跑通 1 条合法 + 1 条非法用例，失败时断言差异落盘。
+3. **http 目标与登录前置**：`src/http-target.mjs` 接登录、Bearer、RPC 解包。验证：`--target http` 对已起的 mock 实例跑通 `student.current` 与 `health`；不可达时按 §6 标记 `skipped`（显式 http 目标退出码 2）。
 4. **方法用例与非法构造**：`cases/methods.mjs`、`cases/illegal-class.mjs` 落 30 方法 ≥2 条 + 4 legacy + 5 类非法。验证：stub 全绿；http 目标下非法用例的错误码与中文消息逐条对上冻结 §4.2/§5。
-5. **SSE 与专用通道**：`lib/sse-client.mjs` + `cases/channels.mjs` 实现顺序断言、取消静默、answer/answer-set 回读、health 无鉴权。验证：stub 帧序列通过；http 目标 `curl -N` 原始帧与报告 `sse/*.txt` 一致。
-6. **electron 目标接入**：`lib/electron-target.mjs` 复用 driver、加锁与跳过逻辑。验证：拿到锁时 electron 组与 http 组断言同构；锁被占用时整组 `skipped` 且退出码 0。
-7. **coverage 三判据**：`lib/openapi.mjs` + `coverage.mjs`。验证：openapi 缺失时降级 `pending`；A 产物落地后三判据全绿，差集明细可列。
-8. **mutation 与报告收尾**：`mutations/*.patch` 三条 + `lib/patch.mjs` + `apply-revert.ps1`，红→还原→绿流程固化进报告；排查表与本文件 §6 对齐。验证：每条 patch 应用后指定用例变红，还原后变绿，`git status --porcelain apps/server docs/contracts` 为空。
+5. **SSE 与专用通道**：`src/sse-client.mjs` + `cases/channels.mjs` 实现顺序断言、取消静默、answer/answer-set 回读、health 无鉴权。验证：stub 帧序列通过；http 目标 `curl -N` 原始帧与报告 `sse/*.txt` 一致。
+6. **electron 目标接入**：`src/electron-target.mjs` 复用 driver、加锁与跳过逻辑。验证：拿到锁时 electron 组与 http 组断言同构；锁被占用时整组 `skipped` 且退出码 0。
+7. **coverage 三判据**：`src/openapi.mjs` + `coverage.mjs`。验证：openapi 缺失时降级 `pending`；A 产物落地后三判据全绿，差集明细可列。
+8. **mutation 与报告收尾**：`mutations/*.patch` 三条 + `src/patch.mjs` + `apply-revert.ps1`，红→还原→绿流程固化进报告；排查表与本文件 §6 对齐。验证：每条 patch 应用后指定用例变红，还原后变绿，`git status --porcelain apps/server docs/contracts` 为空。
 
 ## 参考
 
