@@ -15,9 +15,9 @@ import {
   TeachingGuideSchema,
 } from '@learning-agent/shared'
 import { generateDeterministicMatches } from '@learning-agent/matcher'
-import { normalizeContentBlocksWithMap } from './lib/content.ts'
-import { DeepSeekLlm } from './lib/llm.ts'
-import { tagContentBlocks, tagContentBlocksWithLlm } from './lib/tags.ts'
+import { normalizeContentBlocksWithMap } from './src/content.ts'
+import { DeepSeekLlm } from './src/llm.ts'
+import { tagContentBlocks, tagContentBlocksWithLlm } from './src/tags.ts'
 import { loadEnv, repoRoot } from './env.ts'
 
 loadEnv()

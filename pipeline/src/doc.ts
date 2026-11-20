@@ -10,7 +10,40 @@ import type { DocBlock, ParsedDocument } from './types.ts'
 import { UnparsedDocumentError } from './types.ts'
 
 const execFileAsync = promisify(execFile)
-const WINWORD_PATH = 'C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE'
+
+/**
+ * Word 的安装路径随版本与安装方式变化，不能写死。按优先级探测：
+ * 1. 环境变量 `WINWORD_PATH`（显式指定）；
+ * 2. 常见安装位置（Office 16/15、Program Files 与 Program Files (x86)）；
+ * 3. PATH 里的 `WINWORD.EXE`。
+ * 全部失败才报「Word COM unavailable」，消息里列出尝试过的位置。
+ */
+async function findWinword(): Promise<string | undefined> {
+  const candidates: string[] = []
+  const explicit = process.env.WINWORD_PATH?.trim()
+  if (explicit) candidates.push(explicit)
+  for (const base of ['C:/Program Files/Microsoft Office/root/Office16', 'C:/Program Files/Microsoft Office/Office16',
+    'C:/Program Files (x86)/Microsoft Office/root/Office16', 'C:/Program Files (x86)/Microsoft Office/Office16',
+    'C:/Program Files/Microsoft Office/root/Office15', 'C:/Program Files (x86)/Microsoft Office/Office15']) {
+    candidates.push(`${base}/WINWORD.EXE`)
+  }
+  for (const candidate of candidates) {
+    try {
+      await access(candidate)
+      return candidate
+    } catch {
+      // 该候选不存在，继续下一个。
+    }
+  }
+  try {
+    const { stdout } = await execFileAsync('where', ['WINWORD.EXE'], { windowsHide: true })
+    const first = stdout.split(/\r?\n/).map((line) => line.trim()).find((line) => line.length > 0)
+    if (first) return first
+  } catch {
+    // where 找不到就当作没装。
+  }
+  return undefined
+}
 
 export async function parseDoc(path: string): Promise<ParsedDocument> {
   const warnings: string[] = []
@@ -84,10 +117,12 @@ function textToBlocks(body: string): DocBlock[] {
 }
 
 async function convertDocWithWord(path: string): Promise<string> {
-  try {
-    await access(WINWORD_PATH)
-  } catch {
-    throw new UnparsedDocumentError(path, `Word COM unavailable; WINWORD.EXE not found at ${WINWORD_PATH}`)
+  const winword = await findWinword()
+  if (!winword) {
+    throw new UnparsedDocumentError(
+      path,
+      'Word COM unavailable; WINWORD.EXE 未找到。设置 WINWORD_PATH 环境变量指向 winword.exe，或把 Office 装到默认位置。',
+    )
   }
 
   const outDir = join(tmpdir(), 'learning-agent-doc-convert')

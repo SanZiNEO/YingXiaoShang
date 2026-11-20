@@ -1,7 +1,7 @@
 import { Context } from '@deepseek-ai/cordis'
 import LearningDb from '@learning-agent/db'
 import { Matcher } from '@learning-agent/matcher'
-import { DeepSeekLlm } from './lib/llm.ts'
+import { DeepSeekLlm } from './src/llm.ts'
 import { loadEnv, repoRoot } from './env.ts'
 
 loadEnv()
