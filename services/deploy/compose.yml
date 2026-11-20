@@ -1,0 +1,89 @@
+# yxs 部署编排：采集服务 crawler + 服务端 server，共用 yxs-net 网络与 yxs-data 命名卷。
+#
+# 可移植性硬规则（改本文件前必读）：
+#   1. 容器内路径一律写字面量，不用 `${VAR:-default}` 兜底。宿主导出的同名变量
+#      （桌面端常驻的 LEARNING_AGENT_HOME 就是一例）会被 compose 注入容器，让服务
+#      把数据根算到容器内并不存在的路径上。
+#   2. 端口映射同样写字面量：冻结 §10.1 定死 8787:8787 / 8080:8080。要改端口必须
+#      同时改这里的映射，不接受单方面用环境变量调容器内端口。
+#   3. 不设 container_name：容器名交给 compose 按 project 派生 `<project>-<service>-1`，
+#      用 `-p` 或 COMPOSE_PROJECT_NAME 就完成隔离，既不需要额外后缀变量，也不会与
+#      同宿主另一套栈撞名（container_name 是宿主全局命名空间）。
+#
+# 用法：
+#   docker compose -f services/deploy/compose.yml --profile crawler up -d   # 只起采集
+#   docker compose -f services/deploy/compose.yml --profile full up -d      # 采集 + 服务端
+# 验收隔离（独立 project，容器与卷自动带 yxs-c_ 前缀；-p 优先于顶层 name）：
+#   docker compose -p yxs-c -f services/deploy/compose.yml --profile crawler up -d
+#
+# profiles：
+#   crawler —— 只起采集服务，可独立验收，不要求 yxs-server:local 镜像存在；
+#   full    —— 采集 + 服务端，服务端等采集健康后再启动。
+
+name: yxs
+
+networks:
+  yxs-net:
+    driver: bridge
+
+volumes:
+  yxs-data:
+    external: false
+
+services:
+  crawler:
+    image: yxs-crawler:local
+    profiles: [crawler, full]
+    build:
+      context: ../news-crawler-py
+      dockerfile: Dockerfile
+    ports:
+      - "8787:8787"
+    volumes:
+      - yxs-data:/data
+      - ./scripts/healthcheck.sh:/app/scripts/healthcheck.sh:ro
+    networks: [yxs-net]
+    restart: unless-stopped
+    environment:
+      # 冻结 §10.3：数据根就是卷挂载点 /data，与宿主布局无关。
+      LEARNING_AGENT_HOME: /data
+      # 代码默认只绑 127.0.0.1；容器内不覆盖成 0.0.0.0 则端口映射与健康检查都不通。
+      NEWS_CRAWLER_HOST: "0.0.0.0"
+      NEWS_CRAWLER_PORT: "8787"
+      NEWS_CRAWLER_DB: /data/data/learning.db
+      # 唯一保留宿主可调项：跨源并发槽位随机器 CPU / 网络能力变化，不影响路径与端口。
+      NEWS_CRAWLER_WORKERS: "${NEWS_CRAWLER_WORKERS:-8}"
+    command:
+      - "sh"
+      - "-c"
+      - 'exec news-crawler serve --host 0.0.0.0 --db "$$NEWS_CRAWLER_DB"'
+    healthcheck:
+      test: ["CMD", "python", "/app/scripts/healthcheck.sh"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  server:
+    image: yxs-server:local
+    profiles: [full]
+    build:
+      context: ../..
+      dockerfile: apps/server/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - yxs-data:/data
+    networks: [yxs-net]
+    restart: unless-stopped
+    environment:
+      LEARNING_AGENT_HOME: /data
+      # 冻结 §10.1：容器内必须监听 0.0.0.0:8080，否则宿主端口映射形同虚设。
+      YXS_SERVER_HOST: "0.0.0.0"
+      YXS_SERVER_PORT: "8080"
+      YXS_DB_PATH: /data/data/learning.db
+      # 走 compose 网络内服务别名；宿主导出的 NEWS_CRAWLER_BASE_URL 不能泄漏进来。
+      NEWS_CRAWLER_BASE_URL: "http://crawler:8787"
+    depends_on:
+      crawler:
+        condition: service_healthy
