@@ -1,0 +1,312 @@
+{
+  "dbPath": ".scratch/run/B/home/news.db",
+  "dbReadable": true,
+  "elapsedMs": 16,
+  "generatedAt": "2026-11-20T01:17:25.780Z",
+  "global": {
+    "degenerateRatio": 0.0,
+    "duplicateHashRatio": 0.0,
+    "emptyDateRatio": 0.2727,
+    "emptyTitleRatio": 0.0,
+    "navHitRatio": 0.2364
+  },
+  "schemaVersion": "1.0",
+  "sources": [
+    {
+      "degenerateRatio": 0.0,
+      "duplicateHashRatio": 0.0,
+      "emptyDateRatio": 0.0,
+      "emptyTitleRatio": 0.0,
+      "length": {
+        "p10": 177.2,
+        "p50": 308.0,
+        "p90": 321.6
+      },
+      "navHitRatio": 0.0,
+      "sampleSize": 15,
+      "samples": [
+        {
+          "contentPreview": "经济观察网\n食品ETF鹏华（560130）基金最新份额0.65亿份，上市至今累计减少1.53亿份。最新规模0.59亿元，上市至今累计减少1.60亿元。\n\n该基金近一年跌9.48%，最大回撤为15.23%。当前ETF溢折率-0.09%，超过历史62%的时间，处于中风险区，建议密切关注溢价率走势及市场变化。\n\n以上内容基于公开资料整理，不构成投资建议。",
+          "contentStatus": "partial",
+          "defects": [],
+          "id": "eeo-1096208",
+          "publishedAt": "2026-11-18T15:48+08:00",
+          "source": "eeo",
+          "summaryPreview": "经济观察网 食品ETF鹏华（560130）基金最新份额0.65亿份，上市至今累计减少1.53亿份。最新规模0.59亿元，上市至今累计减少1.60亿元。该基金近一年跌9.48%，最大回撤为15.23%。...",
+          "summaryTruncated": false,
+          "title": "食品ETF鹏华份额规模持续缩水，近一年跌9.48%，溢折率负值超六成需警惕",
+          "truncated": false,
+          "url": "https://www.eeo.com.cn/2026/1118/1096208.shtml"
+        },
+        {
+          "contentPreview": "经济观察网\n红利质量ETF南方（515460）基金最新份额2.65亿份，上市至今累计减少1.90亿份。最新规模2.30亿元，上市至今累计减少2.25亿元。\n\n该基金近一年跌13.20%，最大回撤为16.9%。当前ETF溢折率0.02%，超过历史69%的时间，处于中风险区，建议密切关注溢价率走势及市场变化。\n\n以上内容基于公开资料整理，不构成投资建议。",
+          "contentStatus": "partial",
+          "defects": [],
+          "id": "eeo-1096214",
+          "publishedAt": "2026-11-18T15:51+08:00",
+          "source": "eeo",
+          "summaryPreview": "经济观察网 红利质量ETF南方（515460）基金最新份额2.65亿份，上市至今累计减少1.90亿份。最新规模2.30亿元，上市至今累计减少2.25亿元。该基金近一年跌13.20%，最大回撤为16.9...",
+          "summaryTruncated": false,
+          "title": "红利质量ETF南方份额规模双降，近一年跌13.2%，溢折率处中风险区",
+          "truncated": false,
+          "url": "https://www.eeo.com.cn/2026/1118/1096214.shtml"
+        },
+        {
+          "contentPreview": "经济观察网\n港股通互联网ETF兴业（520790）基金最新份额6.72亿份，上市至今累计增加3.75亿份。最新规模4.81亿元，上市至今累计增加1.91亿元。\n\n该基金近一年跌26.99%，最大回撤为31.13%。当前ETF溢折率0.17%，超过历史53%的时间，处于中风险区，建议密切关注溢价率走势及市场变化。\n\n以上内容基于公开资料整理，不构成投资建议。",
+          "contentStatus": "partial",
+          "defects": [],
+          "id": "eeo-1096204",
+          "publishedAt": "2026-11-18T15:44+08:00",
+          "source": "eeo",
+          "summaryPreview": "经济观察网 港股通互联网ETF兴业（520790）基金最新份额6.72亿份，上市至今累计增加3.75亿份。最新规模4.81亿元，上市至今累计增加1.91亿元。该基金近一年跌26.99%，最大回撤为31...",
+          "summaryTruncated": false,
+          "title": "港股通互联网ETF兴业份额增至6.72亿份，近一年跌26.99%需关注溢价走势",
+          "truncated": false,
+          "url": "https://www.eeo.com.cn/2026/1118/1096204.shtml"
+        }
+      ],
+      "source": "eeo",
+      "verdict": "keep",
+      "verdictReasons": [],
+      "warnings": []
+    },
+    {
+      "degenerateRatio": 0.0,
+      "duplicateHashRatio": 0.0,
+      "emptyDateRatio": 1.0,
+      "emptyTitleRatio": 0.0,
+      "length": {
+        "p10": 1460.0,
+        "p50": 2235.0,
+        "p90": 3058.2
+      },
+      "navHitRatio": 0.1333,
+      "sampleSize": 15,
+      "samples": [
+        {
+          "contentPreview": "市场监管总局发布提醒，警惕不法分子假借汽车召回实施诈骗\n\n11月17日，市场监管总局发文表示，近期，有不法分子假借汽车召回名义实施网络诈骗，误导车主转账、泄露个人信息等。市场监管总局在此提醒广大车主，汽车生产企业对车辆实施召回均免费，不会收取任何费用。如需核实车辆召回信息，请及时登录国家市场监督管理总局缺陷产品召回技术中心官网（https://www.samrdprc.org.cn/）或关注微信公",
+          "contentStatus": "full",
+          "defects": [
+            "nav_hit",
+            "empty_date"
+          ],
+          "id": "jiemian-15343928",
+          "publishedAt": "",
+          "source": "jiemian",
+          "summaryPreview": "宝马新世代车型在中国正式开启量产；特斯拉计划量产Cybercab。",
+          "summaryTruncated": false,
+          "title": "汽车早报｜小米辟谣汽车召回短信 岚图汽车获得独立生产资质",
+          "truncated": true,
+          "url": "https://www.jiemian.com/article/15343928.html"
+        },
+        {
+          "contentPreview": "界面新闻记者 |\n卢奕贝\n\n界面新闻编辑 |\n许悦\n\n名创优品准备明年再关掉几百家门店。\n\n11\n月\n17\n日的三季度业绩会上，名创优品首席财务官张靖京透露，\n2027\n年公司将继续淘汰低效门店，\n“\n明年甚至会关掉几百家低效门店，这个是板上钉钉的事\n”\n。\n\n但名创优品并不打算减少整体门店规模。截至今年\n9\n月底，其国内门店达到\n4726\n家，较去年底净增\n158\n家。它要做的，是把大量过去开出",
+          "contentStatus": "full",
+          "defects": [
+            "nav_hit",
+            "empty_date"
+          ],
+          "id": "jiemian-15343106",
+          "publishedAt": "",
+          "source": "jiemian",
+          "summaryPreview": "过去靠平价生活百货和不断开店增长的名创优品，正试图让IP和潮玩成为提高单店销售的新办法。",
+          "summaryTruncated": false,
+          "title": "叶国富还要再爆改几百家名创优品",
+          "truncated": true,
+          "url": "https://www.jiemian.com/article/15343106.html"
+        },
+        {
+          "contentPreview": "近日，山姆APP上架了一款“中国国际航空国内机票四次卡”的产品，售价3970元，含4次国内经济舱单程权益，自国航移动端兑换生效之日起一年内有效，需提前3天预定。\n\n界面新闻查询发现，该产品仅限国内航线，春节、五一、十一等节假日部分热门时段不可使用。按标价折算，单次机票约992.5元，购票时机建、燃油费需另付。具体可兑换的航线、航班以国航系统实时查询展示为准。\n\n商品页面显示，该产品适用航线为国航实",
+          "contentStatus": "full",
+          "defects": [
+            "empty_date"
+          ],
+          "id": "jiemian-15342148",
+          "publishedAt": "",
+          "source": "jiemian",
+          "summaryPreview": "该产品仅限国内航线，购票时机建、燃油费需另付。",
+          "summaryTruncated": false,
+          "title": "山姆卖机票了！3970元可购买国航四次卡",
+          "truncated": true,
+          "url": "https://www.jiemian.com/article/15342148.html"
+        }
+      ],
+      "source": "jiemian",
+      "verdict": "downgrade",
+      "verdictReasons": [
+        "emptyDateRatio>=0.30 (1.0000)"
+      ],
+      "warnings": []
+    },
+    {
+      "degenerateRatio": 0.0,
+      "duplicateHashRatio": 0.0,
+      "emptyDateRatio": 0.0,
+      "emptyTitleRatio": 0.0,
+      "length": {
+        "p10": 357.4,
+        "p50": 571.0,
+        "p90": 862.0
+      },
+      "navHitRatio": 0.0667,
+      "sampleSize": 15,
+      "samples": [
+        {
+          "contentPreview": "在 BLG 一众赞助商里，转转从来不是最张扬的那个，但绝对是最抽象的那个！11 月 15 日，BLG 以 3:1 战胜 GEN，拿下队史首个《英雄联盟》全球总决赛冠军。陪跑多年的转转，终于等来了天亮的一天！\n\n今年 S16 全球总决赛开赛前，10 月 23 日，转转上线短片《我把好话说在前面》，请来电竞圈知名「毒奶」管泽元，给其他战队送上「夺冠祝福」。圈内人都知道，管泽元的反向预言一向很准，被他看",
+          "contentStatus": "partial",
+          "defects": [
+            "nav_hit"
+          ],
+          "id": "socialbeta-campaign-29010",
+          "publishedAt": "elenajiang",
+          "source": "socialbeta",
+          "summaryPreview": "陪跑多年的转转，终于等来了天亮的一天！",
+          "summaryTruncated": false,
+          "title": "转转请管泽元给 BLG「反向毒奶」",
+          "truncated": true,
+          "url": "https://socialbeta.com/campaign/29010"
+        },
+        {
+          "contentPreview": "随着《后会友期》的热播，全员拿到大芒果，综艺里被叫做闲人马大哥的马天宇，在综艺外顺利拿到户外服饰喜马拉雅的商务合作。近日，喜马拉雅马天宇为「中国山」巅峰大使，合作围绕喜马拉雅高海拔专业户外装备展开，马天宇出镜演绎了玉龙 combo、梅里 2.0、雅拉 2.0 等多款产品。二者邀请粉丝共赴新程，顶峰相见！[SocialBeta]",
+          "contentStatus": "partial",
+          "defects": [],
+          "id": "socialbeta-campaign-29018",
+          "publishedAt": "陈又橙 　·　\n20",
+          "source": "socialbeta",
+          "summaryPreview": "高寒之上，无束穿行。",
+          "summaryTruncated": false,
+          "title": "马天宇成为喜马拉雅「中国山」巅峰大使",
+          "truncated": false,
+          "url": "https://socialbeta.com/campaign/29018"
+        },
+        {
+          "contentPreview": "让茶与八马茶业达成深度战略合作，联合研发「让茶八马茶」系列，首批推出「让茶八马清香铁观音」、「让茶八马大红袍」、「让茶八马金骏眉」3款口味，上架永辉超市全国门店。\n\n作为「高端中国茶第一股」，成功上市的八马拥有极强的信任背书与百年制茶世家的风味判断与品质信用，而让茶则有饮料工程能力与年轻渠道网络。这场战略协同，正是时代浪潮之下，一场产业端的双向奔赴。\n\n当沉淀百年的茶叶风味资产，碰撞快消渠道与新生",
+          "contentStatus": "partial",
+          "defects": [],
+          "id": "socialbeta-campaign-29021",
+          "publishedAt": "SocialBeta",
+          "source": "socialbeta",
+          "summaryPreview": "联合研发背后的商业模式升级。",
+          "summaryTruncated": false,
+          "title": "让茶与八马联合研发开启跨界试探",
+          "truncated": true,
+          "url": "https://socialbeta.com/campaign/29021"
+        }
+      ],
+      "source": "socialbeta",
+      "verdict": "keep",
+      "verdictReasons": [],
+      "warnings": []
+    },
+    {
+      "degenerateRatio": 0.0,
+      "duplicateHashRatio": 0.0,
+      "emptyDateRatio": 0.0,
+      "emptyTitleRatio": 0.0,
+      "length": {
+        "p10": 687.6,
+        "p50": 1684.5,
+        "p90": 4083.4
+      },
+      "navHitRatio": 1.0,
+      "sampleSize": 10,
+      "samples": [
+        {
+          "contentPreview": "点赞\n\n分享\n\n新华社深圳11月18日电（记者韩洁、王攀）11月18日上午，国家主席习近平在深圳出席2026年亚太经合组织工商领导人峰会开幕式并发表主旨演讲。\n\n习近平指出，亚太地区汇集了世界上最重要的湾区，湾区经济具有鲜明的开放性、协同性、外溢性。深圳就位于粤港澳大湾区。中方支持成立世界湾区经济合作联盟，深化各湾区交流互动，探索亚太经济合作新路径。\n\n责任编辑： 杨国强\n\n声明：证券时报力求信息",
+          "contentStatus": "partial",
+          "defects": [
+            "nav_hit"
+          ],
+          "id": "stcn-4341525",
+          "publishedAt": "2026-11-18T11:01+08:00",
+          "source": "stcn",
+          "summaryPreview": "证券时报，证券时报网，由人民日报社主管主办，是证券市场权威信息披露媒体，也是中国资本市场的重要信息披露平台。提供全天候7*24小时财经证券类资讯，内容丰富，包括时报快讯、股市新闻、财经资讯、基金净值、债券、期货、上市公司公告等，为用户提供全",
+          "summaryTruncated": true,
+          "title": "习近平：中方支持成立世界湾区经济合作联盟",
+          "truncated": true,
+          "url": "https://www.stcn.com/article/detail/4341525.html"
+        },
+        {
+          "contentPreview": "点赞\n\n分享\n\n新华社深圳11月18日电（记者潘洁、肖思思）11月18日上午，国家主席习近平在深圳出席2026年亚太经合组织工商领导人峰会开幕式并发表主旨演讲。\n\n习近平指出，中国“十五五”规划既是自身的发展蓝图，也为亚太乃至全球经济增长提供机遇清单，是中国面向全球工商界发出的合作邀约。\n\n中国将为全球工商界提供超大规模的开放市场。中国拥有全球规模最大的中等收入群体，投资和消费潜力巨大。从新能源汽",
+          "contentStatus": "partial",
+          "defects": [
+            "nav_hit"
+          ],
+          "id": "stcn-4341526",
+          "publishedAt": "2026-11-18T11:01+08:00",
+          "source": "stcn",
+          "summaryPreview": "证券时报，证券时报网，由人民日报社主管主办，是证券市场权威信息披露媒体，也是中国资本市场的重要信息披露平台。提供全天候7*24小时财经证券类资讯，内容丰富，包括时报快讯、股市新闻、财经资讯、基金净值、债券、期货、上市公司公告等，为用户提供全",
+          "summaryTruncated": true,
+          "title": "习近平：“十五五”规划是中国面向全球工商界发出的合作邀约",
+          "truncated": true,
+          "url": "https://www.stcn.com/article/detail/4341526.html"
+        },
+        {
+          "contentPreview": "点赞\n\n分享\n\n11月18日，人民银行官网发布消息称，近期，中国人民银行（下称“中国央行”）行长潘功胜与加拿大财政部长商鹏飞、加拿大央行行长麦克勒姆共同签署了《中加金融工作组工作规范》。\n\n为落实今年1月中加两国领导人会晤重要共识，中国央行与加拿大财政部、加拿大央行牵头成立金融工作组，中加金融工作组首次会议于今年4月在北京举行，同时召开了中加金融工作组与金融机构的圆桌会。\n\n此次签署《中加金融工作",
+          "contentStatus": "partial",
+          "defects": [
+            "nav_hit"
+          ],
+          "id": "stcn-4341533",
+          "publishedAt": "2026-11-18T11:22+08:00",
+          "source": "stcn",
+          "summaryPreview": "证券时报，证券时报网，由人民日报社主管主办，是证券市场权威信息披露媒体，也是中国资本市场的重要信息披露平台。提供全天候7*24小时财经证券类资讯，内容丰富，包括时报快讯、股市新闻、财经资讯、基金净值、债券、期货、上市公司公告等，为用户提供全",
+          "summaryTruncated": true,
+          "title": "中国人民银行与加拿大财政部、加拿大央行共同签署《中加金融工作组工作规范》",
+          "truncated": true,
+          "url": "https://www.stcn.com/article/detail/4341533.html"
+        }
+      ],
+      "source": "stcn",
+      "verdict": "downgrade",
+      "verdictReasons": [
+        "navHitRatio>=0.20 (1.0000)"
+      ],
+      "warnings": []
+    }
+  ],
+  "totals": {
+    "articles": 55,
+    "sources": 4,
+    "sourcesWithData": 4
+  },
+  "warnings": [],
+  "worstSources": [
+    {
+      "defectRatio": 1.0,
+      "rank": 1,
+      "reasons": [
+        "emptyDateRatio>=0.30 (1.0000)"
+      ],
+      "sampleSize": 15,
+      "source": "jiemian",
+      "verdict": "downgrade"
+    },
+    {
+      "defectRatio": 1.0,
+      "rank": 2,
+      "reasons": [
+        "navHitRatio>=0.20 (1.0000)"
+      ],
+      "sampleSize": 10,
+      "source": "stcn",
+      "verdict": "downgrade"
+    },
+    {
+      "defectRatio": 0.0667,
+      "rank": 3,
+      "reasons": [],
+      "sampleSize": 15,
+      "source": "socialbeta",
+      "verdict": "keep"
+    },
+    {
+      "defectRatio": 0.0,
+      "rank": 4,
+      "reasons": [],
+      "sampleSize": 15,
+      "source": "eeo",
+      "verdict": "keep"
+    }
+  ]
+}
