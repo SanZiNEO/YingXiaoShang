@@ -1,0 +1,36 @@
+[
+  {
+    "id": "att-001",
+    "question_id": "q-001",
+    "student_id": "20230001",
+    "answer": "因为价格敏感度提升，比价次数变多，冲动下单自然就少了；再加上售后保障成了下单前的必看项，所以「便宜」不再是最重要的那一条。",
+    "feedback_json": {
+      "message": "抓住了价格因素，还差一层渠道差异。",
+      "kp_ids": [
+        "kp_consumer_market"
+      ]
+    },
+    "score": 1,
+    "created_at": "2026-11-18T20:11:03.000Z"
+  },
+  {
+    "id": "att-002",
+    "question_id": "q-2026-autumn-consumer-market-segmentation-case-04-long-identifier-without-any-space-for-wrapping",
+    "student_id": "20230001",
+    "answer": "这道题先按城市与县域把人群划成两块，其实题干描述的是同一人群在不同渠道上的购买频次与比价行为，属于行为变量而不是地理变量；我先前直接按地域划分，等于把行为变量当成地理变量，细分维度用错了。回头看材料里反复出现的比价工具使用频率、客单价与退货率这类可观察行为，才是真正应该用于聚类的指标；consumer-price-sensitivity-and-channel-migration-observation 这条记录里提到的价格敏感度变化与渠道迁移倾向，也都指向行为层面的差异，而不是空间位置上的差异。下次做题时我会先判断变量属于地理、人口、心理还是行为哪一类，再决定怎么细分，避免再把两类变量混用。",
+    "feedback_json": {
+      "message": "细分变量用错了：把行为变量当成地理变量，下次先判断变量属于哪一类。"
+    },
+    "score": 0.4,
+    "created_at": "2026-11-15T21:40:12.000Z"
+  },
+  {
+    "id": "att-003",
+    "question_id": "q-003",
+    "student_id": "20230001",
+    "answer": "先看人群再定渠道：同一价位下，一线城市更依赖内容平台决策，县域市场更依赖即时零售。",
+    "feedback_json": {},
+    "score": 0.75,
+    "created_at": "2026-11-12T19:05:40.000Z"
+  }
+]

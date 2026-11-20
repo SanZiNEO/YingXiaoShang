@@ -1,0 +1,291 @@
+{
+  "profile": {
+    "id": "stu-20230001",
+    "name": "张三",
+    "cohort": "2023级市场营销本科班（专升本，秋季入学，课程以案例研讨与校企共建实训为主，学期中安排两次企业参访）",
+    "background": {
+      "major": "市场营销",
+      "campus": "威海校区",
+      "internship": "校内电商实训基地 6 周"
+    },
+    "goals": [
+      "能区分四种市场细分变量并各举一例",
+      "能用价格敏感度解释促销季的渠道选择"
+    ],
+    "preferences": {
+      "pace": "循序渐进",
+      "format": "案例先行，概念后置",
+      "language": "中文"
+    },
+    "constraints": [
+      "案例需要贴近日常消费",
+      "单次练习不超过 20 分钟"
+    ],
+    "self_assessment": {
+      "consumer_market": "L2",
+      "segmentation_variables": "L1"
+    },
+    "created_at": "2026-09-01T10:00:00.000Z",
+    "updated_at": "2026-11-18T20:11:03.000Z"
+  },
+  "competencies": [
+    {
+      "id": "cpt-market",
+      "name": "消费者市场",
+      "definition": "识别消费者市场的需求差异、购买动机与决策链路。",
+      "levels": [
+        {
+          "level": "L1",
+          "description": "能说出消费者市场的定义与研究对象。"
+        },
+        {
+          "level": "L2",
+          "description": "能用价格敏感度解释一次具体的购买行为。"
+        },
+        {
+          "level": "L3",
+          "description": "能对比两类消费者群体的决策链路差异。"
+        },
+        {
+          "level": "L4",
+          "description": "能为一个细分群体设计验证方案，并评估方案结论。"
+        }
+      ],
+      "observable": [
+        "能复述定义",
+        "能解释购买动机",
+        "能对比决策链路",
+        "能设计验证方案"
+      ],
+      "version": "v0.1"
+    },
+    {
+      "id": "cpt-segmentation",
+      "name": "市场细分变量",
+      "definition": "掌握地理、人口、心理、行为四类细分变量，并能用于案例判断。",
+      "levels": [
+        {
+          "level": "L1",
+          "description": "能列出四类细分变量的名称。"
+        },
+        {
+          "level": "L2",
+          "description": "能判断一个案例用的是哪一类变量。"
+        },
+        {
+          "level": "L3",
+          "description": "能用两类变量交叉描述同一个市场。"
+        },
+        {
+          "level": "L4",
+          "description": "能指出案例中变量混用的错误并给出修正。"
+        }
+      ],
+      "observable": [
+        "能列出四类变量",
+        "能判断变量类别",
+        "能做交叉描述",
+        "能识别变量混用"
+      ],
+      "version": "v0.1"
+    }
+  ],
+  "plan": [],
+  "evidence": [
+    {
+      "id": "ev-001",
+      "student_id": "20230001",
+      "competency_id": "cpt-market",
+      "level": "L2",
+      "strength": "B",
+      "evidence_type": "explanation",
+      "source_type": "question",
+      "source_id": "q-001",
+      "chapter_id": "ch04",
+      "session_id": "",
+      "excerpt": "他把价格敏感度与售后保障放在同一个诉求维度里解释，还自己补了一句「比价次数变多」作为行为证据。",
+      "rationale": "作答引用了教材对购买动机的定义，并给出了一个可观察的行为指标。",
+      "confidence": 0.78,
+      "method": "llm",
+      "review_status": "reviewed",
+      "review_note": "教师抽查通过。",
+      "occurred_at": "2026-11-18T20:11:03.000Z",
+      "created_at": "2026-11-18T20:11:03.000Z",
+      "metadata": {
+        "question_type": "short_answer",
+        "kp_ids": [
+          "kp_consumer_market"
+        ]
+      }
+    },
+    {
+      "id": "ev-002",
+      "student_id": "20230001",
+      "competency_id": "cpt-market",
+      "level": "L2",
+      "strength": "C",
+      "evidence_type": "evidence_use",
+      "source_type": "news",
+      "source_id": "news-002",
+      "chapter_id": "ch04",
+      "session_id": "sess-20261115-01",
+      "excerpt": "他先用这份付费墙节选的报告说明「比价工具使用频率上升、客单价基本持平」，再把 consumer-price-sensitivity-and-channel-migration-observation 这段英文标题里的关键词逐个对应到价格敏感度与渠道迁移，最后承认样本只覆盖线上人群、线下数据不足，所以结论只能描述趋势。",
+      "rationale": "能引用材料并说明其样本局限。",
+      "confidence": 0.66,
+      "method": "hybrid",
+      "review_status": "reviewed",
+      "review_note": "复核时补充了样本局限说明。",
+      "occurred_at": "2026-11-15T21:40:12.000Z",
+      "created_at": "2026-11-16T09:10:00.000Z",
+      "metadata": {
+        "article_id": "news-002"
+      }
+    },
+    {
+      "id": "ev-003",
+      "student_id": "20230001",
+      "competency_id": "cpt-segmentation",
+      "level": "L1",
+      "strength": "D",
+      "evidence_type": "decision",
+      "source_type": "question",
+      "source_id": "q-2026-autumn-consumer-market-segmentation-case-04-long-identifier-without-any-space-for-wrapping",
+      "chapter_id": "ch04",
+      "session_id": "",
+      "excerpt": "把行为变量当成地理变量，把「县域市场偏爱即时零售」写成地域差异。",
+      "rationale": "",
+      "confidence": 0.52,
+      "method": "rule",
+      "review_status": "draft",
+      "review_note": "",
+      "occurred_at": "2026-11-15T21:40:12.000Z",
+      "created_at": "",
+      "metadata": {}
+    }
+  ],
+  "growth": [
+    {
+      "competency": {
+        "id": "cpt-market",
+        "name": "消费者市场",
+        "definition": "识别消费者市场的需求差异、购买动机与决策链路。",
+        "levels": [
+          {
+            "level": "L1",
+            "description": "能说出消费者市场的定义与研究对象。"
+          },
+          {
+            "level": "L2",
+            "description": "能用价格敏感度解释一次具体的购买行为。"
+          },
+          {
+            "level": "L3",
+            "description": "能对比两类消费者群体的决策链路差异。"
+          },
+          {
+            "level": "L4",
+            "description": "能为一个细分群体设计验证方案，并评估方案结论。"
+          }
+        ],
+        "observable": [
+          "能复述定义",
+          "能解释购买动机",
+          "能对比决策链路",
+          "能设计验证方案"
+        ],
+        "version": "v0.1"
+      },
+      "level": "L2",
+      "confidence": 0.72,
+      "evidenceCount": 2,
+      "status": "进步",
+      "preLevel": "L1",
+      "postLevel": "L2",
+      "latestEvidence": {
+        "id": "ev-001",
+        "student_id": "20230001",
+        "competency_id": "cpt-market",
+        "level": "L2",
+        "strength": "B",
+        "evidence_type": "explanation",
+        "source_type": "question",
+        "source_id": "q-001",
+        "chapter_id": "ch04",
+        "session_id": "",
+        "excerpt": "他把价格敏感度与售后保障放在同一个诉求维度里解释，还自己补了一句「比价次数变多」作为行为证据。",
+        "rationale": "作答引用了教材对购买动机的定义，并给出了一个可观察的行为指标。",
+        "confidence": 0.78,
+        "method": "llm",
+        "review_status": "reviewed",
+        "review_note": "教师抽查通过。",
+        "occurred_at": "2026-11-18T20:11:03.000Z",
+        "created_at": "2026-11-18T20:11:03.000Z",
+        "metadata": {
+          "question_type": "short_answer",
+          "kp_ids": [
+            "kp_consumer_market"
+          ]
+        }
+      }
+    },
+    {
+      "competency": {
+        "id": "cpt-segmentation",
+        "name": "市场细分变量",
+        "definition": "掌握地理、人口、心理、行为四类细分变量，并能用于案例判断。",
+        "levels": [
+          {
+            "level": "L1",
+            "description": "能列出四类细分变量的名称。"
+          },
+          {
+            "level": "L2",
+            "description": "能判断一个案例用的是哪一类变量。"
+          },
+          {
+            "level": "L3",
+            "description": "能用两类变量交叉描述同一个市场。"
+          },
+          {
+            "level": "L4",
+            "description": "能指出案例中变量混用的错误并给出修正。"
+          }
+        ],
+        "observable": [
+          "能列出四类变量",
+          "能判断变量类别",
+          "能做交叉描述",
+          "能识别变量混用"
+        ],
+        "version": "v0.1"
+      },
+      "level": "L1",
+      "confidence": 0.48,
+      "evidenceCount": 1,
+      "status": "证据不足",
+      "preLevel": "L1",
+      "postLevel": "L1",
+      "latestEvidence": {
+        "id": "ev-003",
+        "student_id": "20230001",
+        "competency_id": "cpt-segmentation",
+        "level": "L1",
+        "strength": "D",
+        "evidence_type": "decision",
+        "source_type": "question",
+        "source_id": "q-2026-autumn-consumer-market-segmentation-case-04-long-identifier-without-any-space-for-wrapping",
+        "chapter_id": "ch04",
+        "session_id": "",
+        "excerpt": "把行为变量当成地理变量，把「县域市场偏爱即时零售」写成地域差异。",
+        "rationale": "",
+        "confidence": 0.52,
+        "method": "rule",
+        "review_status": "draft",
+        "review_note": "",
+        "occurred_at": "2026-11-15T21:40:12.000Z",
+        "created_at": "",
+        "metadata": {}
+      }
+    }
+  ]
+}

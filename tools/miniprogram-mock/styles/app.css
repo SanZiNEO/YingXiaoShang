@@ -1,0 +1,605 @@
+/* 营小商 · 小程序原型（纯 mock）唯一全局样式表
+ * 原生 CSS，零依赖、零构建；不做样式导入、不引外网字体/图标/资源。
+ * 宽度口径：375px 单列；长串换行与 min-width:0 约束见文末规则区。
+ */
+
+/* ---------- 基础 reset ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #f4f5f7;
+}
+
+body.app {
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fff;
+  padding: 12px 14px 76px;
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #222;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- 排版层级 ---------- */
+
+.page-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.page-sub {
+  font-size: 11px;
+  color: #888;
+}
+
+.card-title,
+.block-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* 正文 13px；辅助说明 11px（见各辅助类） */
+
+/* ---------- 容器与列表 ---------- */
+
+.page-header {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.section {
+  margin-bottom: 16px;
+  max-width: 100%;
+}
+
+.block {
+  max-width: 100%;
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  max-width: 100%;
+}
+
+.card-list,
+.entry-list {
+  max-width: 100%;
+}
+
+.entry-row,
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+  max-width: 100%;
+}
+
+.row-title {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.row-sub {
+  font-size: 11px;
+  color: #888;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #888;
+  min-width: 0;
+}
+
+.row-body {
+  font-size: 12px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.row-disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.entry-desc {
+  font-size: 11px;
+  color: #888;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.identity {
+  max-width: 100%;
+}
+
+.identity-name {
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.identity-sub {
+  font-size: 11px;
+  color: #777;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 12px;
+  color: #555;
+  max-width: 100%;
+}
+
+.tabbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: 375px;
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tabbar-link {
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #555;
+}
+
+.tabbar-link-active {
+  color: #2f6feb;
+  font-weight: 600;
+}
+
+/* ---------- 标签 ---------- */
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  line-height: 1.6;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid #dfe3e8;
+  background: #f2f4f7;
+  color: #4a5568;
+  max-width: 100%;
+}
+
+.tag-accent {
+  border-color: #bcd4f7;
+  background: #e8f1fe;
+  color: #1f5bbf;
+}
+
+.tag-success {
+  border-color: #bfe6cf;
+  background: #e9f6ee;
+  color: #1f7a44;
+}
+
+.tag-warning {
+  border-color: #f6d9b3;
+  background: #fdf3e5;
+  color: #9a5b12;
+}
+
+.tag-muted {
+  border-color: #dfe3e8;
+  background: #f2f4f7;
+  color: #6b7280;
+}
+
+/* 标签内容是外部数据（来源名、能力名、等级），可能出现 90 字符无空格 token。
+ * 单靠 max-width 不够：需要 anywhere 才能在没有断点的长串内部换行。 */
+.tag,
+.tag-accent,
+.tag-success,
+.tag-warning,
+.tag-muted {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* ---------- 正文与详情 ---------- */
+
+.detail {
+  max-width: 100%;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.origin-link {
+  display: block;
+  min-height: 44px;
+  padding: 10px 0;
+  font-size: 12px;
+  color: #2f6feb;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.content-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+  font-size: 13px;
+}
+
+.block-title {
+  margin-bottom: 8px;
+}
+
+.match-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  max-width: 100%;
+}
+
+.match-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+}
+
+.match-meta {
+  font-size: 11px;
+  color: #888;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.match-body,
+.ideology-row {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* ---------- 问答 ---------- */
+
+.record-list {
+  max-width: 100%;
+}
+
+.record {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  max-width: 100%;
+}
+
+.record-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.record-toggle {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.record-body {
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.answer-line,
+.feedback-line {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+/* ---------- 我的（目标约束 / 能力网格 / 证据账本） ---------- */
+
+.goal-block {
+  max-width: 100%;
+}
+
+.growth-block,
+.evidence-block {
+  max-width: 100%;
+}
+
+.line {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  padding: 2px 0;
+  min-width: 0;
+}
+
+.growth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 100%;
+}
+
+.growth-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.growth-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.growth-level {
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 0;
+}
+
+.growth-meta {
+  font-size: 11px;
+  color: #888;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.growth-quote {
+  font-size: 12px;
+  color: #555;
+  border-left: 3px solid #e5e7eb;
+  padding-left: 8px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.evidence-block {
+  max-width: 100%;
+}
+
+.evidence-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  max-width: 100%;
+}
+
+.evidence-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.evidence-excerpt,
+.evidence-rationale {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.evidence-date {
+  font-size: 11px;
+  color: #999;
+}
+
+/* ---------- 三态（loading / error / empty） ---------- */
+
+.state-panel {
+  padding: 24px 0;
+  text-align: center;
+  max-width: 100%;
+}
+
+.state-panel-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.state-panel-desc {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+
+.state-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid #dfe3e8;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: #2f6feb;
+  border-color: #2f6feb;
+  color: #fff;
+}
+
+.btn-secondary {
+  color: #444;
+}
+
+.skeleton {
+  max-width: 100%;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+  background: #eceff3;
+  margin: 8px 0;
+  max-width: 100%;
+}
+
+.skeleton-block {
+  height: 80px;
+  border-radius: 10px;
+  background: #eceff3;
+  margin: 10px 0;
+  max-width: 100%;
+}
+
+.state-loading-text {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.empty {
+  padding: 24px 0;
+  text-align: center;
+  color: #888;
+  font-size: 12px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.empty-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 8px;
+  color: #2f6feb;
+  font-size: 12px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 换行与溢出约束（硬规则） ---------- */
+
+/* flex / grid 直接子项允许收缩，长文本在子项内部换行而不撑破容器 */
+
+.entry-row > *,
+.row > *,
+.record-head > *,
+.match-head > *,
+.growth-head > *,
+.tag-row > *,
+.evidence-tags > *,
+.state-actions > *,
+.tabbar > * {
+  min-width: 0;
+}
+
+.growth-grid > * {
+  min-width: 0;
+}
+
+/* ---------- 动效（≤200ms，减动效降级） ---------- */
+
+.skeleton-line,
+.skeleton-block {
+  transition: opacity 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none;
+    animation: none;
+  }
+}

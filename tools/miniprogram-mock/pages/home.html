@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>首页 · 营小商原型</title>
+  <link rel="stylesheet" href="../styles/app.css">
+</head>
+<body class="app" data-fixture="student.json" data-state="normal">
+  <div id="script-fallback" class="empty">页面脚本未能加载，请对照 fixtures 查看数据结构。</div>
+  <main data-state="normal">
+    <header class="page-header">
+      <div class="identity" data-mock-source="student.current" data-replace="data-field">
+        <div class="identity-name" data-slot="name"></div>
+        <div class="identity-sub" data-slot="sub"></div>
+      </div>
+    </header>
+    <section class="section">
+      <h2 class="block-title">页面入口</h2>
+      <nav class="entry-list" aria-label="页面导航">
+        <a class="entry-row" data-replace="navigation" href="news.html"><span class="row-title">新闻</span><span class="entry-desc">news.list · fixtures/news-list.json</span></a>
+        <a class="entry-row" data-replace="navigation" href="news-detail.html?articleId=news-001"><span class="row-title">新闻详情（示例）</span><span class="entry-desc">news.get · fixtures/news-detail.json</span></a>
+        <a class="entry-row" data-replace="navigation" href="ask.html"><span class="row-title">问答记录</span><span class="entry-desc">questions.attempts · fixtures/attempts.json</span></a>
+        <a class="entry-row" data-replace="navigation" href="profile.html"><span class="row-title">我的</span><span class="entry-desc">profile.get · fixtures/profile.json</span></a>
+      </nav>
+      <p class="page-sub"><a class="empty-action" data-replace="navigation" href="../index.html">返回入口总览</a></p>
+    </section>
+  </main>
+  <div data-state="loading" hidden></div>
+  <div data-state="error" hidden></div>
+  <div data-state="empty" hidden></div>
+  <footer class="tabbar">
+    <a class="tabbar-link tabbar-link-active" href="home.html" data-replace="navigation">首页</a>
+    <a class="tabbar-link" href="news.html" data-replace="navigation">新闻</a>
+    <a class="tabbar-link" href="ask.html" data-replace="navigation">问答</a>
+    <a class="tabbar-link" href="profile.html" data-replace="navigation">我的</a>
+  </footer>
+  <script type="application/json" data-fixture="student.json">{
+  "studentId": "20230001",
+  "name": "张三",
+  "cohort": "2023级市场营销本科班（专升本，秋季入学，课程以案例研讨与校企共建实训为主，学期中安排两次企业参访）"
+}
+</script>
+  <script src="../scripts/app.js"></script>
+</body>
+</html>

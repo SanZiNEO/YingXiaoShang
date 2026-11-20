@@ -1,0 +1,48 @@
+{
+  "article": {
+    "id": "news-001",
+    "source": "36kr",
+    "source_id": "sr-8841",
+    "title": "秋日消费市场观察：理性下单回暖",
+    "url": "",
+    "author": "本报记者 李明",
+    "published_at": "2026-11-19T08:30:00.000Z",
+    "summary": "促销季消费者更看重性价比与售后保障，冲动型下单比例明显下降。",
+    "content": "促销季进入第三周，多家平台的价格监测数据显示，消费者在下单前的比价次数明显增加，冲动型下单的比例较去年同期下降。\n\n一位参与调研的零售分析师指出，价格敏感度上升并不等于只买便宜的货，售后保障、退换便利与配送时效同样成为下单前的必看项；在同等价位下，能提供更清晰售后承诺的商品转化率更高。\n\n在渠道侧，一线城市的消费者更习惯在内容平台完成决策、再到货架电商下单，三线及县域市场则仍以即时零售与社区团购为主；这种分化让品牌在同一个促销季里需要准备两套完全不同的投放节奏。",
+    "content_status": "full",
+    "rights": "转载需授权",
+    "fetched_at": "2026-11-19T09:02:11.000Z"
+  },
+  "matches": [
+    {
+      "kp_id": "kp_consumer_market",
+      "kpName": "消费者市场",
+      "confidence": 0.82,
+      "tag_role": "example",
+      "evidence_span": "促销季里，消费者更愿意为售后承诺清晰的商品多付一点钱，而把“绝对低价”排在比价清单的后半段，这与价格敏感度上升并不矛盾。",
+      "rationale": "材料把价格敏感度、售后保障与购买动机放在同一诉求维度，符合消费者市场的定义边界。"
+    },
+    {
+      "kp_id": "kp_segmentation_variables",
+      "kpName": "市场细分变量",
+      "confidence": 0.64,
+      "tag_role": "mention",
+      "evidence_span": "一线城市与三线及县域市场在渠道选择上出现分化。",
+      "rationale": "只以一句话提及地理变量的差异，未展开四类细分变量的对照。"
+    }
+  ],
+  "ideology": [
+    {
+      "ideology_id": "ideology_common_prosperity",
+      "confidence": 0.71,
+      "evidence_span": "国货品牌与县域消费在同一促销季同步增长，渠道下沉让更多中小城市的消费者获得同等的售后保障。",
+      "rationale": "表述与共同富裕关于区域协调与普惠消费的要点一致。"
+    },
+    {
+      "ideology_id": "ideology_consumer_rights",
+      "confidence": 0.55,
+      "evidence_span": "售后保障成为下单前的必看项，退换便利与否直接影响转化率。",
+      "rationale": "体现消费者权益保护导向，但材料未提及具体维权案例。"
+    }
+  ]
+}

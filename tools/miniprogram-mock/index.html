@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>营小商 · 小程序原型（纯 mock）</title>
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+<body class="app">
+
+  <header class="page-header">
+    <h1 class="page-title">营小商 · 小程序原型（纯 mock）</h1>
+    <p class="page-sub">5 页静态原型，数据全部来自 fixtures/*.json，断网可直接打开。</p>
+  </header>
+
+  <section class="section">
+    <div class="block">
+      <h2 class="block-title">页面入口</h2>
+      <nav class="entry-list" aria-label="页面导航">
+        <a class="entry-row" data-replace="navigation" href="pages/home.html">
+          <span class="row-title">首页</span>
+          <span class="entry-desc">student.current · fixtures/student.json</span>
+        </a>
+        <a class="entry-row" data-replace="navigation" href="pages/news.html">
+          <span class="row-title">新闻列表</span>
+          <span class="entry-desc">news.list · fixtures/news-list.json</span>
+        </a>
+        <a class="entry-row" data-replace="navigation" href="pages/news-detail.html?articleId=news-001">
+          <span class="row-title">新闻详情</span>
+          <span class="entry-desc">news.get · fixtures/news-detail.json</span>
+        </a>
+        <a class="entry-row" data-replace="navigation" href="pages/ask.html">
+          <span class="row-title">问答记录</span>
+          <span class="entry-desc">questions.attempts · fixtures/attempts.json</span>
+        </a>
+        <a class="entry-row" data-replace="navigation" href="pages/profile.html">
+          <span class="row-title">我的</span>
+          <span class="entry-desc">profile.get · fixtures/profile.json</span>
+        </a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="block-title">三态演示（?state= 参数）</h2>
+
+    <div class="card">
+      <h3 class="card-title">首页</h3>
+      <div class="state-actions">
+        <a class="btn btn-secondary" href="pages/home.html?state=loading">loading</a>
+        <a class="btn btn-secondary" href="pages/home.html?state=error">error</a>
+        <a class="btn btn-secondary" href="pages/home.html?state=empty">empty</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">新闻列表</h3>
+      <div class="state-actions">
+        <a class="btn btn-secondary" href="pages/news.html?state=loading">loading</a>
+        <a class="btn btn-secondary" href="pages/news.html?state=error">error</a>
+        <a class="btn btn-secondary" href="pages/news.html?state=empty">empty</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">新闻详情</h3>
+      <div class="state-actions">
+        <a class="btn btn-secondary" href="pages/news-detail.html?articleId=news-001&amp;state=loading">loading</a>
+        <a class="btn btn-secondary" href="pages/news-detail.html?articleId=news-001&amp;state=error">error</a>
+        <a class="btn btn-secondary" href="pages/news-detail.html?articleId=news-001&amp;state=empty">empty</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">问答记录</h3>
+      <div class="state-actions">
+        <a class="btn btn-secondary" href="pages/ask.html?state=loading">loading</a>
+        <a class="btn btn-secondary" href="pages/ask.html?state=error">error</a>
+        <a class="btn btn-secondary" href="pages/ask.html?state=empty">empty</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">我的</h3>
+      <div class="state-actions">
+        <a class="btn btn-secondary" href="pages/profile.html?state=loading">loading</a>
+        <a class="btn btn-secondary" href="pages/profile.html?state=error">error</a>
+        <a class="btn btn-secondary" href="pages/profile.html?state=empty">empty</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-excluded="true">
+    <h2 class="block-title">不在原型范围（边界声明，不是功能入口）</h2>
+    <div class="card">
+      <p class="line">files.reveal（打开所在文件夹）</p>
+      <p class="line">files.preview（预览本地文件）</p>
+      <p class="line">files.openDialog（选择文件对话框）</p>
+      <p class="line">settings.get（读取本机设置与 Key）</p>
+      <p class="line">settings.set（写入本机设置与 Key）</p>
+      <p class="page-sub">这 5 个能力由桌面端保留，小程序 mock 一律不碰。</p>
+    </div>
+  </section>
+
+  <footer>
+    <p class="page-sub">本页是入口总览，不带脚本；进入任一页面后，控制台会打印数据真实来源：file:// 下为 fixture-source: inline-fallback，经静态服务器打开时为 fixture-source: json（此时改 fixtures/*.json 刷新即跟随）。不带 state 参数即正常态。</p>
+  </footer>
+
+</body>
+</html>
