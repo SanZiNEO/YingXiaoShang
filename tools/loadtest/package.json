@@ -1,0 +1,17 @@
+{
+  "name": "@yingxiaoshang/loadtest",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "营小商 F 轮压测工具：并发虚拟学生场景演练、客户端采样与 /metrics 两侧汇总，生成 md/json 压测报告与告警规则演练。",
+  "scripts": {
+    "selftest": "node scripts/selftest.mjs",
+    "check:alerts": "node scripts/check-alerts.mjs",
+    "start": "node scenario.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=22"
+  }
+}
