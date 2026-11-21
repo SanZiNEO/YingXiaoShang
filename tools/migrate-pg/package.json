@@ -1,0 +1,15 @@
+{
+  "name": "@yxs/migrate-pg",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "pg": "^8.23.1"
+  },
+  "scripts": {
+    "migrate": "node src/migrate.js",
+    "verify": "node src/verify.js",
+    "rollback": "node src/rollback.js",
+    "check-schema": "node src/schema-map.js --check"
+  }
+}

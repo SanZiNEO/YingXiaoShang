@@ -1,0 +1,69 @@
+# 营小商 F 轮压测告警规则（冻结 §9.3 五条，Prometheus 原生规则格式）。
+# 规则字段只使用 Prometheus 官方定义的 expr / for / labels / annotations，不自创字段名。
+#
+# 缺口说明（规则 3，契约 02 §4.3、实现 03 §3.9）：
+# 冻结 §9.3 第 3 条原表达式为：
+#   yxs_tokens_total{kind="prompt"} / yxs_token_quota > 0.8
+# 缺口事实：yxs_token_quota 不在冻结 §9.2 的 10 项指标清单内，仓库现状也不存在该指标，
+# 它不是既有指标，活动表达式不能把它当作现存指标引用。
+# F 侧替代口径：按 student_id 汇总 yxs_tokens_total{kind="prompt"}，与固定常量配额比较
+# （默认 tokenQuota=200000，阈值 0.8×200000=160000）。
+# 待 A 轮补齐 yxs_token_quota gauge 后，按冻结 §12 变更登记恢复为冻结原表达式。
+
+groups:
+  - name: yxs-server
+    rules:
+      - alert: YxsHttp5xxRate
+        expr: sum(rate(yxs_http_requests_total{status=~"5.."}[5m])) / sum(rate(yxs_http_requests_total[5m])) > 0.01
+        for: 5m
+        labels:
+          severity: page
+          job: yxs-server
+        annotations:
+          summary: 'YxsHttp5xxRate：5xx 错误率超过 1%（持续 5 分钟）。'
+          description: '分子按 status=~"5.." 筛出 5xx 再取 rate[5m]，分母为全量 rate[5m]；当前 5xx 计数见 yxs_http_requests_total，可按 method/route 标签拆分定位慢接口。'
+
+      - alert: YxsHttpP95Latency
+        expr: histogram_quantile(0.95, sum by (le)(rate(yxs_http_request_duration_seconds_bucket[10m]))) > 3
+        for: 10m
+        labels:
+          severity: warn
+          job: yxs-server
+        annotations:
+          summary: 'YxsHttpP95Latency：HTTP P95 延迟超过 3 秒（持续 10 分钟）。'
+          description: 'P95 来自 yxs_http_request_duration_seconds 直方图，按 method/route 标签拆分定位慢路由；分位数按直方图桶计算，不用平均值代替，桶边界受冻结 12 个桶限制。'
+
+      # 冻结原式（缺口备查，活动表达式不得引用清单外的 yxs_token_quota）：
+      #   yxs_tokens_total{kind="prompt"} / yxs_token_quota > 0.8
+      # 缺口：yxs_token_quota 不在冻结 §9.2 的 10 项指标清单内；待 A 轮补 gauge 后按冻结 §12 恢复。
+      - alert: YxsTokenUsageHigh
+        expr: sum by (student_id)(yxs_tokens_total{kind="prompt"}) > 160000
+        for: 15m
+        labels:
+          severity: warn
+          job: yxs-server
+          quota: "200000"
+          pending: "token-quota-gauge"
+        annotations:
+          summary: 'YxsTokenUsageHigh：学生 {{ $labels.student_id }} 的 prompt token 用量达到配额阈值（160000 = 0.8×200000，持续 15 分钟）。'
+          description: '替代 yxs_token_quota 口径：与固定常量配额 200000 的 80%（160000）比较，不依赖服务端暴露 quota 指标；待服务端补齐 quota gauge 后恢复冻结原表达式，可按 student_id 标签逐学生核对用量。'
+
+      - alert: YxsSqliteBusySpike
+        expr: increase(yxs_sqlite_busy_total[5m]) > 5
+        for: 5m
+        labels:
+          severity: warn
+          job: yxs-server
+        annotations:
+          summary: 'YxsSqliteBusySpike：5 分钟内 SQLITE_BUSY 超过 5 次。'
+          description: '取 yxs_sqlite_busy_total 的 5 分钟增量，可按 db 标签拆分涉及的数据库；现象指向并发写竞争，排查方向为 WAL 模式、busy_timeout 与并发写路径。'
+
+      - alert: YxsServerDown
+        expr: up{job="yxs-server"} == 0
+        for: 1m
+        labels:
+          severity: page
+          job: yxs-server
+        annotations:
+          summary: 'YxsServerDown：服务端目标失联超过 1 分钟。'
+          description: 'up 指标由 Prometheus 抓取目标产生，为 0 表示进程退出或抓取链路中断；排查方向为服务端进程、监听端口与最近一次 /health 健康检查状态。'

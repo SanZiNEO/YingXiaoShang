@@ -1,0 +1,12 @@
+# 本包运行产物（相对包根；不依赖根 .gitignore 兜底）
+node_modules/
+
+# 压测报告与原始指标快照默认落在仓库根的 .scratch/run/F/ 下（根规则已覆盖），
+# 这里再兜一层：允许有人把 --out 指到包内做临时演练而不污染工作区。
+report/
+.artifacts/
+scratch/
+
+# 运行日志与失败帧
+*.log
+sse/

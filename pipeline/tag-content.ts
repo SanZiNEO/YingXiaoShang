@@ -1,8 +1,8 @@
 import { Context } from '@deepseek-ai/cordis'
 import LearningDb from '@learning-agent/db'
 import { loadEnv, repoRoot } from './env.ts'
-import { DeepSeekLlm } from './lib/llm.ts'
-import { tagContentBlocks, tagContentBlocksWithLlm } from './lib/tags.ts'
+import { DeepSeekLlm } from './src/llm.ts'
+import { tagContentBlocks, tagContentBlocksWithLlm } from './src/tags.ts'
 
 loadEnv()
 

@@ -1,0 +1,24 @@
+{
+  "target": "stub",
+  "baseUrl": "http://127.0.0.1:18080",
+  "students": 40,
+  "rampUpSec": 5,
+  "iterations": 1,
+  "scenario": "full",
+  "llm": "mock",
+  "home": ".scratch/run/F/home",
+  "out": ".scratch/run/F/report",
+  "tokenQuota": 200000,
+  "password": "yxs-loadtest",
+  "passwordNote": "示例口令仅用于本机隔离 stub 的预置账号，不对应任何真实账号；对 real 目标请勿填写真实口令，本配置不含任何真实 Key。",
+  "metricsToken": "",
+  "stub": {
+    "port": 18080,
+    "firstTokenDelayMs": 20,
+    "dropDoneAfterTextFrames": null,
+    "missingBuckets": [],
+    "renameErrorsMetric": false,
+    "faults": {}
+  },
+  "clientIps": "distinct"
+}

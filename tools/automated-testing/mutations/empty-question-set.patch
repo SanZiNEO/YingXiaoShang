@@ -1,0 +1,19 @@
+# mutant: M5
+# 目标文件: apps/desktop/src/renderer/src/question-set.ts
+# 锚点行号: 12   （patch 应用前的现状行号）
+# 对应 TC: TC-P1-02
+# 红例断言: tools/automated-testing/src/scenarios/p1-02-empty-question-set.spec.ts:12-13
+# 冻结参考版本: v1（plans/server-client-split/00-master/01-frozen-contracts.md §11；plans/server-client-split/H-electron-mutation/02-contract.md §2.2）
+# 改坏语义: 空题集判定恒返回 markdown，空题集不再走 retry 兜底（学生进入死胡同）。
+# 期望失败关键词: retry
+diff --git a/apps/desktop/src/renderer/src/question-set.ts b/apps/desktop/src/renderer/src/question-set.ts
+index dfd7a23..2001abd 100644
+--- a/apps/desktop/src/renderer/src/question-set.ts
++++ b/apps/desktop/src/renderer/src/question-set.ts
+@@ -9,5 +9,5 @@
+ export type EmptyQuestionSetAction = 'markdown' | 'retry'
+ 
+ export function emptyQuestionSetAction(artifact: { content: string }): EmptyQuestionSetAction {
+-  return artifact.content.trim().length > 0 ? 'markdown' : 'retry'
++  return 'markdown'
+ }

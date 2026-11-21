@@ -1,0 +1,7 @@
+# 本包运行产物（备份快照、dump、演练报告、日志）。
+# 默认产物根是 <repo>/.scratch/run/G/g_backups（已被根 .gitignore 的 .scratch/ 覆盖）；
+# 这里再声明一遍，避免有人把 --out / YXS_G_BACKUP_DIR 指到包内时把数据写进版本库。
+g_backups/
+*.sqlite
+*.dump
+*.log

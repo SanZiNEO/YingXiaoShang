@@ -16,9 +16,8 @@ resources/
 
 # Build output and dependencies
 node_modules/
+# `lib/` 只用于排除 tsc 编译产物（packages/*/lib、apps/server/lib）；手写源码一律放 src/。
 lib/
-!pipeline/lib/
-!pipeline/lib/**/*.ts
 apps/desktop/out/
 apps/desktop/dist/
 apps/desktop/seed/

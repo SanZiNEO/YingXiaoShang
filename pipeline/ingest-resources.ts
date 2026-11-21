@@ -24,22 +24,22 @@ import type {
   Section,
   TeachingGuide,
 } from '@learning-agent/shared'
-import { parseDoc } from './lib/doc.ts'
-import { parseDocx } from './lib/docx.ts'
-import { buildContentBlocks } from './lib/content.ts'
-import { extractIdeology } from './lib/ideology.ts'
+import { parseDoc } from './src/doc.ts'
+import { parseDocx } from './src/docx.ts'
+import { buildContentBlocks } from './src/content.ts'
+import { extractIdeology } from './src/ideology.ts'
 import {
   buildChapterKnowledge,
   cleanLegacyRecord,
   extractOfficialRows,
   type KnowledgeBuildResult,
   type LegacyKpRecord,
-} from './lib/knowledge.ts'
-import { parsePdf } from './lib/pdf.ts'
-import { extractQuestions } from './lib/questions.ts'
-import { extractTeachingGuide } from './lib/teaching.ts'
-import { stripLeadingNumber, unique } from './lib/text.ts'
-import type { OfficialKpRow, ParsedDocument } from './lib/types.ts'
+} from './src/knowledge.ts'
+import { parsePdf } from './src/pdf.ts'
+import { extractQuestions } from './src/questions.ts'
+import { extractTeachingGuide } from './src/teaching.ts'
+import { stripLeadingNumber, unique } from './src/text.ts'
+import type { OfficialKpRow, ParsedDocument } from './src/types.ts'
 
 const RESOURCE_ROOT = resolve('resources/《市场营销学》（第5版）数字资源（不含课件）')
 const OUTPUT_DIR = resolve('data/normalized')

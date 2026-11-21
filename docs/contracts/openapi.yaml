@@ -1,0 +1,1631 @@
+openapi: 3.0.3
+info:
+  title: 营小商服务端
+  version: 0.1.0
+  description: 营小商学习助手服务端：30 个 RPC 业务方法、5 个专用通道与 4 个只读兼容方法。
+servers:
+  - url: http://127.0.0.1:8080
+security:
+  - bearerAuth: []
+paths:
+  /health:
+    get:
+      summary: 存活与数据自检（无前缀，容器探活使用）
+      security: []
+      responses:
+        "200":
+          description: 健康检查结果
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResult"
+        "503":
+          description: 数据库打不开或数据缺失
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+  /metrics:
+    get:
+      summary: Prometheus 指标文本
+      security: []
+      responses:
+        "200":
+          description: text/plain; version=0.0.4
+          content:
+            text/plain:
+              schema:
+                type: string
+  /api/v1/health:
+    get:
+      summary: 存活与数据自检（带 API 前缀）
+      security: []
+      responses:
+        "200":
+          description: 健康检查结果
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResult"
+        "503":
+          description: 数据库打不开或数据缺失
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+  /api/v1/auth/login:
+    post:
+      summary: 学号 + 口令登录
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              required:
+                - studentId
+                - password
+              properties:
+                studentId:
+                  type: string
+                  example: "20230001"
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                required:
+                  - ok
+                  - result
+                  - requestId
+                  - elapsedMs
+                properties:
+                  ok:
+                    type: boolean
+                  result:
+                    $ref: "#/components/schemas/LoginResult"
+                  requestId:
+                    type: string
+                    example: req_9f2a1b3c4d5e
+                  elapsedMs:
+                    type: integer
+        "400": &a1
+          description: 参数校验失败（BAD_REQUEST）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "401": &a2
+          description: 未登录或登录已失效（AUTH_REQUIRED / AUTH_INVALID / AUTH_FAILED）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "403": &a3
+          description: 资源不属于当前学号（FORBIDDEN）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "404": &a4
+          description: 记录或方法不存在（NOT_FOUND / UNKNOWN_METHOD）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "413": &a5
+          description: 请求体超过 1 MiB（PAYLOAD_TOO_LARGE）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "429": &a6
+          description: 触发限流（RATE_LIMITED）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "500": &a7
+          description: 服务端内部错误（INTERNAL）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "501": &a8
+          description: 预留能力尚未实现（NOT_IMPLEMENTED）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "502": &a9
+          description: 上游依赖失败（UPSTREAM_FAILED）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        "504": &a10
+          description: 上游超时（TIMEOUT）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+  /api/v1/auth/logout:
+    post:
+      summary: 注销当前 token
+      responses:
+        "200":
+          description: 已注销
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                required:
+                  - ok
+                properties:
+                  ok:
+                    type: boolean
+        "400": *a1
+        "401": *a2
+        "403": *a3
+        "404": *a4
+        "413": *a5
+        "429": *a6
+        "500": *a7
+        "501": *a8
+        "502": *a9
+        "504": *a10
+  /api/v1/auth/cas/callback:
+    get:
+      summary: CAS 统一身份认证回调（预留，本阶段 501）
+      security: []
+      responses:
+        "501": *a8
+    post:
+      summary: CAS 统一身份认证回调（预留，本阶段 501）
+      security: []
+      responses:
+        "501": *a8
+  /api/v1/auth/oauth/callback:
+    get:
+      summary: OAuth2 回调（预留，本阶段 501）
+      security: []
+      responses:
+        "501": *a8
+    post:
+      summary: OAuth2 回调（预留，本阶段 501）
+      security: []
+      responses:
+        "501": *a8
+  /api/v1/rpc:
+    post:
+      summary: RPC 单端点分发（30 个业务方法）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              required:
+                - method
+              properties:
+                method:
+                  type: string
+                  enum:
+                    - student.current
+                    - chapters.list
+                    - kps.list
+                    - news.list
+                    - news.status
+                    - news.refresh
+                    - news.get
+                    - news.match
+                    - questions.attempts
+                    - profile.get
+                    - profile.growth
+                    - profile.evidence
+                    - profile.snapshot
+                    - profile.review
+                    - artifacts.list
+                    - artifacts.get
+                    - artifacts.export
+                    - memory.facts
+                    - memory.episodes
+                    - memory.summary
+                    - memory.upsert
+                    - memory.delete
+                    - chat.sessions
+                    - chat.messages
+                    - agent.snapshot
+                    - agent.suggestions
+                    - agent.turns
+                    - agent.ledger
+                    - agent.retry
+                    - agent.sessions
+                params:
+                  type: object
+                  additionalProperties: true
+                requestId:
+                  type: string
+                  pattern: ^req_[a-z0-9]{1,24}$
+      responses:
+        "200":
+          description: 调用成功（result 形状随 method 而定）
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                required:
+                  - ok
+                  - result
+                  - requestId
+                  - elapsedMs
+                properties:
+                  ok:
+                    type: boolean
+                  result:
+                    $ref: "#/components/schemas/StudentCurrentResult"
+                  requestId:
+                    type: string
+                    example: req_9f2a1b3c4d5e
+                  elapsedMs:
+                    type: integer
+        "400": *a1
+        "401": *a2
+        "403": *a3
+        "404": *a4
+        "413": *a5
+        "429": *a6
+        "500": *a7
+        "501": *a8
+        "502": *a9
+        "504": *a10
+  /api/v1/chat/stream:
+    post:
+      summary: 对话 SSE 流式通道
+      description: 事件顺序：session → (round | text | tool | tool-end)* → done；异常只发 error 后关闭。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              required:
+                - message
+              properties:
+                sessionId:
+                  type: string
+                message:
+                  type: string
+                  maxLength: 8000
+                chapterId:
+                  type: string
+                scopeOverride:
+                  type: object
+                  additionalProperties: true
+                requestId:
+                  type: string
+                  pattern: ^req_[a-z0-9]{1,24}$
+      responses:
+        "200":
+          description: text/event-stream 帧序列
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                format: binary
+        "400": *a1
+        "401": *a2
+        "403": *a3
+        "404": *a4
+        "413": *a5
+        "429": *a6
+        "500": *a7
+        "501": *a8
+        "502": *a9
+        "504": *a10
+  /api/v1/chat/cancel:
+    post:
+      summary: 取消在途轮次
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              required:
+                - requestId
+              properties:
+                requestId:
+                  type: string
+                  pattern: ^req_[a-z0-9]{1,24}$
+      responses:
+        "200":
+          description: 取消指令已投递（cancelled=false 表示无在途轮次）
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                required:
+                  - cancelled
+                properties:
+                  cancelled:
+                    type: boolean
+        "400": *a1
+        "401": *a2
+        "403": *a3
+        "404": *a4
+        "413": *a5
+        "429": *a6
+        "500": *a7
+        "501": *a8
+        "502": *a9
+        "504": *a10
+  /api/v1/answer:
+    post:
+      summary: 单题作答
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              required:
+                - sessionId
+                - questionId
+                - answer
+              properties:
+                sessionId:
+                  type: string
+                questionId:
+                  type: string
+                answer:
+                  type: string
+                artifactId:
+                  type: string
+                chapterId:
+                  type: string
+      responses:
+        "200":
+          description: 作答结果
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                required:
+                  - ok
+                  - result
+                  - requestId
+                  - elapsedMs
+                properties:
+                  ok:
+                    type: boolean
+                  result:
+                    $ref: "#/components/schemas/AnswerOutput"
+                  requestId:
+                    type: string
+                    example: req_9f2a1b3c4d5e
+                  elapsedMs:
+                    type: integer
+        "400": *a1
+        "401": *a2
+        "403": *a3
+        "404": *a4
+        "413": *a5
+        "429": *a6
+        "500": *a7
+        "501": *a8
+        "502": *a9
+        "504": *a10
+  /api/v1/answer-set:
+    post:
+      summary: 交卷（整份题目集）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              required:
+                - sessionId
+                - artifactId
+                - answers
+              properties:
+                sessionId:
+                  type: string
+                artifactId:
+                  type: string
+                chapterId:
+                  type: string
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                    required:
+                      - questionId
+                      - answer
+                    properties:
+                      questionId:
+                        type: string
+                      answer:
+                        type: string
+      responses:
+        "200":
+          description: 交卷结果
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                required:
+                  - ok
+                  - result
+                  - requestId
+                  - elapsedMs
+                properties:
+                  ok:
+                    type: boolean
+                  result:
+                    $ref: "#/components/schemas/AnswerSetOutput"
+                  requestId:
+                    type: string
+                    example: req_9f2a1b3c4d5e
+                  elapsedMs:
+                    type: integer
+        "400": *a1
+        "401": *a2
+        "403": *a3
+        "404": *a4
+        "413": *a5
+        "429": *a6
+        "500": *a7
+        "501": *a8
+        "502": *a9
+        "504": *a10
+  /api/v1/openapi.yaml:
+    get:
+      summary: 返回本契约文件原文
+      security: []
+      responses:
+        "200":
+          description: OpenAPI YAML 文本
+          content:
+            application/yaml:
+              schema:
+                type: string
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+  schemas:
+    Chapter:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - number
+        - title
+      properties:
+        id:
+          type: string
+        number:
+          type: integer
+          format: int64
+        title:
+          type: string
+        source_path:
+          type: string
+    KnowledgePoint:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - chapter_id
+        - name
+      properties:
+        id:
+          type: string
+        chapter_id:
+          type: string
+        section_id:
+          type: string
+        name:
+          type: string
+        name_en:
+          type: string
+        definition:
+          type: string
+        keywords:
+          type: array
+          items:
+            type: string
+        examples:
+          type: array
+          items:
+            type: string
+        non_examples:
+          type: array
+          items:
+            type: string
+        aliases:
+          type: array
+          items:
+            type: string
+        difficulty:
+          type: integer
+          format: int64
+        competencies:
+          type: array
+          items:
+            type: string
+        decisions:
+          type: array
+          items:
+            type: string
+        source:
+          type: string
+        status:
+          type: string
+        parent_id:
+          type: string
+          nullable: true
+    NewsArticle:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - source
+        - title
+        - url
+        - published_at
+        - content
+        - content_status
+      properties:
+        id:
+          type: string
+        source:
+          type: string
+        source_id:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+        author:
+          type: string
+        published_at:
+          type: string
+        summary:
+          type: string
+        content:
+          type: string
+        content_status:
+          type: string
+        rights:
+          type: string
+        fetched_at:
+          type: string
+    CaseMatch:
+      type: object
+      additionalProperties: true
+      required:
+        - article_id
+        - kp_id
+        - score
+        - evidence_span
+        - review_status
+      properties:
+        article_id:
+          type: string
+        kp_id:
+          type: string
+        score:
+          type: number
+        confidence:
+          type: number
+        tag_role:
+          type: string
+        evidence_span:
+          type: string
+        evidence_start:
+          type: integer
+          format: int64
+        evidence_end:
+          type: integer
+          format: int64
+        rationale:
+          type: string
+        method:
+          type: string
+        review_status:
+          type: string
+        evidence_level:
+          type: string
+        version:
+          type: string
+        reviewer_id:
+          type: string
+        reviewed_at:
+          type: string
+        created_at:
+          type: string
+    IdeologyMatch:
+      type: object
+      additionalProperties: true
+      required:
+        - article_id
+        - ideology_id
+        - confidence
+        - evidence_span
+      properties:
+        article_id:
+          type: string
+        ideology_id:
+          type: string
+        confidence:
+          type: number
+        evidence_span:
+          type: string
+        rationale:
+          type: string
+        review_status:
+          type: string
+        evidence_level:
+          type: string
+        version:
+          type: string
+    QuestionAttempt:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - question_id
+        - student_id
+        - answer
+        - score
+        - created_at
+      properties:
+        id:
+          type: string
+        question_id:
+          type: string
+        student_id:
+          type: string
+        answer:
+          type: string
+        feedback_json: {}
+        score:
+          type: number
+        created_at:
+          type: string
+    Competency:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - name
+        - definition
+        - levels
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        definition:
+          type: string
+        levels:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            required:
+              - level
+              - description
+            properties:
+              level:
+                type: string
+              description:
+                type: string
+        observable:
+          type: array
+          items:
+            type: string
+        version:
+          type: string
+    StudentProfile:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        cohort:
+          type: string
+        background:
+          type: object
+          additionalProperties: true
+        goals:
+          type: array
+          items:
+            type: string
+        preferences:
+          type: object
+          additionalProperties: true
+        constraints:
+          type: array
+          items:
+            type: string
+        self_assessment:
+          type: object
+          additionalProperties: true
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    Evidence:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - student_id
+        - competency_id
+        - excerpt
+        - occurred_at
+      properties:
+        id:
+          type: string
+        student_id:
+          type: string
+        competency_id:
+          type: string
+        level:
+          type: string
+        strength:
+          type: string
+        evidence_type:
+          type: string
+        source_type:
+          type: string
+        source_id:
+          type: string
+        chapter_id:
+          type: string
+        session_id:
+          type: string
+        excerpt:
+          type: string
+        rationale:
+          type: string
+        confidence:
+          type: number
+        method:
+          type: string
+        review_status:
+          type: string
+        review_note:
+          type: string
+        occurred_at:
+          type: string
+        created_at:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+    Artifact:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - student_id
+        - type
+        - title
+        - path
+        - created_at
+      properties:
+        id:
+          type: string
+        student_id:
+          type: string
+        session_id:
+          type: string
+        skill_id:
+          type: string
+        template_id:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        format:
+          type: string
+        path:
+          type: string
+        content:
+          type: string
+        content_json: {}
+        schema_version:
+          type: string
+        version:
+          type: integer
+          format: int64
+        status:
+          type: string
+        source_refs:
+          type: array
+          items:
+            type: string
+        evidence_ids:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+    MemoryFact:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - kind
+        - key
+        - updated_at
+      properties:
+        id:
+          type: string
+        student_id:
+          type: string
+        kind:
+          type: string
+        key:
+          type: string
+        value: {}
+        confidence:
+          type: number
+        source:
+          type: string
+        updated_at:
+          type: string
+    MemoryEpisode:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - student_id
+        - summary
+        - created_at
+      properties:
+        id:
+          type: string
+        student_id:
+          type: string
+        session_id:
+          type: string
+        summary:
+          type: string
+        decisions:
+          type: array
+          items:
+            type: string
+        open_questions:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+    ChatSession:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - student_id
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+        student_id:
+          type: string
+        chapter_id:
+          type: string
+        title:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    ChatMessage:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - session_id
+        - role
+        - content
+        - created_at
+        - seq
+      properties:
+        id:
+          type: string
+        session_id:
+          type: string
+        role:
+          type: string
+        content:
+          type: string
+        evidence_count:
+          type: integer
+          format: int64
+        created_at:
+          type: string
+        seq:
+          type: integer
+          format: int64
+        turn_id:
+          type: string
+        kind:
+          type: string
+        payload_json: {}
+    TurnRow:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - session_id
+        - status
+        - started_at
+      properties:
+        id:
+          type: string
+        session_id:
+          type: string
+        turn_id:
+          type: string
+        status:
+          type: string
+        plan_json: {}
+        record_json: {}
+        seq_start:
+          type: integer
+          format: int64
+        seq_end:
+          type: integer
+          format: int64
+        started_at:
+          type: string
+        finished_at:
+          type: string
+    ChatSessionSummary:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        chapterId:
+          type: string
+        chapterTitle:
+          type: string
+        status:
+          type: string
+        lastTurnAt:
+          type: string
+        pendingAsks:
+          type: integer
+          format: int64
+        hasNewArtifact:
+          type: boolean
+        ledgerStatus:
+          type: string
+    SummaryLedger:
+      type: object
+      additionalProperties: true
+      required:
+        - source_type
+        - source_id
+        - status
+        - updated_at
+      properties:
+        source_type:
+          type: string
+        source_id:
+          type: string
+        source_seq:
+          type: integer
+          format: int64
+        summarized_seq:
+          type: integer
+          format: int64
+        source_hash:
+          type: string
+        status:
+          type: string
+        summary_id:
+          type: string
+        attempts:
+          type: integer
+          format: int64
+        last_error:
+          type: string
+        updated_at:
+          type: string
+    LearningStateSnapshot:
+      type: object
+      additionalProperties: true
+      required:
+        - student_id
+        - phase
+        - phase_confidence
+        - scope
+      properties:
+        student_id:
+          type: string
+        phase:
+          type: string
+        phase_confidence:
+          type: string
+        phase_reasons:
+          type: array
+          items:
+            type: string
+        scope:
+          type: object
+          additionalProperties: true
+        goal:
+          type: string
+        plan:
+          type: object
+          additionalProperties: true
+        evidence:
+          type: object
+          additionalProperties: true
+        artifacts:
+          type: object
+          additionalProperties: true
+        session:
+          type: object
+          additionalProperties: true
+        signals:
+          type: array
+          items:
+            type: string
+        features:
+          type: object
+          additionalProperties: true
+    LearningSuggestions:
+      type: object
+      additionalProperties: true
+      required:
+        - title
+        - items
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        source:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            required:
+              - label
+              - prompt
+            properties:
+              label:
+                type: string
+              prompt:
+                type: string
+    GrowthSnapshot:
+      type: object
+      additionalProperties: true
+      required:
+        - id
+        - student_id
+        - chapter_id
+        - checkpoint
+        - competency_id
+        - level
+        - confidence
+        - evidence_count
+        - created_at
+      properties:
+        id:
+          type: string
+        student_id:
+          type: string
+        chapter_id:
+          type: string
+        checkpoint:
+          type: string
+        competency_id:
+          type: string
+        level:
+          type: string
+        confidence:
+          type: number
+        evidence_count:
+          type: integer
+          format: int64
+        summary:
+          type: string
+        created_at:
+          type: string
+    GrowthSummaryItem:
+      type: object
+      additionalProperties: true
+      required:
+        - competency
+        - level
+        - confidence
+        - evidenceCount
+        - status
+      properties:
+        competency:
+          $ref: "#/components/schemas/Competency"
+        level:
+          type: string
+        confidence:
+          type: number
+        evidenceCount:
+          type: integer
+          format: int64
+        status:
+          type: string
+        preLevel:
+          type: string
+        postLevel:
+          type: string
+        latestEvidence:
+          $ref: "#/components/schemas/Evidence"
+    MatchHit:
+      type: object
+      additionalProperties: true
+      required:
+        - kp_id
+        - score
+        - evidence
+        - review_status
+      properties:
+        kp_id:
+          type: string
+        score:
+          type: number
+        evidence:
+          type: string
+        review_status:
+          type: string
+    StudentCurrentResult:
+      type: object
+      additionalProperties: true
+      required:
+        - studentId
+        - name
+        - cohort
+      properties:
+        studentId:
+          type: string
+        name:
+          type: string
+        cohort:
+          type: string
+    ChaptersListResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/Chapter"
+    KpsListResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/KnowledgePoint"
+    NewsListResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/NewsArticle"
+    NewsStatusResult:
+      type: object
+      additionalProperties: true
+      required:
+        - count
+        - newestFetchedAt
+      properties:
+        count:
+          type: integer
+          format: int64
+        newestFetchedAt:
+          type: string
+    NewsRefreshResult:
+      type: object
+      additionalProperties: true
+      required:
+        - results
+        - queued
+        - accepted
+        - count
+        - newestFetchedAt
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        queued:
+          type: integer
+          format: int64
+        accepted:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int64
+        newestFetchedAt:
+          type: string
+    NewsGetResult:
+      type: object
+      additionalProperties: true
+      required:
+        - article
+        - matches
+        - ideology
+      properties:
+        article:
+          $ref: "#/components/schemas/NewsArticle"
+          nullable: true
+        matches:
+          type: array
+          items:
+            $ref: "#/components/schemas/CaseMatch"
+        ideology:
+          type: array
+          items:
+            $ref: "#/components/schemas/IdeologyMatch"
+    NewsMatchResult:
+      type: object
+      additionalProperties: true
+      required:
+        - matches
+      properties:
+        matches:
+          type: array
+          items:
+            $ref: "#/components/schemas/MatchHit"
+    QuestionsAttemptsResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/QuestionAttempt"
+    ProfileGetResult:
+      type: object
+      additionalProperties: true
+      required:
+        - profile
+        - competencies
+      properties:
+        profile:
+          $ref: "#/components/schemas/StudentProfile"
+          nullable: true
+        competencies:
+          type: array
+          items:
+            $ref: "#/components/schemas/Competency"
+        plan:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        evidence:
+          type: array
+          items:
+            $ref: "#/components/schemas/Evidence"
+        growth:
+          type: array
+          items:
+            $ref: "#/components/schemas/GrowthSummaryItem"
+    ProfileGrowthResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/GrowthSummaryItem"
+    ProfileEvidenceResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/Evidence"
+    ProfileSnapshotResult:
+      $ref: "#/components/schemas/GrowthSnapshot"
+    ProfileReviewResult:
+      type: object
+      additionalProperties: true
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+    ArtifactsListResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/Artifact"
+    ArtifactsGetResult:
+      $ref: "#/components/schemas/Artifact"
+    ArtifactsExportResult:
+      type: object
+      additionalProperties: true
+      required:
+        - path
+      properties:
+        path:
+          type: string
+    MemoryFactsResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/MemoryFact"
+    MemoryEpisodesResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/MemoryEpisode"
+    MemorySummaryResult:
+      type: object
+      additionalProperties: true
+      required:
+        - headline
+        - facts
+        - episodes
+      properties:
+        headline:
+          type: string
+        facts:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemoryFact"
+        episodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/MemoryEpisode"
+    MemoryUpsertResult:
+      $ref: "#/components/schemas/MemoryFact"
+    MemoryDeleteResult:
+      type: object
+      additionalProperties: true
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+    ChatSessionsResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/ChatSession"
+    ChatMessagesResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/ChatMessage"
+    AgentSnapshotResult:
+      $ref: "#/components/schemas/LearningStateSnapshot"
+    AgentSuggestionsResult:
+      $ref: "#/components/schemas/LearningSuggestions"
+    AgentTurnsResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/TurnRow"
+    AgentLedgerResult:
+      type: object
+      additionalProperties: true
+      required:
+        - items
+        - counts
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SummaryLedger"
+        counts:
+          type: object
+          additionalProperties: true
+          required:
+            - summarized
+            - pending
+            - stale
+            - failed
+          properties:
+            summarized:
+              type: integer
+              format: int64
+            pending:
+              type: integer
+              format: int64
+            stale:
+              type: integer
+              format: int64
+            failed:
+              type: integer
+              format: int64
+    AgentRetryResult:
+      $ref: "#/components/schemas/AgentLedgerResult"
+    AgentSessionsResult:
+      type: array
+      items:
+        $ref: "#/components/schemas/ChatSessionSummary"
+    HealthResult:
+      type: object
+      additionalProperties: true
+      required:
+        - ok
+        - warnings
+        - notices
+        - chapters
+        - knowledgePoints
+        - newsArticles
+        - appHome
+        - version
+        - uptimeMs
+      properties:
+        ok:
+          type: boolean
+        warnings:
+          type: array
+          items:
+            type: string
+        notices:
+          type: array
+          items:
+            type: string
+        chapters:
+          type: integer
+          format: int64
+        knowledgePoints:
+          type: integer
+          format: int64
+        newsArticles:
+          type: integer
+          format: int64
+        appHome:
+          type: string
+        version:
+          type: string
+        uptimeMs:
+          type: integer
+          format: int64
+    LoginResult:
+      type: object
+      additionalProperties: true
+      required:
+        - token
+        - expiresAt
+        - student
+      properties:
+        token:
+          type: string
+        expiresAt:
+          type: string
+        student:
+          type: object
+          additionalProperties: true
+          required:
+            - studentId
+            - name
+            - cohort
+          properties:
+            studentId:
+              type: string
+            name:
+              type: string
+            cohort:
+              type: string
+    AnswerOutput:
+      type: object
+      additionalProperties: true
+      required:
+        - turnId
+        - text
+        - feedback
+        - evidence
+        - ledger
+        - warnings
+        - status
+      properties:
+        turnId:
+          type: string
+        text:
+          type: string
+        feedback:
+          type: object
+          additionalProperties: true
+        evidence:
+          type: array
+          items:
+            $ref: "#/components/schemas/Evidence"
+        ledger:
+          $ref: "#/components/schemas/SummaryLedger"
+          nullable: true
+        warnings:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+    AnswerSetOutput:
+      type: object
+      additionalProperties: true
+      required:
+        - turnId
+        - text
+        - results
+        - ledger
+        - warnings
+        - status
+      properties:
+        turnId:
+          type: string
+        text:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        ledger:
+          $ref: "#/components/schemas/SummaryLedger"
+          nullable: true
+        warnings:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+    ErrorBody:
+      type: object
+      additionalProperties: true
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        field:
+          type: string
+        detail: {}
+x-legacy-methods:
+  - name: getKp
+    params:
+      kpId: string
+    result: KnowledgePoint | null
+    notes: 引用溯源：按知识点 id 读取单个知识点。只读，不计入 30 方法清单。
+  - name: getBlock
+    params:
+      blockId: string
+    result: "{ block: ContentBlock, chapter?: Chapter, section?: Section }"
+    notes: 引用溯源：源文跳转，附章节与小节上下文。只读，不计入 30 方法清单。
+  - name: getResource
+    params:
+      resourceId: string（兼容 sourceId）
+    result: "{ guide: object, chapter?: Chapter }"
+    notes: 资源引用溯源。只读，不计入 30 方法清单。
+  - name: listIdeology
+    params: {}
+    result: IdeologyPoint[]
+    notes: 思政点列表页。只读，不计入 30 方法清单。
