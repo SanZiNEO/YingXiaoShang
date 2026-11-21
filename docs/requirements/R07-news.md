@@ -5,7 +5,7 @@
 > 代码：`packages/news/src/index.ts`（Python 服务客户端）、`services/news-crawler-py/`（采集与入库）、`packages/agent/src/tools/read-tools.ts`
 > 上位原则：`../principles/single-agent.md`
 >
-> 2026-11 实现切换：TypeScript 源适配器、`normalize.ts` 与 `pipeline/ingest-news.ts` 已删除；
+> 2026-11 实现切换：TypeScript 源适配器、`normalize.ts` 与旧 TS 入库脚本（`ingest-news`）已删除；
 > 采集、解析、去重和增量入库统一由 Python 服务的 `sources/*.py` + `db.py` 负责。
 
 ## 1. 要什么（学生可见结果）
@@ -99,7 +99,7 @@
 ## 7. 现状与差距（代码事实）
 
 - 采集与入库已全部在 `services/news-crawler-py`：50 个注册源、46 个启用；`sources/*.py` 自注册，`db.py` 是唯一 schema/DAL。
-- 原 TS 的 `packages/news/src/sources/`、`normalize.ts`、`pool.ts` 和 `pipeline/ingest-news.ts` 已删除；`packages/news/src/index.ts` 只剩 HTTP 客户端与 Cordis 工具。
+- 原 TS 的 `packages/news/src/sources/`、`normalize.ts`、`pool.ts` 与旧 TS 入库脚本（`ingest-news`）已删除；`packages/news/src/index.ts` 只剩 HTTP 客户端与 Cordis 工具。
 - 控制面：`GET /health`、`GET /stats`、`POST /run`（`wait=false` 后台触发）、`POST /ingest`（单篇 URL）、`GET /query`（3 秒门面）。
 - 入库：`news_articles.url` 唯一 + `content_hash`；逐条即时 upsert，每轮统计写 `source_runs`。
 - 检索工具：`packages/agent/src/tools/read-tools.ts`；本地门槛 40 字，正文读取 `MAX_BODY=4_000`。

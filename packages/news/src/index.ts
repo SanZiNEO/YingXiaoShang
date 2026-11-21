@@ -92,6 +92,12 @@ export interface RefreshOutcome {
   results: RefreshStats[]
   queued: boolean
   accepted: string[]
+  /**
+   * 采集服务连不上时的降级结果（桌面端没有 Python 服务）。
+   * 界面应显示「采集服务未就绪，先看本地旧闻」，而不是报错——
+   * 刷新是「尽力而为」的动作，把它做成失败只会让学生以为软件坏了。
+   */
+  degraded?: boolean
 }
 
 interface QueryItem {
@@ -277,18 +283,26 @@ export class NewsService extends Service {
     options: RefreshOptions = {},
   ): Promise<RefreshOutcome> {
     const wait = options.wait === true
-    const payload = await this.request<RunResponse>(
-      '/run',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          sources: sourceIds && sourceIds.length > 0 ? sourceIds : undefined,
-          wait,
-        }),
-      },
-      wait ? this.refreshTimeoutMs : 5_000,
-      options.signal,
-    )
+    let payload: RunResponse
+    try {
+      payload = await this.request<RunResponse>(
+        '/run',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            sources: sourceIds && sourceIds.length > 0 ? sourceIds : undefined,
+            wait,
+          }),
+        },
+        wait ? this.refreshTimeoutMs : 5_000,
+        options.signal,
+      )
+    } catch (error) {
+      // 桌面交付包里没有采集服务（见 fallback.ts 顶部说明）：
+      // 「刷新」按钮在包里必然连不上，若不降级就是每次点击都报错。
+      if (!isBackendUnavailable(error) || !this.allowFallback) throw error
+      return { results: [], queued: false, accepted: [], degraded: true }
+    }
     if (payload.ok === false) throw new Error(payload.message || payload.error || 'news refresh failed')
     return {
       results: (payload.rounds ?? []).map(mapRun),

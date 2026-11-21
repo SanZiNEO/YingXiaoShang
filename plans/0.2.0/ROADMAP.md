@@ -214,7 +214,7 @@ M3  微信小程序：资质、备案、域名、内容安全
 | 角色 | 负责 | 明确不碰 |
 |---|---|---|
 | 我方（AI + 你） | 服务端化、Web 前端、业务逻辑、老师端、桌面交付包、发布 | — |
-| 杨泽易 | **服务端骨架 `apps/server`**（HTTP + 会话 + 鉴权 + OpenAPI）、Python 采集服务 Docker 化、正文质量抽检、PG 迁移、契约测试、压测与可观测性、备份演练、Electron 用例跑通 | `packages/*` 业务内核、`apps/desktop`（打包与 IPC）、数据库 schema、提示词、需求口径 |
+| 杨泽易 | **服务端骨架 `apps/server`**（HTTP + 会话 + 鉴权 + OpenAPI）、Python 采集服务 Docker 化、正文质量抽检、采集回传、契约测试、压测与可观测性、备份演练、Electron 用例跑通 | `packages/*` 业务内核、`apps/desktop`（打包与 IPC）、数据库 schema、提示词、需求口径 |
 | 学校/老师 | 服务器、API、域名与资质、老师端需求、班级安排 | — |
 
 流程约定：**分支 + PR + 一次独立复核**再合 main（他目前直接推 main，已改成这规矩）。

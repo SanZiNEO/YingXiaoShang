@@ -184,9 +184,19 @@ export async function dispatchMethod(
       return { ok: true }
     case 'chat.sessions':
       return db.listChatSessions(studentId)
-    case 'chat.messages':
-      // 归属校验在 AgentService/DB 层；服务端仍需在 HTTP 层再挡一次。
-      return db.listChatMessages(String(args.sessionId ?? ''))
+    case 'chat.messages': {
+      // **归属必须在这里挡**：`db.listChatMessages(sessionId)` 只按会话 id 取，不校验学生。
+      // 之前这段注释写着「已在 AgentService/DB 层校验」，是错的——独立复核实测：
+      // 用学生 A 的会话调 B 的 sessionId，能读到 B 的私密对话。
+      // 会话不存在时返回空数组（界面显示空会话），不属于本人时抛错（不给内容，也不说存不存在以外的事）。
+      const sessionId = String(args.sessionId ?? '')
+      const session = db.getChatSession(sessionId)
+      if (!session) return []
+      if (session.student_id !== studentId) {
+        throw new Error('这个会话不属于当前学生，换回自己的账号再看。')
+      }
+      return db.listChatMessages(sessionId)
+    }
     case 'agent.snapshot':
       return agent.getSnapshot(
         studentId,

@@ -56,6 +56,17 @@ export function friendlyError(error: unknown, options: FriendlyOptions = {}): Er
   if (/transport failed|stream.*(closed|interrupted)|premature close/i.test(stripped)) {
     return new Error(`模型连接中途断了（不是你操作的问题）。${retryHint}`)
   }
+  // 数据库约束错误：服务端与桌面端都会遇到。不补的话英文原文会直接透给学生
+  // （独立复核实测过：`FOREIGN KEY constraint failed（如果反复出现…）`）。
+  if (/FOREIGN KEY constraint failed/i.test(stripped)) {
+    return new Error('这条记录关联的账号或课程还不存在：先刷新一下；如果是在新账号上第一次使用，把这句话截图发给老师。')
+  }
+  if (/UNIQUE constraint failed/i.test(stripped)) {
+    return new Error('这条记录已经存在（重复提交），不用再点一次。')
+  }
+  if (/NOT NULL constraint failed/i.test(stripped)) {
+    return new Error('提交的内容缺少必填项，这次没有保存成功。')
+  }
   if (/SQLITE|database is locked|disk I\/O|ENOSPC|read-only database/i.test(stripped)) {
     return new Error('本地数据写入失败：可能是磁盘满了，或者软件还开着另一个窗口。关掉多余的窗口再试。')
   }

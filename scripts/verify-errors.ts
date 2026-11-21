@@ -77,6 +77,19 @@ console.log('')
     !friendlyError(new Error('requested 40023 tokens')).message.includes('模型名不对'))
 }
 
+// 数据库约束错误不能把英文原文透给学生（服务端 500 曾直接露出 FOREIGN KEY constraint failed）。
+{
+  const cases: Array<[string, RegExp]> = [
+    ['FOREIGN KEY constraint failed', /账号或课程还不存在/],
+    ['UNIQUE constraint failed: memory_facts.id', /已经存在/],
+    ['NOT NULL constraint failed: chat_messages.content', /缺少必填项/],
+  ]
+  for (const [raw, expected] of cases) {
+    const text = friendlyError(new Error(raw)).message
+    check(`${raw.slice(0, 24)} → 中文可读`, expected.test(text) && !/constraint failed/i.test(text), text)
+  }
+}
+
 console.log('')
 if (failed === 0) {
   console.log('全部通过')

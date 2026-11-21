@@ -76,6 +76,38 @@ try {
       JSON.stringify(spoofed.map((s) => s.student_id)))
   }
 
+  console.log('2b. 会话归属：读别人的 chat.messages 必须被拒绝（实测过越权）')
+  {
+    // 给甲的会话写一条只有甲能看的内容，乙尝试用同一个 sessionId 读。
+    db.insertChatMessage({
+      id: 'msg_a_secret',
+      session_id: sessionA,
+      role: 'user',
+      content: '只有甲能看到的私密内容',
+      evidence_count: 0,
+      created_at: new Date().toISOString(),
+      seq: 0,
+      turn_id: '',
+      kind: 'user_message',
+      payload_json: {},
+    })
+    const own = await dispatchMethod(deps, 'chat.messages', { sessionId: sessionA }, { studentId: studentA }) as any[]
+    check('本人能读自己的会话', own.length === 1 && /私密/.test(own[0]?.content ?? ''), `条数 ${own.length}`)
+
+    let message = ''
+    let leaked: unknown[] | undefined
+    try {
+      leaked = await dispatchMethod(deps, 'chat.messages', { sessionId: sessionA }, { studentId: studentB }) as any[]
+    } catch (error) {
+      message = error instanceof Error ? error.message : String(error)
+    }
+    check('别人读不到内容', leaked === undefined, `竟然返回了 ${leaked?.length} 条`)
+    check('别人得到可读的拒绝', /不属于当前学生/.test(message), message)
+
+    const missing = await dispatchMethod(deps, 'chat.messages', { sessionId: '不存在' }, { studentId: studentA })
+    check('会话不存在返回空数组（不报错）', Array.isArray(missing) && (missing as unknown[]).length === 0)
+  }
+
   console.log('3. 桌面专属能力在服务端要明确报错，而不是静默什么都不做')
   {
     for (const method of ['files.reveal', 'files.preview', 'files.openDialog']) {

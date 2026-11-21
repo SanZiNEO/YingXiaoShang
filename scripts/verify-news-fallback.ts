@@ -233,6 +233,47 @@ console.log('8. 撞 url：返回的 id 必须是库里真实 id（否则 get_new
   } finally { globalThis.fetch = original }
 }
 
+console.log('9. 刷新按钮在桌面包里不能报错（采集服务本来就不在包里）')
+{
+  const ctx = new Context()
+  ctx.provide('learningDb', { upsertNews: () => 0, listNews: () => [] })
+  const service = new NewsService(ctx as never, {
+    baseUrl: 'http://127.0.0.1:8788',
+    apiKey: () => 'test-key',
+    queryTimeoutMs: 300,
+  })
+  const original = globalThis.fetch
+  globalThis.fetch = (async () => {
+    throw Object.assign(new TypeError('fetch failed'), { cause: new Error('connect ECONNREFUSED 127.0.0.1:8788') })
+  }) as never
+  try {
+    let thrown = ''
+    let outcome: any
+    try {
+      outcome = await service.refresh(undefined, { wait: false })
+    } catch (error) {
+      thrown = error instanceof Error ? error.message : String(error)
+    }
+    check('不抛错（否则界面每次点刷新都报错）', thrown.length === 0, thrown)
+    check('标记为降级', outcome?.degraded === true, JSON.stringify(outcome))
+    check('没有假装排上队', outcome?.queued === false, JSON.stringify(outcome))
+
+    // 服务端部署（allowFallback=false）必须仍然报错：那是真故障，不能吞。
+    // 同一个 Context 只能 provide 一个 'news'，所以这里单独建一个。
+    const strictCtx = new Context()
+    strictCtx.provide('learningDb', { upsertNews: () => 0, listNews: () => [] })
+    const strict = new NewsService(strictCtx as never, {
+      baseUrl: 'http://127.0.0.1:8788',
+      apiKey: () => 'k',
+      refreshTimeoutMs: 300,
+      allowFallback: false,
+    })
+    let strictMessage = ''
+    try { await strict.refresh(undefined, { wait: false }) } catch (error) { strictMessage = error instanceof Error ? error.message : String(error) }
+    check('服务端部署仍然抛错（不吞故障）', strictMessage.length > 0, strictMessage)
+  } finally { globalThis.fetch = original }
+}
+
 console.log('')
 if (failed === 0) { console.log('全部通过'); process.exit(0) }
 console.log(`有 ${failed} 条不通过`)

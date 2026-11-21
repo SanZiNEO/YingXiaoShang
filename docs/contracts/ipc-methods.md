@@ -1,9 +1,10 @@
 # 接口契约（IPC 方法清单 → HTTP）
 
-> 用途：把桌面端现有的 `window.learning.*` 能力，映射成 HTTP 服务端要提供的接口。
+> 用途：把现有 `window.learning.*` 能力映射成 HTTP 服务端要提供的接口。
+> 现状：业务实现已抽到 `packages/dispatch/src/index.ts` 的 `dispatchMethod(deps, method, input, ctx)`
+> （不是 `createDispatch`；桌面端与服务端都调它，服务端另有一层 `rpc/handlers` 做校验与 schema）。
 > 这是 `apps/server` 的输入，也是 Web 前端的依据、契约测试的基准。
-> 基线：`apps/desktop/src/main/index.ts`（`invoke` switch + 7 个独立通道）、
-> `apps/desktop/src/preload/index.ts`（暴露面）。
+> 基线：`packages/dispatch`（业务分发，桌面与服务端共用）+ `apps/desktop/src/main/index.ts`（8 个独立通道）+ `apps/desktop/src/preload/index.ts`（暴露面）。
 > 版本：v1 · 2026-11-19
 
 ---
@@ -24,7 +25,8 @@
 
 ### 1.2 鉴权（**与桌面端最大的不同**）
 
-桌面端：`studentId` 由客户端传，`invoke()` 里 `args.studentId ?? DEMO_STUDENT_ID`。
+桌面端：`invoke()` 仍允许入参覆盖学生（演示切学生用），内部把它作为 `ctx.studentId` 传给 `dispatchMethod`；
+**`dispatchMethod` 自己只认 `ctx.studentId`，从不读入参**（`verify-dispatch.ts` 有越权断言守着）。
 **Web 端必须改**：
 
 ```
@@ -96,7 +98,7 @@ tool-end  { tool, chars, cached }
 | 25 | `memory.upsert` | `kind, key, value` | 事实 | `kind` 六选一 |
 | 26 | `memory.delete` | `factId` | `{ ok:true }` | 写入 |
 | 27 | `chat.sessions` | — | `ChatSession[]` | |
-| 28 | `chat.messages` | `sessionId` | `ChatMessage[]` | **必须校验归属** |
+| 28 | `chat.messages` | `sessionId` | `ChatMessage[]` | **已加归属校验**：不属于本人抛错、会话不存在返回 `[]`（`dispatch` 内实现，`verify-dispatch.ts` 覆盖） |
 | 29 | `agent.snapshot` | `sessionId?, chapterId?` | `LearningStateSnapshot` | |
 | 30 | `agent.suggestions` | `sessionId?` | `LearningSuggestions` | |
 | 31 | `agent.turns` | `sessionId, limit?` | `TurnRow[]` | |
@@ -109,7 +111,7 @@ tool-end  { tool, chars, cached }
 
 ---
 
-## 三、独立通道（8 个）
+## 三、独立通道（8 个：invoke / chat / answer / answer-set / cancel / health / settings:get / settings:set）
 
 | 通道 | 入参 | 返回 | 说明 |
 |---|---|---|---|
@@ -160,8 +162,8 @@ tool-end  { tool, chars, cached }
 
 ## 五、迁移注意（容易踩的三处）
 
-1. **`studentId` 不再由客户端决定**。现有 37 个方法里全部读 `args.studentId`，
-   服务端改成从会话注入。**这是安全关键**，不要照抄桌面实现。
+1. **`studentId` 不再由客户端决定**。`dispatchMethod` 只认 `ctx.studentId`（已实现），
+   服务端必须从会话派生 `ctx`。**这是安全关键**；桌面端保留入参覆盖只是为了演示切学生。
 2. **`DEMO_STUDENT_ID`**：桌面端兜底用。Web 端绝不能有兜底——没有会话就是 401。
 3. **长任务与超时**：`news.match`、`chat`、`answer-set` 都会调模型（10–60 秒）。
    Web 端要设 120 秒超时并对前端显示「正在处理」，不能像普通请求那样 30 秒断掉。
@@ -203,7 +205,9 @@ paths:
 
 ## 七、我会提供的配套
 
-- `packages/dispatch`：把现有 `invoke` 的 250 行 switch 抽成 `createDispatch(deps)`，
-  桌面与服务端共用。**服务端只需 `HTTP → dispatch`，不用重写业务**（本轮正在做）。
-- 种子库 `seed/learning.db`（13 章 / 228 知识点 / 134 条新闻 / 2 会话），契约测试与压测都用它。
-- 现有 15 个断言脚本，服务端接入后可复用其中的纯函数部分。
+- ✅ `packages/dispatch`：已把 `invoke` 的 250 行 switch 抽成
+  `dispatchMethod(deps, method, input, ctx)`。桌面端只留 40 行适配（`main` 从 560 → 408 行）。
+  服务端若愿意也可以复用它（现有 `rpc/handlers` 走同一批 `services.*`，两者不冲突）。
+- ✅ 种子库：`pipeline/seed-db.ts` 可离线生成（实测 13 章 / 244 知识点 / 108 条新闻 / 456 题），
+  契约测试与压测都用它。
+- ✅ 现有 16 个断言脚本（`scripts/verify-*.ts`），服务端接入后可复用其中的纯函数部分。
